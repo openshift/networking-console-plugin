@@ -11,7 +11,7 @@ import { getName } from '@utils/resources/shared';
 import { isEmpty } from '@utils/utils';
 import { networkConsole } from '@utils/utils';
 
-import { NetworkAttachmentDefinitionFormInput, NetworkTypeKeys } from './types';
+import { NetworkAttachmentDefinitionFormInput, NetworkTypeKeys, ovnK8sTopologyKeys } from './types';
 
 const buildConfig = (
   formData: NetworkAttachmentDefinitionFormInput,
@@ -39,14 +39,15 @@ const buildConfig = (
     },
     [NetworkTypeKeys.ovnKubernetesNetworkType]: {
       netAttachDefName,
-      topology: 'layer2',
+      topology: ovnK8sTopologyKeys.ovnK8sLayer,
     },
     [NetworkTypeKeys.ovnKubernetesSecondaryLocalnet]: {
       cniVersion: '0.4.0',
       mtu: parseInt(networkTypeData?.mtu, 10) || undefined,
       name: networkTypeData?.bridgeMapping,
       netAttachDefName,
-      topology: 'localnet',
+      topology: ovnK8sTopologyKeys.ovnK8sLocalnet,
+      type: NetworkTypeKeys.ovnKubernetesNetworkType,
       vlanID: parseInt(networkTypeData?.vlanID, 10) || undefined,
     },
     [NetworkTypeKeys.sriovNetworkType]: {
@@ -86,10 +87,11 @@ export const fromNADObjToFormData = (
   const configParsed = safeParser<NetworkAttachmentDefinitionConfig>(nadObj.spec.config);
 
   const ipam = JSON.stringify(configParsed?.ipam);
+
   return {
     description: nadObj?.metadata?.annotations?.description,
     name: getName(nadObj),
-    networkType: configParsed.type,
+    networkType: getLocalnetTopologyType(configParsed.type, configParsed?.topology),
     [NetworkTypeKeys.cnvBridgeNetworkType]: {
       bridge: configParsed?.bridge || null,
       macspoofchk: configParsed?.macspoofchk,
@@ -142,3 +144,9 @@ export const createNetAttachDef = (
     data: fromDataToNADObj(formData, namespace),
     model: NetworkAttachmentDefinitionModel,
   });
+
+export const getLocalnetTopologyType = (networkType: string, networkTopology?: string): string =>
+  networkType === NetworkTypeKeys.ovnKubernetesNetworkType &&
+  networkTopology === ovnK8sTopologyKeys.ovnK8sLocalnet
+    ? NetworkTypeKeys.ovnKubernetesSecondaryLocalnet
+    : networkType;

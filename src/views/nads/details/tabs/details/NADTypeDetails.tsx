@@ -6,12 +6,14 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 import { getConfigAsJSON, getType } from '@utils/resources/nads/selectors';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
 import { networkTypes } from '@views/nads/form/utils/types';
+import { getLocalnetTopologyType } from '@views/nads/form/utils/utils';
 
 const NADTypeDetails: FC<DetailsItemComponentProps<NetworkAttachmentDefinitionKind>> = ({
   obj: nad,
 }) => {
   const { t } = useNetworkingTranslation();
-  const type = getType(getConfigAsJSON(nad));
+  const nadConfig = getConfigAsJSON(nad);
+  const type = getLocalnetTopologyType(getType(nadConfig), nadConfig?.topology);
 
   if (!type) return <MutedText content={t('Not available')} />;
 

@@ -5,6 +5,11 @@ export enum NetworkTypeKeys {
   sriovNetworkType = 'sriov',
 }
 
+export enum ovnK8sTopologyKeys {
+  ovnK8sLayer = 'layer2',
+  ovnK8sLocalnet = 'localnet',
+}
+
 export type NetworkTypeKeysType =
   | NetworkTypeKeys.cnvBridgeNetworkType
   | NetworkTypeKeys.ovnKubernetesNetworkType
