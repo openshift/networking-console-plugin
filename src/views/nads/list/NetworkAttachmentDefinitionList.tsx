@@ -15,10 +15,7 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
 import { DEFAULT_NAMESPACE } from '@utils/constants';
-import {
-  SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM,
-  SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML,
-} from '@utils/constants/ui';
+import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/constants/ui';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
 import { resourcePathFromModel } from '@utils/resources/shared';
@@ -70,7 +67,7 @@ const NetworkAttachmentDefinitionList: FC<NetworkAttachmentDefinitionListProps> 
                   NetworkAttachmentDefinitionModel,
                   null,
                   namespace || DEFAULT_NAMESPACE,
-                )}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML}`,
+                )}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}`,
               )
             }
           >
