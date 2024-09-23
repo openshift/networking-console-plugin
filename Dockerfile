@@ -1,5 +1,5 @@
 # Builder container
-FROM registry.ci.openshift.org/ocp/builder:rhel-8-base-nodejs-openshift-4.15 AS build
+FROM registry.ci.openshift.org/ocp/builder:rhel-9-base-nodejs-openshift-4.18 AS build
 
 # Install yarn
 RUN npm install -g yarn -s &>/dev/null
@@ -10,10 +10,10 @@ WORKDIR /opt/app-root/src/app
 
 # Run install as supper tux
 USER 0
-RUN yarn install --frozen-lockfile --network-timeout 600000 && yarn build
+RUN yarn install --frozen-lockfile --network-timeout 800000 && yarn build
 
 # Web server container
-FROM registry.ci.openshift.org/ocp/4.17:base-rhel9
+FROM registry.ci.openshift.org/ocp/4.18:base-rhel9
 
 RUN INSTALL_PKGS="nginx" && \
     dnf install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
