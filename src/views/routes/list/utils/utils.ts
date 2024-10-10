@@ -87,3 +87,12 @@ export const sortRoutesByLocation = (direction: string) => (a: RouteKind, b: Rou
 
   return firstValue?.localeCompare(secondValue);
 };
+
+export const sortRoutesByStatus = (direction: string) => (a: RouteKind, b: RouteKind) => {
+  const { first, second } = direction === 'asc' ? { first: a, second: b } : { first: b, second: a };
+
+  const firstValue = routeStatus(first);
+  const secondValue = routeStatus(second);
+
+  return firstValue?.localeCompare(secondValue);
+};
