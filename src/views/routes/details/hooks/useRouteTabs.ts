@@ -1,3 +1,4 @@
+import { useIsAdmin } from '@utils/hooks/useIsAdmin';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import RouteDetailsTab from '@views/routes/details/components/tabs/detailsTab/RouteDetailsTab';
 import RouteMetricsTab from '@views/routes/details/components/tabs/metricsTab/RouteMetricsTab';
@@ -5,6 +6,7 @@ import RouteYAMLTab from '@views/routes/details/components/tabs/yamlTab/RouteYAM
 
 const useRouteTabs = () => {
   const { t } = useNetworkingTranslation();
+  const isAdmin = useIsAdmin();
 
   return [
     {
@@ -12,11 +14,15 @@ const useRouteTabs = () => {
       href: '',
       name: t('Details'),
     },
-    {
-      component: RouteMetricsTab,
-      href: 'metrics',
-      name: t('Metrics'),
-    },
+    ...(isAdmin
+      ? [
+          {
+            component: RouteMetricsTab,
+            href: 'metrics',
+            name: t('Metrics'),
+          },
+        ]
+      : []),
     {
       component: RouteYAMLTab,
       href: 'yaml',
