@@ -20,6 +20,8 @@ import { RouteKind } from '@utils/types';
 import RouteRow from '@views/routes/list/components/RouteRow';
 import useRouteColumns from '@views/routes/list/hooks/useRouteColumns';
 
+import useRouteFilters from './hooks/useRouteFilters';
+
 type RoutesListProps = {
   namespace: string;
 };
@@ -28,12 +30,22 @@ const RoutesList: FC<RoutesListProps> = ({ namespace }) => {
   const { t } = useNetworkingTranslation();
   const navigate = useNavigate();
 
-  const [routes, loaded, loadError] = useK8sWatchResource<RouteKind[]>({
+  const [routesFetch, loaded, loadError] = useK8sWatchResource<RouteKind[]>({
     groupVersionKind: modelToGroupVersionKind(RouteModel),
     isList: true,
     namespace,
   });
-  const [data, filteredData, onFilterChange] = useListPageFilter(routes);
+
+  const routes = routesFetch.map((route, index) => {
+    if (index % 2 === 0) {
+      route.status.ingress = null;
+    }
+
+    return route;
+  });
+
+  const routeFilters = useRouteFilters();
+  const [data, filteredData, onFilterChange] = useListPageFilter(routes, routeFilters);
   const columns = useRouteColumns();
   const title = t('Routes');
 
@@ -68,7 +80,12 @@ const RoutesList: FC<RoutesListProps> = ({ namespace }) => {
         </ListPageCreateButton>
       </ListPageHeader>
       <ListPageBody>
-        <ListPageFilter data={data} loaded={loaded} onFilterChange={onFilterChange} />
+        <ListPageFilter
+          data={data}
+          loaded={loaded}
+          onFilterChange={onFilterChange}
+          rowFilters={routeFilters}
+        />
         <VirtualizedTable<RouteKind>
           columns={columns}
           data={filteredData}

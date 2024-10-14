@@ -1,9 +1,10 @@
 import * as _ from 'lodash';
 
+import { RoutesStatusesType } from '@utils/constants/routes';
 import { t } from '@utils/hooks/useNetworkingTranslation';
 import { RouteIngress, RouteKind } from '@utils/types';
 
-export const routeStatus = (route: RouteKind): string => {
+export const routeStatus = (route: RouteKind): RoutesStatusesType => {
   let atLeastOneAdmitted = false;
 
   if (!route.status || !route.status.ingress) {
