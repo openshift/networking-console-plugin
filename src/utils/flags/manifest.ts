@@ -1,5 +1,5 @@
 import { EncodedExtension } from '@openshift/dynamic-plugin-sdk-webpack';
-import { FeatureFlag } from '@openshift-console/dynamic-plugin-sdk';
+import { FeatureFlag, FeatureFlagHookProvider } from '@openshift-console/dynamic-plugin-sdk';
 
 export const FlagsExtensions: EncodedExtension[] = [
   {
@@ -8,6 +8,12 @@ export const FlagsExtensions: EncodedExtension[] = [
     },
     type: 'console.flag',
   } as EncodedExtension<FeatureFlag>,
+  {
+    properties: {
+      handler: { $codeRef: 'networkingFlags.useUDNEnabledFlag' },
+    },
+    type: 'console.flag/hookProvider',
+  } as EncodedExtension<FeatureFlagHookProvider>,
 ];
 
 export const FlagsExposedModules = {

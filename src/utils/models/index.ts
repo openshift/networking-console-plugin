@@ -55,3 +55,20 @@ export const NetworkOperatorModel: K8sModel = {
   namespaced: false,
   plural: 'networks',
 };
+
+export const UserDefinedNetworkModel: K8sModel = {
+  abbr: 'UDN',
+  apiGroup: 'k8s.ovn.org',
+  apiVersion: 'v1',
+  crd: true,
+  id: 'userdefinednetwork',
+  kind: 'UserDefinedNetwork',
+  label: 'userdefinednetwork',
+  // t('MultiNetworkPolicy')
+  labelKey: 'UserDefinedNetwork',
+  labelPlural: 'UserDefinedNetworks',
+  // t('UserDefinedNetworks')
+  labelPluralKey: 'UserDefinedNetworks',
+  namespaced: true,
+  plural: 'userdefinednetworks',
+};
