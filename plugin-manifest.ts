@@ -10,6 +10,10 @@ import {
 } from './src/views/networkpolicies/manifest';
 import { RoutesExposedModules, RoutesExtensions } from './src/views/routes/manifest';
 import { ServicesExposedModules, ServicesExtensions } from './src/views/services/manifest';
+import {
+  UserDefinedNetworksExposedModules,
+  UserDefinedNetworksExtensions,
+} from './src/views/udns/manifest';
 
 export const pluginMetadata: ConsolePluginBuildMetadata = {
   dependencies: {
@@ -24,6 +28,7 @@ export const pluginMetadata: ConsolePluginBuildMetadata = {
     ...NADsExposedModules,
     ...FlagsExposedModules,
     ...RoutesExposedModules,
+    ...UserDefinedNetworksExposedModules,
     yamlTemplates: './templates/index.ts',
   },
   name: 'networking-console-plugin',
@@ -37,4 +42,5 @@ export const extensions: EncodedExtension[] = [
   ...NetworkPoliciesExtensions,
   ...NADsExtensions,
   ...FlagsExtensions,
+  ...UserDefinedNetworksExtensions,
 ];
