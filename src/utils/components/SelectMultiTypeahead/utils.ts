@@ -6,7 +6,9 @@ import { NO_RESULTS_VALUE } from './constants';
 
 export const filterOptions = (options: SelectOptionProps[], inputValue: string) => {
   const filteredOptions = options.filter((menuItem) =>
-    String(menuItem.children).toLowerCase().includes(inputValue.toLowerCase()),
+    String(menuItem.value || menuItem.children)
+      .toLowerCase()
+      .includes(inputValue.toLowerCase()),
   );
 
   if (isEmpty(filteredOptions)) {
