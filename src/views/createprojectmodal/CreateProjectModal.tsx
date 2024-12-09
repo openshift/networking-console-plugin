@@ -2,23 +2,21 @@ import React, { FC, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
-import {
-  NamespaceModel,
-  ProjectModel,
-  ProjectRequestModel,
-} from '@kubevirt-ui/kubevirt-api/console';
+import { ProjectModel, ProjectRequestModel } from '@kubevirt-ui/kubevirt-api/console';
 import {
   k8sCreate,
   k8sDelete,
   k8sPatch,
   K8sResourceCommon,
+  Operator,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { Button, ButtonVariant, Modal, ModalVariant } from '@patternfly/react-core';
 import ExternalLink from '@utils/components/ExternalLink/ExternalLink';
 import { documentationURLs, getDocumentationURL, isManaged } from '@utils/constants/documentation';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { UserDefinedNetworkModel } from '@utils/models';
-import { getResourceURL } from '@utils/resources/shared';
+import { ClusterUserDefinedNetworkModel, UserDefinedNetworkModel } from '@utils/models';
+import { getName, getResourceURL } from '@utils/resources/shared';
+import { PROJECT_LABEL_FOR_MATCH_EXPRESSION } from '@utils/resources/udns/constants';
 
 import CreateProjectModalForm from './components/CreateProjectModalForm';
 import { initialFormState } from './constants';
@@ -60,18 +58,23 @@ const CreateProjectModal: FC<{
         });
 
       if (networkType === NETWORK_TYPE.CLUSTER_UDN) {
-        const labelsToAdd = Object.entries(clusterUDN.spec.namespaceSelector.matchLabels || {}).map(
-          ([labelKey, labelValue]) => ({
-            op: 'add',
-            path: `/metadata/labels/${labelKey}`,
-            value: labelValue,
-          }),
-        );
-
         await k8sPatch({
-          data: [{ op: 'add', path: '/metadata/labels', value: {} }, ...labelsToAdd],
-          model: NamespaceModel,
-          resource: projectCreated,
+          data: [
+            { op: 'add', path: '/spec/namespaceSelector/matchExpressions', value: [] },
+            {
+              op: 'add',
+              path: '/spec/namespaceSelector/matchExpressions',
+              value: [
+                {
+                  key: PROJECT_LABEL_FOR_MATCH_EXPRESSION,
+                  operator: Operator.Equals,
+                  values: [getName(projectCreated)],
+                },
+              ],
+            },
+          ],
+          model: ClusterUserDefinedNetworkModel,
+          resource: clusterUDN,
         });
       }
 
