@@ -25,7 +25,7 @@ const SelectClusterUDN: FC<{
   if (!loaded) return <InlineLoading />;
 
   return (
-    <FormGroup fieldId="select-cluster-udn" isRequired label={t('Project name')}>
+    <FormGroup fieldId="select-cluster-udn" isRequired label={t('ClusterUserDefinedNetwork name')}>
       <Select
         id="select-cluster-udn"
         selected={selectedClusterUDNName}
