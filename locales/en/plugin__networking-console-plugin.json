@@ -186,6 +186,7 @@
   "IP Addresses accepting traffic for service": "IP Addresses accepting traffic for service",
   "IP block exceptions are not supported and would cause the entire IP block section to be ignored.": "IP block exceptions are not supported and would cause the entire IP block section to be ignored.",
   "IP blocks": "IP blocks",
+  "IPAM Lifecycle": "IPAM Lifecycle",
   "IPAMLifecycle": "IPAMLifecycle",
   "IPAMLifecycle controls IP addresses management lifecycle.": "IPAMLifecycle controls IP addresses management lifecycle.",
   "It is not recommended to set this field without explicit need and understanding of the OVN network topology.": "It is not recommended to set this field without explicit need and understanding of the OVN network topology.",

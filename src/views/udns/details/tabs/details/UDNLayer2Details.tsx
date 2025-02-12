@@ -19,9 +19,9 @@ const UDNLayerDetails: FC<UDNLayer2DetailsProps> = ({ emptyText, joinSubnets, ob
     <>
       <DetailsItem
         defaultValue={emptyText}
-        label={t('IPAMLifecycle')}
+        label={t('IPAM Lifecycle')}
         obj={obj}
-        path={`${layer2Path}.ipamLifecycle`}
+        path={`${layer2Path}.ipam.lifecycle`}
       />
       <DetailsItem defaultValue={emptyText} label={t('MTU')} obj={obj} path={`${layer2Path}.mtu`} />
       <DetailsItem
