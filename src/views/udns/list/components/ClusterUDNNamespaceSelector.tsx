@@ -2,7 +2,7 @@ import React, { FC, MouseEvent, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { ResourceIcon } from '@openshift-console/dynamic-plugin-sdk';
-import { ExpandableSection, FormGroup, List, ListItem } from '@patternfly/react-core';
+import { ExpandableSection, FormSection, List, ListItem } from '@patternfly/react-core';
 import MatchLabels from '@utils/components/MatchLabels/MatchLabels';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { getName } from '@utils/resources/shared';
@@ -31,7 +31,7 @@ const ClusterUDNNamespaceSelector: FC = () => {
   const matchingProjects = projects?.filter((project) => match(project, matchLabels));
 
   return (
-    <FormGroup fieldId="cluster-udn-projects" isRequired label={t('Project(s)')}>
+    <FormSection title={t('Project(s)')} titleElement="h2">
       <MatchLabels
         matchLabels={matchLabels}
         onChange={(newMatchLabels) =>
@@ -54,7 +54,7 @@ const ClusterUDNNamespaceSelector: FC = () => {
           {matchingProjects.length === 0 && t('No matching projects')}
         </List>
       </ExpandableSection>
-    </FormGroup>
+    </FormSection>
   );
 };
 
