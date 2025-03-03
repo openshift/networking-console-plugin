@@ -74,7 +74,7 @@ const SelectorInput: FC<SelectorInputProps> = ({
   };
 
   return (
-    <div className="pf-v5-c-form-control">
+    <div className="pf-v6-c-form-control">
       <tags-input>
         <TagsInput
           addKeys={[13]}

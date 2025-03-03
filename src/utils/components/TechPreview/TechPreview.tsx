@@ -8,7 +8,7 @@ const TechPreview: FC = () => {
   const { t } = useNetworkingTranslation();
 
   return (
-    <div className={classNames('pf-v5-c-button', 'TechPreviewLabel')}>{t('Tech preview')}</div>
+    <div className={classNames('pf-v6-c-button', 'TechPreviewLabel')}>{t('Tech preview')}</div>
   );
 };
 

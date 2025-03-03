@@ -25,7 +25,7 @@ export const Label: FC<LabelProps> = ({ expand, groupVersionKind, name, value })
   return (
     <>
       <PfLabel className={klass}>
-        <Link className="pf-v5-c-label__content" to={href}>
+        <Link className="pf-v6-c-label__content" to={href}>
           <span className="co-label__key" data-test="label-key">
             {name}
           </span>

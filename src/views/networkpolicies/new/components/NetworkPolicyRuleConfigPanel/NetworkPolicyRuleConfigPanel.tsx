@@ -39,6 +39,7 @@ const NetworkPolicyRuleConfigPanel: FC<NetworkPolicyRuleConfigPanelProps> = ({
       <CardTitle component="h4">
         <label>{isIngress ? t('Ingress rule') : t('Egress rule')}</label>
         <Button
+          className="pf-v6-u-ml-sm"
           data-test={`remove-${direction}-rule`}
           onClick={onRemove}
           variant={ButtonVariant.link}

@@ -6,14 +6,7 @@ import {
   PodModel,
 } from '@kubevirt-ui/kubevirt-api/console';
 import { ResourceIcon } from '@openshift-console/dynamic-plugin-sdk';
-import {
-  Alert,
-  AlertVariant,
-  Label,
-  Text,
-  TreeView,
-  TreeViewDataItem,
-} from '@patternfly/react-core';
+import { Alert, AlertVariant, Label, TreeView, TreeViewDataItem } from '@patternfly/react-core';
 import Loading from '@utils/components/Loading/Loading';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { isEmpty } from '@utils/utils';
@@ -98,7 +91,7 @@ const NetworkPolicyPodsPreview: FC<NetworkPolicyPodsPreviewProps> = ({
         title={t("Can't preview pods")}
         variant={AlertVariant.danger}
       >
-        <Text component="p">{error.toString()}</Text>
+        {error.toString()}
       </Alert>
     );
   }

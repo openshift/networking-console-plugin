@@ -2,13 +2,7 @@ import React, { FC } from 'react';
 
 import { RouteModel } from '@kubevirt-ui/kubevirt-api/console';
 import { ResourceYAMLEditor, useActiveNamespace } from '@openshift-console/dynamic-plugin-sdk';
-import {
-  PageSection,
-  PageSectionVariants,
-  Text,
-  TextVariants,
-  Title,
-} from '@patternfly/react-core';
+import { PageSection, Content, ContentVariants, Title } from '@patternfly/react-core';
 import { EditorType } from '@utils/components/SyncedEditor/EditorToggle';
 import { SyncedEditor } from '@utils/components/SyncedEditor/SyncedEditor';
 import { safeYAMLToJS } from '@utils/components/SyncedEditor/yaml';
@@ -34,15 +28,15 @@ const RouteFormPage: FC<RouteFormPageProps> = ({ initialRoute }) => {
 
   return (
     <>
-      <PageSection className="networking-route-form" variant={PageSectionVariants.light}>
+      <PageSection className="networking-route-form">
         <Title headingLevel="h2">
           {initialRoute
             ? t('Edit {{label}}', { label: RouteModel.label })
             : t('Create {{label}}', { label: RouteModel.label })}
         </Title>
-        <Text component={TextVariants.p}>
+        <Content component={ContentVariants.p}>
           {t('Routing is a way to make your application publicly visible')}
-        </Text>
+        </Content>
       </PageSection>
 
       <SyncedEditor

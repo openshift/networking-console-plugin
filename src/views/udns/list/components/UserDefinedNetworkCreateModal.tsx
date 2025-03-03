@@ -3,7 +3,8 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { k8sCreate, useActiveNamespace } from '@openshift-console/dynamic-plugin-sdk';
-import { Button, ButtonVariant, Modal, ModalVariant } from '@patternfly/react-core';
+import { Button, ButtonVariant } from '@patternfly/react-core';
+import { Modal, ModalVariant } from '@patternfly/react-core/deprecated';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { ClusterUserDefinedNetworkModel, UserDefinedNetworkModel } from '@utils/models';
 import { getName, getNamespace, resourcePathFromModel } from '@utils/resources/shared';

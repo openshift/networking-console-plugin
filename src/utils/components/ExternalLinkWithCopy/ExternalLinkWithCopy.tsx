@@ -48,7 +48,7 @@ export const ExternalLinkWithCopy: FC<ExternalLinkWithCopyProps> = ({
               onMouseEnter={() => setCopied(false)}
             >
               <CopyIcon />
-              <span className="pf-v5-u-screen-reader">{t('Copy to clipboard')}</span>
+              <span className="pf-v6-u-screen-reader">{t('Copy to clipboard')}</span>
             </span>
           </CTC>
         </Tooltip>

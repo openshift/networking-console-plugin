@@ -3,13 +3,7 @@ import { useParams } from 'react-router-dom-v5-compat';
 
 import { NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
 import { ResourceYAMLEditor } from '@openshift-console/dynamic-plugin-sdk';
-import {
-  PageSection,
-  PageSectionVariants,
-  Text,
-  TextVariants,
-  Title,
-} from '@patternfly/react-core';
+import { PageSection, Content, Title } from '@patternfly/react-core';
 import { EditorType } from '@utils/components/SyncedEditor/EditorToggle';
 import { SyncedEditor } from '@utils/components/SyncedEditor/SyncedEditor';
 import { safeYAMLToJS } from '@utils/components/SyncedEditor/yaml';
@@ -29,11 +23,11 @@ const NetworkPolicyForm: FC = () => {
 
   return (
     <>
-      <PageSection variant={PageSectionVariants.light}>
+      <PageSection>
         <Title headingLevel="h2">
           {isMultiCreateForm ? MultiNetworkPolicyModel.labelPlural : NetworkPolicyModel.labelPlural}
         </Title>
-        <Text component={TextVariants.p}>{helpText}</Text>
+        <Content component="p">{helpText}</Content>
       </PageSection>
       <SyncedEditor
         displayConversionError

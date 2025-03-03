@@ -17,7 +17,7 @@ const NetworkPolicyFormActionButtons: FC<NetworkPolicyFormActionButtonsProps> = 
   const { t } = useNetworkingTranslation();
 
   return (
-    <ActionGroup className="pf-v5-c-form">
+    <ActionGroup className="pf-v6-c-form">
       <Button
         id="save-changes"
         isDisabled={isDisabled}

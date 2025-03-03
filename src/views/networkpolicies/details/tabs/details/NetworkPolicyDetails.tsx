@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
 import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
-import { Grid, GridItem, PageSection, PageSectionVariants, Title } from '@patternfly/react-core';
+import { Grid, GridItem, PageSection, Title } from '@patternfly/react-core';
 import Loading from '@utils/components/Loading/Loading';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
@@ -20,7 +20,7 @@ const NetworkPolicyDetails: FC<NetworkPolicyDetailsProps> = ({ obj: networkPolic
 
   return (
     <>
-      <PageSection variant={PageSectionVariants.light}>
+      <PageSection>
         <Title headingLevel="h2">{t('{{kind}} details', { kind: networkPolicy.kind })}</Title>
         <Grid span={6}>
           <GridItem>
@@ -28,10 +28,10 @@ const NetworkPolicyDetails: FC<NetworkPolicyDetailsProps> = ({ obj: networkPolic
           </GridItem>
         </Grid>
       </PageSection>
-      <PageSection variant={PageSectionVariants.light}>
+      <PageSection>
         <NetworkPolicyDetailsIngress networkPolicy={networkPolicy} />
       </PageSection>
-      <PageSection variant={PageSectionVariants.light}>
+      <PageSection>
         <NetworkPolicyDetailsEgress networkPolicy={networkPolicy} />
       </PageSection>
     </>

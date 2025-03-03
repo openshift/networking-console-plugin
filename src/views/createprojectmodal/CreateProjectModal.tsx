@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { ProjectModel, ProjectRequestModel } from '@kubevirt-ui/kubevirt-api/console';
 import { k8sCreate, k8sDelete, K8sResourceCommon } from '@openshift-console/dynamic-plugin-sdk';
-import { Button, ButtonVariant, Modal, ModalVariant } from '@patternfly/react-core';
+import { Button, ButtonVariant } from '@patternfly/react-core';
+import { Modal, ModalVariant } from '@patternfly/react-core/deprecated';
 import ExternalLink from '@utils/components/ExternalLink/ExternalLink';
 import { documentationURLs, getDocumentationURL, isManaged } from '@utils/constants/documentation';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';

@@ -7,7 +7,7 @@ import {
   IoK8sApiCoreV1Pod,
 } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import Status from '@openshift-console/dynamic-plugin-sdk/lib/app/components/status/Status';
-import { Button, Divider, Popover, Text, TextContent, TextVariants } from '@patternfly/react-core';
+import { Button, Divider, Popover, Content } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { resourcePathFromModel } from '@utils/resources/shared';
 
@@ -68,16 +68,14 @@ export const PodStatus: FC<PodStatusProps> = ({ pod }) => {
       headerTitle = t('Pod crash loop back-off');
       const containers: IoK8sApiCoreV1Container[] = pod.spec.containers;
       footerLinks = (
-        <TextContent>
-          <Text component={TextVariants.p}>
+        <Content>
+          <p>
             {t(
               'CrashLoopBackOff indicates that the application within the container is failing to start properly.',
             )}
-          </Text>
-          <Text component={TextVariants.p}>
-            {t('To troubleshoot, view logs and events, then debug in terminal.')}
-          </Text>
-          <Text component={TextVariants.p}>
+          </p>
+          <p>{t('To troubleshoot, view logs and events, then debug in terminal.')}</p>
+          <p>
             <Link
               to={`${resourcePathFromModel(PodModel, pod.metadata.name, pod.metadata.namespace)}/logs`}
             >
@@ -89,7 +87,7 @@ export const PodStatus: FC<PodStatusProps> = ({ pod }) => {
             >
               {t('View events')}
             </Link>
-          </Text>
+          </p>
           <Divider />
           {containers.map((container) => {
             if (isContainerCrashLoopBackOff(pod, container.name) && !isWindowsPod(pod)) {
@@ -109,7 +107,7 @@ export const PodStatus: FC<PodStatusProps> = ({ pod }) => {
               );
             }
           })}
-        </TextContent>
+        </Content>
       );
     }
 

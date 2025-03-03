@@ -14,9 +14,8 @@ import {
   AlertVariant,
   Button,
   ButtonVariant,
-  Modal,
-  ModalVariant,
 } from '@patternfly/react-core';
+import { Modal, ModalVariant } from '@patternfly/react-core/deprecated';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { isEmpty } from '@utils/utils';
 import { get } from '@utils/utils/helpers';

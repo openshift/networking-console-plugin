@@ -1,7 +1,5 @@
-import { global_palette_black_300 as globalBlack300 } from '@patternfly/react-tokens/dist/js/global_palette_black_300';
-
 const pfDependentAxisTickLabels = {
-  fill: 'var(--pf-v5-global--Color--200)',
+  fill: 'var(--pf-t--chart--global--fill--color--500)',
   fontFamily: 'var(--pf-v5-chart-global--FontFamily)',
   letterSpacing: 'var(--pf-v5-chart-global--letter-spacing)',
   padding: 5,
@@ -9,7 +7,7 @@ const pfDependentAxisTickLabels = {
 
 const axisTicks = {
   size: 5,
-  stroke: globalBlack300.value,
+  stroke: 'var(--pf-t--chart--global--fill--color--400)',
   strokeWidth: 1,
 };
 

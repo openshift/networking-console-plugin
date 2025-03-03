@@ -30,14 +30,17 @@ export const CopyToClipboard: FC<CopyToClipboardProps> = memo((props) => {
       <Tooltip content={tooltipContent} exitDelay={1250} trigger="click mouseenter focus">
         <CTC onCopy={() => setCopied(true)} text={props.value}>
           <Button
+            icon={
+              <>
+                <CopyIcon />
+                <span className="pf-v6-u-screen-reader">{t('Copy to clipboard')}</span>
+              </>
+            }
             className="co-copy-to-clipboard__btn"
             onMouseEnter={() => setCopied(false)}
             type="button"
             variant="plain"
-          >
-            <CopyIcon />
-            <span className="pf-v5-u-screen-reader">{t('Copy to clipboard')}</span>
-          </Button>
+          />
         </CTC>
       </Tooltip>
     </CodeBlockAction>

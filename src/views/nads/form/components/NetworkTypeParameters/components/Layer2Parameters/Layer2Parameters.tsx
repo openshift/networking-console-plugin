@@ -25,7 +25,7 @@ const Layer2Parameters: FC = () => {
   const baseId = NetworkTypeKeys.ovnKubernetesNetworkType;
   const subnetsError = errors?.[baseId]?.subnets;
   return (
-    <FormGroup label={t('Subnet')} labelIcon={<TechPreview />}>
+    <FormGroup label={t('Subnet')} labelHelp={<TechPreview />}>
       <TextInput
         {...register(`${baseId}.subnets`, {
           onBlur: (event) =>

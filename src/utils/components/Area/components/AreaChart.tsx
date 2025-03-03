@@ -13,7 +13,7 @@ import {
   ChartVoronoiContainer,
   createContainer,
   getCustomTheme,
-} from '@patternfly/react-charts';
+} from '@patternfly/react-charts/victory';
 import ChartLegendTooltip from '@utils/components/Area/components/ChartLegendTooltip';
 import GraphEmpty from '@utils/components/Area/components/GraphEmpty';
 import PrometheusGraph from '@utils/components/Area/components/PrometheusGraph';

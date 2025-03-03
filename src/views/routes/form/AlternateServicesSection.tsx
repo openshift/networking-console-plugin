@@ -41,13 +41,13 @@ const AlternateServicesSection: FC<AlternateServicesSectionProps> = ({ services 
 
       {!isEmpty(filteredServices) && (
         <Button
+          icon={<PlusCircleIcon className="co-icon-space-r" />}
           className="pf-m-link--align-left co-create-route__add-service-btn"
           isInline
           onClick={() => append({ kind: 'Service', name: '', weight: 100 })}
           type="button"
           variant={ButtonVariant.link}
         >
-          <PlusCircleIcon className="co-icon-space-r" />
           {t('Add alternate Service')}
         </Button>
       )}

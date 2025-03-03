@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Helmet } from 'react-helmet';
 
-import { PageSection, PageSectionVariants, Title } from '@patternfly/react-core';
+import { PageSection, Title } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 import './error-page.scss';
@@ -20,16 +20,16 @@ const ErrorPage: FC<ErrorPageProps> = ({ message, title }) => {
         <title>{title || t('Error')}</title>
       </Helmet>
       <>
-        <PageSection variant={PageSectionVariants.light}>
+        <PageSection>
           <Title headingLevel="h2">{t('Error')}</Title>
         </PageSection>
-        <PageSection className="networking-plugin-error-page" variant={PageSectionVariants.light}>
+        <PageSection className="networking-plugin-error-page">
           {title && (
             <Title className="error-page-title" headingLevel="h2">
               {title}
             </Title>
           )}
-          {message && <div className="pf-v5-u-text-align-center">{message}</div>}
+          {message && <div className="pf-v6-u-text-align-center">{message}</div>}
         </PageSection>
       </>
     </div>

@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 
-import { Button, ButtonVariant, Text } from '@patternfly/react-core';
+import { Button, ButtonVariant, Content } from '@patternfly/react-core';
 import { PlusCircleIcon } from '@patternfly/react-icons/dist/esm/icons/plus-circle-icon';
 import LabelSelectorEditor from '@utils/components/LabelSelectorEditor/LabelSelectorEditor';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
@@ -41,10 +41,10 @@ const NetworkPolicyConditionalSelector: FC<NetworkPolicyConditionalSelectorProps
       <span>
         <label>{title}</label>
       </span>
-      <Text component="p">{helpText}</Text>
+      <Content component="p">{helpText}</Content>
       {isVisible || !isEmpty(values) ? (
         <>
-          <Text component="p">{secondHelpText}</Text>
+          <Content component="p">{secondHelpText}</Content>
           <LabelSelectorEditor
             labelSelectorPairs={!isEmpty(values) ? values : [['', '']]}
             onLastItemRemoved={() => setVisible(false)}
@@ -53,13 +53,13 @@ const NetworkPolicyConditionalSelector: FC<NetworkPolicyConditionalSelectorProps
         </>
       ) : (
         <Button
+          icon={<PlusCircleIcon className="co-icon-space-r" />}
           className="pf-m-link--align-left"
           data-test={dataTest ? `add-${dataTest}` : 'add-labels-selector'}
           onClick={() => setVisible(true)}
           type="button"
           variant={ButtonVariant.link}
         >
-          <PlusCircleIcon className="co-icon-space-r" />
           {addSelectorText}
         </Button>
       )}

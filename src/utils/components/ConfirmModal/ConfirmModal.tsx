@@ -1,13 +1,7 @@
 import React, { FC } from 'react';
 
-import {
-  ActionList,
-  ActionListItem,
-  Button,
-  ButtonVariant,
-  Modal,
-  ModalVariant,
-} from '@patternfly/react-core';
+import { ActionList, ActionListItem, Button, ButtonVariant } from '@patternfly/react-core';
+import { Modal, ModalVariant } from '@patternfly/react-core/deprecated';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 import '@styles/modal-action.scss';

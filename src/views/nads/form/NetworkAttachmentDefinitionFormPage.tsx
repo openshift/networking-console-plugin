@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
 import { ResourceYAMLEditor } from '@openshift-console/dynamic-plugin-sdk';
-import { PageSection, PageSectionVariants, Title } from '@patternfly/react-core';
+import { PageSection, Title } from '@patternfly/react-core';
 import { EditorType } from '@utils/components/SyncedEditor/EditorToggle';
 import { SyncedEditor } from '@utils/components/SyncedEditor/SyncedEditor';
 import { safeYAMLToJS } from '@utils/components/SyncedEditor/yaml';
@@ -16,7 +16,7 @@ const NetworkAttachmentDefinitionFormPage: FC = () => {
 
   return (
     <>
-      <PageSection variant={PageSectionVariants.light}>
+      <PageSection>
         <Title headingLevel="h1">{t('Create NetworkAttachmentDefinition')}</Title>
       </PageSection>
       <SyncedEditor

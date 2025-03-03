@@ -10,8 +10,6 @@ import {
   EmptyStateActions,
   EmptyStateBody,
   EmptyStateFooter,
-  EmptyStateHeader,
-  EmptyStateIcon,
 } from '@patternfly/react-core';
 import { AddCircleOIcon } from '@patternfly/react-icons';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
@@ -84,12 +82,11 @@ const ListEmptyState = <T extends K8sResourceCommon>({
   return (
     <>
       {title && <ListPageHeader title={title} />}
-      <EmptyState>
-        <EmptyStateHeader
-          headingLevel="h4"
-          icon={<EmptyStateIcon icon={AddCircleOIcon} />}
-          titleText={t('No {{kind}} found', { kind })}
-        />
+      <EmptyState
+        headingLevel="h4"
+        icon={AddCircleOIcon}
+        titleText={t('No {{kind}} found', { kind })}
+      >
         <EmptyStateBody>
           <Trans t={t}>
             Click <b>Create {{ kind }}</b> to create your first {{ kind }}

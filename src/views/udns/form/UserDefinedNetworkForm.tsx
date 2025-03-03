@@ -14,7 +14,6 @@ import {
   FormSection,
   Grid,
   PageSection,
-  PageSectionVariants,
   TextInput,
 } from '@patternfly/react-core';
 import PopoverHelpIcon from '@utils/components/PopoverHelpIcon/PopoverHelpIcon';
@@ -83,14 +82,14 @@ const UserDefinedNetworkForm: FC<UserDefinedNetworkFormProps> = ({ formData, onC
 
   return (
     <Grid span={6}>
-      <PageSection variant={PageSectionVariants.light}>
+      <PageSection>
         <FormProvider {...methods}>
           <Form onSubmit={handleSubmit(onSubmit)}>
             <FormGroup
               fieldId="name"
               isRequired
               label={t('Name')}
-              labelIcon={
+              labelHelp={
                 <PopoverHelpIcon
                   bodyContent={t(
                     'Networks are not project-bound. Using the same name creates a shared UDN.',

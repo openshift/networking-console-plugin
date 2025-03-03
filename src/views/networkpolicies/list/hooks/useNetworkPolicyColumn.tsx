@@ -53,7 +53,7 @@ const useNetworkPolicyColumn: UseNetworkPolicyListColumns = (pagination, data) =
     },
     {
       id: '',
-      props: { className: 'dropdown-kebab-pf pf-v5-c-table__action' },
+      props: { className: 'dropdown-kebab-pf pf-v6-c-table__action' },
       title: '',
     },
   ];

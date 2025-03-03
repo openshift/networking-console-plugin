@@ -9,7 +9,6 @@ import {
   Form,
   FormGroup,
   PageSection,
-  PageSectionVariants,
   TextInput,
   ValidatedOptions,
 } from '@patternfly/react-core';
@@ -76,7 +75,7 @@ const RouteForm: FC<RouteFormProps> = ({ formData, onChange: onFormChange }) => 
   };
 
   return (
-    <PageSection variant={PageSectionVariants.light}>
+    <PageSection>
       <FormProvider {...methods}>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <FormGroup fieldId={NAME_FIELD_ID} isRequired label={t('Name')}>

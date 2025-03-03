@@ -32,7 +32,7 @@ const ClusterUserDefinedNetworkNamespaceSelector: FC = () => {
             label={
               <Popover
                 bodyContent={
-                  <ul className="pf-v5-c-list" role="list">
+                  <ul className="pf-v6-c-list" role="list">
                     <li>{t('key is the label key that the selector applies')}</li>
                     <li>
                       {t(
@@ -47,7 +47,7 @@ const ClusterUserDefinedNetworkNamespaceSelector: FC = () => {
                   </ul>
                 }
               >
-                <label className="pf-v5-c-form__label">{t('Match Expressions')}</label>
+                <label className="pf-v6-c-form__label">{t('Match Expressions')}</label>
               </Popover>
             }
           >

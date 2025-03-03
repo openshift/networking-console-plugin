@@ -26,12 +26,11 @@ const ProjectNamePopover: FC = () => {
       }
     >
       <Button
+        icon={<OutlinedQuestionCircleIcon />}
         aria-label={t('View naming information')}
         className="co-button-help-icon"
         variant={ButtonVariant.plain}
-      >
-        <OutlinedQuestionCircleIcon />
-      </Button>
+      />
     </Popover>
   );
 };

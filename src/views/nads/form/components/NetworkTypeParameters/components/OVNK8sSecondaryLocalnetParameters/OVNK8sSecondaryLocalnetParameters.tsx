@@ -39,7 +39,7 @@ const OVNK8sSecondaryLocalnetParameters: FC = () => {
       <FormGroup
         isRequired
         label={t('Bridge mapping')}
-        labelIcon={
+        labelHelp={
           <PopoverHelpIcon
             bodyContent={t(
               'Physical network name. A bridge mapping must be configured on cluster nodes to map between physical network names and Open vSwitch bridges.',

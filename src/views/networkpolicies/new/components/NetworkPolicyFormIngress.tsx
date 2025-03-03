@@ -55,6 +55,7 @@ const NetworkPolicyFormIngress: FC<NetworkPolicyFormIngressProps> = ({
           actions={
             <>
               <Button
+                className="pf-v6-u-mr-sm"
                 data-test="remove-all-ingress"
                 isDisabled={networkPolicy.ingress.rules.length === 0}
                 onClick={removeAllIngress}

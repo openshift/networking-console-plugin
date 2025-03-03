@@ -66,6 +66,7 @@ const NetworkPolicyFormEgress: FC<NetworkPolicyFormEgressProps> = ({
           actions={
             <>
               <Button
+                className="pf-v6-u-mr-sm"
                 data-test="remove-all-egress"
                 isDisabled={networkPolicy.egress.rules.length === 0}
                 onClick={removeAllEgress}

@@ -66,20 +66,20 @@ const NetworkPolicyRuleConfigPanelRulePeer: FC<NetworkPolicyRuleConfigPanelRuleP
           <FormFieldGroupHeader
             actions={
               <Button
+                icon={<TrashIcon />}
                 aria-label={t('Remove peer')}
                 className="co-create-networkpolicy__remove-peer"
                 data-test="remove-peer"
                 onClick={() => removePeer(index)}
                 type="button"
                 variant="plain"
-              >
-                <TrashIcon />
-              </Button>
+              />
             }
             titleText={{
               id: `peer-header-${index}`,
               text: getPeerRuleTitle(direction, peer),
             }}
+            style={{ paddingBlockStart: '1rem' }}
           />
         }
         isExpanded

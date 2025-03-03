@@ -23,7 +23,7 @@ const Conditions: FC<ConditionsProps> = ({ conditions, type = ConditionTypes.K8s
   if (_.isEmpty(conditions)) {
     return (
       <div className="cos-status-box">
-        <div className="pf-v5-u-text-align-center">{t('No conditions found')}</div>
+        <div className="pf-v6-u-text-align-center">{t('No conditions found')}</div>
       </div>
     );
   }

@@ -22,7 +22,7 @@ const BridgeParameters: FC = () => {
       </FormGroup>
       <FormGroup
         label={t('VLAN tag number')}
-        labelIcon={<PopoverHelpIcon bodyContent={t('Example: 100')} />}
+        labelHelp={<PopoverHelpIcon bodyContent={t('Example: 100')} />}
       >
         <TextInput {...register(`${NetworkTypeKeys.cnvBridgeNetworkType}.vlanTagNum`)} />
       </FormGroup>
