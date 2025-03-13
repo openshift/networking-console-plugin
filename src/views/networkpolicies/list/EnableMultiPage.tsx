@@ -17,7 +17,6 @@ import {
   EmptyStateActions,
   EmptyStateBody,
   EmptyStateFooter,
-  EmptyStateHeader,
   Tooltip,
 } from '@patternfly/react-core';
 import { ALL_NAMESPACES } from '@utils/constants';
@@ -77,11 +76,10 @@ const EnableMultiPage: FC<EnableMultiPageProps> = ({ namespace }) => {
   );
 
   return (
-    <EmptyState>
-      <EmptyStateHeader
-        headingLevel="h4"
-        titleText={t('{{kind}} disabled', { kind: MultiNetworkPolicyModel.labelPlural })}
-      />
+    <EmptyState
+      headingLevel="h4"
+      titleText={t('{{kind}} disabled', { kind: MultiNetworkPolicyModel.labelPlural })}
+    >
       {error && (
         <EmptyStateBody>
           <Alert title={t('Error')} variant={AlertVariant.danger}>

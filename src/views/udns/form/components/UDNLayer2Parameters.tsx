@@ -46,7 +46,7 @@ const Layer2Parameters: FC = () => {
               </Flex>
             }
           >
-            <label className="pf-v5-c-form__label">{t('IPAMLifecycle')}</label>
+            <label className="pf-v6-c-form__label">{t('IPAMLifecycle')}</label>
           </Popover>
         }
       >
@@ -74,7 +74,7 @@ const Layer2Parameters: FC = () => {
               'MTU is optional, if not provided, the globally configured value in OVN-Kubernetes (defaults to 1400) is used for the network.',
             )}
           >
-            <label className="pf-v5-c-form__label">{t('MTU')}</label>
+            <label className="pf-v6-c-form__label">{t('MTU')}</label>
           </Popover>
         }
       >
@@ -90,7 +90,7 @@ const Layer2Parameters: FC = () => {
         label={
           <Popover
             bodyContent={
-              <ul className="pf-v5-c-list" role="list">
+              <ul className="pf-v6-c-list" role="list">
                 <li>
                   {t(
                     'Primary network is automatically assigned to every pod created in the same namespace.',
@@ -104,7 +104,7 @@ const Layer2Parameters: FC = () => {
               </ul>
             }
           >
-            <label className="pf-v5-c-form__label">{t('Role')}</label>
+            <label className="pf-v6-c-form__label">{t('Role')}</label>
           </Popover>
         }
       >
@@ -182,7 +182,7 @@ const Layer2Parameters: FC = () => {
                   </Flex>
                 }
               >
-                <label className="pf-v5-c-form__label">{t('Subnets')}</label>
+                <label className="pf-v6-c-form__label">{t('Subnets')}</label>
               </Popover>
             }
           />
@@ -220,7 +220,7 @@ const Layer2Parameters: FC = () => {
                   </Flex>
                 }
               >
-                <label className="pf-v5-c-form__label">{t('JoinSubnets')}</label>
+                <label className="pf-v6-c-form__label">{t('JoinSubnets')}</label>
               </Popover>
             }
           />

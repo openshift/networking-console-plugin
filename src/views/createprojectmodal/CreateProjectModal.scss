@@ -1,26 +1,26 @@
 .create-project-modal {
   &__tabs-container {
     display: flex;
-    margin-top: var(--pf-v5-global--spacer--md);
-    padding-bottom: var(--pf-v5-global--spacer--md);
+    margin-top: var(--pf-t--global--spacer--md);
+    padding-bottom: var(--pf-t--global--spacer--md);
   }
 
-  &__tabs.pf-v5-c-tabs.pf-m-box.pf-m-vertical {
+  &__tabs.pf-v6-c-tabs.pf-m-box.pf-m-vertical {
     width: fit-content;
-    --pf-v5-c-tabs--m-vertical--Width: fit-content;
+    --pf-v6-c-tabs--m-vertical--Width: fit-content;
     min-width: 100px;
 
-    .pf-v5-c-tabs__item {
+    .pf-v6-c-tabs__item {
       padding: 0;
     }
   }
 
   &__tabs-content {
-    padding: 0 var(--pf-v5-global--spacer--md);
+    padding: 0 var(--pf-t--global--spacer--md);
     width: 100%;
 
-    .pf-v5-c-form__group {
-      margin-bottom: var(--pf-v5-global--spacer--md);
+    .pf-v6-c-form__group {
+      margin-bottom: var(--pf-t--global--spacer--md);
     }
   }
 
@@ -32,7 +32,7 @@
 
   &__networktab {
     .form-checkbox {
-      margin: var(--pf-v5-global--spacer--md) 0;
+      margin: var(--pf-t--global--spacer--md) 0;
     }
 
     min-height: 300px;

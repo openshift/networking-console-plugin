@@ -9,7 +9,6 @@ import {
   Flex,
   FlexItem,
   PageSection,
-  PageSectionVariants,
   Stack,
   Title,
 } from '@patternfly/react-core';
@@ -29,7 +28,7 @@ const IngressDetailsPageTitle: FC<IngressDetailsPageTitleProps> = ({ ingress }) 
   const namespacePath = useLastNamespacePath();
 
   return (
-    <PageSection className="co-m-nav-title--detail" variant={PageSectionVariants.light}>
+    <PageSection className="co-m-nav-title--detail">
       <Breadcrumb className="pf-c-breadcrumb co-breadcrumb ingress-details-breadcrumbs">
         <BreadcrumbItem>
           <Link to={`/k8s/${namespacePath}/${modelToRef(IngressModel)}`}>{t('Ingresses')}</Link>

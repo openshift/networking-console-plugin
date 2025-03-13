@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Button } from '@patternfly/react-core';
+import { Button, InputGroup, InputGroupItem, TextInput } from '@patternfly/react-core';
 import { MinusCircleIcon } from '@patternfly/react-icons/dist/esm/icons/minus-circle-icon';
 import { PlusCircleIcon } from '@patternfly/react-icons/dist/esm/icons/plus-circle-icon';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
@@ -40,11 +40,13 @@ const NetworkPolicyPorts: FC<NetworkPolicyPortsProps> = (props) => {
           {ports.map((port, idx) => {
             const key = `${port}-${idx}`;
             return (
-              <div className="pf-v5-c-input-group" key={key}>
-                <PortsDropdown index={idx} onSingleChange={onSingleChange} port={port} />
-                <input
+              <InputGroup key={key} className="pf-v6-u-mt-sm">
+                <InputGroupItem isFill>
+                  <PortsDropdown index={idx} onSingleChange={onSingleChange} port={port} />
+                </InputGroupItem>
+                <TextInput
                   aria-describedby="ports-help"
-                  className="pf-v5-c-form-control"
+                  className="pf-v6-c-form-control"
                   data-test="port-input"
                   id={`${key}-port`}
                   name={`${key}-port`}
@@ -61,21 +63,21 @@ const NetworkPolicyPorts: FC<NetworkPolicyPortsProps> = (props) => {
                   value={port.port}
                 />
                 <Button
+                  icon={<MinusCircleIcon />}
                   aria-label={t('Remove port')}
                   className="co-create-networkpolicy__remove-port"
                   data-test="remove-port"
                   onClick={() => onRemove(idx)}
                   type="button"
                   variant="plain"
-                >
-                  <MinusCircleIcon />
-                </Button>
-              </div>
+                />
+              </InputGroup>
             );
           })}
           <div className="co-toolbar__group co-toolbar__group--left co-create-networkpolicy__add-port">
             <Button
-              className="pf-m-link--align-left"
+              icon={<PlusCircleIcon className="co-icon-space-r" />}
+              className="pf-m-link--align-left pf-v6-u-mt-sm"
               data-test="add-port"
               onClick={() => {
                 onChange([...ports, { key: `port-${uuidv4}`, port: '', protocol: 'TCP' }]);
@@ -83,7 +85,6 @@ const NetworkPolicyPorts: FC<NetworkPolicyPortsProps> = (props) => {
               type="button"
               variant="link"
             >
-              <PlusCircleIcon className="co-icon-space-r" />
               {t('Add port')}
             </Button>
           </div>

@@ -9,10 +9,10 @@ import React, {
 } from 'react';
 
 import {
+  Label,
+  LabelGroup,
   Button,
   ButtonVariant,
-  Chip,
-  ChipGroup,
   MenuToggle,
   MenuToggleElement,
   SelectOptionProps,
@@ -20,6 +20,7 @@ import {
   TextInputGroupMain,
   TextInputGroupUtilities,
 } from '@patternfly/react-core';
+
 import { TimesIcon } from '@patternfly/react-icons';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { isEmpty } from '@utils/utils';
@@ -128,23 +129,25 @@ const Toggle: FC<ToggleProps> = ({
           role="combobox"
           value={inputValue}
         >
-          <ChipGroup aria-label={t('Current selections')}>
+          <LabelGroup aria-label={t('Current selections')}>
             {selected?.map((selection, index) => (
-              <Chip
+              <Label
+                variant="outline"
                 key={index}
-                onClick={(ev) => {
+                onClose={(ev) => {
                   ev.stopPropagation();
                   onSelect(selection);
                 }}
               >
                 {selection}
-              </Chip>
+              </Label>
             ))}
-          </ChipGroup>
+          </LabelGroup>
         </TextInputGroupMain>
         <TextInputGroupUtilities>
           {!isEmpty(selected) && (
             <Button
+              icon={<TimesIcon aria-hidden />}
               aria-label={t('Clear input value')}
               onClick={() => {
                 setInputValue('');
@@ -152,9 +155,7 @@ const Toggle: FC<ToggleProps> = ({
                 textInputRef?.current?.focus();
               }}
               variant={ButtonVariant.plain}
-            >
-              <TimesIcon aria-hidden />
-            </Button>
+            />
           )}
         </TextInputGroupUtilities>
       </TextInputGroup>

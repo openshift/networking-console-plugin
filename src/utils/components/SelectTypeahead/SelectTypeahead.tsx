@@ -83,6 +83,7 @@ const SelectTypeahead: FC<SelectTypeaheadProps> = ({
           toggleRef={toggleRef}
         />
       )}
+      isScrollable
     >
       <SelectList id="select-typeahead-listbox">
         {selectOptions.map((option, index) => (

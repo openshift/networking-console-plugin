@@ -9,7 +9,6 @@ import {
   Flex,
   FlexItem,
   PageSection,
-  PageSectionVariants,
   Stack,
   Title,
 } from '@patternfly/react-core';
@@ -31,7 +30,7 @@ const NetworkAttachmentDefinitionPageTitle: FC<NetworkAttachmentDefinitionPageTi
   const policyModel = getPolicyModel(networkPolicy);
 
   return (
-    <PageSection variant={PageSectionVariants.light}>
+    <PageSection>
       <Breadcrumb>
         <BreadcrumbItem>
           <Link to={`/k8s/${namespacePath}/${modelToRef(policyModel)}`}>{policyModel.kind}</Link>

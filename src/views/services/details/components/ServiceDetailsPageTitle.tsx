@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom-v5-compat';
 
 import { modelToRef, ServiceModel } from '@kubevirt-ui/kubevirt-api/console';
 import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
-import { Breadcrumb, BreadcrumbItem } from '@patternfly/react-core';
+import { Breadcrumb, BreadcrumbItem, Title } from '@patternfly/react-core';
 import { useLastNamespacePath } from '@utils/hooks/useLastNamespacePath';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import ServiceActions from '@views/services/actions/ServiceActions';
@@ -27,7 +27,7 @@ const ServicePageTitle: FC<ServicePageTitleProps> = ({ service }) => {
         </Breadcrumb>
       </div>
       <span className="co-m-pane__heading">
-        <h1 className="co-resource-item__resource-name">
+        <Title headingLevel="h1">
           <span
             className="co-m-resource-icon co-m-resource-service co-m-resource-icon--lg"
             title="Service"
@@ -35,7 +35,7 @@ const ServicePageTitle: FC<ServicePageTitleProps> = ({ service }) => {
             {t('S')}
           </span>
           {service?.metadata?.name}
-        </h1>
+        </Title>
         <ServiceActions obj={service} />
       </span>
     </div>

@@ -1,7 +1,7 @@
 .co-synced-editor__editor-toggle {
-  border-bottom: var(--pf-v5-global--BorderWidth--sm) solid
-    var(--pf-v5-global--BorderColor--100);
-  border-top: var(--pf-v5-global--BorderWidth--sm) solid
-    var(--pf-v5-global--BorderColor--100);
-  padding: var(--pf-v5-global--spacer--sm) var(--pf-v5-global--spacer--lg);
+  border-bottom: var(--pf-t--global--border--width--regular) solid
+    var(--pf-t--global--border--color--default);
+  border-top: var(--pf-t--global--border--width--regular) solid
+    var(--pf-t--global--border--color--default);
+  padding: var(--pf-t--global--spacer--sm) var(--pf-t--global--spacer--lg);
 }

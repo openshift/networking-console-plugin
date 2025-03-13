@@ -10,7 +10,6 @@ import {
   EmptyStateActions,
   EmptyStateBody,
   EmptyStateFooter,
-  EmptyStateHeader,
 } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { isEmpty } from '@utils/utils';
@@ -31,21 +30,22 @@ const ListErrorState: FC<ListErrorStateProps> = ({ error, title }) => {
     return (
       <>
         {title && <ListPageHeader title={title} />}
-        <EmptyState className="list-error-state-root">
-          <EmptyStateHeader
-            headingLevel="h4"
-            icon={<img src={restrictedSignImg} />}
-            titleText={t('Restricted Access')}
-          >
-            {t("You don't have access to this section due to cluster policy.")}
-          </EmptyStateHeader>
+        <EmptyState
+          headingLevel="h4"
+          icon={() => <img src={restrictedSignImg} />}
+          className="list-error-state-root"
+          titleText={t('Restricted Access')}
+        >
           <EmptyStateBody>
-            {!isEmpty(error?.message) && (
+            {t("You don't have access to this section due to cluster policy.")}
+          </EmptyStateBody>
+          {!isEmpty(error?.message) && (
+            <EmptyStateFooter>
               <Alert isInline title={t('Error details')} variant="danger">
                 {error?.message}
               </Alert>
-            )}
-          </EmptyStateBody>
+            </EmptyStateFooter>
+          )}
         </EmptyState>
       </>
     );

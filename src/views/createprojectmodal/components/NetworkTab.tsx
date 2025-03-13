@@ -6,7 +6,7 @@ import {
   AlertVariant,
   DropdownItem,
   FormGroup,
-  Text,
+  Content,
   TextInput,
 } from '@patternfly/react-core';
 import FormGroupHelperText from '@utils/components/FormGroupHelperText/FormGroupHelperText';
@@ -37,9 +37,9 @@ const NetworkTab: FC = () => {
         )}
         variant={AlertVariant.info}
       >
-        <Text>
+        <Content component="p">
           {t('This network must be created before you create any workload in this project')}
-        </Text>
+        </Content>
       </Alert>
 
       <Controller

@@ -7,7 +7,7 @@ const NoRouteStatus: FC = () => {
 
   return (
     <div className="cos-status-box">
-      <div className="pf-v5-u-text-align-center">{t('No route status')}</div>
+      <div className="pf-v6-u-text-align-center">{t('No route status')}</div>
     </div>
   );
 };

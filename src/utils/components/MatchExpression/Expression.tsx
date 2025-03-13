@@ -95,14 +95,13 @@ export const Expression: FC<ExpressionProps> = ({
       </FormGroup>
       <FormGroup label=" ">
         <Button
+          icon={<MinusCircleIcon />}
           aria-label="Delete"
           className="key-operator-value__delete-button"
           onClick={onClickRemove}
           type="button"
           variant="plain"
-        >
-          <MinusCircleIcon />
-        </Button>
+        />
       </FormGroup>
     </FormGroup>
   );

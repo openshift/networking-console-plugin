@@ -26,7 +26,7 @@ const NetworkPolicyFormPodSelector: FC<NetworkPolicyFormPodSelectorProps> = ({
   };
 
   return (
-    <>
+    <div>
       <NetworkPolicyConditionalSelector
         dataTest="main-pod-selector"
         helpText={t(
@@ -36,7 +36,7 @@ const NetworkPolicyFormPodSelector: FC<NetworkPolicyFormPodSelectorProps> = ({
         selectorType="pod"
         values={networkPolicy.podSelector}
       />
-      <p>
+      <p className="pf-v6-u-mt-sm">
         <Trans t={t}>
           Show a preview of the{' '}
           <Button
@@ -56,7 +56,7 @@ const NetworkPolicyFormPodSelector: FC<NetworkPolicyFormPodSelectorProps> = ({
         policyNamespace={networkPolicy.namespace}
         popoverRef={podsPreviewPopoverRef}
       />
-    </>
+    </div>
   );
 };
 

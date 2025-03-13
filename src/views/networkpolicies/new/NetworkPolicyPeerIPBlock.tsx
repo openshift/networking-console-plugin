@@ -1,7 +1,7 @@
 import React, { ChangeEvent, FC } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Button, ButtonVariant, Text } from '@patternfly/react-core';
+import { Button, ButtonVariant, Content, InputGroup, TextInput } from '@patternfly/react-core';
 import { MinusCircleIcon } from '@patternfly/react-icons/dist/esm/icons/minus-circle-icon';
 import { PlusCircleIcon } from '@patternfly/react-icons/dist/esm/icons/plus-circle-icon';
 import { useClusterNetworkFeatures } from '@utils/hooks/useClusterNetworkFeatures';
@@ -40,43 +40,40 @@ const NetworkPolicyPeerIPBlock: FC<NetworkPolicyPeerIPBlockProps> = ({
         <label className="co-required" htmlFor="cidr">
           {t('CIDR')}
         </label>
-        <input
+        <TextInput
           aria-describedby="ipblock-help"
-          className="pf-v5-c-form-control"
           data-test="ipblock-cidr-input"
           id="cidr"
           name="cidr"
           onChange={handleCIDRChange}
           placeholder="10.2.1.0/16"
           required
-          type="text"
           value={ipBlock.cidr}
         />
         <div className="help-block">
-          <Text component="p">
+          <Content component="p">
             {direction === 'ingress'
               ? t('If this field is empty, traffic will be allowed from all external sources.')
               : t('If this field is empty, traffic will be allowed to all external sources.')}
-          </Text>
+          </Content>
         </div>
       </div>
       {networkFeaturesLoaded && networkFeatures?.PolicyPeerIPBlockExceptions !== false && (
         <div className="form-group">
           <label>{t('Exceptions')}</label>
           {ipBlock?.except?.map((exc, idx) => (
-            <div className="pf-v5-c-input-group" key={exc.key}>
-              <input
+            <InputGroup key={exc.key} className="pf-v6-u-mt-sm">
+              <TextInput
                 aria-describedby="ports-help"
-                className="pf-v5-c-form-control"
                 data-test="ipblock-exception-input"
                 id={`exception-${idx}`}
                 name={`exception-${idx}`}
                 onChange={(event) => handleExceptionsChange(idx, event.currentTarget.value)}
                 placeholder="10.2.1.0/12"
-                type="text"
                 value={exc.value}
               />
               <Button
+                icon={<MinusCircleIcon />}
                 aria-label={t('Remove exception')}
                 className="co-create-networkpolicy__remove-exception"
                 data-test="ipblock-remove-exception"
@@ -89,13 +86,12 @@ const NetworkPolicyPeerIPBlock: FC<NetworkPolicyPeerIPBlockProps> = ({
                 }}
                 type="button"
                 variant="plain"
-              >
-                <MinusCircleIcon />
-              </Button>
-            </div>
+              />
+            </InputGroup>
           ))}
-          <div className="co-toolbar__group co-toolbar__group--left">
+          <div className="co-toolbar__group co-toolbar__group--left pf-v6-u-mt-sm">
             <Button
+              icon={<PlusCircleIcon className="co-icon-space-r" />}
               className="pf-m-link--align-left"
               data-test="ipblock-add-exception"
               onClick={() => {
@@ -108,7 +104,6 @@ const NetworkPolicyPeerIPBlock: FC<NetworkPolicyPeerIPBlockProps> = ({
               type="button"
               variant={ButtonVariant.link}
             >
-              <PlusCircleIcon className="co-icon-space-r" />
               {t('Add exception')}
             </Button>
           </div>

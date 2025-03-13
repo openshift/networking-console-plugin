@@ -75,14 +75,15 @@ const DetailsSectionLeftColumn: FC<DetailsSectionLeftColumnProps> = ({ route }) 
         <DetailsItem label={t('Annotations')} obj={route} path="metadata.annotations">
           {canUpdate ? (
             <Button
+              icon={<PencilAltIcon className="co-icon-space-l pf-v6-c-button-icon--plain" />}
               data-test="edit-annotations"
               isInline
               onClick={annotationsModalLauncher}
               type="button"
               variant="link"
+              iconPosition="end"
             >
               {t('{{count}} annotation', { count: _.size(getAnnotations(route, {})) })}
-              <PencilAltIcon className="co-icon-space-l pf-v5-c-button-icon--plain" />
             </Button>
           ) : (
             t('{{count}} annotation', { count: _.size(getAnnotations(route, {})) })

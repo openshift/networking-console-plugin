@@ -5,14 +5,14 @@ import {
   ChartLegendTooltipProps,
   ChartTooltip,
   getTheme,
-} from '@patternfly/react-charts';
-import { ChartLegendTooltipStyles } from '@patternfly/react-charts/dist/esm/components/ChartTheme/ChartStyles';
+} from '@patternfly/react-charts/victory';
+import { ChartLegendTooltipStyles } from '@patternfly/react-charts/dist/esm/victory/components/ChartTheme/ChartStyles';
 import {
   getLegendTooltipDataProps,
   getLegendTooltipSize,
   getLegendTooltipVisibleData,
   getLegendTooltipVisibleText,
-} from '@patternfly/react-charts/dist/esm/components/ChartUtils/chart-tooltip';
+} from '@patternfly/react-charts/dist/esm/victory/components/ChartUtils/chart-tooltip';
 import ChartLegendTooltipContent from '@utils/components/Area/components/ChartLegendTooltipContent';
 import { DataPoint } from '@utils/components/Area/utils/types';
 import { evaluateProp } from '@utils/components/Area/utils/utils';
@@ -70,7 +70,7 @@ const ChartLegendTooltip: FC<
           // For non-stack graphs, remove the text for "mainDataName"
           text: legendTooltipProps.text.filter(
             (t, i) => legendTooltipProps.legendData[i].name !== mainDataName,
-          ),
+          ) as string[] | number[],
         };
     const _flyoutHeight =
       getLegendTooltipSize(sizeProps).height + ChartLegendTooltipStyles.flyout.padding;

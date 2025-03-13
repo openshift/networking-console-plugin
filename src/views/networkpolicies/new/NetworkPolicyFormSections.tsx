@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom-v5-compat';
 import { NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
 import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { k8sCreate, useModal } from '@openshift-console/dynamic-plugin-sdk';
-import { Form, PageSection, PageSectionVariants, Title } from '@patternfly/react-core';
+import { Form, PageSection, Title } from '@patternfly/react-core';
 import ConfirmModal, { ConfirmModalProps } from '@utils/components/ConfirmModal/ConfirmModal';
 import { useClusterNetworkFeatures } from '@utils/hooks/useClusterNetworkFeatures';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
@@ -103,7 +103,7 @@ const NetworkPolicyFormSections: FC<NetworkPolicyFormSectionsProps> = ({ formDat
   };
 
   return (
-    <PageSection variant={PageSectionVariants.light}>
+    <PageSection>
       <Form className="co-create-networkpolicy" onSubmit={onSubmit}>
         <NetworkPolicyFormSDNAlert
           networkFeatures={networkFeatures}

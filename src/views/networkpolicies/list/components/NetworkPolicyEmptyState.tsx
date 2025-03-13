@@ -2,13 +2,7 @@ import React, { FC } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom-v5-compat';
 
 import { NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
-import {
-  Button,
-  EmptyState,
-  EmptyStateActions,
-  EmptyStateFooter,
-  EmptyStateHeader,
-} from '@patternfly/react-core';
+import { Button, EmptyState, EmptyStateActions, EmptyStateFooter } from '@patternfly/react-core';
 import { DEFAULT_NAMESPACE } from '@utils/constants';
 import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/constants/ui';
 import { useLastNamespacePath } from '@utils/hooks/useLastNamespacePath';
@@ -29,11 +23,7 @@ const NetworkPolicyEmptyState: FC = () => {
   const navigate = useNavigate();
 
   return (
-    <EmptyState>
-      <EmptyStateHeader
-        headingLevel="h4"
-        titleText={t('No {{kind}} found', { kind: networkModel.kind })}
-      />
+    <EmptyState headingLevel="h4" titleText={t('No {{kind}} found', { kind: networkModel.kind })}>
       <EmptyStateFooter>
         <EmptyStateActions>
           <Button

@@ -18,7 +18,7 @@ const DetailsProjectTab: FC = ({}) => {
         fieldId="input-name"
         isRequired
         label={t('Name')}
-        labelIcon={<ProjectNamePopover />}
+        labelHelp={<ProjectNamePopover />}
       >
         <TextInput
           autoFocus

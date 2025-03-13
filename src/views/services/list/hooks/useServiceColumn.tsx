@@ -8,7 +8,7 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 import { objectColumnSorting } from '@utils/utils/sorting';
 
 export const tableColumnClasses = [
-  'pf-v5-u-w-25-on-xl',
+  'pf-v6-u-w-25-on-xl',
   'pf-m-hidden pf-m-visible-on-md',
   'pf-m-hidden pf-m-visible-on-lg',
   'pf-m-hidden pf-m-visible-on-xl',

@@ -1,7 +1,7 @@
 import React, { FC, FormEventHandler } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { Alert, AlertVariant, Form, FormGroup, Text, TextInput } from '@patternfly/react-core';
+import { Alert, AlertVariant, Form, FormGroup, Content, TextInput } from '@patternfly/react-core';
 import SubnetCIRDHelperText from '@utils/components/SubnetCIRDHelperText/SubnetCIRDHelperText';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
@@ -28,11 +28,11 @@ const UserDefinedNetworkCreateForm: FC<UserDefinedNetworkCreateFormProps> = ({
 
   return (
     <Form id="create-udn-form" onSubmit={onSubmit}>
-      <Text>
+      <Content component="p">
         {t(
           'Define the network used by VirtualMachines and Pods to communicate in the given project',
         )}
-      </Text>
+      </Content>
       {!isClusterUDN && <SelectProject />}
 
       {isClusterUDN && (

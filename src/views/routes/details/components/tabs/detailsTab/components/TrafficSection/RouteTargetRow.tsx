@@ -12,8 +12,8 @@ type RouteTargetRowProps = {
 
 const RouteTargetRow: FC<RouteTargetRowProps> = ({ route, target }) => {
   return (
-    <tr className="pf-v5-c-table__tr">
-      <td className="pf-v5-c-table__td">
+    <tr className="pf-v6-c-table__tr">
+      <td className="pf-v6-c-table__td">
         <ResourceLink
           kind={target?.kind}
           name={target?.name}
@@ -21,8 +21,8 @@ const RouteTargetRow: FC<RouteTargetRowProps> = ({ route, target }) => {
           title={target?.name}
         />
       </td>
-      <td className="pf-v5-c-table__td">{target?.weight}</td>
-      <td className="pf-v5-c-table__td">{calcTrafficPercentage(target?.weight, route)}</td>
+      <td className="pf-v6-c-table__td">{target?.weight}</td>
+      <td className="pf-v6-c-table__td">{calcTrafficPercentage(target?.weight, route)}</td>
     </tr>
   );
 };

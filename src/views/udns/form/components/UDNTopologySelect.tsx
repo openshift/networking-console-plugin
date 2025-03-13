@@ -31,7 +31,7 @@ const UserDefinedNetworkTopologySelect: FC = () => {
           label={
             <Popover
               bodyContent={
-                <ul className="pf-v5-c-list" role="list">
+                <ul className="pf-v6-c-list" role="list">
                   <li>
                     {t(
                       'Layer3 topology creates a layer 2 segment per node, each with a different subnet. Layer 3 routing is used to interconnect node subnets.',
@@ -41,7 +41,7 @@ const UserDefinedNetworkTopologySelect: FC = () => {
                 </ul>
               }
             >
-              <label className="pf-v5-c-form__label">{t('Topology')}</label>
+              <label className="pf-v6-c-form__label">{t('Topology')}</label>
             </Popover>
           }
         >

@@ -11,7 +11,7 @@ const EmptyBox: FC<EmptyBoxProps> = ({ label }) => {
 
   return (
     <div className="cos-status-box">
-      <div className="pf-v5-u-text-align-center" data-test="empty-message">
+      <div className="pf-v6-u-text-align-center" data-test="empty-message">
         {label ? t('No {{label}} found', { label }) : t('Not found')}
       </div>
     </div>

@@ -43,6 +43,7 @@ export const PropertyPath: FC<{
 const EditButton: SFC<EditButtonProps> = (props) => {
   return (
     <Button
+      icon={<PencilAltIcon className="co-icon-space-l pf-v6-c-button-icon--plain" />}
       data-test={
         props.testId ? `${props.testId}-details-item__edit-button` : 'details-item__edit-button'
       }
@@ -50,9 +51,9 @@ const EditButton: SFC<EditButtonProps> = (props) => {
       onClick={props.onClick}
       type="button"
       variant="link"
+      iconPosition="end"
     >
       {props.children}
-      <PencilAltIcon className="co-icon-space-l pf-v5-c-button-icon--plain" />
     </Button>
   );
 };

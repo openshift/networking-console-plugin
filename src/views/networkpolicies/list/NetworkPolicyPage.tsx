@@ -37,7 +37,7 @@ const NetworkPolicyPage: FC<NetworkPolicyPageNavProps> = ({ namespace }) => {
 
   return (
     <>
-      <ListPageHeader title={t(selectedModel.labelPluralKey)}>
+      <ListPageHeader title={t(selectedModel.labelPlural)}>
         {locationTabKey !== TAB_INDEXES.ENABLE_MULTI && (
           <ListPageCreateButton
             className="list-page-create-button-margin"

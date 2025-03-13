@@ -52,8 +52,13 @@ const AlternateService: FC<AlternateServiceProps> = ({
       render={({ field: { onChange, value } }) => (
         <>
           <div className="co-add-remove-form__link--remove-entry">
-            <Button isInline onClick={() => remove(index)} type="button" variant="link">
-              <MinusCircleIcon className="co-icon-space-r" />
+            <Button
+              icon={<MinusCircleIcon className="co-icon-space-r" />}
+              isInline
+              onClick={() => remove(index)}
+              type="button"
+              variant="link"
+            >
               {t('Remove alternate Service')}
             </Button>
           </div>

@@ -26,12 +26,12 @@ const showMetrics =
 
 export const podColumnInfo = Object.freeze({
   cpu: {
-    classes: classNames({ 'pf-v5-u-w-10-on-2xl': showMetrics }),
+    classes: classNames({ 'pf-v6-u-w-10-on-2xl': showMetrics }),
     id: 'cpu',
     title: 'CPU',
   },
   created: {
-    classes: classNames('pf-v5-u-w-10-on-2xl'),
+    classes: classNames('pf-v6-u-w-10-on-2xl'),
     id: 'created',
     title: 'Created',
   },
@@ -46,7 +46,7 @@ export const podColumnInfo = Object.freeze({
     title: 'Labels',
   },
   memory: {
-    classes: classNames({ 'pf-v5-u-w-10-on-2xl': showMetrics }),
+    classes: classNames({ 'pf-v6-u-w-10-on-2xl': showMetrics }),
     id: 'memory',
     title: 'Memory',
   },
@@ -71,12 +71,12 @@ export const podColumnInfo = Object.freeze({
     title: 'Owner',
   },
   ready: {
-    classes: classNames('pf-m-nowrap', 'pf-v5-u-w-10-on-lg', 'pf-v5-u-w-8-on-xl'),
+    classes: classNames('pf-m-nowrap', 'pf-v6-u-w-10-on-lg', 'pf-v6-u-w-8-on-xl'),
     id: 'ready',
     title: 'Ready',
   },
   restarts: {
-    classes: classNames('pf-m-nowrap', 'pf-v5-u-w-8-on-2xl'),
+    classes: classNames('pf-m-nowrap', 'pf-v6-u-w-8-on-2xl'),
     id: 'restarts',
     title: 'Restarts',
   },

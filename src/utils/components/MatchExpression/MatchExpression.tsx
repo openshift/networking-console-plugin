@@ -43,8 +43,12 @@ export const MatchExpressions: FC<MatchExpressionsProps> = ({
           onClickRemove={() => removeExpression(index)}
         />
       ))}
-      <Button onClick={addExpression} type="button" variant="link">
-        <PlusCircleIcon className="co-icon-space-r" />
+      <Button
+        icon={<PlusCircleIcon className="co-icon-space-r" />}
+        onClick={addExpression}
+        type="button"
+        variant="link"
+      >
         {t('Add expression')}
       </Button>
     </>

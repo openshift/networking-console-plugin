@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Link } from 'react-router-dom-v5-compat';
 
 import { modelToRef, RouteModel } from '@kubevirt-ui/kubevirt-api/console';
-import { Breadcrumb, BreadcrumbItem } from '@patternfly/react-core';
+import { Breadcrumb, BreadcrumbItem, Title } from '@patternfly/react-core';
 import { useLastNamespacePath } from '@utils/hooks/useLastNamespacePath';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { getName } from '@utils/resources/shared';
@@ -30,7 +30,7 @@ const RouteDetailsPageTitle: FC<RouteDetailsPageTitleProps> = ({ route }) => {
         </Breadcrumb>
       </div>
       <span className="co-m-pane__heading">
-        <h1 className="co-resource-item__resource-name">
+        <Title headingLevel="h1">
           <span
             className="co-m-resource-icon co-m-resource-service co-m-resource-icon--lg"
             title="Route"
@@ -38,7 +38,7 @@ const RouteDetailsPageTitle: FC<RouteDetailsPageTitleProps> = ({ route }) => {
             {t('RT')}
           </span>
           {getName(route)}
-        </h1>
+        </Title>
         <RouteActions route={route} />
       </span>
     </div>

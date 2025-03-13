@@ -7,7 +7,7 @@ const MaskedData: FC = () => {
 
   return (
     <>
-      <span className="pf-v5-u-screen-reader">{t('Value hidden')}</span>
+      <span className="pf-v6-u-screen-reader">{t('Value hidden')}</span>
       <span aria-hidden="true">&bull;&bull;&bull;&bull;&bull;</span>
     </>
   );

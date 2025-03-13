@@ -23,7 +23,7 @@ const NetworkPolicyAddPeerDropdown: FC<NetworkPolicyAddPeerDropdownProps> = (pro
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   return (
-    <div className="form-group co-create-networkpolicy__add-peer">
+    <div className="form-group co-create-networkpolicy__add-peer pf-v6-u-mt-sm">
       <Dropdown
         data-test="add-peer"
         isOpen={isDropdownOpen}

@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { useParams } from 'react-router-dom-v5-compat';
 
 import { ResourceYAMLEditor } from '@openshift-console/dynamic-plugin-sdk';
-import { PageSection, PageSectionVariants, Title } from '@patternfly/react-core';
+import { PageSection, Title } from '@patternfly/react-core';
 import { EditorType } from '@utils/components/SyncedEditor/EditorToggle';
 import { SyncedEditor } from '@utils/components/SyncedEditor/SyncedEditor';
 import { safeYAMLToJS } from '@utils/components/SyncedEditor/yaml';
@@ -25,7 +25,7 @@ const UserDefinedNetworkFormPage: FC = () => {
 
   return (
     <>
-      <PageSection variant={PageSectionVariants.light}>
+      <PageSection>
         <Title headingLevel="h1">{params.ns ? UDN_HEADER_LABEL : CUDN_HEADER_LABEL}</Title>
       </PageSection>
       <SyncedEditor
