@@ -24,8 +24,8 @@ const LabelSelectorEditor: FC<LabelSelectorEditorProps> = ({
     updateParentData(newPairs);
   };
 
-  const onRemove = (index: number) => {
-    updateParentData(labelSelectorPairs.slice(index, index + 1));
+  const onRemove = (indexToRemove: number) => {
+    updateParentData(labelSelectorPairs.filter((_, index) => indexToRemove !== index));
 
     if (labelSelectorPairs.length === 1) onLastItemRemoved();
   };
