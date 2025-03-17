@@ -4,6 +4,9 @@ FROM registry.ci.openshift.org/ocp/builder:rhel-9-base-nodejs-openshift-4.19 AS 
 # Install yarn
 RUN npm install -g yarn -s &>/dev/null
 
+
+ARG YARN_VERSION=v1.22.19
+
 # Copy app source
 COPY . /opt/app-root/src/app
 WORKDIR /opt/app-root/src/app
