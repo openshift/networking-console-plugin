@@ -11,6 +11,7 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   Button,
+  ButtonVariant,
   Popover,
   Split,
   SplitItem,
@@ -50,8 +51,7 @@ const EditButton: SFC<EditButtonProps> = (props) => {
       iconPosition="end"
       isInline
       onClick={props.onClick}
-      type="button"
-      variant="link"
+      variant={ButtonVariant.link}
     >
       {props.children}
     </Button>
@@ -99,7 +99,11 @@ export const DetailsItem: FC<DetailsItemProps> = ({
                 })}
                 maxWidth="30rem"
               >
-                <Button className="details-item__popover-button" data-test={label} variant="plain">
+                <Button
+                  className="details-item__popover-button"
+                  data-test={label}
+                  variant={ButtonVariant.plain}
+                >
                   {label}
                 </Button>
               </Popover>

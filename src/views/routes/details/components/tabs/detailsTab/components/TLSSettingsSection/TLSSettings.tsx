@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 
-import { Button } from '@patternfly/react-core';
+import { Button, ButtonVariant } from '@patternfly/react-core';
 import { EyeIcon, EyeSlashIcon } from '@patternfly/react-icons';
 import { CopyToClipboard } from '@utils/components/CopyToClipboard/CopyToClipboard';
 import { DetailsItem } from '@utils/components/DetailsItem/DetailsItem';
@@ -40,8 +40,7 @@ const TLSSettings: FC<TLSSettingsProps> = ({ route }) => {
           <Button
             className="pf-m-link--align-left"
             onClick={() => setShowKey(!showKey)}
-            type="button"
-            variant="link"
+            variant={ButtonVariant.link}
           >
             {showKey ? (
               <>

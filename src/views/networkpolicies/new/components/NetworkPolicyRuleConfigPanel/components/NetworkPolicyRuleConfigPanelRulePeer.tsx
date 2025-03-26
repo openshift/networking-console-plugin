@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 
 import {
   Button,
+  ButtonVariant,
   Divider,
   FormFieldGroupExpandable,
   FormFieldGroupHeader,
@@ -71,8 +72,7 @@ const NetworkPolicyRuleConfigPanelRulePeer: FC<NetworkPolicyRuleConfigPanelRuleP
                 data-test="remove-peer"
                 icon={<TrashIcon />}
                 onClick={() => removePeer(index)}
-                type="button"
-                variant="plain"
+                variant={ButtonVariant.plain}
               />
             }
             style={{ paddingBlockStart: '1rem' }}

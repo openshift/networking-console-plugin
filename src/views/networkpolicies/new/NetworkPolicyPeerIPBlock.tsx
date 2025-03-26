@@ -84,8 +84,7 @@ const NetworkPolicyPeerIPBlock: FC<NetworkPolicyPeerIPBlockProps> = ({
                   ];
                   onChange(ipBlock);
                 }}
-                type="button"
-                variant="plain"
+                variant={ButtonVariant.plain}
               />
             </InputGroup>
           ))}
@@ -101,7 +100,6 @@ const NetworkPolicyPeerIPBlock: FC<NetworkPolicyPeerIPBlockProps> = ({
                 });
                 onChange(ipBlock);
               }}
-              type="button"
               variant={ButtonVariant.link}
             >
               {t('Add exception')}

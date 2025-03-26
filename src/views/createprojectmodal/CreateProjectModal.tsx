@@ -4,8 +4,15 @@ import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { ProjectModel, ProjectRequestModel } from '@kubevirt-ui/kubevirt-api/console';
 import { k8sCreate, k8sDelete, K8sResourceCommon } from '@openshift-console/dynamic-plugin-sdk';
-import { Button, ButtonVariant } from '@patternfly/react-core';
-import { Modal, ModalVariant } from '@patternfly/react-core/deprecated';
+import {
+  Button,
+  ButtonVariant,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  ModalVariant,
+} from '@patternfly/react-core';
 import ExternalLink from '@utils/components/ExternalLink/ExternalLink';
 import { documentationURLs, getDocumentationURL, isManaged } from '@utils/constants/documentation';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
@@ -68,8 +75,24 @@ const CreateProjectModal: FC<{
   };
 
   return (
-    <Modal
-      actions={[
+    <Modal isOpen onClose={closeModal} variant={ModalVariant.medium}>
+      <ModalHeader title={t('Create Project')} />
+      <ModalBody>
+        <p>
+          {t('An OpenShift project is an alternative representation of a Kubernetes namespace.')}
+        </p>
+        {!isManaged() && (
+          <p>
+            <ExternalLink href={projectsURL}>
+              {t('Learn more about working with projects')}
+            </ExternalLink>
+          </p>
+        )}
+        <FormProvider {...methods}>
+          <CreateProjectModalForm errorMessage={errorMessage} onSubmit={handleSubmit(create)} />
+        </FormProvider>
+      </ModalBody>
+      <ModalFooter>
         <Button
           data-test="modal-create-project"
           form="create-project-modal-form"
@@ -81,35 +104,17 @@ const CreateProjectModal: FC<{
           variant={ButtonVariant.primary}
         >
           {t('Create')}
-        </Button>,
+        </Button>
         <Button
           data-test-id="modal-create-project"
           isDisabled={isSubmitting}
           key="button"
           onClick={closeModal}
-          type="button"
           variant={ButtonVariant.secondary}
         >
           {t('Cancel')}
-        </Button>,
-      ]}
-      isOpen
-      onClose={closeModal}
-      title={t('Create Project')}
-      variant={ModalVariant.medium}
-    >
-      <p>{t('An OpenShift project is an alternative representation of a Kubernetes namespace.')}</p>
-      {!isManaged() && (
-        <p>
-          <ExternalLink href={projectsURL}>
-            {t('Learn more about working with projects')}
-          </ExternalLink>
-        </p>
-      )}
-
-      <FormProvider {...methods}>
-        <CreateProjectModalForm errorMessage={errorMessage} onSubmit={handleSubmit(create)} />
-      </FormProvider>
+        </Button>
+      </ModalFooter>
     </Modal>
   );
 };

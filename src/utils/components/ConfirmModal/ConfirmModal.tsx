@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
-import { ActionList, ActionListItem, Button, ButtonVariant } from '@patternfly/react-core';
-import { Modal, ModalVariant } from '@patternfly/react-core/deprecated';
+import { Button, ButtonVariant, ModalBody, ModalFooter, ModalHeader } from '@patternfly/react-core';
+import { Modal, ModalVariant } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 import '@styles/modal-action.scss';
@@ -30,30 +30,23 @@ const ConfirmModal: FC<ConfirmModalProps> = ({
 
   return (
     <Modal
-      className="ocs-modal networking-modal"
-      footer={
-        <ActionList className="tabmodal-footer">
-          <ActionListItem>
-            <Button onClick={submit} variant={ButtonVariant.primary}>
-              {btnText || t('Confirm')}
-            </Button>
-          </ActionListItem>
-          <ActionListItem>
-            <Button onClick={closeModal} variant="link">
-              {t('Cancel')}
-            </Button>
-          </ActionListItem>
-        </ActionList>
-      }
+      className="networking-modal"
       id="confirm-modal"
       isOpen
       onClose={closeModal}
       position={'top'}
-      title={title}
-      titleIconVariant="warning"
       variant={ModalVariant.small}
     >
-      {message}
+      <ModalHeader title={title} titleIconVariant="warning" />
+      <ModalBody>{message}</ModalBody>
+      <ModalFooter>
+        <Button onClick={submit} variant={ButtonVariant.primary}>
+          {btnText || t('Confirm')}
+        </Button>
+        <Button onClick={closeModal} variant={ButtonVariant.link}>
+          {t('Cancel')}
+        </Button>
+      </ModalFooter>
     </Modal>
   );
 };

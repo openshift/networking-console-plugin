@@ -3,6 +3,7 @@ import React, { ChangeEvent, FC, Ref, useState } from 'react';
 import { MatchExpression, Operator } from '@openshift-console/dynamic-plugin-sdk';
 import {
   Button,
+  ButtonVariant,
   Dropdown,
   DropdownItem,
   DropdownList,
@@ -99,8 +100,7 @@ export const Expression: FC<ExpressionProps> = ({
           className="key-operator-value__delete-button"
           icon={<MinusCircleIcon />}
           onClick={onClickRemove}
-          type="button"
-          variant="plain"
+          variant={ButtonVariant.plain}
         />
       </FormGroup>
     </FormGroup>

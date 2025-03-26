@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Trans } from 'react-i18next';
 
-import { Button, Popover } from '@patternfly/react-core';
+import { Button, ButtonVariant, Popover } from '@patternfly/react-core';
 import { QuestionCircleIcon } from '@patternfly/react-icons';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
@@ -32,8 +32,7 @@ const CustomRouteHelp: FC<CustomRouteHelpProps> = ({ host, routerCanonicalHostna
       <Button
         className="pf-m-link--align-left"
         icon={<QuestionCircleIcon />}
-        type="button"
-        variant="link"
+        variant={ButtonVariant.link}
       >
         {t('Do you need to set up custom DNS?')}
       </Button>

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { Button, TextInput, Tooltip } from '@patternfly/react-core';
+import { Button, ButtonVariant, TextInput, Tooltip } from '@patternfly/react-core';
 import { MinusCircleIcon, PlusCircleIcon } from '@patternfly/react-icons';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
@@ -78,8 +78,7 @@ const LabelSelectorEditor: FC<LabelSelectorEditorProps> = ({
                     </>
                   }
                   onClick={() => onRemove(index)}
-                  type="button"
-                  variant="plain"
+                  variant={ButtonVariant.plain}
                 />
               </Tooltip>
             </div>
@@ -92,8 +91,7 @@ const LabelSelectorEditor: FC<LabelSelectorEditorProps> = ({
             className="pf-m-link--align-left"
             icon={<PlusCircleIcon />}
             onClick={onAddPair}
-            type="button"
-            variant="link"
+            variant={ButtonVariant.link}
           >
             {t('Add label')}
           </Button>

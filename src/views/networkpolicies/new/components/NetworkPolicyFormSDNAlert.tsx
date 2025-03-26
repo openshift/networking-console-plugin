@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 
 import { useFlag } from '@openshift-console/dynamic-plugin-sdk';
-import { Alert, AlertActionCloseButton } from '@patternfly/react-core';
+import { Alert, AlertActionCloseButton, AlertVariant } from '@patternfly/react-core';
 import ExternalLink from '@utils/components/ExternalLink/ExternalLink';
 import { FLAGS } from '@utils/constants';
 import { getNetworkPolicyDocURL, isManaged } from '@utils/constants/documentation';
@@ -33,7 +33,7 @@ const NetworkPolicyFormSDNAlert: FC<NetworkPolicyFormSDNAlertProps> = ({
     <Alert
       actionClose={<AlertActionCloseButton onClose={() => setShowSDNAlert(false)} />}
       title={t('When using the OpenShift SDN cluster network provider:')}
-      variant="info"
+      variant={AlertVariant.info}
     >
       <ul>
         <li>{t('Egress network policy is not supported.')}</li>

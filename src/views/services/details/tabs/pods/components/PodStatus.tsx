@@ -7,7 +7,7 @@ import {
   IoK8sApiCoreV1Pod,
 } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import Status from '@openshift-console/dynamic-plugin-sdk/lib/app/components/status/Status';
-import { Button, Content, Divider, Popover } from '@patternfly/react-core';
+import { Button, ButtonVariant, Content, Divider, Popover } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { resourcePathFromModel } from '@utils/resources/shared';
 
@@ -32,7 +32,7 @@ const PodStatusPopover: FC<PodStatusPopoverProps> = ({
 }) => {
   return (
     <Popover bodyContent={bodyContent} footerContent={footerContent} headerContent={headerContent}>
-      <Button data-test="popover-status-button" isInline variant="link">
+      <Button data-test="popover-status-button" isInline variant={ButtonVariant.link}>
         <Status status={status} />
       </Button>
     </Popover>

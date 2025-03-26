@@ -1,6 +1,11 @@
 import React, { FC } from 'react';
 
-import { Button, FormFieldGroupExpandable, FormFieldGroupHeader } from '@patternfly/react-core';
+import {
+  Button,
+  ButtonVariant,
+  FormFieldGroupExpandable,
+  FormFieldGroupHeader,
+} from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { NetworkPolicy, NetworkPolicyRule } from '@utils/models';
 
@@ -59,11 +64,15 @@ const NetworkPolicyFormIngress: FC<NetworkPolicyFormIngressProps> = ({
                 data-test="remove-all-ingress"
                 isDisabled={networkPolicy.ingress.rules.length === 0}
                 onClick={removeAllIngress}
-                variant="link"
+                variant={ButtonVariant.link}
               >
                 {t('Remove all')}
               </Button>
-              <Button data-test="add-ingress" onClick={addIngressRule} variant="secondary">
+              <Button
+                data-test="add-ingress"
+                onClick={addIngressRule}
+                variant={ButtonVariant.secondary}
+              >
                 {t('Add ingress rule')}
               </Button>
             </>

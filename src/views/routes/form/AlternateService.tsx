@@ -5,6 +5,7 @@ import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/mode
 import { ResourceIcon } from '@openshift-console/dynamic-plugin-sdk';
 import {
   Button,
+  ButtonVariant,
   DropdownItem,
   FormGroup,
   TextInput,
@@ -56,8 +57,7 @@ const AlternateService: FC<AlternateServiceProps> = ({
               icon={<MinusCircleIcon className="co-icon-space-r" />}
               isInline
               onClick={() => remove(index)}
-              type="button"
-              variant="link"
+              variant={ButtonVariant.link}
             >
               {t('Remove alternate Service')}
             </Button>

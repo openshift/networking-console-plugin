@@ -3,6 +3,7 @@ import React, { FC, FormEvent, ReactNode } from 'react';
 import { useModal } from '@openshift-console/dynamic-plugin-sdk';
 import {
   Button,
+  ButtonVariant,
   FormFieldGroupExpandable,
   FormFieldGroupHeader,
   FormGroup,
@@ -114,11 +115,11 @@ const UDNSubnets: FC<UDNSubnetsProps> = ({
                 data-test="remove-all"
                 isDisabled={subnets.length === 0}
                 onClick={removeAll}
-                variant="link"
+                variant={ButtonVariant.link}
               >
                 {t('Remove all')}
               </Button>
-              <Button data-test="add-subnet" onClick={addSubnet} variant="secondary">
+              <Button data-test="add-subnet" onClick={addSubnet} variant={ButtonVariant.secondary}>
                 {t('Add subnet')}
               </Button>
             </>

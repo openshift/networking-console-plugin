@@ -8,14 +8,17 @@ import {
   ResourceIcon,
 } from '@openshift-console/dynamic-plugin-sdk';
 import {
-  ActionList,
-  ActionListItem,
   Alert,
   AlertVariant,
   Button,
   ButtonVariant,
+  FormGroup,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  ModalVariant,
 } from '@patternfly/react-core';
-import { Modal, ModalVariant } from '@patternfly/react-core/deprecated';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { isEmpty } from '@utils/utils';
 import { get } from '@utils/utils/helpers';
@@ -72,52 +75,57 @@ const PodSelectorModal: FC<PodSelectorModalProps> = ({
 
   return (
     <Modal
-      className="ocs-modal networking-modal"
-      footer={
-        <ActionList className="tabmodal-footer">
-          <ActionListItem>
-            <Button
-              isDisabled={loading}
-              isLoading={loading}
-              onClick={updatePodSelector}
-              variant={ButtonVariant.primary}
-            >
-              {t('Save')}
-            </Button>
-          </ActionListItem>
-          <ActionListItem>
-            <Button onClick={closeModal} variant={ButtonVariant.link}>
-              {t('Cancel')}
-            </Button>
-          </ActionListItem>
-        </ActionList>
-      }
+      className="networking-modal"
       id="pod-selector-modal"
       isOpen
       onClose={closeModal}
       position="top"
-      title={t('Edit Pod selector')}
       variant={ModalVariant.small}
     >
-      <div className="row co-m-form-row">
-        <div className="col-sm-12">
-          <label className="control-label" htmlFor="tags-input">
-            {t('Pod selector for')}{' '}
-            <ResourceIcon groupVersionKind={getGroupVersionKindForModel(model)} />
-            {resource?.metadata?.name}
-          </label>
-          <SelectorInput
-            autoFocus
-            onChange={(newSelector) => setSelector(newSelector)}
-            tags={selector || []}
-          />
+      <ModalHeader title={t('Edit Pod selector')} />
+      <ModalBody>
+        <div className="pf-v6-c-form">
+          <FormGroup
+            fieldId="tags-input"
+            label={
+              <>
+                {t('Pod selector for')}{' '}
+                <ResourceIcon groupVersionKind={getGroupVersionKindForModel(model)} />
+                {resource?.metadata?.name}
+              </>
+            }
+          >
+            <SelectorInput
+              autoFocus
+              onChange={(newSelector) => setSelector(newSelector)}
+              tags={selector || []}
+            />
+          </FormGroup>
         </div>
         {error && (
-          <Alert title={t('Error')} variant={AlertVariant.danger}>
+          <Alert
+            className="pf-v6-u-mt-md"
+            isInline
+            title={t('Error')}
+            variant={AlertVariant.danger}
+          >
             {error}
           </Alert>
         )}
-      </div>
+      </ModalBody>
+      <ModalFooter className="tabmodal-footer">
+        <Button
+          isDisabled={loading}
+          isLoading={loading}
+          onClick={updatePodSelector}
+          variant={ButtonVariant.primary}
+        >
+          {t('Save')}
+        </Button>
+        <Button onClick={closeModal} variant={ButtonVariant.link}>
+          {t('Cancel')}
+        </Button>
+      </ModalFooter>
     </Modal>
   );
 };

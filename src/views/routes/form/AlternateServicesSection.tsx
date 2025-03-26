@@ -45,7 +45,6 @@ const AlternateServicesSection: FC<AlternateServicesSectionProps> = ({ services 
           icon={<PlusCircleIcon className="co-icon-space-r" />}
           isInline
           onClick={() => append({ kind: 'Service', name: '', weight: 100 })}
-          type="button"
           variant={ButtonVariant.link}
         >
           {t('Add alternate Service')}

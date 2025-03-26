@@ -10,7 +10,7 @@ import {
   useAnnotationsModal,
   useLabelsModal,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { Button, PageSection, Title } from '@patternfly/react-core';
+import { Button, ButtonVariant, PageSection, Title } from '@patternfly/react-core';
 import { PencilAltIcon } from '@patternfly/react-icons';
 import { DetailsItem } from '@utils/components/DetailsItem/DetailsItem';
 import { LabelList } from '@utils/components/DetailsItem/LabelList';
@@ -93,8 +93,7 @@ const ServiceDetails: FC<DetailsProps> = ({ obj: service }) => {
                   iconPosition="end"
                   isInline
                   onClick={annotationsModalLauncher}
-                  type="button"
-                  variant="link"
+                  variant={ButtonVariant.link}
                 >
                   {t('{{count}} annotation', {
                     count: _.size(metadata?.annotations),

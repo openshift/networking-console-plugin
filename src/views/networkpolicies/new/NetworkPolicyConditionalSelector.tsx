@@ -57,7 +57,6 @@ const NetworkPolicyConditionalSelector: FC<NetworkPolicyConditionalSelectorProps
           data-test={dataTest ? `add-${dataTest}` : 'add-labels-selector'}
           icon={<PlusCircleIcon className="co-icon-space-r" />}
           onClick={() => setVisible(true)}
-          type="button"
           variant={ButtonVariant.link}
         >
           {addSelectorText}

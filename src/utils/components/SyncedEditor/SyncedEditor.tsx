@@ -2,7 +2,7 @@ import React, { ComponentType, FC, useState } from 'react';
 import * as _ from 'lodash';
 
 import { K8sResourceKind } from '@openshift-console/dynamic-plugin-sdk';
-import { Alert, Bullseye, Button } from '@patternfly/react-core';
+import { Alert, AlertVariant, Bullseye, Button, ButtonVariant } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 import Loading from '../Loading/Loading';
@@ -120,15 +120,15 @@ export const SyncedEditor: FC<SyncedEditorProps> = ({
           className="co-synced-editor__yaml-warning"
           isInline
           title={t('Invalid YAML cannot be persisted')}
-          variant="danger"
+          variant={AlertVariant.danger}
         >
           {displayConversionError && <p>{switchError}</p>}
           <p>{t('Switching to form view will delete any invalid YAML.')}</p>
-          <Button onClick={onClickYAMLWarningConfirm} variant="danger">
+          <Button onClick={onClickYAMLWarningConfirm} variant={ButtonVariant.danger}>
             {t('Switch and delete')}
           </Button>
           &nbsp;
-          <Button onClick={onClickYAMLWarningCancel} variant="secondary">
+          <Button onClick={onClickYAMLWarningCancel} variant={ButtonVariant.secondary}>
             {t('Cancel')}
           </Button>
         </Alert>

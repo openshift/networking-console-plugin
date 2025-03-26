@@ -1,7 +1,13 @@
 import React, { FC } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Button, InputGroup, InputGroupItem, TextInput } from '@patternfly/react-core';
+import {
+  Button,
+  ButtonVariant,
+  InputGroup,
+  InputGroupItem,
+  TextInput,
+} from '@patternfly/react-core';
 import { MinusCircleIcon } from '@patternfly/react-icons/dist/esm/icons/minus-circle-icon';
 import { PlusCircleIcon } from '@patternfly/react-icons/dist/esm/icons/plus-circle-icon';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
@@ -68,8 +74,7 @@ const NetworkPolicyPorts: FC<NetworkPolicyPortsProps> = (props) => {
                   data-test="remove-port"
                   icon={<MinusCircleIcon />}
                   onClick={() => onRemove(idx)}
-                  type="button"
-                  variant="plain"
+                  variant={ButtonVariant.plain}
                 />
               </InputGroup>
             );
@@ -82,8 +87,7 @@ const NetworkPolicyPorts: FC<NetworkPolicyPortsProps> = (props) => {
               onClick={() => {
                 onChange([...ports, { key: `port-${uuidv4}`, port: '', protocol: 'TCP' }]);
               }}
-              type="button"
-              variant="link"
+              variant={ButtonVariant.link}
             >
               {t('Add port')}
             </Button>

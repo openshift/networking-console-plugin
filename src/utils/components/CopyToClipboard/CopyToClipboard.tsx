@@ -2,7 +2,14 @@ import React, { FC, memo, ReactNode, useState } from 'react';
 import { CopyToClipboard as CTC } from 'react-copy-to-clipboard';
 import * as _ from 'lodash';
 
-import { Button, CodeBlock, CodeBlockAction, CodeBlockCode, Tooltip } from '@patternfly/react-core';
+import {
+  Button,
+  ButtonVariant,
+  CodeBlock,
+  CodeBlockAction,
+  CodeBlockCode,
+  Tooltip,
+} from '@patternfly/react-core';
 import { CopyIcon } from '@patternfly/react-icons';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
@@ -38,8 +45,7 @@ export const CopyToClipboard: FC<CopyToClipboardProps> = memo((props) => {
               </>
             }
             onMouseEnter={() => setCopied(false)}
-            type="button"
-            variant="plain"
+            variant={ButtonVariant.plain}
           />
         </CTC>
       </Tooltip>

@@ -1,6 +1,11 @@
 import React, { FC } from 'react';
 
-import { Button, FormFieldGroupExpandable, FormFieldGroupHeader } from '@patternfly/react-core';
+import {
+  Button,
+  ButtonVariant,
+  FormFieldGroupExpandable,
+  FormFieldGroupHeader,
+} from '@patternfly/react-core';
 import { ClusterNetworkFeatures } from '@utils/hooks/useClusterNetworkFeatures';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { NetworkPolicy, NetworkPolicyRule } from '@utils/models';
@@ -70,11 +75,15 @@ const NetworkPolicyFormEgress: FC<NetworkPolicyFormEgressProps> = ({
                 data-test="remove-all-egress"
                 isDisabled={networkPolicy.egress.rules.length === 0}
                 onClick={removeAllEgress}
-                variant="link"
+                variant={ButtonVariant.link}
               >
                 {t('Remove all')}
               </Button>
-              <Button data-test="add-egress" onClick={addEgressRule} variant="secondary">
+              <Button
+                data-test="add-egress"
+                onClick={addEgressRule}
+                variant={ButtonVariant.secondary}
+              >
                 {t('Add egress rule')}
               </Button>
             </>

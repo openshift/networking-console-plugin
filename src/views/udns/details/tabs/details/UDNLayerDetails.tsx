@@ -1,7 +1,14 @@
 import React, { FC, JSX } from 'react';
 
 import { DetailsItemComponentProps } from '@openshift-console/dynamic-plugin-sdk';
-import { ClipboardCopy, Flex, FlexItem, List, ListItem } from '@patternfly/react-core';
+import {
+  ClipboardCopy,
+  ClipboardCopyVariant,
+  Flex,
+  FlexItem,
+  List,
+  ListItem,
+} from '@patternfly/react-core';
 import { DetailsItem } from '@utils/components/DetailsItem/DetailsItem';
 import MutedText from '@utils/components/MutedText/MutedText';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
@@ -65,7 +72,7 @@ const UDNLayerDetails: FC<
           hoverTip={t('Copy')}
           isCode
           isReadOnly
-          variant="inline-compact"
+          variant={ClipboardCopyVariant.inlineCompact}
         >
           {text}
         </ClipboardCopy>

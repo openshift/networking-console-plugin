@@ -3,8 +3,15 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { k8sCreate, useActiveNamespace } from '@openshift-console/dynamic-plugin-sdk';
-import { Button, ButtonVariant } from '@patternfly/react-core';
-import { Modal, ModalVariant } from '@patternfly/react-core/deprecated';
+import {
+  Button,
+  ButtonVariant,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  ModalVariant,
+} from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { ClusterUserDefinedNetworkModel, UserDefinedNetworkModel } from '@utils/models';
 import { getName, getNamespace, resourcePathFromModel } from '@utils/resources/shared';
@@ -63,8 +70,22 @@ const UserDefinedNetworkCreateModal: FC<UserDefinedNetworkCreateModalProps> = ({
   const udn = watch();
 
   return (
-    <Modal
-      actions={[
+    <Modal id="udn-create-modal" isOpen onClose={closeModal} variant={ModalVariant.small}>
+      <ModalHeader
+        title={t('Create {{kind}}', {
+          kind: isClusterUDN ? ClusterUserDefinedNetworkModel.kind : UserDefinedNetworkModel.kind,
+        })}
+      />
+      <ModalBody>
+        <FormProvider {...methods}>
+          <UserDefinedNetworkCreateForm
+            error={error}
+            isClusterUDN={isClusterUDN}
+            onSubmit={handleSubmit(submit)}
+          />
+        </FormProvider>
+      </ModalBody>
+      <ModalFooter>
         <Button
           data-test="create-udn-submit"
           form="create-udn-form"
@@ -75,33 +96,17 @@ const UserDefinedNetworkCreateModal: FC<UserDefinedNetworkCreateModalProps> = ({
           variant={ButtonVariant.primary}
         >
           {t('Create')}
-        </Button>,
+        </Button>
         <Button
           data-test-id="create-udn-close"
           isDisabled={isSubmitting}
           key="button"
           onClick={closeModal}
-          type="button"
           variant={ButtonVariant.secondary}
         >
           {t('Cancel')}
-        </Button>,
-      ]}
-      id="udn-create-modal"
-      isOpen
-      onClose={closeModal}
-      title={t('Create {{kind}}', {
-        kind: isClusterUDN ? ClusterUserDefinedNetworkModel.kind : UserDefinedNetworkModel.kind,
-      })}
-      variant={ModalVariant.small}
-    >
-      <FormProvider {...methods}>
-        <UserDefinedNetworkCreateForm
-          error={error}
-          isClusterUDN={isClusterUDN}
-          onSubmit={handleSubmit(submit)}
-        />
-      </FormProvider>
+        </Button>
+      </ModalFooter>
     </Modal>
   );
 };

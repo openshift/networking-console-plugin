@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
-import { ActionGroup, Button } from '@patternfly/react-core';
+import { ActionGroup, Button, ButtonVariant } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 type NetworkPolicyFormActionButtonsProps = {
@@ -18,16 +18,10 @@ const NetworkPolicyFormActionButtons: FC<NetworkPolicyFormActionButtonsProps> = 
 
   return (
     <ActionGroup className="pf-v6-c-form">
-      <Button
-        id="save-changes"
-        isDisabled={isDisabled}
-        isLoading={isLoading}
-        type="submit"
-        variant="primary"
-      >
+      <Button id="save-changes" isDisabled={isDisabled} isLoading={isLoading} type="submit">
         {t('Create')}
       </Button>
-      <Button id="cancel" onClick={() => navigate(-1)} variant="secondary">
+      <Button id="cancel" onClick={() => navigate(-1)} variant={ButtonVariant.secondary}>
         {t('Cancel')}
       </Button>
     </ActionGroup>

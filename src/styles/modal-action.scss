@@ -1,6 +1,11 @@
 .networking-modal {
   .tabmodal-footer {
     flex: 1;
+    gap: 0.5rem;
     flex-direction: row-reverse;
+
+    .pf-v6-c-button:not(:last-child) {
+      --pf-v6-c-modal-box__footer--c-button--MarginInlineEnd: 0;
+    }
   }
 }

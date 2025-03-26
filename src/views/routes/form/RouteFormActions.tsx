@@ -35,12 +35,7 @@ const RouteFormActions: FC<RouteFormActionsProps> = ({ apiError, isCreationForm 
         >
           {isCreationForm ? t('Create') : t('Save')}
         </Button>
-        <Button
-          id="cancel"
-          onClick={() => navigate(-1)}
-          type="button"
-          variant={ButtonVariant.secondary}
-        >
+        <Button id="cancel" onClick={() => navigate(-1)} variant={ButtonVariant.secondary}>
           {t('Cancel')}
         </Button>
       </ActionGroup>

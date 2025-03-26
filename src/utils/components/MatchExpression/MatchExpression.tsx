@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
 import { MatchExpression, Operator } from '@openshift-console/dynamic-plugin-sdk';
-import { Button } from '@patternfly/react-core';
+import { Button, ButtonVariant } from '@patternfly/react-core';
 import { PlusCircleIcon } from '@patternfly/react-icons/dist/esm/icons/plus-circle-icon';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
@@ -46,8 +46,7 @@ export const MatchExpressions: FC<MatchExpressionsProps> = ({
       <Button
         icon={<PlusCircleIcon className="co-icon-space-r" />}
         onClick={addExpression}
-        type="button"
-        variant="link"
+        variant={ButtonVariant.link}
       >
         {t('Add expression')}
       </Button>

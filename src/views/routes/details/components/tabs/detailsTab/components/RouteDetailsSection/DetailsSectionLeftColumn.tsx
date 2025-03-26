@@ -10,7 +10,7 @@ import {
   useAnnotationsModal,
   useLabelsModal,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { Button } from '@patternfly/react-core';
+import { Button, ButtonVariant } from '@patternfly/react-core';
 import { PencilAltIcon } from '@patternfly/react-icons';
 import { DetailsItem } from '@utils/components/DetailsItem/DetailsItem';
 import { LabelList } from '@utils/components/DetailsItem/LabelList';
@@ -80,8 +80,7 @@ const DetailsSectionLeftColumn: FC<DetailsSectionLeftColumnProps> = ({ route }) 
               iconPosition="end"
               isInline
               onClick={annotationsModalLauncher}
-              type="button"
-              variant="link"
+              variant={ButtonVariant.link}
             >
               {t('{{count}} annotation', { count: _.size(getAnnotations(route, {})) })}
             </Button>

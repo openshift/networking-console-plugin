@@ -4,6 +4,7 @@ import { Trans } from 'react-i18next';
 import { ListPageHeader } from '@openshift-console/dynamic-plugin-sdk';
 import {
   Alert,
+  AlertVariant,
   Button,
   ButtonVariant,
   EmptyState,
@@ -41,7 +42,7 @@ const ListErrorState: FC<ListErrorStateProps> = ({ error, title }) => {
           </EmptyStateBody>
           {!isEmpty(error?.message) && (
             <EmptyStateFooter>
-              <Alert isInline title={t('Error details')} variant="danger">
+              <Alert isInline title={t('Error details')} variant={AlertVariant.danger}>
                 {error?.message}
               </Alert>
             </EmptyStateFooter>

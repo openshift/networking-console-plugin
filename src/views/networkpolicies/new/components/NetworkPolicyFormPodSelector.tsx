@@ -1,7 +1,7 @@
 import React, { FC, useRef } from 'react';
 import { Trans } from 'react-i18next';
 
-import { Button } from '@patternfly/react-core';
+import { Button, ButtonVariant } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { NetworkPolicy } from '@utils/models';
 
@@ -43,7 +43,7 @@ const NetworkPolicyFormPodSelector: FC<NetworkPolicyFormPodSelectorProps> = ({
             data-test="show-affected-pods"
             isInline
             ref={podsPreviewPopoverRef}
-            variant="link"
+            variant={ButtonVariant.link}
           >
             affected pods
           </Button>{' '}
