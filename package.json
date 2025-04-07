@@ -19,7 +19,12 @@
     "test-cypress-headless": "cd integration-tests && node --max-old-space-size=4096 ../node_modules/.bin/cypress run --env openshift=true --browser ${BRIDGE_E2E_BROWSER_NAME:=electron}",
     "cypress-merge": "mochawesome-merge ./integration-tests/screenshots/cypress_report*.json > ./integration-tests/screenshots/cypress.json",
     "cypress-generate": "marge -o ./integration-tests/screenshots/ -f cypress-report -t 'OpenShift Console Plugin Template Cypress Test Results' -p 'OpenShift Cypress Plugin Template Test Results' --showPassed false --assetsDir ./integration-tests/screenshots/cypress/assets ./integration-tests/screenshots/cypress.json",
-    "cypress-postreport": "yarn cypress-merge && yarn cypress-generate"
+    "cypress-postreport": "yarn cypress-merge && yarn cypress-generate",
+    "memsource-upload": "./i18n-scripts/memsource-upload.sh",
+    "memsource-download": "./i18n-scripts/memsource-download.sh",
+    "export-pos": "./i18n-scripts/export-pos.sh",
+    "i18n-to-po": "node ./i18n-scripts/i18n-to-po.js",
+    "po-to-i18n": "node ./i18n-scripts/po-to-i18n.js"
   },
   "dependencies": {
     "react-hook-form": "^7.51.1",
@@ -65,6 +70,7 @@
     "eslint-plugin-simple-import-sort": "^12.0.0",
     "file-loader": "^6.2.0",
     "fork-ts-checker-webpack-plugin": "^9.0.2",
+    "i18next-conv": "12.1.1",
     "i18next-parser": "^3.11.0",
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
