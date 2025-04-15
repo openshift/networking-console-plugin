@@ -14,12 +14,10 @@ function processFile(fileName, language) {
     return;
   }
   let newFilePath;
-  const [_, newFileName] = path.basename(fileName, '.po').split('__');
-  
     if (!fs.existsSync(path.join(__dirname, `../locales/${language}/`))) {
       fs.mkdirSync(path.join(__dirname, `../locales/${language}/`), { recursive: true });
-    newFilePath = path.join(__dirname, `../locales/${language}/${newFileName}.json`);
-    console.log(`Saving /locales/${language}/${newFileName}.json`);
+    newFilePath = path.join(__dirname, `../locales/${language}/plugin__networking-console-plugin.json`);
+    console.log(`Saving /locales/${language}/plugin__networking-console-plugin.json`);
   }
   gettextToI18next(language, fs.readFileSync(fileName))
     .then(save(newFilePath))
