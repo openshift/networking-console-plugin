@@ -3,30 +3,30 @@ const { CustomJSONLexer } = require('./i18n-scripts/lexers');
 
 // eslint-disable-next-line no-undef
 module.exports = {
-  sort: true,
   createOldCatalogs: false,
-  keySeparator: false,
-  locales: ['en'],
-  namespaceSeparator: '~',
-  reactNamespace: false,
   defaultNamespace: 'plugin__networking-console-plugin',
-  useKeysAsDefaultValue: true,
-
+  keySeparator: false,
   // see below for more details
   lexers: {
-    hbs: ['HandlebarsLexer'],
+    default: ['JavascriptLexer'],
     handlebars: ['HandlebarsLexer'],
 
+    hbs: ['HandlebarsLexer'],
     htm: ['HTMLLexer'],
+
     html: ['HTMLLexer'],
-
-    mjs: ['JavascriptLexer'],
     js: ['JavascriptLexer'], // if you're writing jsx inside .js files, change this to JsxLexer
-    ts: ['JavascriptLexer'],
-    jsx: ['JsxLexer'],
-    tsx: ['JsxLexer'],
     json: [CustomJSONLexer],
+    jsx: ['JsxLexer'],
+    mjs: ['JavascriptLexer'],
+    ts: ['JavascriptLexer'],
 
-    default: ['JavascriptLexer'],
+    tsx: ['JsxLexer'],
   },
+  locales: ['en', 'es', 'fr', 'ja', 'ko', 'zh'],
+  namespaceSeparator: '~',
+  reactNamespace: false,
+  sort: true,
+
+  useKeysAsDefaultValue: true,
 };
