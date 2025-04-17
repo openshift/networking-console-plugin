@@ -4,6 +4,11 @@ import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { k8sCreate, useActiveNamespace } from '@openshift-console/dynamic-plugin-sdk';
 import {
+  ActionList,
+  ActionListGroup,
+  ActionListItem,
+  Alert,
+  AlertVariant,
   Button,
   ButtonVariant,
   Modal,
@@ -11,6 +16,8 @@ import {
   ModalFooter,
   ModalHeader,
   ModalVariant,
+  Stack,
+  StackItem,
 } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { ClusterUserDefinedNetworkModel, UserDefinedNetworkModel } from '@utils/models';
@@ -79,33 +86,51 @@ const UserDefinedNetworkCreateModal: FC<UserDefinedNetworkCreateModalProps> = ({
       <ModalBody>
         <FormProvider {...methods}>
           <UserDefinedNetworkCreateForm
-            error={error}
             isClusterUDN={isClusterUDN}
             onSubmit={handleSubmit(submit)}
           />
         </FormProvider>
       </ModalBody>
       <ModalFooter>
-        <Button
-          data-test="create-udn-submit"
-          form="create-udn-form"
-          isDisabled={isSubmitting || !isUDNValid(udn)}
-          isLoading={isSubmitting}
-          key="submit"
-          type="submit"
-          variant={ButtonVariant.primary}
-        >
-          {t('Create')}
-        </Button>
-        <Button
-          data-test-id="create-udn-close"
-          isDisabled={isSubmitting}
-          key="button"
-          onClick={closeModal}
-          variant={ButtonVariant.secondary}
-        >
-          {t('Cancel')}
-        </Button>
+        <Stack hasGutter>
+          {error && (
+            <StackItem>
+              <Alert isInline title={t('Error')} variant={AlertVariant.danger}>
+                {error?.message}
+              </Alert>
+            </StackItem>
+          )}
+          <StackItem>
+            <ActionList>
+              <ActionListGroup>
+                <ActionListItem>
+                  <Button
+                    data-test="create-udn-submit"
+                    form="create-udn-form"
+                    isDisabled={isSubmitting || !isUDNValid(udn)}
+                    isLoading={isSubmitting}
+                    key="submit"
+                    type="submit"
+                    variant={ButtonVariant.primary}
+                  >
+                    {t('Create')}
+                  </Button>
+                </ActionListItem>
+                <ActionListItem>
+                  <Button
+                    data-test-id="create-udn-close"
+                    isDisabled={isSubmitting}
+                    key="button"
+                    onClick={closeModal}
+                    variant={ButtonVariant.secondary}
+                  >
+                    {t('Cancel')}
+                  </Button>
+                </ActionListItem>
+              </ActionListGroup>
+            </ActionList>
+          </StackItem>
+        </Stack>
       </ModalFooter>
     </Modal>
   );

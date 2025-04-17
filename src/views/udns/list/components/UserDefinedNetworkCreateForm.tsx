@@ -1,30 +1,27 @@
 import React, { FC, FormEventHandler } from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
-import { Alert, AlertVariant, Content, Form, FormGroup, TextInput } from '@patternfly/react-core';
-import SubnetCIRDHelperText from '@utils/components/SubnetCIRDHelperText/SubnetCIRDHelperText';
+import { Content, Form, FormGroup, TextInput } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 import ClusterUDNNamespaceSelector from './ClusterUDNNamespaceSelector';
 import { UDNForm } from './constants';
 import SelectProject from './SelectProject';
+import SubnetsInput from './SubnetsInput';
+import Topology from './Topology';
 
 type UserDefinedNetworkCreateFormProps = {
-  error: Error;
   isClusterUDN?: boolean;
   onSubmit: FormEventHandler<HTMLFormElement>;
 };
 
 const UserDefinedNetworkCreateForm: FC<UserDefinedNetworkCreateFormProps> = ({
-  error,
   isClusterUDN,
   onSubmit,
 }) => {
   const { t } = useNetworkingTranslation();
 
-  const { control, register, setValue } = useFormContext<UDNForm>();
-
-  const subnetField = isClusterUDN ? 'spec.network.layer2.subnets' : 'spec.layer2.subnets';
+  const { register } = useFormContext<UDNForm>();
 
   return (
     <Form id="create-udn-form" onSubmit={onSubmit}>
@@ -48,39 +45,10 @@ const UserDefinedNetworkCreateForm: FC<UserDefinedNetworkCreateFormProps> = ({
         </FormGroup>
       )}
 
-      <FormGroup fieldId="input-udn-subnet" isRequired label={t('Subnet CIRD')}>
-        <Controller
-          control={control}
-          name={subnetField}
-          render={({ field: { value } }) => (
-            <TextInput
-              autoFocus
-              data-test="input-udn-subnet"
-              id="input-udn-subnet"
-              isRequired
-              name="input-udn-subnet"
-              onChange={(_, newValue) =>
-                setValue(subnetField, newValue.split(','), {
-                  shouldValidate: true,
-                })
-              }
-              type="text"
-              value={value?.join(',')}
-            />
-          )}
-          rules={{ required: true }}
-        />
+      <SubnetsInput isClusterUDN={isClusterUDN} />
 
-        <SubnetCIRDHelperText />
-      </FormGroup>
-
+      <Topology isClusterUDN={isClusterUDN} />
       {isClusterUDN && <ClusterUDNNamespaceSelector />}
-
-      {error && (
-        <Alert isInline title={t('Error')} variant={AlertVariant.danger}>
-          {error?.message}
-        </Alert>
-      )}
     </Form>
   );
 };

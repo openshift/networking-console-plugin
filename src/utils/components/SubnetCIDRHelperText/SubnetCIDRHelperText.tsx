@@ -4,7 +4,7 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 
 import FormGroupHelperText from '../FormGroupHelperText/FormGroupHelperText';
 
-const SubnetCIRDHelperText: FC = () => {
+const SubnetCIDRHelperText: FC = () => {
   const { t } = useNetworkingTranslation();
 
   return (
@@ -16,4 +16,4 @@ const SubnetCIRDHelperText: FC = () => {
   );
 };
 
-export default SubnetCIRDHelperText;
+export default SubnetCIDRHelperText;

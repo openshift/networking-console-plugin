@@ -70,7 +70,7 @@ const NetworkTab: FC = () => {
 
       {networkType === NETWORK_TYPE.UDN && (
         <>
-          <FormGroup fieldId="input-name" isRequired label={t('Subnet CIRD')}>
+          <FormGroup fieldId="input-name" isRequired label={t('Subnet CIDR')}>
             <Controller
               control={control}
               name="udn.spec.layer2.subnets"
