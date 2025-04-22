@@ -29,7 +29,7 @@ export type UserDefinedNetworkSubnet = string | UserDefinedNetworkLayer3Subnet;
 export type UserDefinedNetworkLayer3 = {
   joinSubnets?: string[];
   mtu?: number;
-  role: string;
+  role: UserDefinedNetworkRole;
   subnets?: UserDefinedNetworkLayer3Subnet[];
 };
 
@@ -41,6 +41,11 @@ export type ClusterUserDefinedNetworkSpec = {
 export type UserDefinedNetworkSpec = {
   layer2?: UserDefinedNetworkLayer2;
   layer3?: UserDefinedNetworkLayer3;
+  localnet?: {
+    physicalNetworkName: string;
+    role: UserDefinedNetworkRole;
+    subnets?: UserDefinedNetworkSubnet[];
+  };
   topology: string;
 };
 
