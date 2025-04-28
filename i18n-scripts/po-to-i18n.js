@@ -16,9 +16,10 @@ function processFile(fileName, language) {
   let newFilePath;
     if (!fs.existsSync(path.join(__dirname, `../locales/${language}/`))) {
       fs.mkdirSync(path.join(__dirname, `../locales/${language}/`), { recursive: true });
-    newFilePath = path.join(__dirname, `../locales/${language}/plugin__networking-console-plugin.json`);
-    console.log(`Saving /locales/${language}/plugin__networking-console-plugin.json`);
-  }
+    }
+  newFilePath = path.join(__dirname, `../locales/${language}/plugin__networking-console-plugin.json`);
+  console.log(`Saving /locales/${language}/plugin__networking-console-plugin.json`);
+  
   gettextToI18next(language, fs.readFileSync(fileName))
     .then(save(newFilePath))
     .catch((e) => console.error(fileName, e));
