@@ -39,10 +39,7 @@ const UserDefinedNetworkCreateForm: FC<UserDefinedNetworkCreateFormProps> = ({
           <TextInput
             autoFocus
             data-test="input-name"
-            id="input-name"
             {...register('metadata.name', { required: true })}
-            isRequired
-            name="name"
           />
         </FormGroup>
       )}
