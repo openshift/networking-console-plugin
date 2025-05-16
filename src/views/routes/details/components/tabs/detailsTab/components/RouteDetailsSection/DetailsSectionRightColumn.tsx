@@ -1,5 +1,11 @@
 import React, { FC } from 'react';
 
+import {
+  DescriptionList as DL,
+  DescriptionListDescription as DLDescription,
+  DescriptionListGroup as DLGroup,
+  DescriptionListTerm as DLTerm,
+} from '@patternfly/react-core';
 import { DetailsItem } from '@utils/components/DetailsItem/DetailsItem';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { RouteKind } from '@utils/types';
@@ -23,15 +29,19 @@ const DetailsSectionRightColumn: FC<DetailsSectionRightColumnProps> = ({ route }
 
   return (
     <div className="col-sm-6">
-      <dl className="co-m-pane__details">
-        <dt>{t('Location')}</dt>
-        <dd>
-          <RouteLocation route={route} />
-        </dd>
-        <dt>{t('Status')}</dt>
-        <dd>
-          <RouteStatus route={route} />
-        </dd>
+      <DL className="co-m-pane__details">
+        <DLGroup>
+          <DLTerm>{t('Location')}</DLTerm>
+          <DLDescription>
+            <RouteLocation route={route} />
+          </DLDescription>
+        </DLGroup>
+        <DLGroup>
+          <DLTerm>{t('Status')}</DLTerm>
+          <DLDescription>
+            <RouteStatus route={route} />
+          </DLDescription>
+        </DLGroup>
         <DetailsItem label={t('Host')} obj={route} path="spec.host" />
         <DetailsItem label={t('Path')} obj={route} path="spec.path" />
         {primaryIngressStatus && (
@@ -49,7 +59,7 @@ const DetailsSectionRightColumn: FC<DetailsSectionRightColumnProps> = ({ route }
             )}
           </DetailsItem>
         )}
-      </dl>
+      </DL>
     </div>
   );
 };
