@@ -3,7 +3,8 @@ import { Trans } from 'react-i18next';
 
 import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { useFlag } from '@openshift-console/dynamic-plugin-sdk';
-import { Divider, Grid, GridItem, Title } from '@patternfly/react-core';
+import { Divider, Grid, GridItem } from '@patternfly/react-core';
+import DetailsSectionTitle from '@utils/components/DetailsSectionTitle/DetailsSectionTitle';
 import ExternalLink from '@utils/components/ExternalLink/ExternalLink';
 import { FLAGS } from '@utils/constants';
 import { getNetworkPolicyDocURL, isManaged } from '@utils/constants/documentation';
@@ -33,7 +34,7 @@ const NetworkPolicyDetailsIngress: FC<NetworkPolicyDetailsIngressProps> = ({ net
 
   return (
     <>
-      <Title headingLevel="h2">{t('Ingress rules')}</Title>
+      <DetailsSectionTitle titleText={t('Ingress rules')} />
       {t(
         'Pods accept all traffic by default. They can be isolated via NetworkPolicies which specify a whitelist of ingress rules. When a Pod is selected by a NetworkPolicy, it will reject all traffic not explicitly allowed via a NetworkPolicy.',
       )}

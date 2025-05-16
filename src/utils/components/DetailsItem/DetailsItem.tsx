@@ -1,5 +1,4 @@
 import React, { FC, MouseEvent, ReactNode, SFC } from 'react';
-import classnames from 'classnames';
 import * as _ from 'lodash-es';
 
 import {
@@ -12,6 +11,10 @@ import {
   BreadcrumbItem,
   Button,
   ButtonVariant,
+  DescriptionListDescription,
+  DescriptionListGroup,
+  DescriptionListTermHelpText,
+  DescriptionListTermHelpTextButton,
   Popover,
   Split,
   SplitItem,
@@ -47,7 +50,7 @@ const EditButton: SFC<EditButtonProps> = (props) => {
       data-test={
         props.testId ? `${props.testId}-details-item__edit-button` : 'details-item__edit-button'
       }
-      icon={<PencilAltIcon className="co-icon-space-l pf-v6-c-button-icon--plain" />}
+      icon={<PencilAltIcon />}
       iconPosition="end"
       isInline
       onClick={props.onClick}
@@ -80,14 +83,15 @@ export const DetailsItem: FC<DetailsItemProps> = ({
   const popoverContent: string = description ?? getPropertyDescription(model, path);
   const value: ReactNode = children || _.get(obj, path, defaultValue);
   const editable = onEdit && canEdit;
+
   return hide ? null : (
-    <>
-      <dt
-        className={classnames('details-item__label', labelClassName)}
+    <DescriptionListGroup>
+      <DescriptionListTermHelpText
+        className={labelClassName}
         data-test-selector={`details-item-label__${label}`}
       >
-        <Split>
-          <SplitItem className="details-item__label">
+        <Split className="pf-v6-u-w-100">
+          <SplitItem isFilled>
             {popoverContent || path ? (
               <Popover
                 headerContent={<div>{label}</div>}
@@ -99,34 +103,25 @@ export const DetailsItem: FC<DetailsItemProps> = ({
                 })}
                 maxWidth="30rem"
               >
-                <Button
-                  className="details-item__popover-button"
-                  data-test={label}
-                  variant={ButtonVariant.plain}
-                >
+                <DescriptionListTermHelpTextButton data-test={label}>
                   {label}
-                </Button>
+                </DescriptionListTermHelpTextButton>
               </Popover>
             ) : (
               label
             )}
           </SplitItem>
           {editable && editAsGroup && (
-            <>
-              <SplitItem isFilled />
-              <SplitItem>
-                <EditButton onClick={onEdit} testId={label}>
-                  {t('Edit')}
-                </EditButton>
-              </SplitItem>
-            </>
+            <SplitItem>
+              <EditButton onClick={onEdit} testId={label}>
+                {t('Edit')}
+              </EditButton>
+            </SplitItem>
           )}
         </Split>
-      </dt>
-      <dd
-        className={classnames('details-item__value', valueClassName, {
-          'details-item__value--group': editable && editAsGroup,
-        })}
+      </DescriptionListTermHelpText>
+      <DescriptionListDescription
+        className={valueClassName}
         data-test-selector={`details-item-value__${label}`}
       >
         {editable && !editAsGroup ? (
@@ -136,8 +131,8 @@ export const DetailsItem: FC<DetailsItemProps> = ({
         ) : (
           value
         )}
-      </dd>
-    </>
+      </DescriptionListDescription>
+    </DescriptionListGroup>
   );
 };
 

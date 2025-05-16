@@ -2,8 +2,8 @@ import React from 'react';
 import { Trans } from 'react-i18next';
 
 import { useFlag } from '@openshift-console/dynamic-plugin-sdk';
-import { Title } from '@patternfly/react-core';
 import { Table, Tbody, Th, Thead, Tr } from '@patternfly/react-table';
+import DetailsSectionTitle from '@utils/components/DetailsSectionTitle/DetailsSectionTitle';
 import ExternalLink from '@utils/components/ExternalLink/ExternalLink';
 import { FLAGS } from '@utils/constants';
 import { getNetworkPolicyDocURL, isManaged } from '@utils/constants/documentation';
@@ -25,7 +25,7 @@ const NetworkPolicyDetailsEgress = ({ networkPolicy }) => {
 
   return (
     <>
-      <Title headingLevel="h2">{t('Egress rules')}</Title>
+      <DetailsSectionTitle titleText={t('Egress rules')} />
       <p className="co-m-pane__explanation">
         {t(
           'All outgoing traffic is allowed by default. Egress rules can be used to restrict outgoing traffic if the cluster network provider allows it. When using the OpenShift SDN cluster network provider, egress network policy is not supported.',
