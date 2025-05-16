@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 
-import { Title as PFTitle } from '@patternfly/react-core';
+import { DescriptionList as DL, Title } from '@patternfly/react-core';
 import { DetailsItem } from '@utils/components/DetailsItem/DetailsItem';
-import Title from '@utils/components/Title/Title';
+import DetailsSectionTitle from '@utils/components/DetailsSectionTitle/DetailsSectionTitle';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { RouteIngress, RouteKind } from '@utils/types';
 import CustomRouteHelp from '@views/routes/details/components/tabs/detailsTab/components/RouteDetailsSection/CustomRouteHelp';
@@ -19,12 +19,12 @@ const IngressStatus: FC<IngressStatusProps> = ({ ingress, route }) => {
 
   return (
     <div className="co-m-route-ingress-status" key={ingress?.routerName}>
-      <Title
+      <DetailsSectionTitle
         titleText={`${t('Router: {{routerName}}', {
           routerName: ingress?.routerName,
         })}`}
       />
-      <dl>
+      <DL>
         <DetailsItem label={t('Host')} obj={route} path="status.ingress.host">
           {ingress?.host}
         </DetailsItem>
@@ -44,10 +44,10 @@ const IngressStatus: FC<IngressStatusProps> = ({ ingress, route }) => {
             />
           )}
         </DetailsItem>
-      </dl>
-      <PFTitle className="pf-v6-u-my-lg" headingLevel="h3">
+      </DL>
+      <Title className="pf-v6-u-my-lg" headingLevel="h3">
         {t('Conditions')}
-      </PFTitle>
+      </Title>
       <Conditions conditions={ingress?.conditions} />
     </div>
   );

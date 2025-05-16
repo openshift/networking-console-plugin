@@ -10,10 +10,19 @@ import {
   useAnnotationsModal,
   useLabelsModal,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { Button, ButtonVariant, PageSection, Title } from '@patternfly/react-core';
+import {
+  Button,
+  ButtonVariant,
+  DescriptionList as DL,
+  DescriptionListDescription as DLDescription,
+  DescriptionListGroup as DLGroup,
+  DescriptionListTerm as DLTerm,
+  PageSection,
+} from '@patternfly/react-core';
 import { PencilAltIcon } from '@patternfly/react-icons';
 import { DetailsItem } from '@utils/components/DetailsItem/DetailsItem';
 import { LabelList } from '@utils/components/DetailsItem/LabelList';
+import DetailsSectionTitle from '@utils/components/DetailsSectionTitle/DetailsSectionTitle';
 import Loading from '@utils/components/Loading/Loading';
 import { OwnerReferences } from '@utils/components/OwnerReference/owner-references';
 import { Selector } from '@utils/components/Selector/Selector';
@@ -51,8 +60,8 @@ const ServiceDetails: FC<DetailsProps> = ({ obj: service }) => {
     <PageSection>
       <div className="row">
         <div className="col-md-6">
-          <Title headingLevel="h2">{t('Service details')}</Title>
-          <dl className="co-m-pane__details" data-test-id="resource-summary">
+          <DetailsSectionTitle titleText={t('Service details')} />
+          <DL className="co-m-pane__details" data-test-id="resource-summary">
             <DetailsItem label={t('Name')} obj={service} path={'metadata.name'} />
             {metadata?.namespace && (
               <DetailsItem label={t('Namespace')} obj={service} path="metadata.namespace">
@@ -71,7 +80,7 @@ const ServiceDetails: FC<DetailsProps> = ({ obj: service }) => {
               obj={service}
               onEdit={labelsModalLauncher}
               path="metadata.labels"
-              valueClassName="details-item__value--labels"
+              valueClassName="co-editable-label-group"
             >
               <LabelList
                 groupVersionKind={modelToGroupVersionKind(ServiceModel)}
@@ -89,7 +98,7 @@ const ServiceDetails: FC<DetailsProps> = ({ obj: service }) => {
               {canUpdate ? (
                 <Button
                   data-test="edit-annotations"
-                  icon={<PencilAltIcon className="co-icon-space-l pf-v6-c-button-icon--plain" />}
+                  icon={<PencilAltIcon />}
                   iconPosition="end"
                   isInline
                   onClick={annotationsModalLauncher}
@@ -112,28 +121,32 @@ const ServiceDetails: FC<DetailsProps> = ({ obj: service }) => {
             <DetailsItem label={t('Owner')} obj={service} path="metadata.ownerReferences">
               <OwnerReferences resource={service} />
             </DetailsItem>
-          </dl>
+          </DL>
         </div>
         <div className="col-md-6">
-          <Title headingLevel="h2">{t('Service routing')}</Title>
-          <dl>
-            <dt>{t('Hostname')}</dt>
-            <dd>
-              <div className="co-select-to-copy">
-                {metadata?.name}.{metadata?.namespace}.svc.cluster.local
-              </div>
-              <div>{t('Accessible within the cluster only')}</div>
-            </dd>
-            <dt>{t('Service address')}</dt>
-            <dd className="service-ips">
-              <ServiceAddress service={service} />
-            </dd>
+          <DetailsSectionTitle titleText={t('Service routing')} />
+          <DL>
+            <DLGroup>
+              <DLTerm>{t('Hostname')}</DLTerm>
+              <DLDescription>
+                <div className="co-select-to-copy">
+                  {metadata?.name}.{metadata?.namespace}.svc.cluster.local
+                </div>
+                <div>{t('Accessible within the cluster only')}</div>
+              </DLDescription>
+            </DLGroup>
+            <DLGroup>
+              <DLTerm>{t('Service address')}</DLTerm>
+              <DLDescription className="service-ips">
+                <ServiceAddress service={service} />
+              </DLDescription>
+            </DLGroup>
             <DetailsItem label={t('Service port mapping')} obj={service} path="spec.ports">
               <div className="service-ips">
                 {service?.spec?.ports ? <ServicePortMapping ports={service.spec.ports} /> : '-'}
               </div>
             </DetailsItem>
-          </dl>
+          </DL>
         </div>
       </div>
     </PageSection>

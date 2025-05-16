@@ -10,6 +10,7 @@ import {
   useAnnotationsModal,
   useLabelsModal,
 } from '@openshift-console/dynamic-plugin-sdk';
+import { DescriptionList as DL } from '@patternfly/react-core';
 import { DetailsItem } from '@utils/components/DetailsItem/DetailsItem';
 import { LabelList } from '@utils/components/DetailsItem/LabelList';
 import { OwnerReferences } from '@utils/components/OwnerReference/owner-references';
@@ -43,7 +44,7 @@ const IngressDetailsSection: FC<IngressDetailsSectionProps> = ({ ingress }) => {
   });
 
   return (
-    <>
+    <DL>
       <DetailsItem label={t('Name')} obj={ingress} path="metadata.name" />
       {ingressNamespace && (
         <DetailsItem label={t('Namespace')} obj={ingress} path="metadata.namespace">
@@ -61,7 +62,7 @@ const IngressDetailsSection: FC<IngressDetailsSectionProps> = ({ ingress }) => {
         obj={ingress}
         onEdit={labelsModalLauncher}
         path="metadata.labels"
-        valueClassName="details-item__value--labels"
+        valueClassName="co-editable-label-group"
       >
         <LabelList
           groupVersionKind={getGroupVersionKindForModel(IngressModel)}
@@ -88,7 +89,7 @@ const IngressDetailsSection: FC<IngressDetailsSectionProps> = ({ ingress }) => {
       <DetailsItem label={t('Owner')} obj={ingress} path="metadata.ownerReferences">
         <OwnerReferences resource={ingress} />
       </DetailsItem>
-    </>
+    </DL>
   );
 };
 

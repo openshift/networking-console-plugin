@@ -1,8 +1,15 @@
 import React, { FC } from 'react';
 
-import { Card, CardBody, CardHeader, CardTitle, Grid, GridItem } from '@patternfly/react-core';
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  CardTitle,
+  Grid,
+  GridItem,
+  PageSection,
+} from '@patternfly/react-core';
 import Area from '@utils/components/Area/Area';
-import Dashboard from '@utils/components/Dashboard/Dashboard';
 import { useIsAdmin } from '@utils/hooks/useIsAdmin';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { getName, getNamespace } from '@utils/resources/shared';
@@ -23,7 +30,7 @@ const RouteMetricsTab: FC<RouteMetricsTabProps> = ({ obj: route }) => {
   const namespaceRouteQuery = `{exported_namespace="${getNamespace(route)}",route="${getName(route)}"}[5m]`;
 
   return (
-    <Dashboard className="resource-metrics-dashboard">
+    <PageSection data-test-id="dashboard">
       <Grid hasGutter>
         <GridItem lg={12} xl={6}>
           <Card className="resource-metrics-dashboard__card">
@@ -64,7 +71,7 @@ const RouteMetricsTab: FC<RouteMetricsTabProps> = ({ obj: route }) => {
           </Card>
         </GridItem>
       </Grid>
-    </Dashboard>
+    </PageSection>
   );
 };
 
