@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import { Link } from 'react-router-dom-v5-compat';
 import classNames from 'classnames';
 
 import { K8sGroupVersionKind } from '@openshift-console/dynamic-plugin-sdk';
@@ -19,21 +18,17 @@ export const Label: FC<LabelProps> = ({ expand, groupVersionKind, name, value })
   const href = `/search?kind=${groupVersionKind.kind}&q=${
     value ? encodeURIComponent(`${name}=${value}`) : name
   }`;
-  const kindOf = `co-m-${groupVersionKind.kind}`;
-  const klass = classNames(kindOf, { 'co-m-expand': expand }, 'co-label');
+  const kindOf = `co-m-${groupVersionKind.kind.toLowerCase()}`;
+  const labelClass = classNames(kindOf, { 'co-m-expand': expand }, 'co-label');
 
   return (
-    <>
-      <PfLabel className={klass}>
-        <Link className="pf-v6-c-label__content" to={href}>
-          <span className="co-label__key" data-test="label-key">
-            {name}
-          </span>
-          {value && <span className="co-label__eq">=</span>}
-          {value && <span className="co-label__value">{value}</span>}
-        </Link>
-      </PfLabel>
-    </>
+    <PfLabel className={labelClass} href={href}>
+      <span className="co-label__key" data-test="label-key">
+        {name}
+      </span>
+      {value && <span className="co-label__eq">=</span>}
+      {value && <span className="co-label__value">{value}</span>}
+    </PfLabel>
   );
 };
 

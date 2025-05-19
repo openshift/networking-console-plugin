@@ -10,7 +10,7 @@ import {
   useAnnotationsModal,
   useLabelsModal,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { Button, ButtonVariant } from '@patternfly/react-core';
+import { Button, ButtonVariant, DescriptionList as DL } from '@patternfly/react-core';
 import { PencilAltIcon } from '@patternfly/react-icons';
 import { DetailsItem } from '@utils/components/DetailsItem/DetailsItem';
 import { LabelList } from '@utils/components/DetailsItem/LabelList';
@@ -46,7 +46,7 @@ const DetailsSectionLeftColumn: FC<DetailsSectionLeftColumnProps> = ({ route }) 
 
   return (
     <div className="col-sm-6">
-      <dl className="co-m-pane__details" data-test-id="resource-summary">
+      <DL className="co-m-pane__details" data-test-id="resource-summary">
         <DetailsItem label={t('Name')} obj={route} path={'metadata.name'} />
         {namespace && (
           <DetailsItem label={t('Namespace')} obj={route} path="metadata.namespace">
@@ -65,7 +65,7 @@ const DetailsSectionLeftColumn: FC<DetailsSectionLeftColumnProps> = ({ route }) 
           obj={route}
           onEdit={labelsModalLauncher}
           path="metadata.labels"
-          valueClassName="details-item__value--labels"
+          valueClassName="co-editable-label-group"
         >
           <LabelList
             groupVersionKind={getGroupVersionKindForModel(RouteModel)}
@@ -76,7 +76,7 @@ const DetailsSectionLeftColumn: FC<DetailsSectionLeftColumnProps> = ({ route }) 
           {canUpdate ? (
             <Button
               data-test="edit-annotations"
-              icon={<PencilAltIcon className="co-icon-space-l pf-v6-c-button-icon--plain" />}
+              icon={<PencilAltIcon />}
               iconPosition="end"
               isInline
               onClick={annotationsModalLauncher}
@@ -103,7 +103,7 @@ const DetailsSectionLeftColumn: FC<DetailsSectionLeftColumnProps> = ({ route }) 
         <DetailsItem label={t('Owner')} obj={route} path="metadata.ownerReferences">
           <OwnerReferences resource={route} />
         </DetailsItem>
-      </dl>
+      </DL>
     </div>
   );
 };

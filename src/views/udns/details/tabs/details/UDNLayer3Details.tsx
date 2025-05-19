@@ -1,5 +1,6 @@
 import React, { FC, JSX } from 'react';
 
+import { DescriptionList as DL } from '@patternfly/react-core';
 import { DetailsItem } from '@utils/components/DetailsItem/DetailsItem';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { ClusterUserDefinedNetworkKind, UserDefinedNetworkKind } from '@utils/resources/udns/types';
@@ -16,7 +17,7 @@ const UDNLayer3Details: FC<UDNLayer3DetailsProps> = ({ emptyText, joinSubnets, o
   const layer3Path = obj.spec?.network ? 'spec.network.layer3' : 'spec.layer3';
 
   return (
-    <>
+    <DL>
       <DetailsItem defaultValue={emptyText} label={t('MTU')} obj={obj} path={`${layer3Path}.mtu`} />
       <DetailsItem
         defaultValue={emptyText}
@@ -40,7 +41,7 @@ const UDNLayer3Details: FC<UDNLayer3DetailsProps> = ({ emptyText, joinSubnets, o
       >
         {joinSubnets}
       </DetailsItem>
-    </>
+    </DL>
   );
 };
 
