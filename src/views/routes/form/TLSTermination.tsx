@@ -1,14 +1,8 @@
 import React, { FC } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import {
-  Content,
-  ContentVariants,
-  DropdownItem,
-  FileUpload,
-  FormGroup,
-  Title,
-} from '@patternfly/react-core';
+import { Content, ContentVariants, DropdownItem, FormGroup, Title } from '@patternfly/react-core';
+import FileUpload from '@utils/components/FileUpload/FileUpload';
 import Select from '@utils/components/Select/Select';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
