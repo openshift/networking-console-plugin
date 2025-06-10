@@ -20,6 +20,7 @@ import { PencilAltIcon } from '@patternfly/react-icons/dist/esm/icons/pencil-alt
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 import { getPropertyDescription } from './swagger';
+import LinkifyExternal from '@views/routes/details/components/tabs/detailsTab/components/RouteIngressStatusSection/LinkifyExternal';
 
 export const PropertyPath: FC<{
   kind: string;
@@ -92,7 +93,11 @@ export const DetailsItem: FC<DetailsItemProps> = ({
               <Popover
                 headerContent={<div>{label}</div>}
                 {...(popoverContent && {
-                  bodyContent: <div className="co-pre-line">{popoverContent}</div>,
+                  bodyContent: (
+                    <LinkifyExternal>
+                      <div className="co-pre-line">{popoverContent}</div>
+                    </LinkifyExternal>
+                  ),
                 })}
                 {...(path && {
                   footerContent: <PropertyPath kind={model?.kind} path={path} />,

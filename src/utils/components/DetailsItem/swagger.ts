@@ -1,6 +1,10 @@
 import * as _ from 'lodash';
 
-import { getGroupVersionKindForModel, K8sModel } from '@openshift-console/dynamic-plugin-sdk';
+import {
+  consoleFetchJSON,
+  getGroupVersionKindForModel,
+  K8sModel,
+} from '@openshift-console/dynamic-plugin-sdk';
 
 export const getDefinitionKey = _.memoize(
   (model: K8sModel, definitions: SwaggerDefinitions): string => {
@@ -19,6 +23,23 @@ export const getDefinitionKey = _.memoize(
 
 let swaggerDefinitions: SwaggerDefinitions;
 export const getSwaggerDefinitions = (): SwaggerDefinitions => swaggerDefinitions;
+
+export const fetchSwagger = async (): Promise<SwaggerDefinitions> => {
+  try {
+    const response: SwaggerAPISpec = await consoleFetchJSON('api/kubernetes/openapi/v2');
+    if (!response.definitions) {
+      // eslint-disable-next-line no-console
+      console.error('Definitions missing in OpenAPI response.');
+      return null;
+    }
+    swaggerDefinitions = response.definitions;
+    return swaggerDefinitions;
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.error('Could not get OpenAPI definitions', e);
+    return null;
+  }
+};
 
 const getRef = (definition: SwaggerDefinition): string => {
   const ref = definition.$ref || _.get(definition, 'items.$ref');
@@ -108,3 +129,5 @@ export type SwaggerAPISpec = {
   paths: { [path: string]: any };
   swagger: string;
 };
+
+fetchSwagger();
