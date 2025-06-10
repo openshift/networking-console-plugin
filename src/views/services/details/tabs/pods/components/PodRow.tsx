@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import classNames from 'classnames';
 import * as _ from 'lodash';
 
-import { modelToGroupVersionKind, modelToRef, PodModel } from '@kubevirt-ui/kubevirt-api/console';
+import { modelToGroupVersionKind, PodModel } from '@kubevirt-ui/kubevirt-api/console';
 import { IoK8sApiCoreV1Pod } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
   PrometheusResponse,
@@ -39,8 +39,7 @@ const PodRow: FC<PodRowType> = ({
   const { readyCount, totalContainers } = podReadiness(pod);
   const phase = podPhase(pod);
   const restarts = podRestarts(pod);
-  const resourceKind = modelToRef(PodModel);
-  const context = { [resourceKind]: pod };
+  const context = { [`core~${PodModel.apiVersion}~${PodModel.kind}`]: pod };
 
   const cores = getPodCPUUsage(cpuUsageData, pod);
   const bytes = getPodMemoryUsage(memoryUsageData, pod);
