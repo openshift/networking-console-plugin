@@ -1,5 +1,6 @@
 import React, { FC, JSX } from 'react';
 
+import { DescriptionList as DL } from '@patternfly/react-core';
 import { DetailsItem } from '@utils/components/DetailsItem/DetailsItem';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { ClusterUserDefinedNetworkKind, UserDefinedNetworkKind } from '@utils/resources/udns/types';
@@ -16,7 +17,7 @@ const UDNLayerDetails: FC<UDNLayer2DetailsProps> = ({ emptyText, joinSubnets, ob
   const layer2Path = obj.spec?.network ? 'spec.network.layer2' : 'spec.layer2';
 
   return (
-    <>
+    <DL>
       <DetailsItem
         defaultValue={emptyText}
         label={t('IPAM Lifecycle')}
@@ -46,7 +47,7 @@ const UDNLayerDetails: FC<UDNLayer2DetailsProps> = ({ emptyText, joinSubnets, ob
       >
         {joinSubnets}
       </DetailsItem>
-    </>
+    </DL>
   );
 };
 

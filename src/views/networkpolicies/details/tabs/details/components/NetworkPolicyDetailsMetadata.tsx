@@ -9,6 +9,7 @@ import {
   useAnnotationsModal,
   useLabelsModal,
 } from '@openshift-console/dynamic-plugin-sdk';
+import { DescriptionList as DL } from '@patternfly/react-core';
 import { DetailsItem } from '@utils/components/DetailsItem/DetailsItem';
 import { LabelList } from '@utils/components/DetailsItem/LabelList';
 import { OwnerReferences } from '@utils/components/OwnerReference/owner-references';
@@ -37,7 +38,7 @@ const NetworkPolicyDetailsMetadata: FC<NetworkPolicyDetailsMetadataProps> = ({ n
   });
 
   return (
-    <>
+    <DL>
       <DetailsItem label={t('Name')} obj={networkPolicy} path={'metadata.name'} />
       <DetailsItem label={t('Namespace')} obj={networkPolicy} path="metadata.namespace">
         <ResourceLink
@@ -52,6 +53,7 @@ const NetworkPolicyDetailsMetadata: FC<NetworkPolicyDetailsMetadataProps> = ({ n
         obj={networkPolicy}
         onEdit={labelsModalLauncher}
         path="metadata.labels"
+        valueClassName="co-editable-label-group"
       >
         <LabelList
           groupVersionKind={modelToGroupVersionKind(policyModel)}
@@ -75,7 +77,7 @@ const NetworkPolicyDetailsMetadata: FC<NetworkPolicyDetailsMetadataProps> = ({ n
       <DetailsItem label={t('Owner')} obj={networkPolicy} path="metadata.ownerReferences">
         <OwnerReferences resource={networkPolicy} />
       </DetailsItem>
-    </>
+    </DL>
   );
 };
 

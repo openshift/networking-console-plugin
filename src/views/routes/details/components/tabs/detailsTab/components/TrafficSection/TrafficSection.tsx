@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 
-import { PageSection, Title } from '@patternfly/react-core';
+import { PageSection } from '@patternfly/react-core';
+import DetailsSectionTitle from '@utils/components/DetailsSectionTitle/DetailsSectionTitle';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { RouteKind } from '@utils/types';
 import TrafficSettings from '@views/routes/details/components/tabs/detailsTab/components/TrafficSection/TrafficSettings';
@@ -14,7 +15,7 @@ const TrafficSection: FC<TrafficSectionProps> = ({ route }) => {
 
   return (
     <PageSection>
-      <Title headingLevel="h2">{t('Traffic')}</Title>
+      <DetailsSectionTitle titleText={t('Traffic')} />
       <TrafficSettings route={route} />
     </PageSection>
   );
