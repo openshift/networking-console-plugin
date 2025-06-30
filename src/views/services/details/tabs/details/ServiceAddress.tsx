@@ -1,6 +1,8 @@
 import React, { FC } from 'react';
 
 import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+import { HelperText, HelperTextItem } from '@patternfly/react-core';
+import { Table, Tbody, Td, Th, Thead, Tr } from '@patternfly/react-table';
 import MutedText from '@utils/components/MutedText/MutedText';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
@@ -38,12 +40,14 @@ const ServiceAddress: FC<{ service: IoK8sApiCoreV1Service }> = ({ service }) => 
   };
 
   return (
-    <div>
-      <div className="row co-ip-header">
-        <div className="col-xs-6">{t('Type')}</div>
-        <div className="col-xs-6">{t('Location')}</div>
-      </div>
-      <div className="rows">
+    <Table borders={false} variant="compact">
+      <Thead>
+        <Tr>
+          <Th className="pf-v6-u-pl-0">{t('Type')}</Th>
+          <Th>{t('Location')}</Th>
+        </Tr>
+      </Thead>
+      <Tbody>
         {ServiceType(service.spec.type)}
         {service.spec.externalIPs &&
           ServiceIPsRow({
@@ -51,8 +55,8 @@ const ServiceAddress: FC<{ service: IoK8sApiCoreV1Service }> = ({ service }) => 
             ips: service?.spec?.externalIPs,
             name: t('External IP'),
           })}
-      </div>
-    </div>
+      </Tbody>
+    </Table>
   );
 };
 
@@ -65,18 +69,18 @@ const ServiceIPsRow: FC<{ desc: string; ips: string[]; name: string; note?: stri
   const { t } = useNetworkingTranslation();
 
   return (
-    <div className="co-ip-row">
-      <div className="row">
-        <div className="col-xs-6">
-          <p className="ip-name">{name}</p>
-          <p className="ip-desc">{desc}</p>
-        </div>
-        <div className="col-xs-6">
-          {note && <MutedText content={note} isSpan />}
-          {ips ? ips.join(', ') : t('Pending')}
-        </div>
-      </div>
-    </div>
+    <Tr>
+      <Td className="pf-v6-u-pl-0">
+        <p>{name}</p>
+        <HelperText>
+          <HelperTextItem>{desc}</HelperTextItem>
+        </HelperText>
+      </Td>
+      <Td>
+        {note && <MutedText content={note} isSpan />}
+        {ips ? ips.join(', ') : t('Pending')}
+      </Td>
+    </Tr>
   );
 };
 

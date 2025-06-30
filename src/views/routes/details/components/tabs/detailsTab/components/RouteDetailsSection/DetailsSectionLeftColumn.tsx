@@ -10,7 +10,7 @@ import {
   useAnnotationsModal,
   useLabelsModal,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { Button, ButtonVariant, DescriptionList as DL } from '@patternfly/react-core';
+import { Button, ButtonVariant, DescriptionList as DL, GridItem } from '@patternfly/react-core';
 import { PencilAltIcon } from '@patternfly/react-icons';
 import { DetailsItem } from '@utils/components/DetailsItem/DetailsItem';
 import { LabelList } from '@utils/components/DetailsItem/LabelList';
@@ -45,7 +45,7 @@ const DetailsSectionLeftColumn: FC<DetailsSectionLeftColumnProps> = ({ route }) 
   });
 
   return (
-    <div className="col-sm-6">
+    <GridItem sm={6}>
       <DL className="co-m-pane__details" data-test-id="resource-summary">
         <DetailsItem label={t('Name')} obj={route} path={'metadata.name'} />
         {namespace && (
@@ -104,7 +104,7 @@ const DetailsSectionLeftColumn: FC<DetailsSectionLeftColumnProps> = ({ route }) 
           <OwnerReferences resource={route} />
         </DetailsItem>
       </DL>
-    </div>
+    </GridItem>
   );
 };
 

@@ -5,12 +5,12 @@ const toArray = (value) => (Array.isArray(value) ? value : [value]);
 export const requirementToString = (requirement: MatchExpression): string => {
   const requirementStrings = {
     [Operator.DoesNotExist]: `!${requirement.key}`,
-    [Operator.Equals]: `${requirement.key}=${requirement.values[0]}`,
+    [Operator.Equals]: `${requirement.key}=${requirement.values?.[0]}`,
     [Operator.Exists]: requirement.key,
-    [Operator.GreaterThan]: `${requirement.key} > ${requirement.values[0]}`,
+    [Operator.GreaterThan]: `${requirement.key} > ${requirement.values?.[0]}`,
     [Operator.In]: `${requirement.key} in (${toArray(requirement.values).join(',')})`,
-    [Operator.LessThan]: `${requirement.key} < ${requirement.values[0]}`,
-    [Operator.NotEquals]: `${requirement.key}!=${requirement.values[0]}`,
+    [Operator.LessThan]: `${requirement.key} < ${requirement.values?.[0]}`,
+    [Operator.NotEquals]: `${requirement.key}!=${requirement.values?.[0]}`,
     [Operator.NotIn]: `${requirement.key} notin (${toArray(requirement.values).join(',')})`,
   };
 

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { PageSection } from '@patternfly/react-core';
+import { Grid, PageSection } from '@patternfly/react-core';
 import DetailsSectionTitle from '@utils/components/DetailsSectionTitle/DetailsSectionTitle';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { RouteKind } from '@utils/types';
@@ -17,10 +17,10 @@ const RouteDetailsSection: FC<RouteDetailsSectionProps> = ({ route }) => {
   return (
     <PageSection>
       <DetailsSectionTitle titleText={t('Route details')} />
-      <div className="row">
+      <Grid hasGutter>
         <DetailsSectionLeftColumn route={route} />
         <DetailsSectionRightColumn route={route} />
-      </div>
+      </Grid>
     </PageSection>
   );
 };

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { Button, ButtonVariant, TextInput, Tooltip } from '@patternfly/react-core';
+import { Button, ButtonVariant, Grid, GridItem, TextInput, Tooltip } from '@patternfly/react-core';
 import { MinusCircleIcon, PlusCircleIcon } from '@patternfly/react-icons';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
@@ -36,67 +36,60 @@ const LabelSelectorEditor: FC<LabelSelectorEditorProps> = ({
 
   return (
     <>
-      <div className="row pairs-list__heading">
-        <div className="col-xs-5 text-secondary text-uppercase" id="editor-label-header">
+      <Grid hasGutter>
+        <GridItem id="editor-label-header" sm={5}>
           {t('Key')}
-        </div>
-        <div className="col-xs-5 text-secondary text-uppercase" id="editor-selector-header">
+        </GridItem>
+        <GridItem id="editor-selector-header" sm={5}>
           {t('Value')}
-        </div>
-        <div className="col-xs-1 co-empty__header" />
-      </div>
-      {labelSelectorPairs.map((labelSelectorPair, index) => {
-        return (
-          <div className="row pairs-list__row" key={index}>
-            <div className="col-xs-5 pairs-list__value-pair-field">
-              <TextInput
-                aria-labelledby="editor-label-header"
-                id={`${index}-serial`}
-                onChange={(_, value) => onChange(value, labelSelectorPair[1], index)}
-                type="text"
-                value={labelSelectorPair[0]}
-              />
-            </div>
-            <div className="col-xs-5 pairs-list__name-field">
-              <TextInput
-                aria-labelledby="editor-selector-header"
-                id={`${index}-serial`}
-                onChange={(_, value) => onChange(labelSelectorPair[0], value, index)}
-                type="text"
-                value={labelSelectorPair[1]}
-              />
-            </div>
-            <div className="col-xs-1 pairs-list__action">
-              <Tooltip content={t('Remove')}>
-                <Button
-                  className="pairs-list__span-btns"
-                  data-test-id="pairs-list__delete-from-btn"
-                  icon={
-                    <>
-                      <MinusCircleIcon className="pairs-list__side-btn pairs-list__delete-icon" />
-                      <span className="sr-only">{t('Delete')}</span>
-                    </>
-                  }
-                  onClick={() => onRemove(index)}
-                  variant={ButtonVariant.plain}
-                />
-              </Tooltip>
-            </div>
-          </div>
-        );
-      })}
-      <div className="row">
-        <div className="col-xs-12">
-          <Button
-            className="pf-m-link--align-left"
-            icon={<PlusCircleIcon />}
-            onClick={onAddPair}
-            variant={ButtonVariant.link}
-          >
+        </GridItem>
+        {labelSelectorPairs.map((labelSelectorPair, index) => {
+          return (
+            <GridItem key={index}>
+              <Grid hasGutter>
+                <GridItem sm={5}>
+                  <TextInput
+                    aria-labelledby="editor-label-header"
+                    id={`${index}-serial`}
+                    onChange={(_, value) => onChange(value, labelSelectorPair[1], index)}
+                    type="text"
+                    value={labelSelectorPair[0]}
+                  />
+                </GridItem>
+                <GridItem sm={5}>
+                  <TextInput
+                    aria-labelledby="editor-selector-header"
+                    id={`${index}-serial`}
+                    onChange={(_, value) => onChange(labelSelectorPair[0], value, index)}
+                    type="text"
+                    value={labelSelectorPair[1]}
+                  />
+                </GridItem>
+                <GridItem sm={1}>
+                  <Tooltip content={t('Remove')}>
+                    <Button
+                      data-test-id="pairs-list__delete-from-btn"
+                      icon={
+                        <>
+                          <MinusCircleIcon />
+                          <span className="sr-only">{t('Delete')}</span>
+                        </>
+                      }
+                      onClick={() => onRemove(index)}
+                      variant={ButtonVariant.plain}
+                    />
+                  </Tooltip>
+                </GridItem>
+              </Grid>
+            </GridItem>
+          );
+        })}
+        <GridItem>
+          <Button icon={<PlusCircleIcon />} onClick={onAddPair} variant={ButtonVariant.link}>
             {t('Add label')}
           </Button>
-        </div>
-      </div>
+        </GridItem>
+      </Grid>
     </>
   );
 };

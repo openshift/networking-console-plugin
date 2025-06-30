@@ -5,6 +5,7 @@ import {
   DescriptionListDescription as DLDescription,
   DescriptionListGroup as DLGroup,
   DescriptionListTerm as DLTerm,
+  GridItem,
 } from '@patternfly/react-core';
 import { DetailsItem } from '@utils/components/DetailsItem/DetailsItem';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
@@ -28,7 +29,7 @@ const DetailsSectionRightColumn: FC<DetailsSectionRightColumnProps> = ({ route }
   );
 
   return (
-    <div className="col-sm-6">
+    <GridItem sm={6}>
       <DL className="co-m-pane__details">
         <DLGroup>
           <DLTerm>{t('Location')}</DLTerm>
@@ -60,7 +61,7 @@ const DetailsSectionRightColumn: FC<DetailsSectionRightColumnProps> = ({ route }
           </DetailsItem>
         )}
       </DL>
-    </div>
+    </GridItem>
   );
 };
 

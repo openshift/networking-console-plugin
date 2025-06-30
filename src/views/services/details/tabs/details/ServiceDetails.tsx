@@ -17,6 +17,8 @@ import {
   DescriptionListDescription as DLDescription,
   DescriptionListGroup as DLGroup,
   DescriptionListTerm as DLTerm,
+  Grid,
+  GridItem,
   PageSection,
 } from '@patternfly/react-core';
 import { PencilAltIcon } from '@patternfly/react-icons';
@@ -58,8 +60,8 @@ const ServiceDetails: FC<DetailsProps> = ({ obj: service }) => {
 
   return (
     <PageSection>
-      <div className="row">
-        <div className="col-md-6">
+      <Grid hasGutter>
+        <GridItem md={6}>
           <DetailsSectionTitle titleText={t('Service details')} />
           <DL className="co-m-pane__details" data-test-id="resource-summary">
             <DetailsItem label={t('Name')} obj={service} path={'metadata.name'} />
@@ -122,8 +124,8 @@ const ServiceDetails: FC<DetailsProps> = ({ obj: service }) => {
               <OwnerReferences resource={service} />
             </DetailsItem>
           </DL>
-        </div>
-        <div className="col-md-6">
+        </GridItem>
+        <GridItem md={6}>
           <DetailsSectionTitle titleText={t('Service routing')} />
           <DL>
             <DLGroup>
@@ -147,8 +149,8 @@ const ServiceDetails: FC<DetailsProps> = ({ obj: service }) => {
               </div>
             </DetailsItem>
           </DL>
-        </div>
-      </div>
+        </GridItem>
+      </Grid>
     </PageSection>
   );
 };
