@@ -79,7 +79,7 @@ const IngressDetailsSection: FC<IngressDetailsSectionProps> = ({ ingress }) => {
           count: Object.keys(ingress?.metadata?.annotations || {}).length,
         })}
       </DetailsItem>
-      <DetailsItem label={t('TLS certificate')}>
+      <DetailsItem label={t('TLS certificate')} obj={ingress}>
         <TLSCert ingress={ingress} />
       </DetailsItem>
       <DetailsItem label={t('Created at')} obj={ingress} path="metadata.creationTimestamp">
