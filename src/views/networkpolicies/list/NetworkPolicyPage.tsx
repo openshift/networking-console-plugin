@@ -2,13 +2,18 @@ import React, { FC, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom-v5-compat';
 
 import { modelToGroupVersionKind, NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
-import { ListPageCreateButton, ListPageHeader } from '@openshift-console/dynamic-plugin-sdk';
+import {
+  ListPageCreateButton,
+  ListPageHeader,
+  useActiveNamespace,
+} from '@openshift-console/dynamic-plugin-sdk';
 import { Tab, Tabs, TabTitleText } from '@patternfly/react-core';
 import { ALL_NAMESPACES, DEFAULT_NAMESPACE } from '@utils/constants';
 import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/constants/ui';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { MultiNetworkPolicyModel } from '@utils/models';
 import { resourcePathFromModel } from '@utils/resources/shared';
+import { getValidNamespace } from '@utils/utils';
 
 import useIsMultiEnabled from './hooks/useIsMultiEnabled';
 import { TAB_INDEXES } from './constants';
@@ -17,14 +22,11 @@ import MultiNetworkPolicyList from './MultiNetworkPolicyList';
 import NetworkPolicyList from './NetworkPolicyList';
 import { getActiveKeyFromPathname, getNetworkPolicyURLTab } from './utils';
 
-export type NetworkPolicyPageNavProps = {
-  namespace: string;
-};
-
-const NetworkPolicyPage: FC<NetworkPolicyPageNavProps> = ({ namespace }) => {
+const NetworkPolicyPage: FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-
+  const [activeNamespace] = useActiveNamespace();
+  const namespace = getValidNamespace(activeNamespace);
   const locationTabKey = useMemo(
     () => getActiveKeyFromPathname(location?.pathname),
     [location?.pathname],
