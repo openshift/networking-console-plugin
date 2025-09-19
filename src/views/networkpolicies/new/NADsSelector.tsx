@@ -58,13 +58,12 @@ const NADsSelector: FC<NADsSelectorProps> = ({ namespace, networkPolicy, onPolic
         {loadError}
       </Alert>
     );
-
   return (
     <FormGroup fieldId="multi-networkpolicy-policyfor" isRequired label={t('Policy for')}>
       <SelectMultiTypeahead
         options={nadsOptions}
         placeholder={t('Select one or more NetworkAttachmentDefinitions')}
-        selected={networkPolicy.policyFor}
+        selected={networkPolicy.policyFor || []}
         setSelected={onChange}
       />
     </FormGroup>
