@@ -24,7 +24,7 @@ const NetworkAttachmentDefinitionPageTitle: FC<NetworkAttachmentDefinitionPageTi
   return (
     <DetailsPageTitle
       breadcrumbs={[
-        { name: policyModel.kind, to: `/k8s/${namespacePath}/${modelToRef(policyModel)}` },
+        { name: policyModel.labelPlural, to: `/k8s/${namespacePath}/${modelToRef(policyModel)}` },
         { name: t('{{kind}} details', { kind: policyModel.kind }) },
       ]}
     >
