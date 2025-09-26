@@ -43,7 +43,7 @@ const NetworkAttachmentDefinitionList: FC<NetworkAttachmentDefinitionListProps> 
   });
   const [data, filteredData, onFilterChange] = useListPageFilter(nads);
   const columns = useNADsColumns();
-  const title = t('NetworkAttachmentDefinitions');
+  const title = t('Network Attachment Definition details');
 
   return (
     <ListEmptyState<NetworkAttachmentDefinitionKind>

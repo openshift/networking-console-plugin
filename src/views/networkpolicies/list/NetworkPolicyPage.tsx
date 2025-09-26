@@ -70,21 +70,21 @@ const NetworkPolicyPage: FC = () => {
       >
         <Tab
           eventKey={TAB_INDEXES.NETWORK}
-          title={<TabTitleText>{t('NetworkPolicies')}</TabTitleText>}
+          title={<TabTitleText>{t('NetworkPolicy details')}</TabTitleText>}
         >
           <NetworkPolicyList namespace={namespace} />
         </Tab>
         {isMultiEnabled ? (
           <Tab
             eventKey={TAB_INDEXES.MULTI_NETWORK}
-            title={<TabTitleText>{t('MultiNetworkPolicies')}</TabTitleText>}
+            title={<TabTitleText>{t('MultiNetworkPolicy details')}</TabTitleText>}
           >
             <MultiNetworkPolicyList namespace={namespace} />
           </Tab>
         ) : (
           <Tab
             eventKey={TAB_INDEXES.ENABLE_MULTI}
-            title={<TabTitleText>{t('MultiNetworkPolicies')}</TabTitleText>}
+            title={<TabTitleText>{t('MultiNetworkPolicy details')}</TabTitleText>}
           >
             <EnableMultiPage namespace={namespace} />
           </Tab>
