@@ -21,7 +21,7 @@ const MatchLabels: FC<MatchLabelsProps> = ({
   const { t } = useNetworkingTranslation();
 
   return (
-    <FormGroup fieldId={fieldId} label={t('Match Labels')}>
+    <FormGroup fieldId={fieldId} isRequired label={t('Match Labels')}>
       <SelectorInput
         autoFocus
         inputProps={{ id: fieldId }}
