@@ -6,13 +6,18 @@ import {
   DropdownItem,
   DropdownList,
   FormGroup,
+  Label,
   MenuToggle,
   MenuToggleElement,
 } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 import useNetworkItems from '../../hooks/useNetworkItems';
-import { NetworkAttachmentDefinitionFormInput } from '../../utils/types';
+import {
+  NetworkAttachmentDefinitionFormInput,
+  NetworkTypeKeys,
+  networkTypes,
+} from '../../utils/types';
 
 import MissingOperatorsAlert from './components/MissingOperatorsAlert';
 
@@ -51,17 +56,28 @@ const NetworkAttachmentDefinitionTypeSelect: FC = () => {
             )}
           >
             <DropdownList>
-              {Object.entries(networkTypeItems).map(([type, label]) => (
-                <DropdownItem
-                  key={type}
-                  onClick={() => {
-                    onChange(type);
-                  }}
-                  value={type}
-                >
-                  {label}
-                </DropdownItem>
-              ))}
+              {Object.entries(networkTypeItems).map(([type, label]) => {
+                const isSecondaryLocalnet =
+                  label === networkTypes[NetworkTypeKeys.ovnKubernetesSecondaryLocalnet];
+
+                return (
+                  <DropdownItem
+                    {...(isSecondaryLocalnet && {
+                      description: t('Configure in VirtualMachine networks page'),
+                    })}
+                    key={type}
+                    onClick={() => {
+                      onChange(type);
+                    }}
+                    value={type}
+                  >
+                    {label}
+                    {isSecondaryLocalnet && (
+                      <Label className="pf-v6-u-ml-sm">{t('Deprecated')}</Label>
+                    )}
+                  </DropdownItem>
+                );
+              })}
             </DropdownList>
           </Dropdown>
         </FormGroup>
