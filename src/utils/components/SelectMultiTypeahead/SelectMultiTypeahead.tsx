@@ -50,6 +50,7 @@ const SelectMultiTypeahead: FC<SelectMultiTypeaheadProps> = ({
     <Select
       id="multi-typeahead-select"
       isOpen={isOpen}
+      isScrollable
       onOpenChange={() => setIsOpen(false)}
       onSelect={(ev, selection) => onSelect(selection as string)}
       selected={selected}

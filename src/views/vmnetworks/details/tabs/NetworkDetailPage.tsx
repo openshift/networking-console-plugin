@@ -63,7 +63,7 @@ const NetworkDetailsPage: FC<NetworkDetailsPageProps> = ({ obj: network }) => {
     <PageSection>
       <Grid hasGutter>
         <GridItem md={6}>
-          <DetailsSectionTitle titleText={t('VirtualMachine network details')} />
+          <DetailsSectionTitle titleText={t('Virtual Machine Network details')} />
           <DL className="co-m-pane__details" data-test-id="resource-summary">
             <DetailsItem label={t('Name')} obj={network} path={'metadata.name'} />
             <DetailsItem
