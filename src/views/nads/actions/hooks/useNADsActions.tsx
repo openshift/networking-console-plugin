@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { NetworkAttachmentDefinitionModelRef } from '@kubevirt-ui/kubevirt-api/console';
@@ -13,7 +14,6 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 import { isUserDefinedNetworkNAD } from '@utils/resources/nads/helpers';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
 import { asAccessReview, getName, getNamespace } from '@utils/resources/shared';
-import { useMemo } from 'react';
 
 type NADsActionsProps = (
   obj: NetworkAttachmentDefinitionKind,

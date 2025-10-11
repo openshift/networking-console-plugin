@@ -68,10 +68,10 @@ const VMNetworkNewForm: FC = () => {
         header={
           <WizardHeader
             description={t(
-              'Define a VirtualMachine network providing access to the physical underlay for VirtualMachines.',
+              'Define a Virtual Machine Network providing access to the physical underlay through a selected node network mapping.',
             )}
             isCloseHidden
-            title={t('VirtualMachine network')}
+            title={t('Create Virtual Machine Network')}
           />
         }
         onSave={handleSubmit(onSubmit)}

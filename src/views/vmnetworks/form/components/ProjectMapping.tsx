@@ -4,7 +4,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { Radio, Title } from '@patternfly/react-core';
 import NoProjectReadyForPrimaryUDNAlert from '@utils/components/ProjectsPrimaryUDNAlerts/NoProjectReadyForPrimaryUDNAlert';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import useProjectsWithPrimaryUserDefinedLabel from '@utils/hooks/useProjectsWithPrimaryUserDefinedLabel';
+import useProjects from '@utils/hooks/useProjects/useProjects';
 
 import { VMNetworkForm } from '../constants';
 
@@ -17,7 +17,7 @@ const ProjectMapping: FC = () => {
 
   const showProjectList = watch('showProjectList');
 
-  const [projects, loadedProjects, errorLoadingProjects] = useProjectsWithPrimaryUserDefinedLabel();
+  const [projects, loadedProjects, errorLoadingProjects] = useProjects();
 
   const noProjectReadyForPrimaryUDN =
     loadedProjects && !errorLoadingProjects && projects?.length === 0;
@@ -64,7 +64,7 @@ const ProjectMapping: FC = () => {
         name="showProjectList"
         render={({ field: { onChange, value } }) => (
           <Radio
-            description={t('Enable the projects for this network have the labels you specified')}
+            description={t('Ensure the projects for this network have the labels you specified.')}
             id="project-labels"
             isChecked={!value}
             label={t('Select labels to specify qualifying projects')}

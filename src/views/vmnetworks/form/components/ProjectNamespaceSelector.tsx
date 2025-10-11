@@ -1,7 +1,15 @@
 import React, { FC } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { Button, ButtonVariant, Checkbox, FormSection } from '@patternfly/react-core';
+import {
+  Button,
+  ButtonVariant,
+  Card,
+  CardBody,
+  Checkbox,
+  FormGroup,
+  FormSection,
+} from '@patternfly/react-core';
 import { PlusCircleIcon } from '@patternfly/react-icons';
 import LabelSelectorEditor from '@utils/components/LabelSelectorEditor/LabelSelectorEditor';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
@@ -20,16 +28,31 @@ const ProjectNamespaceSelector: FC = () => {
       <Controller
         control={control}
         name="network.spec.namespaceSelector.matchLabels"
-        render={({ field: { onChange, value: matchLabel } }) =>
-          isEmpty(matchLabel) ? (
-            <div>
-              <Button
-                icon={<PlusCircleIcon />}
-                onClick={() => onChange({ ['']: '' })}
-                variant={ButtonVariant.link}
-              >
-                {t('Add a label to specify qualifying projects')}
-              </Button>
+        render={({ field: { onChange, value: matchLabel } }) => (
+          <>
+            <FormGroup>
+              <Card>
+                <CardBody>
+                  {isEmpty(matchLabel) ? (
+                    <Button
+                      icon={<PlusCircleIcon />}
+                      onClick={() => onChange({ ['']: '' })}
+                      variant={ButtonVariant.link}
+                    >
+                      {t('Add a label to specify qualifying projects')}
+                    </Button>
+                  ) : (
+                    <LabelSelectorEditor
+                      labelSelectorPairs={Object.entries(matchLabel || {})}
+                      onLastItemRemoved={() => onChange({})}
+                      updateParentData={(newLabels) => onChange(Object.fromEntries(newLabels))}
+                    />
+                  )}
+                </CardBody>
+              </Card>
+            </FormGroup>
+
+            <FormGroup>
               <Controller
                 control={control}
                 name="matchLabelCheck"
@@ -37,22 +60,15 @@ const ProjectNamespaceSelector: FC = () => {
                   <Checkbox
                     id="check-empty-matchlabel"
                     isChecked={matchLabelCheck}
-                    label={t(
-                      "I'm aware that if no label is specified, all current and future projects will have access to this network. To prevent this, add labels to the network",
-                    )}
+                    isDisabled={!isEmpty(matchLabel)}
+                    label={t('Allow all current and future projects to access this network.')}
                     onChange={(_, checked) => onCheckChange(checked)}
                   />
                 )}
               />
-            </div>
-          ) : (
-            <LabelSelectorEditor
-              labelSelectorPairs={Object.entries(matchLabel || {})}
-              onLastItemRemoved={() => onChange({})}
-              updateParentData={(newLabels) => onChange(Object.fromEntries(newLabels))}
-            />
-          )
-        }
+            </FormGroup>
+          </>
+        )}
       />
 
       <SelectedProjects />
