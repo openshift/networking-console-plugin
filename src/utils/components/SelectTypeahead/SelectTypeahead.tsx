@@ -18,7 +18,7 @@ type SelectTypeaheadProps = {
   id: string;
   newOptionComponent?: (inputValue: string) => ReactNode;
   options: SelectOptionProps[];
-  placeholder: string;
+  placeholder?: string;
   selected: string;
   setSelected: (newSelection: null | string) => void;
 };
@@ -43,7 +43,7 @@ const SelectTypeahead: FC<SelectTypeaheadProps> = ({
 
   const onSelect = (value: string) => {
     if (value) {
-      setSelected(selected === value ? null : value);
+      setSelected(value);
 
       setInputValue(value);
       if (selected === value) {
@@ -56,12 +56,22 @@ const SelectTypeahead: FC<SelectTypeaheadProps> = ({
     textInputRef.current?.focus();
   };
 
+  const resetInputToSelectedOption = () => {
+    if (inputValue && inputValue !== selected) {
+      setInputValue(selected ?? '');
+      setFilterValue('');
+    }
+  };
+
   return (
     <Select
       id={id}
       isOpen={isOpen}
       isScrollable
-      onOpenChange={() => setIsOpen(false)}
+      onOpenChange={() => {
+        setIsOpen(false);
+        resetInputToSelectedOption();
+      }}
       onSelect={(ev, selection) => onSelect(selection as string)}
       selected={selected}
       toggle={(toggleRef: Ref<MenuToggleElement>) => (
@@ -77,6 +87,7 @@ const SelectTypeahead: FC<SelectTypeaheadProps> = ({
           setInputValue={(newInput) => {
             setInputValue(newInput);
             setFilterValue(newInput);
+            if (!newInput) setSelected(null);
           }}
           setIsOpen={setIsOpen}
           setSelected={setSelected}

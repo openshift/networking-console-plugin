@@ -6,7 +6,6 @@ import {
   HelperTextItem,
   ValidatedOptions,
 } from '@patternfly/react-core';
-import { ExclamationCircleIcon } from '@patternfly/react-icons';
 
 type FormGroupHelperTextProps = {
   validated?: ValidatedOptions;
@@ -18,12 +17,7 @@ const FormGroupHelperText: FC<FormGroupHelperTextProps> = ({
 }) => (
   <FormHelperText>
     <HelperText>
-      <HelperTextItem
-        icon={validated === ValidatedOptions.error && <ExclamationCircleIcon color="red" />}
-        variant={validated}
-      >
-        {children}
-      </HelperTextItem>
+      <HelperTextItem variant={validated}>{children}</HelperTextItem>
     </HelperText>
   </FormHelperText>
 );
