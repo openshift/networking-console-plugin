@@ -57,7 +57,7 @@ const ProjectMapping: FC = () => {
         name="showProjectList"
         render={({ field: { onChange, value } }) => (
           <Radio
-            description={t('Enable the projects for this network have the labels you specified')}
+            description={t('Ensure the projects for this network have the labels you specified.')}
             id="project-labels"
             isChecked={!value}
             label={t('Select labels to specify qualifying projects')}
