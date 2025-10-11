@@ -13,13 +13,7 @@ type ServiceActionsProps = {
 const ServiceActions: FC<ServiceActionsProps> = ({ isKebabToggle, obj }) => {
   const [actions] = useServiceActions(obj);
 
-  return (
-    <ActionsDropdown
-      actions={actions}
-      id="virtual-machine-instance-migration-actions"
-      isKebabToggle={isKebabToggle}
-    />
-  );
+  return <ActionsDropdown actions={actions} id="service-actions" isKebabToggle={isKebabToggle} />;
 };
 
 export default ServiceActions;

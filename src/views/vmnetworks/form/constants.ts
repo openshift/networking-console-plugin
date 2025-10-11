@@ -2,6 +2,8 @@ import { ClusterUserDefinedNetworkModel } from '@utils/models';
 import { LOCALNET_TOPOLOGY } from '@utils/resources/udns/constants';
 import { ClusterUserDefinedNetworkKind, UserDefinedNetworkRole } from '@utils/resources/udns/types';
 
+export const DEFAULT_MTU = 1500;
+
 export const defaultVMNetwork: ClusterUserDefinedNetworkKind = {
   apiVersion: `${ClusterUserDefinedNetworkModel.apiGroup}/${ClusterUserDefinedNetworkModel.apiVersion}`,
   kind: ClusterUserDefinedNetworkModel.kind,
@@ -16,7 +18,7 @@ export const defaultVMNetwork: ClusterUserDefinedNetworkKind = {
         ipam: {
           mode: 'Disabled',
         },
-        mtu: 1500,
+        mtu: DEFAULT_MTU,
         physicalNetworkName: '',
 
         role: UserDefinedNetworkRole.Secondary,
@@ -41,4 +43,5 @@ export const defaultFormValue: VMNetworkForm = {
 export const MIN_VLAN_ID = 1;
 export const MAX_VLAN_ID = 4094;
 
-export const DEFAULT_VLAN_ID = 1000;
+export const OVN_BRIDGE_MAPPINGS = 'bridge-mappings';
+export const PREFIX_PHYSNET = 'physnet';
