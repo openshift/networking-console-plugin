@@ -5,6 +5,7 @@ import {
   ListPageCreateDropdown,
   useModal,
 } from '@openshift-console/dynamic-plugin-sdk';
+import { useIsAdmin } from '@utils/hooks/useIsAdmin';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import {
   ClusterUserDefinedNetworkModelGroupVersionKind,
@@ -25,6 +26,7 @@ type UDNListCreateButtonProps = {
 const UDNListCreateButton: FC<UDNListCreateButtonProps> = ({ allUDNs, namespace }) => {
   const { t } = useNetworkingTranslation();
   const createModal = useModal();
+  const isAdmin = useIsAdmin();
 
   const namespaceHavePrimaryUDN = allUDNs?.find(
     (udn) =>
@@ -32,6 +34,25 @@ const UDNListCreateButton: FC<UDNListCreateButtonProps> = ({ allUDNs, namespace 
       getNamespace(udn) === namespace &&
       isPrimaryUDN(udn),
   );
+
+  if (!isAdmin) {
+    return (
+      <ListPageCreateButton
+        className="list-page-create-button-margin"
+        createAccessReview={{
+          groupVersionKind: UserDefinedNetworkModelGroupVersionKind,
+          namespace,
+        }}
+        onClick={() =>
+          createModal(UserDefinedNetworkCreateModal, {
+            isClusterUDN: false,
+          })
+        }
+      >
+        {t('Create UserDefinedNetwork')}
+      </ListPageCreateButton>
+    );
+  }
 
   if (namespaceHavePrimaryUDN) {
     return (
