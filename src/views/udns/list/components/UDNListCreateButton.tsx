@@ -1,13 +1,15 @@
 import React, { FC } from 'react';
 
 import {
+  K8sVerb,
   ListPageCreateButton,
   ListPageCreateDropdown,
+  useAccessReview,
   useModal,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { useIsAdmin } from '@utils/hooks/useIsAdmin';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import {
+  ClusterUserDefinedNetworkModel,
   ClusterUserDefinedNetworkModelGroupVersionKind,
   UserDefinedNetworkModel,
   UserDefinedNetworkModelGroupVersionKind,
@@ -26,7 +28,6 @@ type UDNListCreateButtonProps = {
 const UDNListCreateButton: FC<UDNListCreateButtonProps> = ({ allUDNs, namespace }) => {
   const { t } = useNetworkingTranslation();
   const createModal = useModal();
-  const isAdmin = useIsAdmin();
 
   const namespaceHavePrimaryUDN = allUDNs?.find(
     (udn) =>
@@ -35,7 +36,13 @@ const UDNListCreateButton: FC<UDNListCreateButtonProps> = ({ allUDNs, namespace 
       isPrimaryUDN(udn),
   );
 
-  if (!isAdmin) {
+  const [canCreateClusterUDN] = useAccessReview({
+    group: ClusterUserDefinedNetworkModel.apiGroup,
+    resource: ClusterUserDefinedNetworkModel.plural,
+    verb: 'create' as K8sVerb,
+  });
+
+  if (!canCreateClusterUDN) {
     return (
       <ListPageCreateButton
         className="list-page-create-button-margin"
