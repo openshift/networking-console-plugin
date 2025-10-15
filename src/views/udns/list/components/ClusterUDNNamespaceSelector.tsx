@@ -29,7 +29,7 @@ const ClusterUDNNamespaceSelector: FC = () => {
   const matchingProjects = projects?.filter((project) => match(project, matchLabels));
 
   return (
-    <FormSection title={t('Project(s)')} titleElement="h2">
+    <FormSection title={t('Namespace(s)')} titleElement="h2">
       <MatchLabels
         matchLabels={matchLabels}
         onChange={(newMatchLabels) =>
@@ -40,7 +40,9 @@ const ClusterUDNNamespaceSelector: FC = () => {
       <ExpandableSection
         isExpanded={isExpanded}
         onToggle={onToggle}
-        toggleText={isExpanded ? t('Hide selected project(s)') : t('Review selected project(s)')}
+        toggleText={
+          isExpanded ? t('Hide selected Namespace(s)') : t('Review selected Namespace(s)')
+        }
       >
         <List isPlain>
           {matchingProjects.map((project) => (
