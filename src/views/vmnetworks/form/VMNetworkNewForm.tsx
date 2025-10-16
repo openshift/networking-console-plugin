@@ -1,6 +1,7 @@
 import React, { FC, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { Trans } from 'react-i18next';
+import { Link, useNavigate } from 'react-router-dom-v5-compat';
 
 import { k8sCreate } from '@openshift-console/dynamic-plugin-sdk';
 import {
@@ -14,6 +15,7 @@ import {
   WizardStep,
 } from '@patternfly/react-core';
 import ErrorAlert from '@utils/components/ErrorAlert';
+import { documentationURLs, getDocumentationURL } from '@utils/constants/documentation';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { ClusterUserDefinedNetworkModel } from '@utils/models';
 import { isEmpty } from '@utils/utils';
@@ -67,11 +69,22 @@ const VMNetworkNewForm: FC = () => {
       <Wizard
         header={
           <WizardHeader
-            description={t(
-              'Define a VirtualMachine network providing access to the physical underlay for VirtualMachines.',
-            )}
+            description={
+              <Trans t={t}>
+                Define a Virtual Machine Network providing access to the physical underlay through a
+                selected node network mapping. Learn more about{' '}
+                <Link
+                  rel="noreferrer"
+                  target="_blank"
+                  to={getDocumentationURL(documentationURLs.multipleNetworks)}
+                >
+                  virtual machine networks
+                </Link>
+                .
+              </Trans>
+            }
             isCloseHidden
-            title={t('VirtualMachine network')}
+            title={t('Create Virtual Machine Network')}
           />
         }
         onSave={handleSubmit(onSubmit)}
@@ -110,6 +123,7 @@ const VMNetworkNewForm: FC = () => {
                   variant="success"
                 >
                   <Button
+                    isInline
                     onClick={() => {
                       navigate(`${VM_NETWORKS_PATH}/${name}`);
                       close();

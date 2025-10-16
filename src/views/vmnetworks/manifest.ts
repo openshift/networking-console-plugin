@@ -7,7 +7,7 @@ import { VM_NETWORKS_PATH } from './constants';
 export const VMNetworksExtensions: EncodedExtension[] = [
   {
     flags: {
-      required: ['CAN_LIST_NS'],
+      required: ['CAN_LIST_NS', 'NMSTATE_PLUGIN_ENABLED'],
     },
     properties: {
       dataAttributes: {
@@ -17,7 +17,7 @@ export const VMNetworksExtensions: EncodedExtension[] = [
       href: 'k8s/cluster/virtualmachine-networks',
       id: 'vmnetwork-virt-perspective',
       insertBefore: 'networkpolicies-virt-perspective',
-      name: '%plugin__networking-console-plugin~VirtualMachine networks%',
+      name: '%plugin__networking-console-plugin~Virtual Machine Networks%',
       perspective: 'virtualization-perspective',
       prefixNamespaced: false,
       section: 'networking-virt-perspective',
@@ -26,7 +26,7 @@ export const VMNetworksExtensions: EncodedExtension[] = [
   } as EncodedExtension<HrefNavItem>,
   {
     flags: {
-      required: ['CAN_LIST_NS'],
+      required: ['CAN_LIST_NS', 'NMSTATE_PLUGIN_ENABLED'],
     },
     properties: {
       dataAttributes: {
@@ -36,7 +36,7 @@ export const VMNetworksExtensions: EncodedExtension[] = [
       href: 'k8s/cluster/virtualmachine-networks',
       id: 'vmnetwork',
       insertBefore: 'networkPolicies',
-      name: '%plugin__networking-console-plugin~VirtualMachine networks%',
+      name: '%plugin__networking-console-plugin~Virtual Machine Networks%',
       prefixNamespaced: false,
       section: 'networking',
     },

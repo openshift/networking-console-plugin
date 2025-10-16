@@ -12,8 +12,8 @@ import {
   Popover,
 } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import useNonSystemProjects from '@utils/hooks/useNonSystemProjects';
 import { ProjectGroupVersionKind } from '@utils/hooks/useProjects/constants';
-import useProjectsWithPrimaryUserDefinedLabel from '@utils/hooks/useProjectsWithPrimaryUserDefinedLabel';
 import { getName } from '@utils/resources/shared';
 import { getVMNetworkProjects } from '@utils/resources/vmnetworks/utils';
 
@@ -26,7 +26,7 @@ const SelectedProjects: FC = () => {
 
   const vmNetwork = watch('network');
 
-  const [projects] = useProjectsWithPrimaryUserDefinedLabel();
+  const [projects] = useNonSystemProjects();
 
   const matchingProjects = getVMNetworkProjects(vmNetwork, projects);
 
@@ -36,7 +36,7 @@ const SelectedProjects: FC = () => {
       variant={matchingProjects.length === 0 ? AlertVariant.warning : AlertVariant.success}
     >
       {matchingProjects.length === 0 ? (
-        t('No projects matched')
+        t('No projects selected')
       ) : (
         <Popover
           bodyContent={

@@ -9,6 +9,8 @@ import {
 import { ALL_NAMESPACES_KEY, DEFAULT_NAMESPACE } from '@utils/constants';
 import { getLabels } from '@utils/resources/shared';
 
+import { SYSTEM_NAMESPACES, SYSTEM_NAMESPACES_PREFIX } from './constants';
+
 export const networkConsole = console;
 
 export const isEmpty = (obj) =>
@@ -103,3 +105,10 @@ export const verifyMatchExpressions = (
         return false;
     }
   });
+
+export const isSystemNamespace = (projectName: string) => {
+  const startsWithNamespace = SYSTEM_NAMESPACES_PREFIX.some((ns) => projectName.startsWith(ns));
+  const isNamespace = SYSTEM_NAMESPACES.includes(projectName);
+
+  return startsWithNamespace || isNamespace;
+};
