@@ -2,9 +2,8 @@ import React, { FC } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import { Radio, Title } from '@patternfly/react-core';
-import NoProjectReadyForPrimaryUDNAlert from '@utils/components/ProjectsPrimaryUDNAlerts/NoProjectReadyForPrimaryUDNAlert';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import useProjectsWithPrimaryUserDefinedLabel from '@utils/hooks/useProjectsWithPrimaryUserDefinedLabel';
+import useNonSystemProjects from '@utils/hooks/useNonSystemProjects';
 
 import { VMNetworkForm } from '../constants';
 
@@ -17,10 +16,7 @@ const ProjectMapping: FC = () => {
 
   const showProjectList = watch('showProjectList');
 
-  const [projects, loadedProjects, errorLoadingProjects] = useProjectsWithPrimaryUserDefinedLabel();
-
-  const noProjectReadyForPrimaryUDN =
-    loadedProjects && !errorLoadingProjects && projects?.length === 0;
+  const [projects, loadedProjects, errorLoadingProjects] = useNonSystemProjects();
 
   return (
     <>
@@ -31,8 +27,6 @@ const ProjectMapping: FC = () => {
         )}
       </p>
 
-      {noProjectReadyForPrimaryUDN && <NoProjectReadyForPrimaryUDNAlert />}
-
       <Controller
         control={control}
         name="showProjectList"
@@ -40,7 +34,6 @@ const ProjectMapping: FC = () => {
           <Radio
             id="project-list"
             isChecked={value}
-            isDisabled={noProjectReadyForPrimaryUDN}
             label={t('Select projects from list')}
             name="project-list"
             onChange={(_, checked) => {
@@ -51,7 +44,7 @@ const ProjectMapping: FC = () => {
         )}
       />
 
-      {showProjectList && !noProjectReadyForPrimaryUDN && (
+      {showProjectList && (
         <ProjectList
           errorLoadingProjects={errorLoadingProjects}
           loadedProjects={loadedProjects}
