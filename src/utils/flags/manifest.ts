@@ -14,6 +14,17 @@ export const FlagsExtensions: EncodedExtension[] = [
     },
     type: 'console.flag/hookProvider',
   } as EncodedExtension<FeatureFlagHookProvider>,
+  {
+    properties: {
+      flag: 'NMSTATE_PLUGIN_ENABLED',
+      model: {
+        group: 'nmstate.io',
+        kind: 'NodeNetworkState',
+        version: 'v1beta1',
+      },
+    },
+    type: 'console.flag/model',
+  },
 ];
 
 export const FlagsExposedModules = {

@@ -7,7 +7,7 @@ import { VM_NETWORKS_PATH } from './constants';
 export const VMNetworksExtensions: EncodedExtension[] = [
   {
     flags: {
-      required: ['CAN_LIST_NS'],
+      required: ['CAN_LIST_NS', 'NMSTATE_PLUGIN_ENABLED'],
     },
     properties: {
       dataAttributes: {
@@ -26,7 +26,7 @@ export const VMNetworksExtensions: EncodedExtension[] = [
   } as EncodedExtension<HrefNavItem>,
   {
     flags: {
-      required: ['CAN_LIST_NS'],
+      required: ['CAN_LIST_NS', 'NMSTATE_PLUGIN_ENABLED'],
     },
     properties: {
       dataAttributes: {
