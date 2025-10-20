@@ -29,7 +29,7 @@ type ToggleProps = {
   inputValue: string;
   isOpen: boolean;
   onSelect: (value: string) => void;
-  placeholder: string;
+  placeholder?: string;
   selected: string;
   selectOptions: SelectOptionProps[];
   setFocusedItemIndex: (newValue: null | number) => void;
