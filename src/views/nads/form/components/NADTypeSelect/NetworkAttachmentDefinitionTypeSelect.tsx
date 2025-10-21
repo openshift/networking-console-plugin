@@ -63,7 +63,7 @@ const NetworkAttachmentDefinitionTypeSelect: FC = () => {
                 return (
                   <DropdownItem
                     {...(isSecondaryLocalnet && {
-                      description: t('Configure in VirtualMachine networks page'),
+                      description: t('Configure in Virtual Machine Networks page'),
                     })}
                     key={type}
                     onClick={() => {
