@@ -35,13 +35,13 @@ const ProjectList: FC<ProjectListProps> = ({ errorLoadingProjects, loadedProject
   );
 
   const transformProjectsIntoMatchExpressions = useCallback(
-    (selected: string[]): MatchExpression[] => {
-      return selected.map((name) => ({
+    (selected: string[]): MatchExpression[] => [
+      {
         key: PROJECT_LABEL_FOR_MATCH_EXPRESSION,
         operator: 'In',
-        values: [name],
-      }));
-    },
+        values: selected,
+      },
+    ],
     [],
   );
 
