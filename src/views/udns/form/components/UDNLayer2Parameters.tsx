@@ -171,7 +171,7 @@ const Layer2Parameters: FC = () => {
                     </FlexItem>
                     <FlexItem>
                       {t(
-                        'The format should match standard CIDR notation (for example, "10.128.0.0/16").',
+                        'The format should match standard CIDR notation (for example, "192.168.123.0/24").',
                       )}
                     </FlexItem>
                     <FlexItem>

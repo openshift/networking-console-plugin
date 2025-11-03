@@ -70,7 +70,7 @@ const NetworkTab: FC = () => {
 
       {networkType === NETWORK_TYPE.UDN && (
         <>
-          <FormGroup fieldId="input-name" isRequired label={t('Subnet CIRD')}>
+          <FormGroup fieldId="input-name" isRequired label={t('Subnet CIDR')}>
             <Controller
               control={control}
               name="udn.spec.layer2.subnets"
@@ -95,7 +95,7 @@ const NetworkTab: FC = () => {
 
             <FormGroupHelperText>
               {t(
-                'Dual-stack clusters may set 2 subnets (one for each IP family), otherwise only 1 subnet is allowed.  The format should match standard CIDR notation (for example, "10.128.0.0/16").',
+                'Dual-stack clusters may set 2 subnets (one for each IP family), otherwise only 1 subnet is allowed.  The format should match standard CIDR notation (for example, "192.168.123.0/24").',
               )}
             </FormGroupHelperText>
           </FormGroup>
