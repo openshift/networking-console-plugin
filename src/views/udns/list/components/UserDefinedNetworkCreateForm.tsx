@@ -4,7 +4,7 @@ import { Trans } from 'react-i18next';
 import { Link } from 'react-router-dom-v5-compat';
 
 import { Alert, AlertVariant, Content, Form, FormGroup, TextInput } from '@patternfly/react-core';
-import SubnetCIRDHelperText from '@utils/components/SubnetCIRDHelperText/SubnetCIRDHelperText';
+import SubnetCIDRHelperText from '@utils/components/SubnetCIDRHelperText/SubnetCIDRHelperText';
 import { documentationURLs, getDocumentationURL } from '@utils/constants/documentation';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
@@ -54,7 +54,7 @@ const UserDefinedNetworkCreateForm: FC<UserDefinedNetworkCreateFormProps> = ({
         </FormGroup>
       )}
 
-      <FormGroup fieldId="input-udn-subnet" isRequired label={t('Subnet CIRD')}>
+      <FormGroup fieldId="input-udn-subnet" isRequired label={t('Subnet CIDR')}>
         <Controller
           control={control}
           name={subnetField}
@@ -77,7 +77,7 @@ const UserDefinedNetworkCreateForm: FC<UserDefinedNetworkCreateFormProps> = ({
           rules={{ required: true }}
         />
 
-        <SubnetCIRDHelperText />
+        <SubnetCIDRHelperText />
       </FormGroup>
 
       {isClusterUDN && <ClusterUDNNamespaceSelector />}
