@@ -262,6 +262,7 @@
   "No {{label}} found": "没有找到 {{label}}",
   "No conditions found": "未找到条件",
   "No datapoints found.": "找不到数据点。",
+  "No description": "No description",
   "No hosts": "没有主机",
   "No labels": "没有标签",
   "No matching projects": "No matching projects",

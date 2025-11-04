@@ -20,7 +20,11 @@ export const OwnerReferences: FC<OwnerReferencesProps> = ({ resource }) => {
       namespace={resource.metadata.namespace}
     />
   ));
-  return owners.length ? <>{owners}</> : <span className="text-muted">{t('No owner')}</span>;
+  return owners.length ? (
+    <>{owners}</>
+  ) : (
+    <span className="pf-v6-u-text-color-subtle">{t('No owner')}</span>
+  );
 };
 
 type OwnerReferencesProps = {

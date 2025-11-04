@@ -11,7 +11,7 @@ import {
   BreadcrumbItem,
   Button,
   ButtonVariant,
-  DescriptionListDescription as DL,
+  DescriptionListDescription as DLDescription,
   DescriptionListGroup as DLGroup,
   DescriptionListTermHelpText as DLTermHelpText,
   DescriptionListTermHelpTextButton as DLTermHelpTextButton,
@@ -123,7 +123,7 @@ export const DetailsItem: FC<DetailsItemProps> = ({
           )}
         </Split>
       </DLTermHelpText>
-      <DL className={valueClassName} data-test-selector={`details-item-value__${label}`}>
+      <DLDescription className={valueClassName} data-test-selector={`details-item-value__${label}`}>
         {editable && !editAsGroup ? (
           <EditButton onClick={onEdit} testId={label}>
             {value}
@@ -131,7 +131,7 @@ export const DetailsItem: FC<DetailsItemProps> = ({
         ) : (
           value
         )}
-      </DL>
+      </DLDescription>
     </DLGroup>
   );
 };

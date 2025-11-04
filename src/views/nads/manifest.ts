@@ -58,6 +58,17 @@ export const NADsExtensions: EncodedExtension[] = [
   } as EncodedExtension<RoutePage>,
   {
     properties: {
+      column: 'left',
+      component: { $codeRef: 'NetworkAttachmentDefintionDescriptionDetails' },
+      id: 'nad-description-detail-item',
+      model: NetworkAttachmentDefinitionExtensionModel,
+      path: 'metadata.annotations.description',
+      title: 'Description',
+    },
+    type: 'console.resource/details-item',
+  } as EncodedExtension<DetailsItem>,
+  {
+    properties: {
       column: 'right',
       component: { $codeRef: 'NetworkAttachmentDefintionTypeDetails' },
       id: 'nad-type-detail-item',
@@ -92,6 +103,8 @@ export const NADsExtensions: EncodedExtension[] = [
 export const NADsExposedModules: ConsolePluginBuildMetadata['exposedModules'] = {
   NetworkAttachmentDefinitionFormPage: './views/nads/form/NetworkAttachmentDefinitionFormPage.tsx',
   NetworkAttachmentDefinitionList: './views/nads/list/NetworkAttachmentDefinitionList.tsx',
+  NetworkAttachmentDefintionDescriptionDetails:
+    './views/nads/details/tabs/details/NADDescriptionDetails.tsx',
   NetworkAttachmentDefintionTypeDetails: './views/nads/details/tabs/details/NADTypeDetails.tsx',
   useNADsActions: './views/nads/actions/hooks/useNADsActions.tsx',
 };

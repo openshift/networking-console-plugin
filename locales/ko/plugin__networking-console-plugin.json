@@ -262,6 +262,7 @@
   "No {{label}} found": "{{label}}을/를 찾을 수 없음",
   "No conditions found": "조건을 찾을 수 없습니다.",
   "No datapoints found.": "데이터 포인트를 찾을 수 없습니다",
+  "No description": "No description",
   "No hosts": "호스트 없음",
   "No labels": "라벨 없음",
   "No matching projects": "No matching projects",

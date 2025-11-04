@@ -265,6 +265,7 @@
   "No {{label}} found": "No se encontró {{label}}",
   "No conditions found": "No se encontraron condiciones",
   "No datapoints found.": "No se encontraron puntos de datos.",
+  "No description": "No description",
   "No hosts": "No se encontraron hosts",
   "No labels": "Sin etiquetas",
   "No matching projects": "No matching projects",

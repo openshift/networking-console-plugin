@@ -11,8 +11,8 @@ import { getName } from '@utils/resources/shared';
 import { isEmpty } from '@utils/utils';
 import { networkConsole } from '@utils/utils';
 
-import { NetworkAttachmentDefinitionFormInput, NetworkTypeKeys, ovnK8sTopologyKeys } from './types';
 import { DEFAULT_MTU } from './constants';
+import { NetworkAttachmentDefinitionFormInput, NetworkTypeKeys, ovnK8sTopologyKeys } from './types';
 
 const buildConfig = (
   formData: NetworkAttachmentDefinitionFormInput,
