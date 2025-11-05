@@ -5,10 +5,12 @@ import NetworkAttachmentDefinitionModel, {
   NetworkAttachmentDefinitionModelGroupVersionKind,
 } from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
 import {
+  K8sVerb,
   ListPageBody,
   ListPageCreateButton,
   ListPageFilter,
   ListPageHeader,
+  useAccessReview,
   useK8sWatchResource,
   useListPageFilter,
   VirtualizedTable,
@@ -45,8 +47,15 @@ const NetworkAttachmentDefinitionList: FC<NetworkAttachmentDefinitionListProps> 
   const columns = useNADsColumns();
   const title = t('NetworkAttachmentDefinitions');
 
+  const [canCreateNAD] = useAccessReview({
+    group: NetworkAttachmentDefinitionModel.apiGroup,
+    resource: NetworkAttachmentDefinitionModel.plural,
+    verb: 'create' as K8sVerb,
+  });
+
   return (
     <ListEmptyState<NetworkAttachmentDefinitionKind>
+      canCreate={canCreateNAD}
       createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}
       data={data}
       error={loadError}
