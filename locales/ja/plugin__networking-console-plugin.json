@@ -262,6 +262,7 @@
   "No {{label}} found": "{{label}} が見つかりません",
   "No conditions found": "条件が見つかりません",
   "No datapoints found.": "データポイントが見つかりません。",
+  "No description": "No description",
   "No hosts": "ホストなし",
   "No labels": "ラベルなし",
   "No matching projects": "No matching projects",

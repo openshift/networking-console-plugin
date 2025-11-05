@@ -37,7 +37,7 @@ export const Selector: FC<SelectorProps> = ({
   return (
     <div className="co-m-selector">
       {_.isEmpty(selector) ? (
-        <p className="text-muted">{t('No selector')}</p>
+        <p className="pf-v6-u-text-color-subtle">{t('No selector')}</p>
       ) : (
         <Requirement kind={kind} namespace={namespace} requirements={selector} />
       )}
