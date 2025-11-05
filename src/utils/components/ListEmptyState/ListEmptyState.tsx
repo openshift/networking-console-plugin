@@ -21,6 +21,7 @@ import ListErrorState from './ListErrorState';
 import ListSkeleton from './ListSkeleton';
 
 type ListEmptyStateProps<T> = {
+  canCreate?: boolean;
   children: ReactNode;
   createButtonAction?: ReactNode;
   createButtonlink?: string;
@@ -34,6 +35,7 @@ type ListEmptyStateProps<T> = {
 };
 
 const ListEmptyState = <T extends K8sResourceCommon>({
+  canCreate = true,
   children,
   createButtonAction,
   createButtonlink,
@@ -87,13 +89,17 @@ const ListEmptyState = <T extends K8sResourceCommon>({
         icon={AddCircleOIcon}
         titleText={t('No {{kind}} found', { kind })}
       >
-        <EmptyStateBody>
-          <Trans t={t}>
-            Click <b>Create {{ kind }}</b> to create your first {{ kind }}
-          </Trans>
-        </EmptyStateBody>
+        {canCreate && (
+          <EmptyStateBody>
+            <Trans t={t}>
+              Click <b>Create {{ kind }}</b> to create your first {{ kind }}
+            </Trans>
+          </EmptyStateBody>
+        )}
         <EmptyStateFooter>
-          <EmptyStateActions>{createButtonAction || defaultCreateButton}</EmptyStateActions>
+          {canCreate && (
+            <EmptyStateActions>{createButtonAction || defaultCreateButton}</EmptyStateActions>
+          )}
           <EmptyStateActions>
             <ExternalLink href={learnMoreLink}>
               {t('Learn more about {{ kind }}', { kind })}
