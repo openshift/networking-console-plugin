@@ -9,11 +9,11 @@ import {
   SplitItem,
   TextInput,
   Title,
-  ValidatedOptions,
 } from '@patternfly/react-core';
 import FormGroupHelperText from '@utils/components/FormGroupHelperText/FormGroupHelperText';
 import PopoverHelpIcon from '@utils/components/PopoverHelpIcon/PopoverHelpIcon';
 import SelectTypeahead from '@utils/components/SelectTypeahead/SelectTypeahead';
+import { MAX_MTU } from '@utils/constants/mtu';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { VLAN_MODE_ACCESS } from '@utils/resources/udns/types';
 import { isEmpty } from '@utils/utils';
@@ -21,6 +21,7 @@ import { isEmpty } from '@utils/utils';
 import { DEFAULT_MTU, VMNetworkForm } from '../constants';
 import useMaxMTU from '../hooks/useMaxMTU';
 import useNodeNetworkMappingOptions from '../hooks/useNodeNetworkMappingOptions';
+import { getMTUValidatedInfo } from '../utils/utils';
 
 import VLANIDField from './VLANIDField';
 
@@ -31,13 +32,19 @@ const NetworkDefinition: FC = () => {
   const { control, register, setValue, watch } = useFormContext<VMNetworkForm>();
 
   const localnet = watch('network.spec.network.localnet.physicalNetworkName');
+  const mtu = watch('network.spec.network.localnet.mtu');
 
   const [nodeNetworkMappingOptions, nncpSpecListForLocalnet] = useNodeNetworkMappingOptions();
-  const maxMTU = useMaxMTU(localnet, nncpSpecListForLocalnet);
+  const maxMTUFromLocalnet = useMaxMTU(localnet, nncpSpecListForLocalnet);
 
   useEffect(() => {
-    setValue('network.spec.network.localnet.mtu', maxMTU === Infinity ? DEFAULT_MTU : maxMTU);
-  }, [maxMTU, setValue]);
+    if (mtu === null) {
+      setValue(
+        'network.spec.network.localnet.mtu',
+        maxMTUFromLocalnet === Infinity ? DEFAULT_MTU : maxMTUFromLocalnet,
+      );
+    }
+  }, [maxMTUFromLocalnet, mtu, setValue]);
 
   return (
     <Form className="network-definition">
@@ -103,23 +110,19 @@ const NetworkDefinition: FC = () => {
           control={control}
           name="network.spec.network.localnet.mtu"
           render={({ field: { onChange, value } }) => {
-            const validated = value > maxMTU ? ValidatedOptions.warning : ValidatedOptions.default;
+            const { message, validated } = getMTUValidatedInfo(value, maxMTUFromLocalnet, t);
             return (
               <>
                 <TextInput
+                  max={MAX_MTU}
                   min={0}
                   onChange={(event) => onChange(event.currentTarget.valueAsNumber)}
                   type="number"
                   validated={validated}
                   value={value}
                 />
-                {value > maxMTU && (
-                  <FormGroupHelperText validated={validated}>
-                    {t(
-                      'MTU is higher than {{maxMTU}} bytes, which is a maximum that the selected node network can guarantee. This may cause packet fragmentation.',
-                      { maxMTU },
-                    )}
-                  </FormGroupHelperText>
+                {message && (
+                  <FormGroupHelperText validated={validated}>{message}</FormGroupHelperText>
                 )}
               </>
             );

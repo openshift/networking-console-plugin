@@ -18,7 +18,7 @@ export const defaultVMNetwork: ClusterUserDefinedNetworkKind = {
         ipam: {
           mode: 'Disabled',
         },
-        mtu: DEFAULT_MTU,
+        mtu: null, // null on purpose so setting mtu to maxMTU (or DEFAULT_MTU) is done only once
         physicalNetworkName: '',
 
         role: UserDefinedNetworkRole.Secondary,

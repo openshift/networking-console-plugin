@@ -16,6 +16,7 @@ import {
 } from '@patternfly/react-core';
 import ErrorAlert from '@utils/components/ErrorAlert';
 import { documentationURLs, getDocumentationURL } from '@utils/constants/documentation';
+import { MAX_MTU } from '@utils/constants/mtu';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { ClusterUserDefinedNetworkModel } from '@utils/models';
 import { isEmpty } from '@utils/utils';
@@ -43,9 +44,13 @@ const VMNetworkNewForm: FC = () => {
 
   const name = watch('network.metadata.name');
   const bridgeMapping = watch('network.spec.network.localnet.physicalNetworkName');
+  const mtu = watch('network.spec.network.localnet.mtu');
   const namespaceSelector = watch('network.spec.namespaceSelector');
   const showProjectList = watch('showProjectList');
   const matchLabelCheck = watch('matchLabelCheck');
+
+  const isRequiredFieldsInvalid =
+    isEmpty(name) || isEmpty(bridgeMapping) || isEmpty(mtu) || mtu > MAX_MTU;
 
   const emptyProjectList = showProjectList
     ? isEmpty(namespaceSelector.matchExpressions)
@@ -91,7 +96,7 @@ const VMNetworkNewForm: FC = () => {
       >
         <WizardStep
           footer={{
-            isNextDisabled: isEmpty(name) || isEmpty(bridgeMapping),
+            isNextDisabled: isRequiredFieldsInvalid,
             onClose,
           }}
           id="wizard-network-definition"
@@ -101,7 +106,7 @@ const VMNetworkNewForm: FC = () => {
         </WizardStep>
         <WizardStep
           footer={{
-            isNextDisabled: isSubmitting || emptyProjectList,
+            isNextDisabled: isRequiredFieldsInvalid || isSubmitting || emptyProjectList,
             nextButtonProps: { isLoading: isSubmitting },
             nextButtonText: t('Create'),
             onClose,

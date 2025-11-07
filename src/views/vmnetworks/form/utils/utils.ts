@@ -1,3 +1,5 @@
+import { TFunction } from 'react-i18next';
+
 import {
   InterfaceType,
   NodeNetworkConfigurationInterface,
@@ -6,6 +8,8 @@ import {
   V1NodeNetworkConfigurationPolicy,
   V1NodeNetworkConfigurationPolicySpec,
 } from '@kubevirt-ui/kubevirt-api/nmstate';
+import { ValidatedOptions } from '@patternfly/react-core';
+import { MAX_MTU } from '@utils/constants/mtu';
 import { isEmpty } from '@utils/utils';
 
 import { OVN_BRIDGE_MAPPINGS, PREFIX_PHYSNET } from '../constants';
@@ -89,3 +93,31 @@ export const getNNCPSpecListForLocalnetObject = (
     },
     {} as Record<string, V1NodeNetworkConfigurationPolicySpec[]>,
   ) ?? {};
+
+export const getMTUValidatedInfo = (mtu: number, maxMTUFromLocalnet: number, t: TFunction) => {
+  if (mtu > MAX_MTU) {
+    return {
+      message: t('MTU is higher than {{MAX_MTU}} bytes, which is a maximum possible MTU.', {
+        MAX_MTU,
+      }),
+      validated: ValidatedOptions.error,
+    };
+  }
+
+  if (mtu > maxMTUFromLocalnet) {
+    return {
+      message: t(
+        'MTU is higher than {{maxMTUFromLocalnet}} bytes, which is a maximum that the selected node network can guarantee. This may cause packet fragmentation.',
+        {
+          maxMTUFromLocalnet,
+        },
+      ),
+      validated: ValidatedOptions.warning,
+    };
+  }
+
+  return {
+    message: undefined,
+    validated: ValidatedOptions.default,
+  };
+};
