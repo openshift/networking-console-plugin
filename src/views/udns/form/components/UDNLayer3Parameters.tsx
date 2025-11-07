@@ -14,6 +14,7 @@ import {
   TextInput,
 } from '@patternfly/react-core';
 import FormGroupHelperText from '@utils/components/FormGroupHelperText/FormGroupHelperText';
+import { MAX_MTU } from '@utils/constants/mtu';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { UserDefinedNetworkRole } from '@utils/resources/udns/types';
 
@@ -41,7 +42,7 @@ const Layer3Parameters: FC = () => {
       >
         <TextInput
           type="number"
-          {...register(`${TopologyKeys.Layer3}.mtu`, { max: 65536, min: 0, required: false })}
+          {...register(`${TopologyKeys.Layer3}.mtu`, { max: MAX_MTU, min: 0, required: false })}
         />
         <FormGroupHelperText>
           {t('MTU is the maximum transmission unit for a network.')}
