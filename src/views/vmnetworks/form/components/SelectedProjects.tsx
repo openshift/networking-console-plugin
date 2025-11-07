@@ -36,7 +36,7 @@ const SelectedProjects: FC = () => {
       variant={matchingProjects.length === 0 ? AlertVariant.warning : AlertVariant.success}
     >
       {matchingProjects.length === 0 ? (
-        t('No projects matched')
+        t('No projects selected')
       ) : (
         <Popover
           bodyContent={

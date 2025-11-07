@@ -100,3 +100,36 @@ export const ClusterUserDefinedNetworkModelGroupVersionKind = modelToGroupVersio
   ClusterUserDefinedNetworkModel,
 );
 export const ClusterUserDefinedNetworkModelRef = modelToRef(ClusterUserDefinedNetworkModel);
+
+const NodeNetworkConfigurationPolicyModel: K8sModel = {
+  abbr: 'NNCP',
+  apiGroup: 'nmstate.io',
+  apiVersion: 'v1',
+  crd: true,
+  id: 'NodeNetworkConfigurationPolicy',
+  kind: 'NodeNetworkConfigurationPolicy',
+  // t('NodeNetworkConfigurationPolicy')
+  label: 'NodeNetworkConfigurationPolicy',
+  labelPlural: 'NodeNetworkConfigurationPolicies',
+  namespaced: false,
+  plural: 'nodenetworkconfigurationpolicies',
+};
+
+export const NodeNetworkConfigurationPolicyModelGroupVersionKind = modelToGroupVersionKind(
+  NodeNetworkConfigurationPolicyModel,
+);
+
+const NodeNetworkStateModel: K8sModel = {
+  abbr: 'NNS',
+  apiGroup: 'nmstate.io',
+  apiVersion: 'v1beta1',
+  crd: true,
+  id: 'NodeNetworkState',
+  kind: 'NodeNetworkState',
+  label: 'NodeNetworkState',
+  labelPlural: 'NodeNetworkStates',
+  namespaced: false,
+  plural: 'nodenetworkstates',
+};
+
+export const NodeNetworkStateModelGroupVersionKind = modelToGroupVersionKind(NodeNetworkStateModel);
