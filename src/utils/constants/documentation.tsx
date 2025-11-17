@@ -42,15 +42,18 @@ export const documentationURLs: documentationURLsType = {
     downstream: 'html/building_applications/deployments',
     upstream: 'applications/deployments/what-deployments-are.html',
   },
+
   multipleNetworks: {
-    downstream: 'html/networking/multiple-networks',
+    downstream: 'html/multiple_networks/understanding-multiple-networks',
     upstream: 'networking/multiple_networks/understanding-multiple-networks.html',
   },
+
   networkPolicy: {
     downstream: 'html/networking/network-policy#about-network-policy',
     kube: `${KUBE_DOCS}/concepts/services-networking/network-policies/`,
     upstream: 'networking/network_security/network_policy/about-network-policy.html',
   },
+
   operators: {
     downstream: 'html/operators/understanding-operators#olm-what-operators-are',
     upstream: 'operators/understanding/olm-what-operators-are.html',
@@ -95,6 +98,10 @@ export const documentationURLs: documentationURLsType = {
   usingRBAC: {
     downstream: 'html/authentication_and_authorization/using-rbac',
     upstream: 'authentication/using-rbac.html',
+  },
+  vmNetworking: {
+    downstream: 'html/virtualization/networking',
+    upstream: 'networking/networking_overview/understanding-networking.html',
   },
   workingWithProjects: {
     downstream: 'html/building_applications/projects#working-with-projects',
