@@ -49,7 +49,7 @@ const VMNetworkList: FC = () => {
       data={data}
       error={loadError}
       kind={t('Virtual Machine Network')}
-      learnMoreLink={getDocumentationURL(documentationURLs.multipleNetworks)}
+      learnMoreLink={getDocumentationURL(documentationURLs.vmNetworking)}
       loaded={loaded}
       onCreate={onCreate}
       title={title}

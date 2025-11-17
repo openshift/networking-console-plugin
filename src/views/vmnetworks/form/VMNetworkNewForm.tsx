@@ -76,7 +76,7 @@ const VMNetworkNewForm: FC = () => {
                 <Link
                   rel="noreferrer"
                   target="_blank"
-                  to={getDocumentationURL(documentationURLs.multipleNetworks)}
+                  to={getDocumentationURL(documentationURLs.vmNetworking)}
                 >
                   virtual machine networks
                 </Link>
