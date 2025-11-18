@@ -77,7 +77,7 @@ const SelectMultiTypeahead: FC<SelectMultiTypeaheadProps> = ({
             className={option.className}
             id={`select-multi-typeahead-${option.value.replace(' ', '-')}`}
             isFocused={focusedItemIndex === index}
-            isSelected={selected.includes(option.value)}
+            isSelected={selected?.includes(option.value)}
             key={option.value || option.children}
             {...option}
           >
