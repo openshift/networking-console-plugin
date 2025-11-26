@@ -1,13 +1,19 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Trans } from 'react-i18next';
 import { Link } from 'react-router-dom-v5-compat';
 
 import { Alert, AlertVariant, Label } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { UDN_NO_NAMESPACE_ALERT_SHOWN } from '@utils/telemetry/constants';
+import { logNetworkingEvent } from '@utils/telemetry/telemetry';
 import { PRIMARY_USER_DEFINED_LABEL } from '@views/udns/list/constants';
 
 const NoProjectReadyForPrimaryUDNAlert: FC = () => {
   const { t } = useNetworkingTranslation();
+
+  useEffect(() => {
+    logNetworkingEvent(UDN_NO_NAMESPACE_ALERT_SHOWN);
+  }, []);
 
   return (
     <Alert

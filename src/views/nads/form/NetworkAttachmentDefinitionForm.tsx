@@ -21,6 +21,8 @@ import { ALL_NAMESPACES_KEY, DEFAULT_NAMESPACE } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
 import { resourcePathFromModel } from '@utils/resources/shared';
+import { NAD_CREATION_FAILED, NAD_CREATION_STARTED } from '@utils/telemetry/constants';
+import { logCreationFailed, logNADCreated, logNetworkingEvent } from '@utils/telemetry/telemetry';
 import { isEmpty } from '@utils/utils';
 
 import NetworkAttachmentDefinitionTypeSelect from './components/NADTypeSelect/NetworkAttachmentDefinitionTypeSelect';
@@ -43,6 +45,10 @@ const NetworkAttachmentDefinitionForm: FC<NetworkAttachmentDefinitionFormProps> 
   const [activeNamespace] = useActiveNamespace();
   const namespace = ALL_NAMESPACES_KEY === activeNamespace ? DEFAULT_NAMESPACE : activeNamespace;
 
+  useEffect(() => {
+    logNetworkingEvent(NAD_CREATION_STARTED);
+  }, []);
+
   const methods = useForm<NetworkAttachmentDefinitionFormInput>({
     defaultValues: fromNADObjToFormData(formData),
   });
@@ -63,9 +69,11 @@ const NetworkAttachmentDefinitionForm: FC<NetworkAttachmentDefinitionFormProps> 
   const onSubmit = (data: NetworkAttachmentDefinitionFormInput) => {
     createNetAttachDef(data, namespace)
       .then(() => {
+        logNADCreated(data.networkType, 'form', namespace);
         navigate(resourcePathFromModel(NetworkAttachmentDefinitionModel, data?.name, namespace));
       })
       .catch((err) => {
+        logCreationFailed(NAD_CREATION_FAILED, err);
         setError(err);
       });
   };
