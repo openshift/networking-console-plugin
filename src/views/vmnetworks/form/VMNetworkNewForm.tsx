@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Trans } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom-v5-compat';
@@ -19,6 +19,16 @@ import { documentationURLs, getDocumentationURL } from '@utils/constants/documen
 import { MAX_MTU } from '@utils/constants/mtu';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { ClusterUserDefinedNetworkModel } from '@utils/models';
+import {
+  VM_NETWORK_ABANDONED,
+  VM_NETWORK_CREATION_FAILED,
+  VM_NETWORK_CREATION_STARTED,
+} from '@utils/telemetry/constants';
+import {
+  logCreationFailed,
+  logNetworkingEvent,
+  logVMNetworkCreated,
+} from '@utils/telemetry/telemetry';
 import { isEmpty } from '@utils/utils';
 
 import { VM_NETWORKS_PATH } from '../constants';
@@ -31,6 +41,21 @@ const VMNetworkNewForm: FC = () => {
   const navigate = useNavigate();
   const { t } = useNetworkingTranslation();
   const [apiError, setError] = useState<Error>(null);
+
+  const completed = useRef(false);
+  const currentStepId = useRef<number | string>('wizard-network-definition');
+
+  useEffect(() => {
+    logNetworkingEvent(VM_NETWORK_CREATION_STARTED);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (!completed.current) {
+        logNetworkingEvent(VM_NETWORK_ABANDONED, { stepId: currentStepId.current });
+      }
+    };
+  }, []);
 
   const methods = useForm<VMNetworkForm>({
     defaultValues: defaultFormValue,
@@ -62,7 +87,14 @@ const VMNetworkNewForm: FC = () => {
         data: data.network,
         model: ClusterUserDefinedNetworkModel,
       });
+
+      completed.current = true;
+      logVMNetworkCreated(data.network, data.showProjectList);
+
+      navigate(VM_NETWORKS_PATH);
     } catch (error) {
+      completed.current = true;
+      logCreationFailed(VM_NETWORK_CREATION_FAILED, error);
       setError(error);
     }
   };
@@ -93,6 +125,9 @@ const VMNetworkNewForm: FC = () => {
           />
         }
         onSave={handleSubmit(onSubmit)}
+        onStepChange={(event, currentStep) => {
+          currentStepId.current = currentStep.id;
+        }}
       >
         <WizardStep
           footer={{

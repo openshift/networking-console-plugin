@@ -22,6 +22,18 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 import { ClusterUserDefinedNetworkModel, UserDefinedNetworkModel } from '@utils/models';
 import { resourcePathFromModel } from '@utils/resources/shared';
 import { ClusterUserDefinedNetworkKind, UserDefinedNetworkKind } from '@utils/resources/udns/types';
+import {
+  CUDN_CREATION_FAILED,
+  CUDN_CREATION_STARTED,
+  UDN_CREATION_FAILED,
+  UDN_CREATION_STARTED,
+} from '@utils/telemetry/constants';
+import {
+  logCreationFailed,
+  logCUDNCreated,
+  logNetworkingEvent,
+  logUDNCreated,
+} from '@utils/telemetry/telemetry';
 import { isEmpty } from '@utils/utils';
 
 import ClusterUserDefinedNetworkNamespaceSelector from './components/CUDNNamespaceSelector';
@@ -47,6 +59,11 @@ const UserDefinedNetworkForm: FC<UserDefinedNetworkFormProps> = ({ formData, onC
     namespace = ALL_NAMESPACES_KEY === activeNamespace ? DEFAULT_NAMESPACE : activeNamespace;
   }
 
+  useEffect(() => {
+    const eventName = isCluster ? CUDN_CREATION_STARTED : UDN_CREATION_STARTED;
+    logNetworkingEvent(eventName);
+  }, [isCluster]);
+
   const methods = useForm<UserDefinedNetworkFormInput>({
     defaultValues: fromUDNObjToFormData(formData),
   });
@@ -67,6 +84,14 @@ const UserDefinedNetworkForm: FC<UserDefinedNetworkFormProps> = ({ formData, onC
   const onSubmit = (data: UserDefinedNetworkFormInput) => {
     createUDN(data, namespace)
       .then(() => {
+        const udn = fromDataToUDNObj(data, namespace);
+
+        if (isCluster) {
+          logCUDNCreated(udn);
+        } else {
+          logUDNCreated(udn);
+        }
+
         navigate(
           resourcePathFromModel(
             isCluster ? ClusterUserDefinedNetworkModel : UserDefinedNetworkModel,
@@ -76,6 +101,8 @@ const UserDefinedNetworkForm: FC<UserDefinedNetworkFormProps> = ({ formData, onC
         );
       })
       .catch((err) => {
+        const failEvent = isCluster ? CUDN_CREATION_FAILED : UDN_CREATION_FAILED;
+        logCreationFailed(failEvent, err);
         setError(err);
       });
   };
