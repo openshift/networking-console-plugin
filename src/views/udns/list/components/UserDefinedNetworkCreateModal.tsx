@@ -18,6 +18,18 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 import useProjectsWithPrimaryUserDefinedLabel from '@utils/hooks/useProjectsWithPrimaryUserDefinedLabel';
 import { ClusterUserDefinedNetworkModel, UserDefinedNetworkModel } from '@utils/models';
 import { getName, getNamespace, resourcePathFromModel } from '@utils/resources/shared';
+import {
+  CUDN_CREATION_FAILED,
+  CUDN_CREATION_STARTED,
+  UDN_CREATION_FAILED,
+  UDN_CREATION_STARTED,
+} from '@utils/telemetry/constants';
+import {
+  logCreationFailed,
+  logCUDNCreated,
+  logNetworkingEvent,
+  logUDNCreated,
+} from '@utils/telemetry/telemetry';
 
 import { PROJECT_NAME } from '../constants';
 
@@ -38,6 +50,11 @@ const UserDefinedNetworkCreateModal: FC<UserDefinedNetworkCreateModalProps> = ({
 }) => {
   const { t } = useNetworkingTranslation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const eventName = isClusterUDN ? CUDN_CREATION_STARTED : UDN_CREATION_STARTED;
+    logNetworkingEvent(eventName);
+  }, [isClusterUDN]);
 
   const [activeNamespace] = useActiveNamespace();
   const [projectsReadyForPrimaryUDN, loadedPrimaryUDN, errorLoadingPrimaryUDN] =
@@ -80,19 +97,24 @@ const UserDefinedNetworkCreateModal: FC<UserDefinedNetworkCreateModalProps> = ({
   const [error, setIsError] = useState<Error>();
   const submit = async (udn: UDNForm) => {
     try {
-      const model =
-        udn.kind === ClusterUserDefinedNetworkModel.kind
-          ? ClusterUserDefinedNetworkModel
-          : UserDefinedNetworkModel;
+      const model = isClusterUDN ? ClusterUserDefinedNetworkModel : UserDefinedNetworkModel;
 
-      await k8sCreate({
+      const createdResource = await k8sCreate({
         data: udn,
         model,
       });
-      closeModal();
 
+      if (isClusterUDN) {
+        logCUDNCreated(createdResource);
+      } else {
+        logUDNCreated(createdResource);
+      }
+
+      closeModal();
       navigate(resourcePathFromModel(model, getName(udn), getNamespace(udn)));
     } catch (apiError) {
+      const failEvent = isClusterUDN ? CUDN_CREATION_FAILED : UDN_CREATION_FAILED;
+      logCreationFailed(failEvent, apiError);
       setIsError(apiError);
     }
   };
