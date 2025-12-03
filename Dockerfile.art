@@ -24,7 +24,7 @@ RUN test -d ${REMOTE_SOURCES_DIR}/cachito-gomod-with-deps || exit 1; \
  && yarn install --frozen-lockfile && yarn build
 
 # Web server container
-FROM registry.ci.openshift.org/ocp/4.21:base-rhel9
+FROM registry.ci.openshift.org/ocp/4.21:base-rhel9-minimal-test
 
 RUN INSTALL_PKGS="nginx" && \
     dnf install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
