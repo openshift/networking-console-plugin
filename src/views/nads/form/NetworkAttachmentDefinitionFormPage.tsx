@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useCallback } from 'react';
 
 import { ResourceYAMLEditor } from '@openshift-console/dynamic-plugin-sdk';
 import { PageSection, Title } from '@patternfly/react-core';
@@ -14,6 +14,18 @@ import NetworkAttachmentDefinitionForm from './NetworkAttachmentDefinitionForm';
 const NetworkAttachmentDefinitionFormPage: FC = () => {
   const { t } = useNetworkingTranslation();
 
+  const YAMLEditor = useCallback(
+    ({ initialYAML = '', onChange }) => (
+      <ResourceYAMLEditor
+        create
+        hideHeader
+        initialResource={safeYAMLToJS(initialYAML)}
+        onChange={onChange}
+      />
+    ),
+    [],
+  );
+
   return (
     <>
       <PageSection>
@@ -25,14 +37,7 @@ const NetworkAttachmentDefinitionFormPage: FC = () => {
         initialData={generateDefaultNAD()}
         initialType={EditorType.Form}
         lastViewUserSettingKey={LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY}
-        YAMLEditor={({ initialYAML = '', onChange }) => (
-          <ResourceYAMLEditor
-            create
-            hideHeader
-            initialResource={safeYAMLToJS(initialYAML)}
-            onChange={onChange}
-          />
-        )}
+        YAMLEditor={YAMLEditor}
       />
     </>
   );
