@@ -1,4 +1,4 @@
-import React, { ComponentType, FC, useState } from 'react';
+import React, { ComponentType, FC, useCallback, useState } from 'react';
 import * as _ from 'lodash';
 
 import { K8sResourceKind } from '@openshift-console/dynamic-plugin-sdk';
@@ -61,15 +61,18 @@ export const SyncedEditor: FC<SyncedEditorProps> = ({
     }
   };
 
-  const handleYAMLChange = (newYAML = '') => {
-    asyncYAMLToJS(newYAML)
-      .then((js) => {
-        setSwitchError(undefined);
-        handleFormDataChange(js);
-        setYAML(safeJSToYAML(prune?.(formData) ?? formData, yaml, YAML_TO_JS_OPTIONS));
-      })
-      .catch((err) => setSwitchError(String(err)));
-  };
+  const handleYAMLChange = useCallback(
+    (newYAML = '') => {
+      asyncYAMLToJS(newYAML)
+        .then((js) => {
+          setSwitchError(undefined);
+          handleFormDataChange(js);
+          setYAML(safeJSToYAML(prune?.(formData) ?? formData, yaml, YAML_TO_JS_OPTIONS));
+        })
+        .catch((err) => setSwitchError(String(err)));
+    },
+    [formData, prune],
+  );
 
   const changeEditorType = (newType: EditorType): void => {
     setEditorType(newType);

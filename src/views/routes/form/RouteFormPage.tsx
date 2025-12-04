@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useCallback, useMemo } from 'react';
 
 import { RouteModel } from '@kubevirt-ui/kubevirt-api/console';
 import { ResourceYAMLEditor, useActiveNamespace } from '@openshift-console/dynamic-plugin-sdk';
@@ -21,16 +21,33 @@ type RouteFormPageProps = { initialRoute?: RouteKind };
 const RouteFormPage: FC<RouteFormPageProps> = ({ initialRoute }) => {
   const { t } = useNetworkingTranslation();
 
+  const isEditing = Boolean(initialRoute);
+
   const [activeNamespace] = useActiveNamespace();
   const namespace = getValidNamespace(activeNamespace);
 
-  const k8sObj = initialRoute || generateDefaultRoute(namespace);
+  const k8sObj = useMemo(
+    () => initialRoute || generateDefaultRoute(namespace),
+    [initialRoute, namespace],
+  );
+
+  const YAMLEditor = useCallback(
+    ({ initialYAML = '', onChange }) => (
+      <ResourceYAMLEditor
+        create={!isEditing}
+        hideHeader
+        initialResource={safeYAMLToJS(initialYAML)}
+        onChange={onChange}
+      />
+    ),
+    [isEditing],
+  );
 
   return (
     <>
       <PageSection className="networking-route-form">
         <Title headingLevel="h2">
-          {initialRoute
+          {isEditing
             ? t('Edit {{label}}', { label: RouteModel.label })
             : t('Create {{label}}', { label: RouteModel.label })}
         </Title>
@@ -45,14 +62,7 @@ const RouteFormPage: FC<RouteFormPageProps> = ({ initialRoute }) => {
         initialData={k8sObj}
         initialType={EditorType.Form}
         lastViewUserSettingKey={LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY}
-        YAMLEditor={({ initialYAML = '', onChange }) => (
-          <ResourceYAMLEditor
-            create
-            hideHeader
-            initialResource={safeYAMLToJS(initialYAML)}
-            onChange={onChange}
-          />
-        )}
+        YAMLEditor={YAMLEditor}
       />
     </>
   );

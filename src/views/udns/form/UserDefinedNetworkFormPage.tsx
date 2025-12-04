@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useCallback } from 'react';
 import { useParams } from 'react-router-dom-v5-compat';
 
 import { ResourceYAMLEditor } from '@openshift-console/dynamic-plugin-sdk';
@@ -23,6 +23,18 @@ const UserDefinedNetworkFormPage: FC = () => {
   const UDN_HEADER_LABEL = t('Create UserDefinedNetwork');
   const CUDN_HEADER_LABEL = t('Create ClusterUserDefinedNetwork');
 
+  const YAMLEditor = useCallback(
+    ({ initialYAML = '', onChange }) => (
+      <ResourceYAMLEditor
+        create
+        hideHeader
+        initialResource={safeYAMLToJS(initialYAML)}
+        onChange={onChange}
+      />
+    ),
+    [],
+  );
+
   return (
     <>
       <PageSection>
@@ -34,14 +46,7 @@ const UserDefinedNetworkFormPage: FC = () => {
         initialData={params.ns ? generateDefaultUDN() : generateDefaultCUDN()}
         initialType={EditorType.Form}
         lastViewUserSettingKey={LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY}
-        YAMLEditor={({ initialYAML = '', onChange }) => (
-          <ResourceYAMLEditor
-            create
-            hideHeader
-            initialResource={safeYAMLToJS(initialYAML)}
-            onChange={onChange}
-          />
-        )}
+        YAMLEditor={YAMLEditor}
       />
     </>
   );

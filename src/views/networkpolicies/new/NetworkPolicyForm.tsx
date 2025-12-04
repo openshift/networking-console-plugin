@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom-v5-compat';
 
 import { NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
@@ -19,7 +19,22 @@ const NetworkPolicyForm: FC = () => {
   const [helpText, setHelpText] = useState<string>(FORM_HELPER_TEXT);
   const isMultiCreateForm = useIsMultiNetworkPolicy();
 
-  const k8sObj = networkPolicyToK8sResource(getInitialPolicy(ns), isMultiCreateForm);
+  const k8sObj = useMemo(
+    () => networkPolicyToK8sResource(getInitialPolicy(ns), isMultiCreateForm),
+    [ns, isMultiCreateForm],
+  );
+
+  const YAMLEditor = useCallback(
+    ({ initialYAML = '', onChange }) => (
+      <ResourceYAMLEditor
+        create
+        hideHeader
+        initialResource={safeYAMLToJS(initialYAML)}
+        onChange={onChange}
+      />
+    ),
+    [],
+  );
 
   return (
     <>
@@ -38,14 +53,7 @@ const NetworkPolicyForm: FC = () => {
         onChangeEditorType={(type) =>
           setHelpText(type === EditorType.Form ? FORM_HELPER_TEXT : YAM_HELPER_TEXT)
         }
-        YAMLEditor={({ initialYAML = '', onChange }) => (
-          <ResourceYAMLEditor
-            create
-            hideHeader
-            initialResource={safeYAMLToJS(initialYAML)}
-            onChange={onChange}
-          />
-        )}
+        YAMLEditor={YAMLEditor}
       />
     </>
   );
