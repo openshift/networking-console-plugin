@@ -33,7 +33,7 @@ const ServiceAddress: FC<{ service: IoK8sApiCoreV1Service }> = ({ service }) => 
       default:
         return ServiceIPsRow({
           desc: t('Accessible within the cluster only'),
-          ips: [service?.spec?.clusterIP],
+          ips: service?.spec?.clusterIPs || [service?.spec?.clusterIP],
           name: t('Cluster IP'),
         });
     }
