@@ -31,7 +31,7 @@ const ServiceAddress: FC<{ service: IoK8sApiCoreV1Service }> = ({ service }) => 
       default:
         return ServiceIPsRow({
           desc: t('Accessible within the cluster only'),
-          ips: [service?.spec?.clusterIP],
+          ips: service?.spec?.clusterIPs || [service?.spec?.clusterIP],
           name: t('Cluster IP'),
         });
     }
@@ -72,7 +72,8 @@ const ServiceIPsRow: FC<{ desc: string; ips: string[]; name: string; note?: stri
           <p className="ip-desc">{desc}</p>
         </div>
         <div className="col-xs-6">
-          {note && <MutedText content={note} isSpan />};{ips ? ips.join(', ') : t('Pending')}
+          {note && <MutedText content={note} isSpan />}
+          {ips ? ips.join(', ') : t('Pending')}
         </div>
       </div>
     </div>
