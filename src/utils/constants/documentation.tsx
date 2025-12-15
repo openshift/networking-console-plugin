@@ -46,8 +46,8 @@ export const documentationURLs: documentationURLsType = {
     upstream: 'networking/multiple_networks/primary_networks/about-user-defined-networks.html',
   },
   routes: {
-    downstream: 'html/ingress_and_load_balancing/configuring-routes',
-    upstream: 'networking/ingress_load_balancing/routes/route-configuration.html',
+    downstream: 'html/ingress_and_load_balancing/routes',
+    upstream: 'networking/ingress_load_balancing/routes/nw-configuring-routes.html',
   },
   vmNetworking: {
     downstream: 'html/virtualization/networking',
