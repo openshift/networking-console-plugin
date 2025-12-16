@@ -1,7 +1,11 @@
 const UPSTREAM_LATEST = 'https://docs.okd.io/latest/';
+const REDHAT_DOC_BASE =
+  'https://docs.redhat.com/en/documentation/openshift_container_platform/latest/';
 
-// Prefer the documentation base URL passed as a flag, but fall back to the latest upstream docs if none was specified.
-export const openshiftHelpBase = window.SERVER_FLAGS.documentationBaseURL || UPSTREAM_LATEST;
+// Use latest upstream docs if branding is 'okd', but fall back to Red Hat documentation.
+export const openshiftHelpBase =
+  window.SERVER_FLAGS.documentationBaseURL ||
+  (window.SERVER_FLAGS.branding === 'okd' ? UPSTREAM_LATEST : REDHAT_DOC_BASE);
 
 export const DOC_URL_OPENSHIFT_WHATS_NEW = 'https://www.openshift.com/learn/whats-new';
 export const DOC_URL_OPERATORFRAMEWORK_SDK = 'https://sdk.operatorframework.io/';
@@ -49,7 +53,7 @@ export const documentationURLs: documentationURLsType = {
   },
 
   networkPolicy: {
-    downstream: 'html/networking/network-policy#about-network-policy',
+    downstream: 'html/network_security/network-policy#about-network-policy',
     kube: `${KUBE_DOCS}/concepts/services-networking/network-policies/`,
     upstream: 'networking/network_security/network_policy/about-network-policy.html',
   },
@@ -67,12 +71,12 @@ export const documentationURLs: documentationURLsType = {
     upstream: 'post_installation_configuration/machine-configuration-tasks.html',
   },
   primaryUDN: {
-    downstream: 'html/networking/multiple-networks#primary-networks',
+    downstream: 'html/virtualization/networking#virt-connecting-vm-to-primary-udn',
     upstream: 'networking/multiple_networks/primary_networks/about-user-defined-networks.html',
   },
   routes: {
-    downstream: 'html/networking/configuring-routes',
-    upstream: 'networking/routes/route-configuration.html',
+    downstream: 'html/ingress_and_load_balancing/routes',
+    upstream: 'networking/ingress_load_balancing/routes/nw-configuring-routes.html',
   },
   understandingUpgradeChannels: {
     downstream:
