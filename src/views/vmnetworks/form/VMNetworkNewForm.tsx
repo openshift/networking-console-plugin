@@ -78,8 +78,9 @@ const VMNetworkNewForm: FC = () => {
     isEmpty(name) || isEmpty(bridgeMapping) || isEmpty(mtu) || mtu > MAX_MTU;
 
   const emptyProjectList = showProjectList
-    ? isEmpty(namespaceSelector.matchExpressions)
-    : !matchLabelCheck && isEmpty(namespaceSelector.matchLabels);
+    ? isEmpty(namespaceSelector?.matchExpressions) ||
+      namespaceSelector?.matchExpressions?.every((expr) => isEmpty(expr?.values))
+    : !matchLabelCheck && isEmpty(namespaceSelector?.matchLabels);
 
   const onSubmit = async (data: VMNetworkForm) => {
     try {
