@@ -132,7 +132,6 @@
   "Delete VirtualMachine network?": "Delete VirtualMachine network?",
   "Deny all egress traffic": "Deny all egress traffic",
   "Deny all ingress traffic": "Deny all ingress traffic",
-  "Deprecated": "Deprecated",
   "Description": "Description",
   "Destination CA certificate": "Destination CA certificate",
   "Destinations added to this rule will allow traffic from the pods defined above. Destinations in this list are combined using a logical OR operation.": "Destinations added to this rule will allow traffic from the pods defined above. Destinations in this list are combined using a logical OR operation.",
