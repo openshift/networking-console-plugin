@@ -6,7 +6,6 @@ import {
   DropdownItem,
   DropdownList,
   FormGroup,
-  Label,
   MenuToggle,
   MenuToggleElement,
 } from '@patternfly/react-core';
@@ -72,9 +71,6 @@ const NetworkAttachmentDefinitionTypeSelect: FC = () => {
                     value={type}
                   >
                     {label}
-                    {isSecondaryLocalnet && (
-                      <Label className="pf-v6-u-ml-sm">{t('Deprecated')}</Label>
-                    )}
                   </DropdownItem>
                 );
               })}
