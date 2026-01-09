@@ -1,4 +1,4 @@
-import { adjectives, animals, uniqueNamesGenerator } from 'unique-names-generator';
+import { animals, colors, uniqueNamesGenerator } from 'unique-names-generator';
 
 import { ALL_NAMESPACES_KEY, DEFAULT_NAMESPACE } from '@utils/constants';
 
@@ -9,7 +9,7 @@ export const isEmpty = (obj) =>
 
 export const generateName = (prefix: string): string => {
   return `${prefix}-${uniqueNamesGenerator({
-    dictionaries: [adjectives, animals],
+    dictionaries: [colors, animals],
     separator: '-',
   })}`;
 };
