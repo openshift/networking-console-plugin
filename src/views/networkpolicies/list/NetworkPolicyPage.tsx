@@ -8,12 +8,11 @@ import {
   useActiveNamespace,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { Tab, Tabs, TabTitleText } from '@patternfly/react-core';
-import { ALL_NAMESPACES, DEFAULT_NAMESPACE } from '@utils/constants';
+import { ALL_NAMESPACES, ALL_NAMESPACES_KEY, DEFAULT_NAMESPACE } from '@utils/constants';
 import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/constants/ui';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { MultiNetworkPolicyModel } from '@utils/models';
 import { resourcePathFromModel } from '@utils/resources/shared';
-import { getValidNamespace } from '@utils/utils';
 
 import useIsMultiEnabled from './hooks/useIsMultiEnabled';
 import { TAB_INDEXES } from './constants';
@@ -26,7 +25,7 @@ const NetworkPolicyPage: FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [activeNamespace] = useActiveNamespace();
-  const namespace = getValidNamespace(activeNamespace);
+  const namespace = activeNamespace === ALL_NAMESPACES_KEY ? null : activeNamespace;
   const locationTabKey = useMemo(
     () => getActiveKeyFromPathname(location?.pathname),
     [location?.pathname],
