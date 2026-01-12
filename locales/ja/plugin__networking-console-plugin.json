@@ -307,7 +307,7 @@
   "Pod selector for": "以下の Pod セレクター",
   "Pod unschedulable": "Pod がスケジュール対象外である",
   "Pods": "Pods",
-  "Pods accept all traffic by default. They can be isolated via NetworkPolicies which specify a whitelist of ingress rules. When a Pod is selected by a NetworkPolicy, it will reject all traffic not explicitly allowed via a NetworkPolicy.": "Pod はデフォルトですべてのトラフィックを受け入れます。これらは、Ingress ルールのホワイトリストを指定する NetworkPolicies を使用して分離できます。Pod が NetworkPolicy によって選択されると、NetworkPolicy で明示的に許可されていないすべてのトラフィックが拒否されます。",
+  "Pods accept all traffic by default. They can be isolated via NetworkPolicies which specify an allowlist of ingress rules. When a Pod is selected by a NetworkPolicy, it will reject all traffic not explicitly allowed via a NetworkPolicy.": "Pods accept all traffic by default. They can be isolated via NetworkPolicies which specify an allowlist of ingress rules. When a Pod is selected by a NetworkPolicy, it will reject all traffic not explicitly allowed via a NetworkPolicy.",
   "Pods having all the supplied key/value pairs as labels will be selected.": "指定のキー/値の全ペアがラベルとして指定されている Pod が選択されます。",
   "Policy for": "次のポリシー:",
   "Policy name": "ポリシー名",
