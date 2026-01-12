@@ -36,7 +36,7 @@ const NetworkPolicyDetailsIngress: FC<NetworkPolicyDetailsIngressProps> = ({ net
     <>
       <DetailsSectionTitle titleText={t('Ingress rules')} />
       {t(
-        'Pods accept all traffic by default. They can be isolated via NetworkPolicies which specify a whitelist of ingress rules. When a Pod is selected by a NetworkPolicy, it will reject all traffic not explicitly allowed via a NetworkPolicy.',
+        'Pods accept all traffic by default. They can be isolated via NetworkPolicies which specify an allowlist of ingress rules. When a Pod is selected by a NetworkPolicy, it will reject all traffic not explicitly allowed via a NetworkPolicy.',
       )}
       {!isManaged() && (
         <Trans t={t}>
