@@ -310,7 +310,7 @@
   "Pod selector for": "Pod selector for",
   "Pod unschedulable": "Pod unschedulable",
   "Pods": "Pods",
-  "Pods accept all traffic by default. They can be isolated via NetworkPolicies which specify a whitelist of ingress rules. When a Pod is selected by a NetworkPolicy, it will reject all traffic not explicitly allowed via a NetworkPolicy.": "Pods accept all traffic by default. They can be isolated via NetworkPolicies which specify a whitelist of ingress rules. When a Pod is selected by a NetworkPolicy, it will reject all traffic not explicitly allowed via a NetworkPolicy.",
+  "Pods accept all traffic by default. They can be isolated via NetworkPolicies which specify an allowlist of ingress rules. When a Pod is selected by a NetworkPolicy, it will reject all traffic not explicitly allowed via a NetworkPolicy.": "Pods accept all traffic by default. They can be isolated via NetworkPolicies which specify an allowlist of ingress rules. When a Pod is selected by a NetworkPolicy, it will reject all traffic not explicitly allowed via a NetworkPolicy.",
   "Pods having all the supplied key/value pairs as labels will be selected.": "Pods having all the supplied key/value pairs as labels will be selected.",
   "Policy for": "Policy for",
   "Policy name": "Policy name",
