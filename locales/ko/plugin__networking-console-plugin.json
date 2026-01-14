@@ -305,7 +305,7 @@
   "Pod selector for": "다음의 Pod 선택기",
   "Pod unschedulable": "Pod 예약 불가",
   "Pods": "Pod",
-  "Pods accept all traffic by default. They can be isolated via NetworkPolicies which specify a whitelist of ingress rules. When a Pod is selected by a NetworkPolicy, it will reject all traffic not explicitly allowed via a NetworkPolicy.": "Pod는 기본적으로 모든 트래픽을 허용합니다. Ingress 규칙의 화이트리스트를 지정하는 네트워크 정책을 통해 분리할 수 있습니다. 네트워크 정책에서 Pod를 선택하면 네트워크 정책을 통해 명시적으로 허용되지 않은 모든 트래픽이 거부됩니다. ",
+  "Pods accept all traffic by default. They can be isolated via NetworkPolicies which specify an allowlist of ingress rules. When a Pod is selected by a NetworkPolicy, it will reject all traffic not explicitly allowed via a NetworkPolicy.": "Pods accept all traffic by default. They can be isolated via NetworkPolicies which specify an allowlist of ingress rules. When a Pod is selected by a NetworkPolicy, it will reject all traffic not explicitly allowed via a NetworkPolicy.",
   "Pods having all the supplied key/value pairs as labels will be selected.": "레이블로 제공된 모든 키/값 쌍이 있는 Pod가 선택됩니다.",
   "Policy for": "정책 대상",
   "Policy name": "정책 이름",
