@@ -127,7 +127,6 @@
   "Delete VirtualMachine network": "Delete VirtualMachine network",
   "Deny all egress traffic": "すべての Egress トラフィックを拒否",
   "Deny all ingress traffic": "すべての Ingress トラフィックを拒否",
-  "Deprecated": "Deprecated",
   "Description": "説明",
   "Destination CA certificate": "宛先 CA 証明書",
   "Destinations added to this rule will allow traffic from the pods defined above. Destinations in this list are combined using a logical OR operation.": "宛先がこのルールに追加されると、上記で定義した Pod からのトラフィックが許可されます。この一覧の宛先は、論理 OR 演算を使用して結合されます。",

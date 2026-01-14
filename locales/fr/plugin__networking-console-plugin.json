@@ -130,7 +130,6 @@
   "Delete VirtualMachine network": "Delete VirtualMachine network",
   "Deny all egress traffic": "Refuser tout le trafic sortant",
   "Deny all ingress traffic": "Refuser tout le trafic entrant",
-  "Deprecated": "Deprecated",
   "Description": "Description",
   "Destination CA certificate": "Certificat d’autorité de certification de destination",
   "Destinations added to this rule will allow traffic from the pods defined above. Destinations in this list are combined using a logical OR operation.": "Les destinations ajoutées à cette règle autoriseront le trafic provenant des pods définis ci-dessus. Les destinations de cette liste sont combinées à l’aide d’une opération logique OU.",
