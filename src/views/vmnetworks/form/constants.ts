@@ -3,8 +3,9 @@ import { LOCALNET_TOPOLOGY } from '@utils/resources/udns/constants';
 import { ClusterUserDefinedNetworkKind, UserDefinedNetworkRole } from '@utils/resources/udns/types';
 
 export const DEFAULT_MTU = 1500;
+export const NODE_NETWORK_MAPPING_PARAM_KEY = 'physicalNetworkName';
 
-export const defaultVMNetwork: ClusterUserDefinedNetworkKind = {
+export const getDefaultVMNetwork = (nodeNetworkMapping = ''): ClusterUserDefinedNetworkKind => ({
   apiVersion: `${ClusterUserDefinedNetworkModel.apiGroup}/${ClusterUserDefinedNetworkModel.apiVersion}`,
   kind: ClusterUserDefinedNetworkModel.kind,
   metadata: {
@@ -19,14 +20,14 @@ export const defaultVMNetwork: ClusterUserDefinedNetworkKind = {
           mode: 'Disabled',
         },
         mtu: null, // null on purpose so setting mtu to maxMTU (or DEFAULT_MTU) is done only once
-        physicalNetworkName: '',
+        physicalNetworkName: nodeNetworkMapping,
 
         role: UserDefinedNetworkRole.Secondary,
       },
       topology: LOCALNET_TOPOLOGY,
     },
   },
-};
+});
 
 export type VMNetworkForm = {
   matchLabelCheck: boolean;
@@ -34,11 +35,11 @@ export type VMNetworkForm = {
   showProjectList: boolean;
 };
 
-export const defaultFormValue: VMNetworkForm = {
+export const getDefaultFormValue = (nodeNetworkMapping?: string): VMNetworkForm => ({
   matchLabelCheck: false,
-  network: defaultVMNetwork,
+  network: getDefaultVMNetwork(nodeNetworkMapping),
   showProjectList: true,
-};
+});
 
 export const MIN_VLAN_ID = 1;
 export const MAX_VLAN_ID = 4094;
