@@ -331,13 +331,6 @@
     reselect "4.x"
     typesafe-actions "^4.2.1"
 
-"@openshift-console/plugin-shared@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@openshift-console/plugin-shared/-/plugin-shared-0.0.1.tgz#981ecfb2d8873265bcaf1d068dc5fe8c46df3ad8"
-  integrity sha512-sg823G7ijoE9s/jqZbR1zep/iHA2Bn0rVt+CRJ7YO+Ogc4EJQlSJFwvsQmk5rbGvpgHxi0X2CfarYTED+f2woQ==
-  dependencies:
-    classnames "2.x"
-
 "@openshift/dynamic-plugin-sdk-webpack@^4.0.2":
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/@openshift/dynamic-plugin-sdk-webpack/-/dynamic-plugin-sdk-webpack-4.0.2.tgz#0304911c9c27ecff7ba5d2df5ca24f781fd445ec"
@@ -2013,7 +2006,7 @@ ci-info@^3.2.0:
   resolved "https://registry.yarnpkg.com/ci-info/-/ci-info-3.9.0.tgz#4279a62028a7b1f262f3473fc9605f5e218c59b4"
   integrity sha512-NIxF55hv4nSqQswkAeiOi1r83xy8JldOFDTWiug55KBu9Jnblncd2U6ViHmYgHf01TPZS77NJBhBMKdWj9HQMQ==
 
-classnames@2.x, classnames@^2.5.1:
+classnames@^2.5.1:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.5.1.tgz#ba774c614be0f016da105c858e7159eae8e7687b"
   integrity sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==
