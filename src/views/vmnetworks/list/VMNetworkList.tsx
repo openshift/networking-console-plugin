@@ -38,7 +38,7 @@ const VMNetworkList: FC = () => {
   const [data, filteredData, onFilterChange] = useListPageFilter(allVMNetworks);
   const columns = useVMNetworkColumns();
 
-  const title = t('Virtual Machine Networks');
+  const title = t('Virtual machine networks');
 
   const onCreate = () => {
     navigate(`${VM_NETWORKS_PATH}/~new`);
@@ -48,7 +48,7 @@ const VMNetworkList: FC = () => {
     <ListEmptyState<ClusterUserDefinedNetworkKind>
       data={data}
       error={loadError}
-      kind={t('Virtual Machine Network')}
+      kind={t('OVN localnet network')}
       learnMoreLink={getDocumentationURL(documentationURLs.vmNetworking)}
       loaded={loaded}
       onCreate={onCreate}
@@ -61,7 +61,7 @@ const VMNetworkList: FC = () => {
           }}
           onClick={onCreate}
         >
-          {t('Create Virtual Machine Network')}
+          {t('Create network')}
         </ListPageCreateButton>
       </ListPageHeader>
       <ListPageBody>

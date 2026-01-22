@@ -37,7 +37,7 @@ const useVMNetworkColumns = (): { id: string; title: string }[] => {
       {
         id: 'physicalNetworkName',
         sort: 'spec.network.localnet.physicalNetworkName',
-        title: t('Node network mapping'),
+        title: t('Physical network name'),
         transforms: [sortable],
       },
       {

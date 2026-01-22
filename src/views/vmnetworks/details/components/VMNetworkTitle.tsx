@@ -18,8 +18,8 @@ const VMNetworkTitle: FC<VMNetworkTitleProps> = ({ network }) => {
   return (
     <DetailsPageTitle
       breadcrumbs={[
-        { name: t('Virtual Machine Networks'), to: VM_NETWORKS_PATH },
-        { name: t('Virtual Machine Network details') },
+        { name: t('Virtual machine networks'), to: VM_NETWORKS_PATH },
+        { name: t('Virtual machine network details') },
       ]}
     >
       <Title headingLevel="h1">{getName(network)}</Title>

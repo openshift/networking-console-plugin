@@ -2,18 +2,17 @@ import React, { FC, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { k8sUpdate } from '@openshift-console/dynamic-plugin-sdk';
-import { Form, FormGroup, ModalVariant } from '@patternfly/react-core';
-import { WarningTriangleIcon } from '@patternfly/react-icons';
-import chartWarningColor from '@patternfly/react-tokens/dist/esm/chart_global_warning_Color_200';
+import { Alert, Form, FormGroup, ModalVariant } from '@patternfly/react-core';
 import BaseModal from '@utils/components/BaseModal/BaseModal';
 import ErrorAlert from '@utils/components/ErrorAlert';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { ClusterUserDefinedNetworkModel } from '@utils/models';
 import { ClusterUserDefinedNetworkKind } from '@utils/resources/udns/types';
-import { isEmpty } from '@utils/utils';
 import ProjectMapping from '@views/vmnetworks/form/components/ProjectMapping';
 import { VMNetworkForm } from '@views/vmnetworks/form/constants';
 import { isValidProjectMapping } from '@views/vmnetworks/utils';
+
+import { getDefaultProjectMappingOption } from '../utils/utils';
 
 export type EditProjectMappingModalProps = {
   closeModal?: () => void;
@@ -26,9 +25,8 @@ const EditProjectMappingModal: FC<EditProjectMappingModalProps> = ({ closeModal,
 
   const methods = useForm<VMNetworkForm>({
     defaultValues: {
-      matchLabelCheck: isEmpty(obj?.spec?.namespaceSelector?.matchLabels),
       network: obj,
-      showProjectList: !isEmpty(obj?.spec?.namespaceSelector?.matchExpressions),
+      projectMappingOption: getDefaultProjectMappingOption(obj?.spec?.namespaceSelector),
     },
   });
 
@@ -39,11 +37,10 @@ const EditProjectMappingModal: FC<EditProjectMappingModalProps> = ({ closeModal,
   } = methods;
 
   const namespaceSelector = watch('network.spec.namespaceSelector');
-  const showProjectList = watch('showProjectList');
-  const matchLabelCheck = watch('matchLabelCheck');
+  const projectMappingOption = watch('projectMappingOption');
 
   const isSubmitDisabled =
-    isSubmitting || !isValidProjectMapping(showProjectList, matchLabelCheck, namespaceSelector);
+    isSubmitting || !isValidProjectMapping(projectMappingOption, namespaceSelector);
 
   const onSubmit = async (data: VMNetworkForm) => {
     try {
@@ -56,26 +53,28 @@ const EditProjectMappingModal: FC<EditProjectMappingModalProps> = ({ closeModal,
       setError(error);
     }
   };
+
   return (
     <BaseModal
       closeModal={closeModal}
-      description={t(
-        'You can edit your VirtualMachine network mapping. Use the list of projects or labels to specify qualifying projects.',
-      )}
+      description={t('Use the list of projects or the labels to specify qualifying projects.')}
       executeFn={handleSubmit(onSubmit)}
       id="edit-project-mapping-modal"
       isSubmitDisabled={isSubmitDisabled}
       modalVariant={ModalVariant.small}
       submitButtonText={t('Save')}
-      title={t('Edit project mapping')}
+      title={t('Edit projects mapping')}
     >
       <FormProvider {...methods}>
         <Form id="edit-project-mapping-form">
-          <p>
-            <WarningTriangleIcon color={chartWarningColor.value} />{' '}
-            {t('VirtualMachines in projects that are no longer enrolled will lose connectivity')}{' '}
-          </p>
-          <ProjectMapping />
+          <Alert
+            isInline
+            title={t(
+              'VirtualMachines in projects that are no longer enrolled will lose connectivity',
+            )}
+            variant="warning"
+          />
+          <ProjectMapping isEditModal />
           {apiError && (
             <FormGroup>
               <ErrorAlert error={apiError} />

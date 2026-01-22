@@ -2,11 +2,13 @@ import React, { FC, useEffect } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import {
+  Alert,
   Checkbox,
   Form,
   FormGroup,
   Split,
   SplitItem,
+  Stack,
   TextInput,
   Title,
 } from '@patternfly/react-core';
@@ -48,8 +50,15 @@ const NetworkDefinition: FC = () => {
 
   return (
     <Form className="network-definition">
-      <Title headingLevel="h2">{t('Network definition')}</Title>
-      <p>{t('This configuration is not editable after the network is created.')}</p>
+      <Stack hasGutter>
+        <Title headingLevel="h2">{t('Network definition')}</Title>
+        <Alert
+          isInline
+          isPlain
+          title={t('This configuration is not editable after the network is created.')}
+          variant="info"
+        />
+      </Stack>
 
       <FormGroup fieldId="name" isRequired label={t('Name')}>
         <TextInput {...register('network.metadata.name', { required: true })} />
@@ -61,13 +70,13 @@ const NetworkDefinition: FC = () => {
       <FormGroup
         fieldId="bridge-mapping"
         isRequired
-        label={t('Node network mapping')}
+        label={t('Physical network')}
         labelHelp={
           <PopoverHelpIcon
             bodyContent={t(
               'The network connects to a physical network through an Open vSwitch bridge.',
             )}
-            headerContent={t('Node network mapping')}
+            headerContent={t('Physical network')}
           />
         }
       >

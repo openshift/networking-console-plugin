@@ -27,7 +27,7 @@ const useVMNetworkActions = (obj: ClusterUserDefinedNetworkKind) => {
         ),
         disabled: true,
         id: 'edit-vm-network',
-        label: t('Edit VirtualMachine network'),
+        label: t('Edit network definition'),
       },
       {
         accessReview: asAccessReview(ClusterUserDefinedNetworkModel, obj, 'patch'),
@@ -36,7 +36,7 @@ const useVMNetworkActions = (obj: ClusterUserDefinedNetworkKind) => {
             obj,
           }),
         id: 'edit-vm-network-project-mapping',
-        label: t('Edit project mapping'),
+        label: t('Edit projects mapping'),
       },
       {
         accessReview: asAccessReview(ClusterUserDefinedNetworkModel, obj, 'delete'),
@@ -45,7 +45,7 @@ const useVMNetworkActions = (obj: ClusterUserDefinedNetworkKind) => {
             obj,
           }),
         id: 'delete-vm-network',
-        label: t('Delete VirtualMachine network'),
+        label: t('Delete'),
       },
     ],
     [obj, t, createModal],
