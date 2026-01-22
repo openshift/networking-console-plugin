@@ -7,7 +7,7 @@ import Loading from '@utils/components/Loading/Loading';
 import FailedToGetProjectsAlert from '@utils/components/ProjectsPrimaryUDNAlerts/FailedToGetProjectsAlert';
 import SelectMultiTypeahead from '@utils/components/SelectMultiTypeahead/SelectMultiTypeahead';
 import { getName } from '@utils/resources/shared';
-import { PROJECT_LABEL_FOR_MATCH_EXPRESSION } from '@utils/resources/udns/constants';
+import { PROJECT_NAME_LABEL_KEY } from '@utils/resources/udns/constants';
 
 import { VMNetworkForm } from '../constants';
 
@@ -37,7 +37,7 @@ const ProjectList: FC<ProjectListProps> = ({ errorLoadingProjects, loadedProject
   const transformProjectsIntoMatchExpressions = useCallback(
     (selected: string[]): MatchExpression[] => [
       {
-        key: PROJECT_LABEL_FOR_MATCH_EXPRESSION,
+        key: PROJECT_NAME_LABEL_KEY,
         operator: 'In',
         values: selected,
       },
@@ -50,7 +50,7 @@ const ProjectList: FC<ProjectListProps> = ({ errorLoadingProjects, loadedProject
   if (errorLoadingProjects) return <FailedToGetProjectsAlert error={errorLoadingProjects} />;
 
   return (
-    <>
+    <div className="pf-v6-u-pl-md">
       <Controller
         control={control}
         name="network.spec.namespaceSelector.matchExpressions"
@@ -65,7 +65,7 @@ const ProjectList: FC<ProjectListProps> = ({ errorLoadingProjects, loadedProject
         )}
       />
       {matchExpressions?.length > 0 && <SelectedProjects />}
-    </>
+    </div>
   );
 };
 

@@ -1,18 +1,8 @@
 import React, { FC } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import {
-  Button,
-  ButtonVariant,
-  Card,
-  CardBody,
-  Checkbox,
-  FormGroup,
-  FormSection,
-} from '@patternfly/react-core';
-import { PlusCircleIcon } from '@patternfly/react-icons';
+import { Card, CardBody, FormGroup } from '@patternfly/react-core';
 import LabelSelectorEditor from '@utils/components/LabelSelectorEditor/LabelSelectorEditor';
-import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { isEmpty } from '@utils/utils';
 
 import { VMNetworkForm } from '../constants';
@@ -20,62 +10,38 @@ import { VMNetworkForm } from '../constants';
 import SelectedProjects from './SelectedProjects';
 
 const ProjectNamespaceSelector: FC = () => {
-  const { t } = useNetworkingTranslation();
-  const { control } = useFormContext<VMNetworkForm>();
+  const { control, watch } = useFormContext<VMNetworkForm>();
+  const matchLabels = watch('network.spec.namespaceSelector.matchLabels') || {};
+
+  const hasValidMatchLabels =
+    !isEmpty(matchLabels) && !(Object.keys(matchLabels).length === 1 && matchLabels[''] === '');
 
   return (
-    <FormSection title={t('Projects')} titleElement="h2">
+    <div className="pf-v6-u-pl-md">
       <Controller
         control={control}
         name="network.spec.namespaceSelector.matchLabels"
         render={({ field: { onChange, value: matchLabel } }) => {
-          const hasLabels = !isEmpty(matchLabel);
+          const labelSelectorPairs = Object.entries(matchLabel);
           return (
-            <>
-              <FormGroup>
-                <Card>
-                  <CardBody>
-                    {hasLabels ? (
-                      <LabelSelectorEditor
-                        labelSelectorPairs={Object.entries(matchLabel || {})}
-                        onLastItemRemoved={() => onChange({})}
-                        updateParentData={(newLabels) => onChange(Object.fromEntries(newLabels))}
-                      />
-                    ) : (
-                      <Button
-                        icon={<PlusCircleIcon />}
-                        onClick={() => onChange({ ['']: '' })}
-                        variant={ButtonVariant.link}
-                      >
-                        {t('Add a label to specify qualifying projects')}
-                      </Button>
-                    )}
-                  </CardBody>
-                </Card>
-              </FormGroup>
-
-              <FormGroup>
-                <Controller
-                  control={control}
-                  name="matchLabelCheck"
-                  render={({ field: { onChange: onCheckChange, value: matchLabelCheck } }) => (
-                    <Checkbox
-                      id="check-empty-matchlabel"
-                      isChecked={hasLabels ? false : matchLabelCheck}
-                      isDisabled={hasLabels}
-                      label={t('Allow all current and future projects to access this network.')}
-                      onChange={(_, checked) => onCheckChange(checked)}
-                    />
-                  )}
-                />
-              </FormGroup>
-            </>
+            <FormGroup>
+              <Card>
+                <CardBody>
+                  <LabelSelectorEditor
+                    labelSelectorPairs={
+                      isEmpty(labelSelectorPairs) ? [['', '']] : labelSelectorPairs
+                    }
+                    onLastItemRemoved={() => onChange({})}
+                    updateParentData={(newLabels) => onChange(Object.fromEntries(newLabels))}
+                  />
+                </CardBody>
+              </Card>
+            </FormGroup>
           );
         }}
       />
-
-      <SelectedProjects />
-    </FormSection>
+      {hasValidMatchLabels && <SelectedProjects />}
+    </div>
   );
 };
 

@@ -1,5 +1,6 @@
+import { DEFAULT_NAMESPACE } from '@utils/constants';
 import { ClusterUserDefinedNetworkModel } from '@utils/models';
-import { LOCALNET_TOPOLOGY } from '@utils/resources/udns/constants';
+import { LOCALNET_TOPOLOGY, PROJECT_NAME_LABEL_KEY } from '@utils/resources/udns/constants';
 import { ClusterUserDefinedNetworkKind, UserDefinedNetworkRole } from '@utils/resources/udns/types';
 
 export const DEFAULT_MTU = 1500;
@@ -13,7 +14,7 @@ export const getDefaultVMNetwork = (nodeNetworkMapping = ''): ClusterUserDefined
     name: '',
   },
   spec: {
-    namespaceSelector: {},
+    namespaceSelector: { matchLabels: { [PROJECT_NAME_LABEL_KEY]: DEFAULT_NAMESPACE } },
     network: {
       localnet: {
         ipam: {
@@ -29,16 +30,20 @@ export const getDefaultVMNetwork = (nodeNetworkMapping = ''): ClusterUserDefined
   },
 });
 
+export enum ProjectMappingOption {
+  AllProjects = 'all-projects',
+  SelectByLabels = 'select-by-labels',
+  SelectFromList = 'select-from-list',
+}
+
 export type VMNetworkForm = {
-  matchLabelCheck: boolean;
   network: ClusterUserDefinedNetworkKind;
-  showProjectList: boolean;
+  projectMappingOption: ProjectMappingOption;
 };
 
 export const getDefaultFormValue = (nodeNetworkMapping?: string): VMNetworkForm => ({
-  matchLabelCheck: false,
   network: getDefaultVMNetwork(nodeNetworkMapping),
-  showProjectList: true,
+  projectMappingOption: ProjectMappingOption.AllProjects,
 });
 
 export const MIN_VLAN_ID = 1;

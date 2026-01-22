@@ -52,7 +52,7 @@ const DeleteVMNetworkModal: FC<DeleteVMNetworkModalProps> = ({ closeModal, obj }
       position="top"
       variant={ModalVariant.small}
     >
-      <ModalHeader title={t('Delete VirtualMachine network?')} titleIconVariant={'warning'} />
+      <ModalHeader title={t('Delete network?')} titleIconVariant={'warning'} />
       <ModalBody>
         {t('Are you sure you want to delete')} <strong>{name}</strong>?
       </ModalBody>

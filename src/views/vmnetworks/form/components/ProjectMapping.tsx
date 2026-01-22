@@ -1,50 +1,76 @@
 import React, { FC } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { Radio, Title } from '@patternfly/react-core';
+import { Radio, Stack, Title } from '@patternfly/react-core';
+import { DEFAULT_NAMESPACE } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import useNonSystemProjects from '@utils/hooks/useNonSystemProjects';
+import { PROJECT_NAME_LABEL_KEY } from '@utils/resources/udns/constants';
 
-import { VMNetworkForm } from '../constants';
+import { ProjectMappingOption, VMNetworkForm } from '../constants';
 
 import ProjectList from './ProjectList';
 import ProjectNamespaceSelector from './ProjectNamespaceSelector';
 
-const ProjectMapping: FC = () => {
+type ProjectMappingProps = {
+  isEditModal?: boolean;
+};
+
+const ProjectMapping: FC<ProjectMappingProps> = ({ isEditModal = false }) => {
   const { t } = useNetworkingTranslation();
   const { control, setValue, watch } = useFormContext<VMNetworkForm>();
 
-  const showProjectList = watch('showProjectList');
+  const projectMappingOption = watch('projectMappingOption');
 
   const [projects, loadedProjects, errorLoadingProjects] = useNonSystemProjects();
 
   return (
     <>
-      <Title headingLevel="h2">{t('Project mapping')}</Title>
-      <p>
-        {t(
-          'You can select projects from the list or select labels to specify qualifying projects.',
-        )}
-      </p>
+      {!isEditModal && (
+        <Stack hasGutter>
+          <Title headingLevel="h2">{t('Project mapping')}</Title>
+          <p>{t('Link your new network to specific OpenShift projects.')}</p>
+        </Stack>
+      )}
 
+      {/* Make this network available for all projects = configure with default namespace selector */}
       <Controller
         control={control}
-        name="showProjectList"
-        render={({ field: { onChange, value } }) => (
+        name="projectMappingOption"
+        render={({ field: { onChange } }) => (
           <Radio
-            id="project-list"
-            isChecked={value}
-            label={t('Select projects from list')}
-            name="project-list"
-            onChange={(_, checked) => {
-              setValue('network.spec.namespaceSelector', { matchExpressions: [] });
-              onChange(checked);
+            id="project-all"
+            isChecked={projectMappingOption === ProjectMappingOption.AllProjects}
+            label={t('Make this network available for all projects')}
+            name="project-mapping"
+            onChange={() => {
+              setValue('network.spec.namespaceSelector', {
+                matchLabels: { [PROJECT_NAME_LABEL_KEY]: DEFAULT_NAMESPACE },
+              });
+              onChange(ProjectMappingOption.AllProjects);
             }}
           />
         )}
       />
 
-      {showProjectList && (
+      <Controller
+        control={control}
+        name="projectMappingOption"
+        render={({ field: { onChange } }) => (
+          <Radio
+            id="project-list"
+            isChecked={projectMappingOption === ProjectMappingOption.SelectFromList}
+            label={t('Select projects from list')}
+            name="project-mapping"
+            onChange={() => {
+              setValue('network.spec.namespaceSelector', { matchExpressions: [] });
+              onChange(ProjectMappingOption.SelectFromList);
+            }}
+          />
+        )}
+      />
+
+      {projectMappingOption === ProjectMappingOption.SelectFromList && (
         <ProjectList
           errorLoadingProjects={errorLoadingProjects}
           loadedProjects={loadedProjects}
@@ -54,23 +80,23 @@ const ProjectMapping: FC = () => {
 
       <Controller
         control={control}
-        name="showProjectList"
-        render={({ field: { onChange, value } }) => (
+        name="projectMappingOption"
+        render={({ field: { onChange } }) => (
           <Radio
             description={t('Ensure the projects for this network have the labels you specified.')}
             id="project-labels"
-            isChecked={!value}
+            isChecked={projectMappingOption === ProjectMappingOption.SelectByLabels}
             label={t('Select labels to specify qualifying projects')}
-            name="project-labels"
-            onChange={(_, checked) => {
+            name="project-mapping"
+            onChange={() => {
               setValue('network.spec.namespaceSelector', { matchLabels: {} });
-              onChange(!checked);
+              onChange(ProjectMappingOption.SelectByLabels);
             }}
           />
         )}
       />
 
-      {!showProjectList && <ProjectNamespaceSelector />}
+      {projectMappingOption === ProjectMappingOption.SelectByLabels && <ProjectNamespaceSelector />}
     </>
   );
 };

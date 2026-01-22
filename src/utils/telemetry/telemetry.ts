@@ -2,7 +2,7 @@ import { K8sResourceCommon } from '@openshift-console/dynamic-plugin-sdk';
 import { getSegmentAnalytics } from '@openshift-console/dynamic-plugin-sdk-internal';
 import { isEmpty } from '@utils/utils';
 import { networkConsole } from '@utils/utils/helpers';
-import { DEFAULT_MTU } from '@views/vmnetworks/form/constants';
+import { DEFAULT_MTU, ProjectMappingOption } from '@views/vmnetworks/form/constants';
 
 import {
   CUDN_CREATED,
@@ -87,12 +87,18 @@ export const logCUDNCreated = (resource: K8sResourceCommon & { spec?: any }) => 
   }
 };
 
+const projectMappingMethodMap: Record<ProjectMappingOption, string> = {
+  [ProjectMappingOption.AllProjects]: 'all_projects',
+  [ProjectMappingOption.SelectByLabels]: 'label_selector',
+  [ProjectMappingOption.SelectFromList]: 'select_from_list',
+};
+
 export const logVMNetworkCreated = (
   resource: K8sResourceCommon & { spec?: any },
-  showProjectList: boolean,
+  projectMappingOption: ProjectMappingOption,
 ) => {
   logNetworkingEvent(VM_NETWORK_CREATED, {
-    projectMappingMethod: showProjectList ? 'select_from_list' : 'label_selector',
+    projectMappingMethod: projectMappingMethodMap[projectMappingOption],
   });
 
   const localnet = resource?.spec?.network?.localnet;

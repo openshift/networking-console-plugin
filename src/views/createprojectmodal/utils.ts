@@ -1,6 +1,6 @@
 import { k8sPatch, Operator } from '@openshift-console/dynamic-plugin-sdk';
 import { ClusterUserDefinedNetworkModel } from '@utils/models';
-import { PROJECT_LABEL_FOR_MATCH_EXPRESSION } from '@utils/resources/udns/constants';
+import { PROJECT_NAME_LABEL_KEY } from '@utils/resources/udns/constants';
 import { ClusterUserDefinedNetworkKind } from '@utils/resources/udns/types';
 
 export const patchClusterUDN = async (
@@ -9,7 +9,7 @@ export const patchClusterUDN = async (
 ) => {
   const projectMatchExpressionIndex =
     clusterUDN?.spec?.namespaceSelector?.matchExpressions?.findIndex(
-      (expression) => expression.key === PROJECT_LABEL_FOR_MATCH_EXPRESSION,
+      (expression) => expression.key === PROJECT_NAME_LABEL_KEY,
     );
 
   const currentUDNProjects =
@@ -23,7 +23,7 @@ export const patchClusterUDN = async (
             op: 'add',
             path: `/spec/namespaceSelector/matchExpressions/`,
             value: {
-              key: PROJECT_LABEL_FOR_MATCH_EXPRESSION,
+              key: PROJECT_NAME_LABEL_KEY,
               operator: Operator.In,
               values: [projectName],
             },
