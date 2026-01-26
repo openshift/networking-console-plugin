@@ -5,7 +5,7 @@ import { RowProps, TableData } from '@openshift-console/dynamic-plugin-sdk';
 import MutedText from '@utils/components/MutedText/MutedText';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { getName } from '@utils/resources/shared';
-import { getMTU } from '@utils/resources/udns/selectors';
+import { getLocalnet, getMTU, getVLANID } from '@utils/resources/udns/selectors';
 import { ClusterUserDefinedNetworkKind } from '@utils/resources/udns/types';
 import { NO_DATA_DASH } from '@utils/utils/constants';
 import VMNetworkAction from '@views/vmnetworks/actions/VMNetworkActions';
@@ -29,7 +29,10 @@ const VMNetworkRow: FC<VMNetworkRowType> = ({ activeColumnIDs, obj }) => {
         <MatchedProjects obj={obj} />
       </TableData>
       <TableData activeColumnIDs={activeColumnIDs} id="physicalNetworkName">
-        {obj?.spec?.network?.localnet?.physicalNetworkName || NO_DATA_DASH}
+        {getLocalnet(obj)?.physicalNetworkName || NO_DATA_DASH}
+      </TableData>
+      <TableData activeColumnIDs={activeColumnIDs} id="vlanID">
+        {getVLANID(obj) || NO_DATA_DASH}
       </TableData>
       <TableData activeColumnIDs={activeColumnIDs} id="mtu">
         {mtu || <MutedText content={t('Not available')} />}

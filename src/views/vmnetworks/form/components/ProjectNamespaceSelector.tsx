@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { Card, CardBody, FormGroup } from '@patternfly/react-core';
+import { Card, CardBody, FormGroup, Stack } from '@patternfly/react-core';
 import LabelSelectorEditor from '@utils/components/LabelSelectorEditor/LabelSelectorEditor';
 import { isEmpty } from '@utils/utils';
 
@@ -17,7 +17,7 @@ const ProjectNamespaceSelector: FC = () => {
     !isEmpty(matchLabels) && !(Object.keys(matchLabels).length === 1 && matchLabels[''] === '');
 
   return (
-    <div className="pf-v6-u-pl-md">
+    <Stack className="pf-v6-u-pl-md" hasGutter>
       <Controller
         control={control}
         name="network.spec.namespaceSelector.matchLabels"
@@ -41,7 +41,7 @@ const ProjectNamespaceSelector: FC = () => {
         }}
       />
       {hasValidMatchLabels && <SelectedProjects />}
-    </div>
+    </Stack>
   );
 };
 

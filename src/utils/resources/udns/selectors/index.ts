@@ -4,6 +4,7 @@ import {
   ClusterUserDefinedNetworkKind,
   UserDefinedNetworkKind,
   UserDefinedNetworkLayer3Subnet,
+  UserDefinedNetworkLocalnet,
   UserDefinedNetworkSpec,
 } from '../types';
 
@@ -66,3 +67,9 @@ export const getMTU = (udn: ClusterUserDefinedNetworkKind | UserDefinedNetworkKi
 
   return udn?.spec?.layer2?.mtu || udn?.spec?.layer3?.mtu;
 };
+
+export const getLocalnet = (cudn: ClusterUserDefinedNetworkKind): UserDefinedNetworkLocalnet =>
+  cudn?.spec?.network?.localnet;
+
+export const getVLANID = (cudn: ClusterUserDefinedNetworkKind): number =>
+  getLocalnet(cudn)?.vlan?.access?.id;

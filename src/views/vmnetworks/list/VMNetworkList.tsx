@@ -1,81 +1,54 @@
 import React, { FC } from 'react';
-import { useNavigate } from 'react-router-dom-v5-compat';
 
 import {
   ListPageBody,
-  ListPageCreateButton,
   ListPageFilter,
-  ListPageHeader,
-  useK8sWatchResource,
   useListPageFilter,
   VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
-import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
-import { documentationURLs, getDocumentationURL } from '@utils/constants/documentation';
-import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { ClusterUserDefinedNetworkModelGroupVersionKind } from '@utils/models';
-import { LOCALNET_TOPOLOGY } from '@utils/resources/udns/constants';
+import ListErrorState from '@utils/components/ListEmptyState/ListErrorState';
+import ListSkeleton from '@utils/components/ListEmptyState/ListSkeleton';
 import { ClusterUserDefinedNetworkKind } from '@utils/resources/udns/types';
+import { isEmpty } from '@utils/utils';
 
-import { VM_NETWORKS_PATH } from '../constants';
+import useVMNetworks from '../hooks/useVMNetworks';
 
+import LocalnetEmptyState from './components/LocalnetEmptyState/LocalnetEmptyState';
 import VMNetworkRow from './components/VMNetworkRow';
 import useVMNetworkColumns from './hooks/useVMNetworkColumns';
 
-const VMNetworkList: FC = () => {
-  const { t } = useNetworkingTranslation();
-  const navigate = useNavigate();
+type VMNetworkListProps = {
+  onCreate: () => void;
+};
 
-  const [resources, loaded, loadError] = useK8sWatchResource<ClusterUserDefinedNetworkKind[]>({
-    groupVersionKind: ClusterUserDefinedNetworkModelGroupVersionKind,
-    isList: true,
-    namespaced: false,
-  });
-
-  const allVMNetworks = resources?.filter(
-    (resource) => resource.spec.network.topology === LOCALNET_TOPOLOGY,
-  );
-  const [data, filteredData, onFilterChange] = useListPageFilter(allVMNetworks);
+const VMNetworkList: FC<VMNetworkListProps> = ({ onCreate }) => {
+  const [vmNetworks, loaded, error] = useVMNetworks();
+  const [data, filteredData, onFilterChange] = useListPageFilter(vmNetworks);
   const columns = useVMNetworkColumns();
 
-  const title = t('Virtual machine networks');
+  if (error) return <ListErrorState error={error} />;
 
-  const onCreate = () => {
-    navigate(`${VM_NETWORKS_PATH}/~new`);
-  };
+  if (!loaded)
+    return (
+      <ListPageBody>
+        <ListSkeleton />
+      </ListPageBody>
+    );
+
+  if (isEmpty(data)) return <LocalnetEmptyState onCreate={onCreate} />;
 
   return (
-    <ListEmptyState<ClusterUserDefinedNetworkKind>
-      data={data}
-      error={loadError}
-      kind={t('OVN localnet network')}
-      learnMoreLink={getDocumentationURL(documentationURLs.vmNetworking)}
-      loaded={loaded}
-      onCreate={onCreate}
-      title={title}
-    >
-      <ListPageHeader title={title}>
-        <ListPageCreateButton
-          createAccessReview={{
-            groupVersionKind: ClusterUserDefinedNetworkModelGroupVersionKind,
-          }}
-          onClick={onCreate}
-        >
-          {t('Create network')}
-        </ListPageCreateButton>
-      </ListPageHeader>
-      <ListPageBody>
-        <ListPageFilter data={data} loaded={loaded} onFilterChange={onFilterChange} />
-        <VirtualizedTable<ClusterUserDefinedNetworkKind>
-          columns={columns}
-          data={filteredData}
-          loaded={loaded}
-          loadError={loadError}
-          Row={VMNetworkRow}
-          unfilteredData={data}
-        />
-      </ListPageBody>
-    </ListEmptyState>
+    <ListPageBody>
+      <ListPageFilter data={data} loaded={loaded} onFilterChange={onFilterChange} />
+      <VirtualizedTable<ClusterUserDefinedNetworkKind>
+        columns={columns}
+        data={filteredData}
+        loaded={loaded}
+        loadError={error}
+        Row={VMNetworkRow}
+        unfilteredData={data}
+      />
+    </ListPageBody>
   );
 };
 
