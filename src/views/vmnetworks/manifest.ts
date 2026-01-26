@@ -2,7 +2,7 @@ import { EncodedExtension } from '@openshift/dynamic-plugin-sdk-webpack';
 import { HrefNavItem, RoutePage } from '@openshift-console/dynamic-plugin-sdk';
 import { ConsolePluginBuildMetadata } from '@openshift-console/dynamic-plugin-sdk-webpack/lib/build-types';
 
-import { VM_NETWORKS_PATH } from './constants';
+import { VM_NETWORKS_OTHER_TYPES_PATH, VM_NETWORKS_PATH } from './constants';
 
 export const VMNetworksExtensions: EncodedExtension[] = [
   {
@@ -45,16 +45,16 @@ export const VMNetworksExtensions: EncodedExtension[] = [
   {
     properties: {
       component: {
-        $codeRef: 'VMNetworkList',
+        $codeRef: 'VMNetworksPage',
       },
-      path: [VM_NETWORKS_PATH],
+      path: [VM_NETWORKS_PATH, VM_NETWORKS_OTHER_TYPES_PATH],
     },
     type: 'console.page/route',
   } as EncodedExtension<RoutePage>,
   {
     properties: {
       component: {
-        $codeRef: 'VMNetworkPage',
+        $codeRef: 'VMNetworkDetailsPage',
       },
       path: [`${VM_NETWORKS_PATH}/:name`],
     },
@@ -72,7 +72,7 @@ export const VMNetworksExtensions: EncodedExtension[] = [
 ];
 
 export const VMNetworksExposedModules: ConsolePluginBuildMetadata['exposedModules'] = {
-  VMNetworkList: './views/vmnetworks/list/VMNetworkList.tsx',
+  VMNetworkDetailsPage: './views/vmnetworks/details/VMNetworkDetailsPage.tsx',
   VMNetworkNewForm: './views/vmnetworks/form/VMNetworkNewForm.tsx',
-  VMNetworkPage: './views/vmnetworks/details/VMNetworkPage.tsx',
+  VMNetworksPage: './views/vmnetworks/list/VMNetworksPage.tsx',
 };
