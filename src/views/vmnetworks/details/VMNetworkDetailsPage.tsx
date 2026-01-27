@@ -29,6 +29,18 @@ const VMNetworkDetailsPage: FC = () => {
         href: 'yaml',
         name: 'YAML',
       },
+      {
+        component: React.lazy(() => import('./tabs/ConnectedProjects/ConnectedProjects')),
+        href: 'connected-projects',
+        name: 'Connected projects',
+      },
+      {
+        component: React.lazy(
+          () => import('./tabs/ConnectedVirtualMachines/ConnectedVirtualMachines'),
+        ),
+        href: 'connected-virtual-machines',
+        name: 'Connected virtual machines',
+      },
     ],
     [],
   );

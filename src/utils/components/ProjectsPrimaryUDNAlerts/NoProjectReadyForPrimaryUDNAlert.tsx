@@ -8,7 +8,13 @@ import { UDN_NO_NAMESPACE_ALERT_SHOWN } from '@utils/telemetry/constants';
 import { logNetworkingEvent } from '@utils/telemetry/telemetry';
 import { PRIMARY_USER_DEFINED_LABEL } from '@views/udns/list/constants';
 
-const NoProjectReadyForPrimaryUDNAlert: FC = () => {
+type NoProjectReadyForPrimaryUDNAlertProps = {
+  className?: string;
+};
+
+const NoProjectReadyForPrimaryUDNAlert: FC<NoProjectReadyForPrimaryUDNAlertProps> = ({
+  className,
+}) => {
   const { t } = useNetworkingTranslation();
 
   useEffect(() => {
@@ -17,6 +23,7 @@ const NoProjectReadyForPrimaryUDNAlert: FC = () => {
 
   return (
     <Alert
+      className={className}
       isInline
       title={t('No namespace is configured for a primary user-defined network')}
       variant={AlertVariant.danger}
