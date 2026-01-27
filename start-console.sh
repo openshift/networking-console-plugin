@@ -43,6 +43,7 @@ for arg in "$@"; do
     fi
 
     git pull
+    npm ci
 
     pid="$(lsof -t -i:$INITIAL_PORT 2>/dev/null || true)"
     [ -n "$pid" ] && kill -9 "$pid"
@@ -51,14 +52,7 @@ for arg in "$@"; do
         cd web 
     fi
 
-    if [ -f yarn.lock ]; then
-        echo "Detected yarn.lock → using yarn to run $arg"
-        yarn install
-        PORT=$INITIAL_PORT yarn start --port="$INITIAL_PORT" &
-    else
-        npm ci
-        PORT=$INITIAL_PORT npm run start -- --port="$INITIAL_PORT" &
-    fi
+    PORT=$INITIAL_PORT npm run start -- --port=$INITIAL_PORT &
 
     running_podman_linux="$running_podman_linux,$arg=http://localhost:$INITIAL_PORT"
     running_podman="$running_podman,$arg=http://host.containers.internal:$INITIAL_PORT"
