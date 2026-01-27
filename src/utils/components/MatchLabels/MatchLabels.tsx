@@ -29,7 +29,7 @@ const MatchLabels: FC<MatchLabelsProps> = ({
           onChange(
             arr.reduce((acc, v) => {
               const split = v.split('=');
-              return (acc[split[0]] = split[1]), acc;
+              return ((acc[split[0]] = split[1]), acc);
             }, {}),
           )
         }
