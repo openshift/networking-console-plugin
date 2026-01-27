@@ -18,12 +18,12 @@ import { DataPoint } from '@utils/components/Area/utils/types';
 import { evaluateProp } from '@utils/components/Area/utils/utils';
 
 const ChartLegendTooltip: FC<
-  Omit<ChartLegendTooltipProps, 'title'> & {
+  {
     formatDate: (data: DataPoint<Date>[]) => string;
     getLabel?: (prop: { datum: DataPoint<Date> }) => string;
     mainDataName: string;
     stack?: boolean;
-  }
+  } & Omit<ChartLegendTooltipProps, 'title'>
 > = (props) => {
   const {
     activePoints,

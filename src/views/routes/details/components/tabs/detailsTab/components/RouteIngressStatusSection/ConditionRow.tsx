@@ -11,7 +11,7 @@ import { ClusterServiceVersionCondition, ConditionTypes } from '@views/routes/de
 import { getStatusLabel } from '@views/routes/details/utils/utils';
 
 type ConditionRowProps = {
-  condition: K8sResourceCondition & ClusterServiceVersionCondition;
+  condition: ClusterServiceVersionCondition & K8sResourceCondition;
   index: number;
   type: keyof typeof ConditionTypes;
 };
