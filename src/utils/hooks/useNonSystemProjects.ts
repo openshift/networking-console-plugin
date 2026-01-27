@@ -5,7 +5,7 @@ import useProjects from '@utils/hooks/useProjects/useProjects';
 import { getName } from '@utils/resources/shared';
 import { isSystemNamespace } from '@utils/utils/helpers';
 
-const useNonSystemProjects = (): [K8sResourceCommon[], boolean, any] => {
+const useNonSystemProjects = (): [K8sResourceCommon[], boolean, Error] => {
   const [projects, loaded, error] = useProjects();
 
   const nonSystemProjects = useMemo(
