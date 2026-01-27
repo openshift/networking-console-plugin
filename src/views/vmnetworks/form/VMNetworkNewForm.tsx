@@ -18,6 +18,7 @@ import ErrorAlert from '@utils/components/ErrorAlert';
 import { documentationURLs, getDocumentationURL } from '@utils/constants/documentation';
 import { MAX_MTU } from '@utils/constants/mtu';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import useQueryParams from '@utils/hooks/useQueryParams';
 import { ClusterUserDefinedNetworkModel } from '@utils/models';
 import {
   VM_NETWORK_ABANDONED,
@@ -36,7 +37,6 @@ import { VM_NETWORKS_PATH } from '../constants';
 import NetworkDefinition from './components/NetworkDefinition';
 import ProjectMapping from './components/ProjectMapping';
 import { getDefaultFormValue, NODE_NETWORK_MAPPING_PARAM_KEY, VMNetworkForm } from './constants';
-import useQueryParams from '@utils/hooks/useQueryParams';
 
 const VMNetworkNewForm: FC = () => {
   const navigate = useNavigate();
