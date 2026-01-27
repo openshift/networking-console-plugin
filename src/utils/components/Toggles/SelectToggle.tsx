@@ -2,9 +2,9 @@ import React, { Ref } from 'react';
 
 import { MenuToggle, MenuToggleElement, MenuToggleProps } from '@patternfly/react-core';
 
-type SelectToggleProps = MenuToggleProps & {
+type SelectToggleProps = {
   selected: any;
-};
+} & MenuToggleProps;
 
 const SelectToggle = ({ selected, ...menuProps }: SelectToggleProps) =>
   function SToggle(toggleRef: Ref<MenuToggleElement>) {

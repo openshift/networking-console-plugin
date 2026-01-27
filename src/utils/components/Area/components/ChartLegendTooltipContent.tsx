@@ -18,10 +18,10 @@ import {
 import { evaluateProp } from '../utils/utils';
 
 const ChartLegendTooltipContent: FC<
-  ChartLegendTooltipContentProps & {
+  {
     mainDataName?: string;
     stack?: boolean;
-  }
+  } & ChartLegendTooltipContentProps
 > = (props) => {
   const {
     activePoints,
