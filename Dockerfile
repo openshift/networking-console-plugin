@@ -1,5 +1,5 @@
 # Builder container
-FROM registry.ci.openshift.org/ocp/builder:rhel-8-base-nodejs-openshift-4.15 AS build
+FROM registry.ci.openshift.org/ocp/builder:rhel-9-base-nodejs-openshift-4.22 AS build
 
 # Install yarn
 RUN npm install -g yarn -s &>/dev/null
@@ -13,7 +13,14 @@ USER 0
 RUN yarn install --frozen-lockfile --network-timeout 600000 && yarn build
 
 # Web server container
-FROM registry.access.redhat.com/ubi9/nginx-120
+FROM registry.ci.openshift.org/ocp/4.22:base-rhel9
+
+RUN INSTALL_PKGS="nginx" && \
+    dnf install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
+    rpm -V $INSTALL_PKGS && \
+    yum -y clean all --enablerepo='*' && \
+    chown -R 1001:0 /var/lib/nginx /var/log/nginx /run && \
+    chmod -R ug+rwX /var/lib/nginx /var/log/nginx /run
 
 # Use none-root user
 USER 1001
