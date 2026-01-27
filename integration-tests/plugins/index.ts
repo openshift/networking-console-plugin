@@ -6,9 +6,9 @@ module.exports = (on, config) => {
       module: {
         rules: [
           {
-            loader: 'ts-loader',
-            options: { happyPackMode: true, transpileOnly: true },
-            test: /\.tsx?$/,
+            exclude: /node_modules/,
+            loader: 'esbuild-loader',
+            test: /\.ts$/,
           },
         ],
       },
