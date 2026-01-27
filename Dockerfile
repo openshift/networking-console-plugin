@@ -1,5 +1,5 @@
 # Builder container
-FROM registry.ci.openshift.org/ocp/builder:rhel-9-base-nodejs-openshift-4.19 AS build
+FROM registry.ci.openshift.org/ocp/builder:rhel-9-base-nodejs-openshift-4.22 AS build
 
 # Copy app source
 COPY . /opt/app-root/src/app
@@ -10,7 +10,7 @@ USER 0
 RUN npm ci && npm run build
 
 # Web server container
-FROM registry.ci.openshift.org/ocp/4.19:base-rhel9
+FROM registry.ci.openshift.org/ocp/4.22:base-rhel9
 
 RUN INSTALL_PKGS="nginx" && \
     dnf install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
