@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #Please run this script under bash 4+
-set -euo pipefail
+# set -euo pipefail
 
 #Cloning, pulling and running other plugins starting from port 9002
 # to add more plugin simply add more properites to dic. [name-of-plugin]={git-repo-url}

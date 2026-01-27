@@ -20,7 +20,7 @@ const RouteDetailsPageTitle: FC<RouteDetailsPageTitleProps> = ({ route }) => {
   return (
     <DetailsPageTitle
       breadcrumbs={[
-        { name: t('Routes'), to: `/k8s/${namespacePath}/${modelToRef(RouteModel)}` },
+        { name: t('Routes'), to: `/k8s/${namespacePath}/${modelToRef(RouteModel)}`, dataTestId: 'routes-breadcrumb' },
         { name: t('Route details') },
       ]}
     >
