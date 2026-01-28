@@ -35,12 +35,16 @@ import { VM_NETWORKS_PATH } from '../constants';
 
 import NetworkDefinition from './components/NetworkDefinition';
 import ProjectMapping from './components/ProjectMapping';
-import { defaultFormValue, VMNetworkForm } from './constants';
+import { getDefaultFormValue, NODE_NETWORK_MAPPING_PARAM_KEY, VMNetworkForm } from './constants';
+import useQueryParams from '@utils/hooks/useQueryParams';
 
 const VMNetworkNewForm: FC = () => {
   const navigate = useNavigate();
   const { t } = useNetworkingTranslation();
   const [apiError, setError] = useState<Error>(null);
+
+  const params = useQueryParams();
+  const nodeNetworkMapping = params?.[NODE_NETWORK_MAPPING_PARAM_KEY] || '';
 
   const completed = useRef(false);
   const currentStepId = useRef<number | string>('wizard-network-definition');
@@ -58,7 +62,7 @@ const VMNetworkNewForm: FC = () => {
   }, []);
 
   const methods = useForm<VMNetworkForm>({
-    defaultValues: defaultFormValue,
+    defaultValues: getDefaultFormValue(nodeNetworkMapping),
   });
 
   const {
