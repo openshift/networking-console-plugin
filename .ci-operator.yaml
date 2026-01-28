@@ -2,3 +2,11 @@ build_root_image:
   name: nodejs-18
   namespace: openshift
   tag: latest
+
+tests:
+  - as: lint
+    commands: |
+      yarn install --frozen-lockfile
+      yarn lint
+    container:
+      from: src
