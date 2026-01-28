@@ -128,6 +128,7 @@ const VMNetworkNewForm: FC = () => {
             onClose,
           }}
           id="wizard-project-mapping"
+          isDisabled={isRequiredFieldsInvalid || isSubmitting}
           name={t('Project mapping')}
         >
           <Form>
