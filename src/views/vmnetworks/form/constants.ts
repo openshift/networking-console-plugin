@@ -1,7 +1,11 @@
 import { DEFAULT_NAMESPACE } from '@utils/constants';
 import { ClusterUserDefinedNetworkModel } from '@utils/models';
 import { LOCALNET_TOPOLOGY, PROJECT_NAME_LABEL_KEY } from '@utils/resources/udns/constants';
-import { ClusterUserDefinedNetworkKind, UserDefinedNetworkRole } from '@utils/resources/udns/types';
+import {
+  ClusterUserDefinedNetworkKind,
+  IPAM_MODE_DISABLED,
+  UserDefinedNetworkRole,
+} from '@utils/resources/udns/types';
 
 export const DEFAULT_MTU = 1500;
 export const NODE_NETWORK_MAPPING_PARAM_KEY = 'physicalNetworkName';
@@ -18,7 +22,7 @@ export const getDefaultVMNetwork = (nodeNetworkMapping = ''): ClusterUserDefined
     network: {
       localnet: {
         ipam: {
-          mode: 'Disabled',
+          mode: IPAM_MODE_DISABLED,
         },
         mtu: null, // null on purpose so setting mtu to maxMTU (or DEFAULT_MTU) is done only once
         physicalNetworkName: nodeNetworkMapping,

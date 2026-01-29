@@ -1,5 +1,5 @@
 import { ClusterUserDefinedNetworkModel, UserDefinedNetworkModel } from '@utils/models';
-import { FIXED_PRIMARY_UDN_NAME } from '@utils/resources/udns/constants';
+import { FIXED_PRIMARY_UDN_NAME, LAYER2_TOPOLOGY } from '@utils/resources/udns/constants';
 import {
   ClusterUserDefinedNetworkKind,
   UserDefinedNetworkKind,
@@ -22,7 +22,7 @@ export const createUDN = (namespace?: string): UserDefinedNetworkKind => ({
       role: UserDefinedNetworkRole.Primary,
       subnets: [''],
     },
-    topology: 'Layer2',
+    topology: LAYER2_TOPOLOGY,
   },
 });
 
@@ -40,7 +40,7 @@ export const createClusterUDN = (name: string): ClusterUserDefinedNetworkKind =>
         role: UserDefinedNetworkRole.Primary,
         subnets: [''],
       },
-      topology: 'Layer2',
+      topology: LAYER2_TOPOLOGY,
     },
   },
 });
