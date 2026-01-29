@@ -8,7 +8,7 @@ import { ClusterUserDefinedNetworkKind } from '@utils/resources/udns/types';
 
 import VMNetworkTitle from './components/VMNetworkTitle';
 
-const VMNetworkPage: FC = () => {
+const VMNetworkDetailsPage: FC = () => {
   const { name } = useParams<{ name: string }>();
   const [vmNetwork, loaded, error] = useK8sWatchResource<ClusterUserDefinedNetworkKind>({
     groupVersionKind: ClusterUserDefinedNetworkModelGroupVersionKind,
@@ -29,6 +29,18 @@ const VMNetworkPage: FC = () => {
         href: 'yaml',
         name: 'YAML',
       },
+      {
+        component: React.lazy(() => import('./tabs/ConnectedProjects/ConnectedProjects')),
+        href: 'connected-projects',
+        name: 'Connected projects',
+      },
+      {
+        component: React.lazy(
+          () => import('./tabs/ConnectedVirtualMachines/ConnectedVirtualMachines'),
+        ),
+        href: 'connected-virtual-machines',
+        name: 'Connected virtual machines',
+      },
     ],
     [],
   );
@@ -41,4 +53,4 @@ const VMNetworkPage: FC = () => {
   );
 };
 
-export default VMNetworkPage;
+export default VMNetworkDetailsPage;

@@ -21,7 +21,7 @@ import './list-error-state.scss';
 
 type ListErrorStateProps = {
   error: any;
-  title: string;
+  title?: string;
 };
 
 const ListErrorState: FC<ListErrorStateProps> = ({ error, title }) => {

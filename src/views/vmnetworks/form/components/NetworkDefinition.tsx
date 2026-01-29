@@ -20,9 +20,9 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 import { VLAN_MODE_ACCESS } from '@utils/resources/udns/types';
 import { isEmpty } from '@utils/utils';
 
+import usePhysicalNetworkOptions from '../../hooks/usePhysicalNetworkOptions';
 import { DEFAULT_MTU, VMNetworkForm } from '../constants';
 import useMaxMTU from '../hooks/useMaxMTU';
-import useNodeNetworkMappingOptions from '../hooks/useNodeNetworkMappingOptions';
 import { getMTUValidatedInfo } from '../utils/utils';
 
 import VLANIDField from './VLANIDField';
@@ -36,7 +36,7 @@ const NetworkDefinition: FC = () => {
   const localnet = watch('network.spec.network.localnet.physicalNetworkName');
   const mtu = watch('network.spec.network.localnet.mtu');
 
-  const [nodeNetworkMappingOptions, nncpSpecListForLocalnet] = useNodeNetworkMappingOptions();
+  const [physicalNetworkOptions, nncpSpecListForLocalnet] = usePhysicalNetworkOptions();
   const maxMTUFromLocalnet = useMaxMTU(localnet, nncpSpecListForLocalnet);
 
   useEffect(() => {
@@ -80,14 +80,14 @@ const NetworkDefinition: FC = () => {
           />
         }
       >
-        {nodeNetworkMappingOptions.length > 0 ? (
+        {physicalNetworkOptions.length > 0 ? (
           <Controller
             control={control}
             name="network.spec.network.localnet.physicalNetworkName"
             render={({ field: { onChange, value } }) => (
               <SelectTypeahead
                 id="bridge-mapping"
-                options={nodeNetworkMappingOptions}
+                options={physicalNetworkOptions}
                 selected={value}
                 setSelected={(newSelection) => {
                   onChange(newSelection);
