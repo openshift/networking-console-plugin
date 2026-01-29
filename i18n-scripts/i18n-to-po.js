@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const { i18nextToPo } = require('i18next-conv');
 const minimist = require('minimist');
 const common = require('./common.js');
 
@@ -26,10 +25,10 @@ function removeValues(i18nFile, filePath) {
   fs.writeFileSync(tmpFile, JSON.stringify(updatedFile, null, 2));
 }
 
-function consolidateWithExistingTranslations(filePath, fileName, language, packageDir) {
-  const existingTranslationsPath= `./../locales/${language}/${fileName}.json`;
+function consolidateWithExistingTranslations(filePath, fileName, language) {
   const englishFile = require(filePath);
   const englishKeys = Object.keys(englishFile);
+  const existingTranslationsPath = `./../locales/${language}/${fileName}.json`;
   if (fs.existsSync(path.join(__dirname, existingTranslationsPath))) {
     const existingTranslationsFile = require(path.join(__dirname, existingTranslationsPath));
     const existingKeys = Object.keys(existingTranslationsFile);
@@ -43,8 +42,9 @@ function consolidateWithExistingTranslations(filePath, fileName, language, packa
   }
 }
 
-function processFile(fileName, language) {
+function processFile(fileName, language, i18nextToPo) {
   let tmpFile;
+
   const i18nFile = path.join(__dirname, `./../locales/en/${fileName}.json`);
 
   try {
@@ -66,7 +66,7 @@ function processFile(fileName, language) {
           save(
             path.join(
               __dirname,
-              `./../po-files/${language}/public__${path.basename(fileName)}.po`,
+              `./../po-files/${language}/${path.basename(fileName)}.po`,
             ),
             language,
           ),
@@ -76,17 +76,17 @@ function processFile(fileName, language) {
   } catch (err) {
     console.error(`Failed to processFile ${fileName}:`, err);
   }
+
   common.deleteFile(tmpFile);
   console.log(`Processed ${fileName}`);
 }
 
 const options = {
-  string: ['language', 'package', 'file'],
+  string: ['language', 'file'],
   boolean: ['help'],
   array: ['files'],
   alias: {
     h: 'help',
-    p: 'package',
     f: 'files',
     l: 'language',
   },
@@ -97,16 +97,21 @@ const options = {
 
 const args = minimist(process.argv.slice(2), options);
 
-if (args.help) {
-  console.log(
-    "-h: help\n-l: language (i.e. 'ja')\n\n-f: file name to convert (i.e. 'nav')",
-  );
-} else if (args.files && args.language) {
-  if (Array.isArray(args.files)) {
-    for (let i = 0; i < args.files.length; i++) {
-      processFile(args.files[i], args.language);
+async function main() {
+  const { i18nextToPo } = await import('i18next-conv');
+  if (args.help) {
+    console.log(
+      "-h: help\n-l: language (i.e. 'ja')\n-f: file name to convert (i.e. 'plugin__kubevirt-plugin')",
+    );
+  } else if (args.files && args.language) {
+    if (Array.isArray(args.files)) {
+      for (let i = 0; i < args.files.length; i++) {
+        processFile(args.files[i], args.language, i18nextToPo);
+      }
+    } else {
+      processFile(args.files, args.language, i18nextToPo);
     }
-  } else {
-    processFile(args.files, args.language);
   }
 }
+
+main().catch((e) => console.error(e));
