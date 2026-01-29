@@ -10,6 +10,11 @@ export enum ovnK8sTopologyKeys {
   ovnK8sLocalnet = 'localnet',
 }
 
+export enum ovnK8sRoleKeys {
+  primary = 'primary',
+  secondary = 'secondary',
+}
+
 export type NetworkTypeKeysType =
   | NetworkTypeKeys.cnvBridgeNetworkType
   | NetworkTypeKeys.ovnKubernetesNetworkType
