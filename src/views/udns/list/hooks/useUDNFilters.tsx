@@ -1,9 +1,9 @@
 import { RowFilter } from '@openshift-console/dynamic-plugin-sdk';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { ClusterUserDefinedNetworkModel, UserDefinedNetworkModel } from '@utils/models';
-import { RouteKind } from '@utils/types';
+import { ClusterUserDefinedNetworkKind, UserDefinedNetworkKind } from '@utils/resources/udns/types';
 
-const useUDNFilters = (): RowFilter<RouteKind>[] => {
+const useUDNFilters = (): RowFilter<ClusterUserDefinedNetworkKind | UserDefinedNetworkKind>[] => {
   const { t } = useNetworkingTranslation();
 
   return [
