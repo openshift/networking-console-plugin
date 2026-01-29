@@ -2,7 +2,7 @@ import React, { FC, useCallback, useMemo } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import { K8sResourceCommon, MatchExpression } from '@openshift-console/dynamic-plugin-sdk';
-import { SelectOptionProps } from '@patternfly/react-core';
+import { SelectOptionProps, Stack } from '@patternfly/react-core';
 import Loading from '@utils/components/Loading/Loading';
 import FailedToGetProjectsAlert from '@utils/components/ProjectsPrimaryUDNAlerts/FailedToGetProjectsAlert';
 import SelectMultiTypeahead from '@utils/components/SelectMultiTypeahead/SelectMultiTypeahead';
@@ -50,7 +50,7 @@ const ProjectList: FC<ProjectListProps> = ({ errorLoadingProjects, loadedProject
   if (errorLoadingProjects) return <FailedToGetProjectsAlert error={errorLoadingProjects} />;
 
   return (
-    <div className="pf-v6-u-pl-md">
+    <Stack className="pf-v6-u-pl-md" hasGutter>
       <Controller
         control={control}
         name="network.spec.namespaceSelector.matchExpressions"
@@ -65,7 +65,7 @@ const ProjectList: FC<ProjectListProps> = ({ errorLoadingProjects, loadedProject
         )}
       />
       {matchExpressions?.length > 0 && <SelectedProjects />}
-    </div>
+    </Stack>
   );
 };
 
