@@ -8,7 +8,7 @@ import { ClusterUserDefinedNetworkKind } from '@utils/resources/udns/types';
 
 import VMNetworkTitle from './components/VMNetworkTitle';
 
-const VMNetworkPage: FC = () => {
+const VMNetworkDetailsPage: FC = () => {
   const { name } = useParams<{ name: string }>();
   const [vmNetwork, loaded, error] = useK8sWatchResource<ClusterUserDefinedNetworkKind>({
     groupVersionKind: ClusterUserDefinedNetworkModelGroupVersionKind,
@@ -41,4 +41,4 @@ const VMNetworkPage: FC = () => {
   );
 };
 
-export default VMNetworkPage;
+export default VMNetworkDetailsPage;
