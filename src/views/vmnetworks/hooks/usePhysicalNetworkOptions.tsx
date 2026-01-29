@@ -8,9 +8,9 @@ import { useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { SelectOptionProps } from '@patternfly/react-core';
 import { NodeNetworkConfigurationPolicyModelGroupVersionKind } from '@utils/models';
 
-import { getNNCPSpecListForLocalnetObject } from '../utils/utils';
+import { getNNCPSpecListForLocalnetObject } from '../form/utils/utils';
 
-const useNodeNetworkMappingOptions = (): [
+const usePhysicalNetworkOptions = (): [
   SelectOptionProps[],
   Record<string, V1NodeNetworkConfigurationPolicySpec[]>,
   boolean,
@@ -29,7 +29,7 @@ const useNodeNetworkMappingOptions = (): [
     [policies],
   );
 
-  const nodeNetworkMappingOptions = useMemo(() => {
+  const physicalNetworkOptions = useMemo(() => {
     return Object.keys(nncpSpecListForLocalnet).map((option) => ({
       children: option,
       key: option,
@@ -37,7 +37,7 @@ const useNodeNetworkMappingOptions = (): [
     }));
   }, [nncpSpecListForLocalnet]);
 
-  return [nodeNetworkMappingOptions, nncpSpecListForLocalnet, policiesLoaded, policiesLoadError];
+  return [physicalNetworkOptions, nncpSpecListForLocalnet, policiesLoaded, policiesLoadError];
 };
 
-export default useNodeNetworkMappingOptions;
+export default usePhysicalNetworkOptions;

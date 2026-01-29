@@ -29,6 +29,7 @@ export type NetworkAttachmentDefinitionConfig = {
   netAttachDefName?: string;
   plugins?: NetworkAttachmentDefinitionPlugin[];
   preserveDefaultVlan?: boolean;
+  role?: string;
   subnets?: string;
   topology?: string;
   type?: string;

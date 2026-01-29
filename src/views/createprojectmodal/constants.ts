@@ -1,5 +1,5 @@
 import { t } from '@utils/hooks/useNetworkingTranslation';
-import { FIXED_PRIMARY_UDN_NAME } from '@utils/resources/udns/constants';
+import { FIXED_PRIMARY_UDN_NAME, LAYER2_TOPOLOGY } from '@utils/resources/udns/constants';
 import { UserDefinedNetworkRole } from '@utils/resources/udns/types';
 
 import { CreateProjectModalFormState, NETWORK_TYPE } from './types';
@@ -36,7 +36,7 @@ export const initialFormState: CreateProjectModalFormState = {
         role: UserDefinedNetworkRole.Primary,
         subnets: [],
       },
-      topology: 'Layer2',
+      topology: LAYER2_TOPOLOGY,
     },
   },
 };
