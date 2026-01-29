@@ -17,7 +17,7 @@ function processFile(fileName, language, gettextToI18next) {
   if (!fs.existsSync(path.join(__dirname, `../locales/${language}/`))) {
     fs.mkdirSync(path.join(__dirname, `../locales/${language}/`), { recursive: true });
   }
-  const newFilePath = path.join(__dirname, `../locales/${language}/${newFileName}.json`);
+  const newFilePath = path.join(__dirname, `../locales/${language}/plugin__networking-console-plugin.json`);
   console.log(`Saving locales/${language}/${newFileName}.json`);
   
   gettextToI18next(language, fs.readFileSync(fileName))
