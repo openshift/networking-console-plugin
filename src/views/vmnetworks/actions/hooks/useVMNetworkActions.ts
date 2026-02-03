@@ -5,6 +5,7 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 import { ClusterUserDefinedNetworkModel } from '@utils/models';
 import { asAccessReview } from '@utils/resources/shared';
 import { ClusterUserDefinedNetworkKind } from '@utils/resources/udns/types';
+import { isEmpty } from '@utils/utils';
 
 import DeleteVMNetworkModal, {
   DeleteVMNetworkModalProps,
@@ -16,6 +17,8 @@ import EditProjectMappingModal, {
 const useVMNetworkActions = (obj: ClusterUserDefinedNetworkKind) => {
   const { t } = useNetworkingTranslation();
   const createModal = useModal();
+
+  const isMarkedForDeletion = !isEmpty(obj?.metadata?.deletionTimestamp);
 
   const actions = useMemo(
     (): Action[] => [
@@ -44,11 +47,17 @@ const useVMNetworkActions = (obj: ClusterUserDefinedNetworkKind) => {
           createModal<DeleteVMNetworkModalProps>(DeleteVMNetworkModal, {
             obj,
           }),
+        description: isMarkedForDeletion
+          ? t(
+              'This network is marked for deletion and will be removed after all connected virtual machines are disconnected.',
+            )
+          : undefined,
+        disabled: isMarkedForDeletion,
         id: 'delete-vm-network',
         label: t('Delete'),
       },
     ],
-    [obj, t, createModal],
+    [obj, t, createModal, isMarkedForDeletion],
   );
 
   return actions;

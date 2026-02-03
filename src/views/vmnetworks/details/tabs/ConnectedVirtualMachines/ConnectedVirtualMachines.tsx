@@ -14,8 +14,9 @@ import ListSkeleton from '@utils/components/ListEmptyState/ListSkeleton';
 import { ClusterUserDefinedNetworkKind } from '@utils/resources/udns/types';
 import { isEmpty } from '@utils/utils';
 
+import useConnectedVMs from '../../../hooks/useConnectedVMs';
+
 import useVirtualMachineActions from './actions/hooks/useVirtualMachineActions';
-import useConnectedVMs from './hooks/useConnectedVMs';
 import useSelectedVMs from './hooks/useSelectedVMs';
 import useVirtualMachineColumns from './hooks/useVirtualMachineColumns';
 import ConnectedVirtualMachinesRow, {
