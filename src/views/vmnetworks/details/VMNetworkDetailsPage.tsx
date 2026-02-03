@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC, lazy, useMemo } from 'react';
 import { useParams } from 'react-router-dom-v5-compat';
 
 import { HorizontalNav, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
@@ -20,14 +20,24 @@ const VMNetworkDetailsPage: FC = () => {
   const pages = useMemo(
     () => [
       {
-        component: React.lazy(() => import('./tabs/NetworkDetailPage')),
+        component: lazy(() => import('./tabs/NetworkDetailPage')),
         href: '',
         name: 'Details',
       },
       {
-        component: React.lazy(() => import('./tabs/NetworkYAMLPage')),
+        component: lazy(() => import('./tabs/NetworkYAMLPage')),
         href: 'yaml',
         name: 'YAML',
+      },
+      {
+        component: lazy(() => import('./tabs/ConnectedProjects/ConnectedProjects')),
+        href: 'connected-projects',
+        name: 'Connected projects',
+      },
+      {
+        component: lazy(() => import('./tabs/ConnectedVirtualMachines/ConnectedVirtualMachines')),
+        href: 'connected-virtual-machines',
+        name: 'Connected virtual machines',
       },
     ],
     [],

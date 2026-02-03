@@ -132,7 +132,9 @@ const UserDefinedNetworkCreateModal: FC<UserDefinedNetworkCreateModalProps> = ({
         {showFailedToRetrieveProjectsError && (
           <FailedToGetProjectsAlert error={errorLoadingPrimaryUDN} />
         )}
-        {showNoProjectReadyForPrimaryUDNError && <NoProjectReadyForPrimaryUDNAlert />}
+        {showNoProjectReadyForPrimaryUDNError && (
+          <NoProjectReadyForPrimaryUDNAlert className="pf-v6-u-mb-md" />
+        )}
 
         <FormProvider {...methods}>
           <UserDefinedNetworkCreateForm

@@ -12,6 +12,7 @@ type ActionsDropdownProps = {
   actions: Action[];
   className?: string;
   id?: string;
+  isDisabled?: boolean;
   isKebabToggle?: boolean;
   onLazyClick?: () => void;
 };
@@ -20,6 +21,7 @@ const ActionsDropdown: FC<ActionsDropdownProps> = ({
   actions = [],
   className,
   id,
+  isDisabled,
   isKebabToggle,
   onLazyClick,
 }) => {
@@ -38,6 +40,7 @@ const ActionsDropdown: FC<ActionsDropdownProps> = ({
     ? KebabToggle({ isExpanded: isOpen, onClick: onToggle })
     : DropdownToggle({
         children: t('Actions'),
+        isDisabled,
         isExpanded: isOpen,
         onClick: onToggle,
       });
