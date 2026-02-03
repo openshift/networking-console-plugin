@@ -6,7 +6,7 @@ import {
   MatchLabels,
   Operator,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { ALL_NAMESPACES_KEY, DEFAULT_NAMESPACE } from '@utils/constants';
+import { ALL_NAMESPACES, ALL_NAMESPACES_KEY, DEFAULT_NAMESPACE } from '@utils/constants';
 import { getLabels } from '@utils/resources/shared';
 
 import { SYSTEM_NAMESPACES, SYSTEM_NAMESPACES_PREFIX } from './constants';
@@ -22,6 +22,9 @@ export const generateName = (prefix: string): string => {
     separator: '-',
   })}`;
 };
+
+export const createNamespacePath = (namespace: string) =>
+  namespace ? `ns/${namespace}` : ALL_NAMESPACES;
 
 export const getValidNamespace = (activeNamespace: string) =>
   activeNamespace === ALL_NAMESPACES_KEY ? DEFAULT_NAMESPACE : activeNamespace;
