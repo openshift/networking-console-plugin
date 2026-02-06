@@ -49,10 +49,6 @@ export const documentationURLs: documentationURLsType = {
     downstream: 'html/ingress_and_load_balancing/routes',
     upstream: 'networking/ingress_load_balancing/routes/nw-configuring-routes.html',
   },
-  vmNetworking: {
-    downstream: 'html/virtualization/networking',
-    upstream: 'networking/networking_overview/understanding-networking.html',
-  },
   workingWithProjects: {
     downstream: 'html/building_applications/projects#working-with-projects',
     upstream: 'applications/projects/working-with-projects.html',
