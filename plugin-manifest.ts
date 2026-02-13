@@ -14,7 +14,6 @@ import {
   UserDefinedNetworksExposedModules,
   UserDefinedNetworksExtensions,
 } from './src/views/udns/manifest';
-import { VMNetworksExposedModules, VMNetworksExtensions } from './src/views/vmnetworks/manifest';
 
 export const pluginMetadata: ConsolePluginBuildMetadata = {
   dependencies: {
@@ -30,7 +29,6 @@ export const pluginMetadata: ConsolePluginBuildMetadata = {
     ...FlagsExposedModules,
     ...RoutesExposedModules,
     ...UserDefinedNetworksExposedModules,
-    ...VMNetworksExposedModules,
     yamlTemplates: './templates/index.ts',
   },
   name: 'networking-console-plugin',
@@ -45,5 +43,4 @@ export const extensions: EncodedExtension[] = [
   ...NADsExtensions,
   ...FlagsExtensions,
   ...UserDefinedNetworksExtensions,
-  ...VMNetworksExtensions,
 ];
