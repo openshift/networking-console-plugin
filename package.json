@@ -7,7 +7,7 @@
   "scripts": {
     "clean": "rm -rf dist",
     "dev": "NODE_ENV=development NODE_OPTIONS=--max-old-space-size=8192 rm -rf dist && yarn ts-node ./node_modules/.bin/webpack serve --progress",
-    "build": "yarn clean && NODE_ENV=production yarn ts-node node_modules/.bin/webpack",
+    "build": "yarn clean && NODE_ENV=production NODE_OPTIONS=--max-old-space-size=4096 yarn ts-node node_modules/.bin/webpack",
     "build-dev": "yarn clean && yarn ts-node node_modules/.bin/webpack",
     "start": "yarn ts-node node_modules/.bin/webpack serve",
     "start-console": "./start-console.sh",
