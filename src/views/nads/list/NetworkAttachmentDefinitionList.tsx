@@ -49,6 +49,7 @@ const NetworkAttachmentDefinitionList: FC<NetworkAttachmentDefinitionListProps> 
 
   const [canCreateNAD] = useAccessReview({
     group: NetworkAttachmentDefinitionModel.apiGroup,
+    namespace,
     resource: NetworkAttachmentDefinitionModel.plural,
     verb: 'create' as K8sVerb,
   });
@@ -91,7 +92,7 @@ const NetworkAttachmentDefinitionList: FC<NetworkAttachmentDefinitionListProps> 
         <VirtualizedTable<NetworkAttachmentDefinitionKind>
           columns={columns}
           data={filteredData}
-          EmptyMsg={() => <NADListEmpty namespace={namespace} />}
+          EmptyMsg={() => <NADListEmpty canCreateNAD={canCreateNAD} namespace={namespace} />}
           loaded={loaded}
           loadError={loadError}
           Row={NADsRow}
