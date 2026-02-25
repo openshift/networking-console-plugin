@@ -20,10 +20,11 @@ import { QuickStartModel } from '@utils/models';
 import { resourcePathFromModel } from '@utils/resources/shared';
 
 type NADListEmptyProps = {
+  canCreateNAD?: boolean;
   namespace: string;
 };
 
-const NADListEmpty: FC<NADListEmptyProps> = ({ namespace }) => {
+const NADListEmpty: FC<NADListEmptyProps> = ({ canCreateNAD = true, namespace }) => {
   const navigate = useNavigate();
   const { t } = useNetworkingTranslation();
 
@@ -43,15 +44,17 @@ const NADListEmpty: FC<NADListEmptyProps> = ({ namespace }) => {
   return (
     <EmptyState headingLevel="h4" titleText={t('No NetworkAttachmentDefinition found')}>
       <EmptyStateFooter>
-        <Button
-          onClick={() =>
-            navigate(
-              `${resourcePathFromModel(NetworkAttachmentDefinitionModel, null, namespace || DEFAULT_NAMESPACE)}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}`,
-            )
-          }
-        >
-          {t('Create NetworkAttachmentDefinition')}
-        </Button>
+        {canCreateNAD && (
+          <Button
+            onClick={() =>
+              navigate(
+                `${resourcePathFromModel(NetworkAttachmentDefinitionModel, null, namespace || DEFAULT_NAMESPACE)}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}`,
+              )
+            }
+          >
+            {t('Create NetworkAttachmentDefinition')}
+          </Button>
+        )}
 
         {hasQuickStarts && (
           <EmptyStateActions>
