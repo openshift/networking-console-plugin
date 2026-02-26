@@ -61,7 +61,7 @@ export const logNADCreated = (
   logNetworkingEvent(NAD_CREATED, { creationMethod, namespace, networkType });
 };
 
-export const logUDNCreated = (resource: K8sResourceCommon & { spec?: any }) => {
+export const logUDNCreated = (resource: { spec?: any } & K8sResourceCommon) => {
   const networkSpec = resource?.spec;
 
   const properties: Record<string, any> = {
@@ -72,7 +72,7 @@ export const logUDNCreated = (resource: K8sResourceCommon & { spec?: any }) => {
   logNetworkingEvent(UDN_CREATED, properties);
 };
 
-export const logCUDNCreated = (resource: K8sResourceCommon & { spec?: any }) => {
+export const logCUDNCreated = (resource: { spec?: any } & K8sResourceCommon) => {
   const networkSpec = resource?.spec?.network;
 
   const properties: Record<string, any> = {
@@ -88,7 +88,7 @@ export const logCUDNCreated = (resource: K8sResourceCommon & { spec?: any }) => 
 };
 
 export const logVMNetworkCreated = (
-  resource: K8sResourceCommon & { spec?: any },
+  resource: { spec?: any } & K8sResourceCommon,
   showProjectList: boolean,
 ) => {
   logNetworkingEvent(VM_NETWORK_CREATED, {
