@@ -3,15 +3,10 @@ FROM registry.ci.openshift.org/ocp/builder:rhel-9-base-nodejs-openshift-4.22 AS 
 
 # Copy app source
 COPY . /opt/app-root/src/app
-COPY $REMOTE_SOURCES $REMOTE_SOURCES_DIR
 WORKDIR /opt/app-root/src/app
 
-# use dependencies provided by Cachito
-USER 0
-RUN test -d ${REMOTE_SOURCES_DIR}/cachito-gomod-with-deps || exit 1; \
-    cp -f $REMOTE_SOURCES_DIR/cachito-gomod-with-deps/app/{.npmrc,package-lock.json,registry-ca.pem} . \
- && source ${REMOTE_SOURCES_DIR}/cachito-gomod-with-deps/cachito.env \
- && npm ci && npm run build
+# Install dependencies and build
+RUN CYPRESS_INSTALL_BINARY=0 npm ci && npm run build
 
 # Web server container
 FROM registry.ci.openshift.org/ocp/4.22:base-rhel9
@@ -19,11 +14,11 @@ FROM registry.ci.openshift.org/ocp/4.22:base-rhel9
 RUN INSTALL_PKGS="nginx" && \
     dnf install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
-    yum -y clean all --enablerepo='*' && \
+    dnf -y clean all --enablerepo='*' && \
     chown -R 1001:0 /var/lib/nginx /var/log/nginx /run && \
     chmod -R ug+rwX /var/lib/nginx /var/log/nginx /run
 
-# Use none-root user
+# Use non-root user
 USER 1001
 
 COPY --from=build /opt/app-root/src/app/dist /opt/app-root/src
