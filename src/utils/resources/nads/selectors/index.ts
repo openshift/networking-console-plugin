@@ -13,8 +13,13 @@ export const getConfigAsJSON = (
 };
 
 export const getType = (config: NetworkAttachmentDefinitionConfig): string => {
-  return config?.type === undefined ? null : config.type;
-};
+  if (config?.type) {
+    return config.type;
+  }
 
-export const getDescription = (netAttachDef: NetworkAttachmentDefinitionKind): string =>
-  netAttachDef?.metadata?.annotations?.description;
+  if (config?.plugins && Array.isArray(config.plugins) && config.plugins.length > 0) {
+    return config.plugins[0]?.type || null;
+  }
+
+  return null;
+};
