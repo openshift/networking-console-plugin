@@ -18,7 +18,7 @@ FROM registry.ci.openshift.org/ocp/4.19:base-rhel9
 RUN INSTALL_PKGS="nginx" && \
     dnf install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
-    yum -y clean all --enablerepo='*' && \
+    yum -y clean all --enablerepo='*' && rm -rf /var/cache/dnf/* && \
     chown -R 1001:0 /var/lib/nginx /var/log/nginx /run && \
     chmod -R ug+rwX /var/lib/nginx /var/log/nginx /run
 
