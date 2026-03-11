@@ -142,7 +142,7 @@ export const resourcePathFromModel = (
     url += namespace ? `ns/${namespace}/` : 'all-namespaces/';
   }
 
-  url += `${model.apiGroup}~${model.apiVersion}~${model.kind}`;
+  url += `${model.apiGroup || CORE}~${model.apiVersion}~${model.kind}`;
 
   if (name) {
     // Some resources have a name that needs to be encoded. For instance,
