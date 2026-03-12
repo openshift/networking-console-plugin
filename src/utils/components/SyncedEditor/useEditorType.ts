@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { useUserSettings } from '@openshift-console/dynamic-plugin-sdk-internal';
+import { useUserSettings } from '@openshift-console/dynamic-plugin-sdk';
 import {
   PREFERRED_CREATE_EDIT_METHOD_USER_SETTING_VALUE_LATEST,
   usePreferredCreateEditMethod,
