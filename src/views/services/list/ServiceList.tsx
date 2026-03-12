@@ -8,19 +8,17 @@ import {
   ListPageCreateButton,
   ListPageFilter,
   ListPageHeader,
+  useActiveNamespace,
   useK8sWatchResource,
   useListPageFilter,
   VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
 import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
-import { DEFAULT_NAMESPACE } from '@utils/constants';
 import { DOC_URL_NETWORK_SERVICE } from '@utils/constants/documentation';
-import {
-  SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM,
-  SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML,
-} from '@utils/constants/ui';
+import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/constants/ui';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { resourcePathFromModel } from '@utils/resources/shared';
+import { getValidNamespace } from '@utils/utils';
 
 import ServiceRow from './components/ServiceRow';
 import useServiceColumn from './hooks/useServiceColumn';
@@ -33,6 +31,8 @@ type ServiceListProps = {
 const ServiceList: FC<ServiceListProps> = ({ namespace }) => {
   const { t } = useNetworkingTranslation();
   const navigate = useNavigate();
+  const [activeNamespace] = useActiveNamespace();
+  const validNamespace = getValidNamespace(namespace || activeNamespace);
 
   const [service, loaded, loadError] = useK8sWatchResource<IoK8sApiCoreV1Service[]>({
     groupVersionKind: modelToGroupVersionKind(ServiceModel),
@@ -42,11 +42,18 @@ const ServiceList: FC<ServiceListProps> = ({ namespace }) => {
 
   const [data, filteredData, onFilterChange] = useListPageFilter(service);
   const columns = useServiceColumn();
+
+  const serviceCreateFormLink = `${resourcePathFromModel(
+    ServiceModel,
+    null,
+    validNamespace,
+  )}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}`;
+
   const title = t('Services');
 
   return (
     <ListEmptyState<IoK8sApiCoreV1Service>
-      createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}
+      createButtonlink={serviceCreateFormLink}
       data={data}
       error={loadError}
       kind={ServiceModel.kind}
@@ -54,22 +61,14 @@ const ServiceList: FC<ServiceListProps> = ({ namespace }) => {
       loaded={loaded}
       title={title}
     >
-      <ListPageHeader title={t('Services')}>
+      <ListPageHeader title={title}>
         <ListPageCreateButton
           className="list-page-create-button-margin"
           createAccessReview={{
             groupVersionKind: modelToGroupVersionKind(ServiceModel),
-            namespace,
+            namespace: validNamespace,
           }}
-          onClick={() =>
-            navigate(
-              `${resourcePathFromModel(
-                ServiceModel,
-                null,
-                namespace || DEFAULT_NAMESPACE,
-              )}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML}`,
-            )
-          }
+          onClick={() => navigate(serviceCreateFormLink)}
         >
           {t('Create Service')}
         </ListPageCreateButton>
