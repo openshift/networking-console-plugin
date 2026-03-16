@@ -1,4 +1,4 @@
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { modelToRef, RouteModel } from '@kubevirt-ui/kubevirt-api/console';
 import {
@@ -16,7 +16,7 @@ type UseRouteActions = (route: RouteKind) => [actions: Action[]];
 const useRouteActions: UseRouteActions = (route) => {
   const { t } = useNetworkingTranslation();
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const launchDeleteModal = useDeleteModal(route);
   const launchLabelsModal = useLabelsModal(route);
   const launchAnnotationsModal = useAnnotationsModal(route);
@@ -39,8 +39,7 @@ const useRouteActions: UseRouteActions = (route) => {
     },
     {
       accessReview: asAccessReview(RouteModel, route, 'update'),
-      cta: () =>
-        history.push(`/k8s/ns/${routeNamespace}/${modelToRef(RouteModel)}/${routeName}/form`),
+      cta: () => navigate(`/k8s/ns/${routeNamespace}/${modelToRef(RouteModel)}/${routeName}/form`),
       id: 'edit-routes',
       label: t('Edit Route'),
     },
