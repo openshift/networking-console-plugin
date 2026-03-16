@@ -1,4 +1,4 @@
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { modelToRef, ServiceModel } from '@kubevirt-ui/kubevirt-api/console';
 import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
@@ -20,7 +20,7 @@ type ServiceActionProps = (obj: IoK8sApiCoreV1Service) => [actions: Action[]];
 const useServiceActions: ServiceActionProps = (obj) => {
   const { t } = useNetworkingTranslation();
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const launchDeleteModal = useDeleteModal(obj);
   const launchLabelsModal = useLabelsModal(obj);
   const launchAnnotationsModal = useAnnotationsModal(obj);
@@ -54,8 +54,7 @@ const useServiceActions: ServiceActionProps = (obj) => {
     },
     {
       accessReview: asAccessReview(ServiceModel, obj, 'update'),
-      cta: () =>
-        history.push(`/k8s/ns/${objNamespace}/${modelToRef(ServiceModel)}/${objName}/yaml`),
+      cta: () => navigate(`/k8s/ns/${objNamespace}/${modelToRef(ServiceModel)}/${objName}/yaml`),
       id: 'edit-services',
       label: t('Edit Service'),
     },
