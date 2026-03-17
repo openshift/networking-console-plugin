@@ -32,7 +32,7 @@
     "react-tagsinput": "^3.20.3"
   },
   "devDependencies": {
-    "@cypress/webpack-preprocessor": "^5.15.5",
+    "@cypress/webpack-preprocessor": "^7.0.0",
     "@kubevirt-ui/kubevirt-api": "^1.4.2",
     "@openshift-console/dynamic-plugin-sdk": "4.20.0",
     "@openshift-console/dynamic-plugin-sdk-internal": "4.20.0",
@@ -55,8 +55,8 @@
     "classnames": "^2.5.1",
     "copy-webpack-plugin": "^12.0.2",
     "css-loader": "^6.7.1",
-    "cypress": "^12.17.4",
-    "cypress-multi-reporters": "^1.6.2",
+    "cypress": "^15.0.0",
+    "cypress-multi-reporters": "^2.0.0",
     "esbuild-loader": "^4.4.2",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^8.10.0",
