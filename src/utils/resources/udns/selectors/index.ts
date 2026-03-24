@@ -4,6 +4,7 @@ import {
   ClusterUserDefinedNetworkKind,
   UserDefinedNetworkKind,
   UserDefinedNetworkLayer3Subnet,
+  UserDefinedNetworkLocalnet,
   UserDefinedNetworkSpec,
 } from '../types';
 
@@ -53,6 +54,18 @@ export const getModel = (obj: ClusterUserDefinedNetworkKind | UserDefinedNetwork
   } else {
     return UserDefinedNetworkModel;
   }
+};
+
+export const getLocalnet = (
+  obj: ClusterUserDefinedNetworkKind | UserDefinedNetworkKind,
+): UserDefinedNetworkLocalnet | undefined => {
+  return getNetwork(obj)?.localnet;
+};
+
+export const getVLANID = (
+  obj: ClusterUserDefinedNetworkKind | UserDefinedNetworkKind,
+): number | undefined => {
+  return getNetwork(obj)?.localnet?.vlan?.access?.id;
 };
 
 export const getMTU = (udn: ClusterUserDefinedNetworkKind | UserDefinedNetworkKind): number => {

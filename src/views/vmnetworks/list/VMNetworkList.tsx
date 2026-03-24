@@ -8,19 +8,19 @@ import {
   ListPageHeader,
   useK8sWatchResource,
   useListPageFilter,
-  VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
+import KubevirtTable from '@utils/components/KubevirtTable/KubevirtTable';
 import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
 import { documentationURLs, getDocumentationURL } from '@utils/constants/documentation';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { ClusterUserDefinedNetworkModelGroupVersionKind } from '@utils/models';
+import { getName } from '@utils/resources/shared';
 import { LOCALNET_TOPOLOGY } from '@utils/resources/udns/constants';
 import { ClusterUserDefinedNetworkKind } from '@utils/resources/udns/types';
 
 import { VM_NETWORKS_PATH } from '../constants';
 
-import VMNetworkRow from './components/VMNetworkRow';
-import useVMNetworkColumns from './hooks/useVMNetworkColumns';
+import useVMNetworkTableColumns from './hooks/useVMNetworkTableColumns';
 
 const VMNetworkList: FC = () => {
   const { t } = useNetworkingTranslation();
@@ -36,7 +36,7 @@ const VMNetworkList: FC = () => {
     (resource) => resource.spec.network.topology === LOCALNET_TOPOLOGY,
   );
   const [data, filteredData, onFilterChange] = useListPageFilter(allVMNetworks);
-  const columns = useVMNetworkColumns();
+  const columns = useVMNetworkTableColumns();
 
   const title = t('Virtual Machine Networks');
 
@@ -66,12 +66,14 @@ const VMNetworkList: FC = () => {
       </ListPageHeader>
       <ListPageBody>
         <ListPageFilter data={data} loaded={loaded} onFilterChange={onFilterChange} />
-        <VirtualizedTable<ClusterUserDefinedNetworkKind>
+        <KubevirtTable<ClusterUserDefinedNetworkKind>
+          ariaLabel={t('VM Networks table')}
           columns={columns}
           data={filteredData}
+          getRowId={(row) => getName(row) ?? ''}
           loaded={loaded}
           loadError={loadError}
-          Row={VMNetworkRow}
+          noFilteredDataEmptyMsg={t('No virtual machine networks found')}
           unfilteredData={data}
         />
       </ListPageBody>
