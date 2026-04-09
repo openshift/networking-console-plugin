@@ -33,7 +33,7 @@ const EnableMultiPage: FC<EnableMultiPageProps> = ({ namespace }) => {
   const navigate = useNavigate();
   const [error, setError] = useState<Error | null>();
 
-  const [networkClusterConfig, loaded] = useK8sWatchResource<K8sResourceCommon & { spec: any }>({
+  const [networkClusterConfig, loaded] = useK8sWatchResource<{ spec: any } & K8sResourceCommon>({
     groupVersionKind: modelToGroupVersionKind(NetworkConfigModel),
     name: 'cluster',
   });

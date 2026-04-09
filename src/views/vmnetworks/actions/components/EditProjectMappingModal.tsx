@@ -66,7 +66,9 @@ const EditProjectMappingModal: FC<EditProjectMappingModalProps> = ({ closeModal,
         <Form id="edit-project-mapping-form">
           <p>
             <WarningTriangleIcon color={chartWarningColor.value} />{' '}
-            {t('VirtualMachines in projects that are no longer enrolled will lose connectivity')}{' '}
+            {t(
+              'VirtualMachines in projects that are no longer enrolled will lose connectivity',
+            )}{' '}
           </p>
           <ProjectMapping />
           {isSubmitSuccessful && isEmpty(apiError) && (

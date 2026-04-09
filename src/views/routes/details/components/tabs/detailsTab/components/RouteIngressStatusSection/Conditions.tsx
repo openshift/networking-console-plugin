@@ -16,7 +16,7 @@ const Conditions: FC<ConditionsProps> = ({ conditions, type = ConditionTypes.K8s
   const { t } = useNetworkingTranslation();
 
   const rows = (conditions as Array<ClusterServiceVersionCondition | K8sResourceCondition>)?.map?.(
-    (condition: K8sResourceCondition & ClusterServiceVersionCondition, i: number) => (
+    (condition: ClusterServiceVersionCondition & K8sResourceCondition, i: number) => (
       <ConditionRow condition={condition} index={i} key={`condition-${i}`} type={type} />
     ),
   );
