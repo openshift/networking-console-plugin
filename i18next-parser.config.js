@@ -5,6 +5,10 @@ const { CustomJSONLexer } = require('./i18n-scripts/lexers');
 module.exports = {
   createOldCatalogs: false,
   defaultNamespace: 'plugin__networking-console-plugin',
+  defaultValue: (lng, ns, key) => {
+    return key;
+  },
+  input: ['src/**/*.{js,jsx,ts,tsx,json}'],
   keySeparator: false,
   // see below for more details
   lexers: {
@@ -21,12 +25,17 @@ module.exports = {
     mjs: ['JavascriptLexer'],
     ts: ['JavascriptLexer'],
 
-    tsx: ['JsxLexer'],
+    tsx: [
+      {
+        lexer: 'JsxLexer',
+        transKeepBasicHtmlNodesFor: ['br'],
+        transSupportBasicHtmlNodes: true,
+      },
+    ],
   },
   locales: ['en', 'es', 'fr', 'ja', 'ko', 'zh'],
   namespaceSeparator: '~',
   reactNamespace: false,
   sort: true,
-
   useKeysAsDefaultValue: true,
 };

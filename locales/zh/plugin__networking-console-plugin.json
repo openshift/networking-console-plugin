@@ -2,7 +2,7 @@
   " See more details in: <3></3>": " 详情请参阅：<3></3>",
   " See more details in: <3></3>.": " 详情请参阅：<3></3>。",
   "(all nodes): ": "（所有节点）：",
-  "{{count}} annotation": "{{count}} annotation",
+  "{{count}} annotation_other": "{{count}} annotations",
   "{{kind}} details": "{{kind}}详情",
   "{{kind}} disabled": "{{kind}} 禁用",
   "{{numCores}} cores": "{{numCores}} 核",
@@ -11,7 +11,7 @@
   "{{path}} should be an Array.": "{{path}} 需要是一个数组。",
   "{{path}} should not be empty.": "{{path}} 不能为空。",
   "{{value}} at {{date}}": "{{value}} 于 {{date}}",
-  "+{{count}} more": "+{{count}} more",
+  "+{{count}} more_other": "+{{count}} more",
   "<0>OpenShift Virtualization Operator</0> or <3>SR-IOV Network Operator </3>needs to be installed on the cluster, in order to pick the Network Type.": "<0>OpenShift Virtualization Operator</0> 或 <3>SR-IOV Network Operator</3> 需要在集群中安装，以便选择网络类型。",
   "404: Page Not Found": "404：页未找到",
   "A number between 0 and 255 that depicts relative weight compared with other targets.": "0 到 255 之间的数字，它显示了与其他目标相比的相对权重。",
@@ -428,7 +428,5 @@
   "YAML view": "YAML 视图",
   "You don't have access to this section due to cluster policy.": "由于集群策略您无法访问此部分。",
   "You don't have permission to perform this action": "您没有执行此操作的权限",
-  "You must create a Namespace to be able to create projects that begin with 'openshift-', 'kubernetes-', or 'kube-'.": "您必须创建一个命名空间，才能创建以 'openshift-'、'kubernetes-' 或 'kube-' 开头的项目。",
-  "{{count}} annotation_0": "{{count}} 注解",
-  "+{{count}} more_0": "+{{count}} 更多"
+  "You must create a Namespace to be able to create projects that begin with 'openshift-', 'kubernetes-', or 'kube-'.": "您必须创建一个命名空间，才能创建以 'openshift-'、'kubernetes-' 或 'kube-' 开头的项目。"
 }

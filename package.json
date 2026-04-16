@@ -11,7 +11,7 @@
     "build-dev": "npm run clean && npm run ts-node -- node_modules/.bin/webpack",
     "start": "npm run ts-node -- node_modules/.bin/webpack serve",
     "start-console": "./start-console.sh",
-    "i18n": "./i18n-scripts/build-i18n.sh && node ./i18n-scripts/set-english-defaults.js",
+    "i18n": "./i18n-scripts/build-i18n.sh",
     "ts-node": "ts-node -O '{\"module\":\"commonjs\"}'",
     "lint": "eslint ./src ./integration-tests ",
     "lint-fix": "eslint ./src ./integration-tests --fix",
@@ -25,6 +25,10 @@
     "export-pos": "./i18n-scripts/export-pos.sh",
     "i18n-to-po": "node ./i18n-scripts/i18n-to-po.js",
     "po-to-i18n": "node ./i18n-scripts/po-to-i18n.js"
+  },
+  "overrides": {
+    "serialize-javascript": "^7.0.5",
+    "mocha": "12.0.0-beta-10"
   },
   "dependencies": {
     "react-hook-form": "^7.51.1",
@@ -69,7 +73,7 @@
     "file-loader": "^6.2.0",
     "fork-ts-checker-webpack-plugin": "^9.0.2",
     "i18next-conv": "12.1.1",
-    "i18next-parser": "^3.11.0",
+    "i18next-parser": "^9.4.0",
     "js-yaml": "^4.1.0",
     "lodash": "^4.18.1",
     "mocha-junit-reporter": "^2.2.0",
