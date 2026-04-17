@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
-import { Helmet } from 'react-helmet';
 
+import { DocumentTitle } from '@openshift-console/dynamic-plugin-sdk';
 import { PageSection, Title } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
@@ -16,9 +16,7 @@ const ErrorPage: FC<ErrorPageProps> = ({ message, title }) => {
 
   return (
     <div>
-      <Helmet>
-        <title>{title || t('Error')}</title>
-      </Helmet>
+      <DocumentTitle>{title || t('Error')}</DocumentTitle>
       <>
         <PageSection>
           <Title headingLevel="h2">{t('Error')}</Title>

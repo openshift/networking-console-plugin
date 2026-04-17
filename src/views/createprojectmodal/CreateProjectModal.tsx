@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { useNavigate } from 'react-router';
 
 import { ProjectModel, ProjectRequestModel } from '@kubevirt-ui/kubevirt-api/console';
 import { k8sCreate, k8sDelete, K8sResourceCommon } from '@openshift-console/dynamic-plugin-sdk';

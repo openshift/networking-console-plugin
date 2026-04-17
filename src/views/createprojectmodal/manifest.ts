@@ -1,5 +1,7 @@
-import { EncodedExtension } from '@openshift/dynamic-plugin-sdk-webpack';
-import { ConsolePluginBuildMetadata } from '@openshift-console/dynamic-plugin-sdk-webpack/lib/build-types';
+import {
+  ConsolePluginBuildMetadata,
+  EncodedExtension,
+} from '@openshift-console/dynamic-plugin-sdk-webpack';
 
 import { FLAG_UDN_ENABLED } from '../../utils/flags/consts';
 

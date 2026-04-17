@@ -1,5 +1,7 @@
-import { EncodedExtension } from '@openshift/dynamic-plugin-sdk-webpack';
-import { ConsolePluginBuildMetadata } from '@openshift-console/dynamic-plugin-sdk-webpack/lib/build-types';
+import {
+  EncodedExtension,
+  ConsolePluginBuildMetadata,
+} from '@openshift-console/dynamic-plugin-sdk-webpack';
 
 import { FlagsExposedModules, FlagsExtensions } from './src/utils/flags/manifest';
 import { IngressesExposedModules, IngressesExtensions } from './src/views/ingresses/manifest';

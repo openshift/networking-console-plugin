@@ -1,7 +1,7 @@
 import React, { FC, FormEventHandler } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Trans } from 'react-i18next';
-import { Link } from 'react-router-dom-v5-compat';
+import { Link } from 'react-router';
 
 import { Alert, AlertVariant, Content, Form, FormGroup, TextInput } from '@patternfly/react-core';
 import SubnetCIDRHelperText from '@utils/components/SubnetCIDRHelperText/SubnetCIDRHelperText';

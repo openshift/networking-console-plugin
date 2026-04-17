@@ -1,5 +1,5 @@
-import { EncodedExtension } from '@openshift/dynamic-plugin-sdk-webpack';
 import { FeatureFlag, FeatureFlagHookProvider } from '@openshift-console/dynamic-plugin-sdk';
+import { EncodedExtension } from '@openshift-console/dynamic-plugin-sdk-webpack';
 
 export const FlagsExtensions: EncodedExtension[] = [
   {

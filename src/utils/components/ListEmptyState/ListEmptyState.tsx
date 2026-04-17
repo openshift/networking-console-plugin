@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { Trans } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom-v5-compat';
+import { useNavigate, useParams } from 'react-router';
 
 import { K8sResourceCommon, ListPageHeader } from '@openshift-console/dynamic-plugin-sdk';
 import {

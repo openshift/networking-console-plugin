@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { useNavigate } from 'react-router';
 
 import { modelToGroupVersionKind, modelToRef } from '@kubevirt-ui/kubevirt-api/console';
 import {
