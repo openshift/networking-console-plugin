@@ -111,5 +111,17 @@
     "webpack": "^5.104.1",
     "webpack-cli": "5.1.4",
     "webpack-dev-server": "^5.2.3"
+  },
+  "overrides": {
+    "@openshift-console/dynamic-plugin-sdk": {
+      "immutable": "3.8.3"
+    },
+    "@openshift-console/dynamic-plugin-sdk-internal": {
+      "immutable": "3.8.3"
+    },
+    "sass": {
+      "immutable": "5.1.5"
+    },
+    "serialize-javascript": "7.0.5"
   }
 }
