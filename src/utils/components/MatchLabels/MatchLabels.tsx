@@ -25,14 +25,14 @@ const MatchLabels: FC<MatchLabelsProps> = ({
       <SelectorInput
         autoFocus
         inputProps={{ id: fieldId }}
-        onChange={(arr) =>
+        onChange={(arr) => {
           onChange(
             arr.reduce((acc, v) => {
               const split = v.split('=');
               return ((acc[split[0]] = split[1]), acc);
             }, {}),
-          )
-        }
+          );
+        }}
         tags={Object.keys(matchLabels).map((key) => `${key}=${matchLabels[key]}`)}
       />
       <FormGroupHelperText>
