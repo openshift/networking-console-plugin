@@ -2,7 +2,7 @@
   " See more details in: <3></3>": " 詳細は以下を参照してください: <3></3>",
   " See more details in: <3></3>.": " 詳細は、<3></3> を参照してください。",
   "(all nodes): ": "(すべてのノード): ",
-  "{{count}} annotation_other": "",
+  "{{count}} annotation_other": "{{count}} annotation_other",
   "{{kind}} details": "{{kind}} の詳細",
   "{{kind}} disabled": "{{kind}} が無効",
   "{{numCores}} cores": "{{numCores}} コア",

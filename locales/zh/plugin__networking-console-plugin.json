@@ -2,7 +2,7 @@
   " See more details in: <3></3>": " 详情请参阅：<3></3>",
   " See more details in: <3></3>.": " 详情请参阅：<3></3>。",
   "(all nodes): ": "（所有节点）：",
-  "{{count}} annotation_other": "",
+  "{{count}} annotation_other": "{{count}} annotation_other",
   "{{kind}} details": "{{kind}}详情",
   "{{kind}} disabled": "{{kind}} 禁用",
   "{{numCores}} cores": "{{numCores}} 核",
