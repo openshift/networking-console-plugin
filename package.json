@@ -11,7 +11,7 @@
     "build-dev": "npm run clean && npm run ts-node -- node_modules/.bin/webpack",
     "start": "npm run ts-node -- node_modules/.bin/webpack serve",
     "start-console": "./start-console.sh",
-    "i18n": "./i18n-scripts/build-i18n.sh && node ./i18n-scripts/set-english-defaults.js",
+    "i18n": "node ./i18n-scripts/migrate-plural-format.js && ./i18n-scripts/build-i18n.sh && node ./i18n-scripts/set-english-defaults.js",
     "ts-node": "ts-node -O '{\"module\":\"commonjs\"}'",
     "lint": "eslint ./src ./integration-tests ",
     "lint-fix": "eslint ./src ./integration-tests --fix",
