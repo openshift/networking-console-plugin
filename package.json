@@ -102,6 +102,9 @@
   },
   "resolutions": {
     "@types/react": "17.0.40",
-    "webpack": "^5.68.0"
+    "webpack": "^5.68.0",
+    "@openshift-console/dynamic-plugin-sdk/immutable": "3.8.3",
+    "@openshift-console/dynamic-plugin-sdk-internal/immutable": "3.8.3",
+    "sass/immutable": "4.3.8"
   }
 }
