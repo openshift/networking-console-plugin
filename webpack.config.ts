@@ -54,9 +54,9 @@ const config: Configuration = {
         test: /\.(jsx?|tsx?)$/,
         use: [
           {
-            loader: 'ts-loader',
+            loader: 'esbuild-loader',
             options: {
-              configFile: path.resolve(__dirname, 'tsconfig.json'),
+              tsconfig: path.resolve(__dirname, 'tsconfig.json'),
             },
           },
         ],

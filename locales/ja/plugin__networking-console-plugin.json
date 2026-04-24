@@ -2,8 +2,8 @@
   " See more details in: <3></3>": " 詳細は以下を参照してください: <3></3>",
   " See more details in: <3></3>.": " 詳細は、<3></3> を参照してください。",
   "(all nodes): ": "(すべてのノード): ",
-  "{{count}} annotation": "{{count}} annotation",
-  "{{count}} projects selected": "{{count}} projects selected",
+  "{{count}} annotation_other": "{{count}} annotation_other",
+  "{{count}} projects selected_other": "{{count}} projects selected_other",
   "{{kind}} details": "{{kind}} の詳細",
   "{{kind}} disabled": "{{kind}} が無効",
   "{{numCores}} cores": "{{numCores}} コア",
@@ -12,7 +12,7 @@
   "{{path}} should be an Array.": "{{path}} は配列でなければなりません。",
   "{{path}} should not be empty.": "{{path}} は空にできません。",
   "{{value}} at {{date}}": "{{date}} の {{value}}",
-  "+{{count}} more": "+{{count}} more",
+  "+{{count}} more_other": "+{{count}} more_other",
   "<0>OpenShift Virtualization Operator</0> or <3>SR-IOV Network Operator </3>needs to be installed on the cluster, in order to pick the Network Type.": "ネットワークタイプを選択するには、<0>OpenShift Virtualization Operator</0> または <3>SR-IOV Network Operator</3> がクラスターにインストールされている必要があります。",
   "404: Page Not Found": "404: ページが見つかりません",
   "A number between 0 and 255 that depicts relative weight compared with other targets.": "他のターゲットとの相対的な重みを示す 0 から 255 の間の数字。",
@@ -457,6 +457,5 @@
   "You don't have access to this section due to cluster policy.": "クラスターのポリシーにより、このセクションにアクセスできません。",
   "You don't have permission to perform this action": "このアクションを実行する権限がありません",
   "You must create a Namespace to be able to create projects that begin with 'openshift-', 'kubernetes-', or 'kube-'.": "You must create a Namespace to be able to create projects that begin with 'openshift-', 'kubernetes-', or 'kube-'.",
-  "You physical network switch must be configured with a VLAN trunk that is permitted to carry traffic for this specific ID.": "You physical network switch must be configured with a VLAN trunk that is permitted to carry traffic for this specific ID.",
-  "{{count}} annotation_0": "{{count}} 件のアノテーション"
+  "You physical network switch must be configured with a VLAN trunk that is permitted to carry traffic for this specific ID.": "You physical network switch must be configured with a VLAN trunk that is permitted to carry traffic for this specific ID."
 }

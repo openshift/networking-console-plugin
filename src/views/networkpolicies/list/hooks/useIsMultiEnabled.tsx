@@ -4,7 +4,7 @@ import { NetworkConfigModel } from '@views/nads/form/utils/constants';
 
 const useIsMultiEnabled = (): [enabled: boolean, loaded: boolean, error: any] => {
   const [networkClusterConfig, loaded, error] = useK8sWatchResource<
-    K8sResourceCommon & { spec: any }
+    { spec: any } & K8sResourceCommon
   >({
     groupVersionKind: modelToGroupVersionKind(NetworkConfigModel),
     name: 'cluster',
