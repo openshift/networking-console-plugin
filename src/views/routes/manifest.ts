@@ -1,4 +1,3 @@
-import { EncodedExtension } from '@openshift/dynamic-plugin-sdk-webpack';
 import {
   ResourceDetailsPage,
   ResourceListPage,
@@ -6,7 +5,10 @@ import {
   RoutePage,
   YAMLTemplate,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { ConsolePluginBuildMetadata } from '@openshift-console/dynamic-plugin-sdk-webpack/lib/build-types';
+import {
+  ConsolePluginBuildMetadata,
+  EncodedExtension,
+} from '@openshift-console/dynamic-plugin-sdk-webpack';
 
 const RouteExtensionModel = {
   group: 'route.openshift.io',

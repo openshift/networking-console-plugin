@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
-import { Link } from 'react-router-dom-v5-compat';
-import * as _ from 'lodash-es';
+import { Link } from 'react-router';
+import * as _ from 'lodash';
 
 import { Selector as SelectorKind } from '@openshift-console/dynamic-plugin-sdk';
-import { SearchIcon } from '@patternfly/react-icons/dist/esm/icons/search-icon';
+import { SearchIcon } from '@patternfly/react-icons';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 import { selectorToString } from './utilts';

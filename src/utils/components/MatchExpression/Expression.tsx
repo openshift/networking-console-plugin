@@ -12,7 +12,7 @@ import {
   MenuToggleElement,
   TextInput,
 } from '@patternfly/react-core';
-import { MinusCircleIcon } from '@patternfly/react-icons/dist/esm/icons/minus-circle-icon';
+import { MinusCircleIcon } from '@patternfly/react-icons';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 import { ALL_OPERATORS, UNARY_OPERATORS } from './MatchExpression';

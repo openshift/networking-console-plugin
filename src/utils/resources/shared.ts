@@ -59,7 +59,7 @@ export const asAccessReview = (
  */
 export const getCreationTimestamp = <A extends K8sResourceCommon = K8sResourceCommon>(
   resource: A,
-) => new Date(resource?.metadata?.creationTimestamp);
+) => new Date(resource?.metadata?.creationTimestamp).toString();
 
 /**
  * Get annotations

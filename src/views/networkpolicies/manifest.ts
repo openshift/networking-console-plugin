@@ -1,11 +1,13 @@
-import { EncodedExtension } from '@openshift/dynamic-plugin-sdk-webpack';
 import {
   ResourceDetailsPage,
   ResourceListPage,
   ResourceNSNavItem,
   RoutePage,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { ConsolePluginBuildMetadata } from '@openshift-console/dynamic-plugin-sdk-webpack/lib/build-types';
+import {
+  ConsolePluginBuildMetadata,
+  EncodedExtension,
+} from '@openshift-console/dynamic-plugin-sdk-webpack';
 
 const NetworkPolicyExtensionModel = {
   group: 'networking.k8s.io',

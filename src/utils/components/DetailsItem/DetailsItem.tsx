@@ -1,5 +1,5 @@
-import React, { FC, MouseEvent, ReactNode, SFC } from 'react';
-import * as _ from 'lodash-es';
+import React, { FC, MouseEvent, ReactNode } from 'react';
+import * as _ from 'lodash';
 
 import {
   getGroupVersionKindForResource,
@@ -19,7 +19,7 @@ import {
   Split,
   SplitItem,
 } from '@patternfly/react-core';
-import { PencilAltIcon } from '@patternfly/react-icons/dist/esm/icons/pencil-alt-icon';
+import { PencilAltIcon } from '@patternfly/react-icons';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import LinkifyExternal from '@views/routes/details/components/tabs/detailsTab/components/RouteIngressStatusSection/LinkifyExternal';
 
@@ -45,7 +45,7 @@ export const PropertyPath: FC<{
   );
 };
 
-const EditButton: SFC<EditButtonProps> = (props) => {
+const EditButton: FC<EditButtonProps> = (props) => {
   return (
     <Button
       data-test={
@@ -138,6 +138,7 @@ export const DetailsItem: FC<DetailsItemProps> = ({
 
 export type DetailsItemProps = {
   canEdit?: boolean;
+  children?: ReactNode;
   defaultValue?: ReactNode;
   description?: string;
   editAsGroup?: boolean;
@@ -151,6 +152,7 @@ export type DetailsItemProps = {
 };
 
 type EditButtonProps = {
+  children?: ReactNode;
   onClick: (e: MouseEvent<HTMLButtonElement>) => void;
   testId?: string;
 };
