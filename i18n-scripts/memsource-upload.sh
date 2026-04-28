@@ -23,7 +23,7 @@ PROJECT_INFO=$(memsource project create --name "[OCP $VERSION] UI Localization n
 PROJECT_ID=$(echo "$PROJECT_INFO" | jq -r '.uid')
 
 echo "Exporting PO files"
-yarn export-pos
+npm run export-pos
 echo "Exported all PO files"
 
 echo "Creating jobs for exported PO files"
