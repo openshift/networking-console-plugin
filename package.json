@@ -109,5 +109,12 @@
     "lodash": "^4.18.1",
     "lodash-es": "^4.18.1",
     "@remix-run/router": "^1.23.2"
+  },
+  "overrides": {
+    "@patternfly/quickstarts": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    },
+    "@remix-run/router": "^1.23.2"
   }
 }
