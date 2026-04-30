@@ -67,7 +67,7 @@
     "fork-ts-checker-webpack-plugin": "^9.0.2",
     "i18next-parser": "^3.11.0",
     "js-yaml": "^4.1.0",
-    "lodash": "^4.17.21",
+    "lodash": "^4.18.1",
     "mocha-junit-reporter": "^2.2.0",
     "mochawesome": "^7.1.3",
     "mochawesome-merge": "^4.3.0",
@@ -102,6 +102,8 @@
     "webpack": "^5.68.0",
     "@openshift-console/dynamic-plugin-sdk/immutable": "3.8.3",
     "@openshift-console/dynamic-plugin-sdk-internal/immutable": "3.8.3",
-    "sass/immutable": "4.3.8"
+    "sass/immutable": "4.3.8",
+    "lodash": "^4.18.1",
+    "lodash-es": "^4.18.1"
   }
 }
