@@ -2,7 +2,7 @@
   " See more details in: <3></3>": " 詳細は以下を参照してください: <3></3>",
   " See more details in: <3></3>.": " 詳細は、<3></3> を参照してください。",
   "(all nodes): ": "(すべてのノード): ",
-  "{{count}} annotation": "{{count}} annotation",
+  "{{count}} annotation_other": "{{count}} annotation_other",
   "{{kind}} details": "{{kind}} の詳細",
   "{{kind}} disabled": "{{kind}} が無効",
   "{{numCores}} cores": "{{numCores}} コア",
@@ -422,6 +422,5 @@
   "YAML view": "YAML ビュー",
   "You don't have access to this section due to cluster policy.": "クラスターのポリシーにより、このセクションにアクセスできません。",
   "You don't have permission to perform this action": "このアクションを実行する権限がありません",
-  "You must create a Namespace to be able to create projects that begin with 'openshift-', 'kubernetes-', or 'kube-'.": "You must create a Namespace to be able to create projects that begin with 'openshift-', 'kubernetes-', or 'kube-'.",
-  "{{count}} annotation_0": "{{count}} 件のアノテーション"
+  "You must create a Namespace to be able to create projects that begin with 'openshift-', 'kubernetes-', or 'kube-'.": "You must create a Namespace to be able to create projects that begin with 'openshift-', 'kubernetes-', or 'kube-'."
 }

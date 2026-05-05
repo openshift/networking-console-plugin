@@ -2,7 +2,7 @@
   " See more details in: <3></3>": " 详情请参阅：<3></3>",
   " See more details in: <3></3>.": " 详情请参阅：<3></3>。",
   "(all nodes): ": "（所有节点）：",
-  "{{count}} annotation": "{{count}} annotation",
+  "{{count}} annotation_other": "{{count}} annotation_other",
   "{{kind}} details": "{{kind}}详情",
   "{{kind}} disabled": "{{kind}} 禁用",
   "{{numCores}} cores": "{{numCores}} 核",
@@ -422,6 +422,5 @@
   "YAML view": "YAML 视图",
   "You don't have access to this section due to cluster policy.": "由于集群策略您无法访问此部分。",
   "You don't have permission to perform this action": "您没有执行此操作的权限",
-  "You must create a Namespace to be able to create projects that begin with 'openshift-', 'kubernetes-', or 'kube-'.": "You must create a Namespace to be able to create projects that begin with 'openshift-', 'kubernetes-', or 'kube-'.",
-  "{{count}} annotation_0": "{{count}} 注解"
+  "You must create a Namespace to be able to create projects that begin with 'openshift-', 'kubernetes-', or 'kube-'.": "You must create a Namespace to be able to create projects that begin with 'openshift-', 'kubernetes-', or 'kube-'."
 }

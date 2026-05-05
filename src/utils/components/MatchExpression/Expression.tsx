@@ -91,7 +91,7 @@ export const Expression: FC<ExpressionProps> = ({
             })
           }
           type="text"
-          value={valueDisabled ? '' : values?.join(',') ?? ''}
+          value={valueDisabled ? '' : (values?.join(',') ?? '')}
         />
       </FormGroup>
       <FormGroup label=" ">

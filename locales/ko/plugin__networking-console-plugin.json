@@ -2,7 +2,7 @@
   " See more details in: <3></3>": " 자세한 내용은 다음을 참조하십시오.<3></3>",
   " See more details in: <3></3>.": " 자세한 내용은 다음을 참조하십시오.<3></3>",
   "(all nodes): ": "(모든 노드): ",
-  "{{count}} annotation": "{{count}} annotation",
+  "{{count}} annotation_other": "{{count}} annotation_other",
   "{{kind}} details": "{{kind}} 세부 정보",
   "{{kind}} disabled": "{{kind}} 비활성화됨",
   "{{numCores}} cores": "{{numCores}} 코어",
@@ -422,6 +422,5 @@
   "YAML view": "YAML보기",
   "You don't have access to this section due to cluster policy.": "클러스터 정책으로 인해 이 섹션에 액세스할 수 없습니다.",
   "You don't have permission to perform this action": "이 작업을 수행할 수 있는 권한이 없습니다",
-  "You must create a Namespace to be able to create projects that begin with 'openshift-', 'kubernetes-', or 'kube-'.": "You must create a Namespace to be able to create projects that begin with 'openshift-', 'kubernetes-', or 'kube-'.",
-  "{{count}} annotation_0": "{{count}} 주석"
+  "You must create a Namespace to be able to create projects that begin with 'openshift-', 'kubernetes-', or 'kube-'.": "You must create a Namespace to be able to create projects that begin with 'openshift-', 'kubernetes-', or 'kube-'."
 }
