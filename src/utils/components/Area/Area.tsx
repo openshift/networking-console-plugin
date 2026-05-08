@@ -9,7 +9,7 @@ import {
 } from '@utils/components/Area/utils/constants';
 import { mapLimitsRequests } from '@utils/components/Area/utils/utils';
 
-type AreaProps = AreaChartProps & {
+type AreaProps = {
   byteDataType?: ByteDataTypes;
   endTime?: number;
   limitQuery?: string;
@@ -19,7 +19,7 @@ type AreaProps = AreaChartProps & {
   samples?: number;
   timeout?: string;
   timespan?: number;
-};
+} & AreaChartProps;
 
 const Area: FC<AreaProps> = ({
   endTime = Date.now(),
