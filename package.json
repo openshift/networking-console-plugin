@@ -124,5 +124,8 @@
     "lodash": "^4.18.1",
     "lodash-es": "^4.18.1",
     "@remix-run/router": "^1.23.2"
+  },
+  "overrides": {
+    "serialize-javascript": "^7.0.5"
   }
 }
