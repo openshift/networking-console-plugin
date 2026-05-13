@@ -29,7 +29,7 @@ const EnableMultiPage: FC = () => {
   const lastNamespacePath = useLastNamespacePath();
   const navigate = useNavigate();
 
-  const [networkClusterConfig, loaded] = useK8sWatchResource<K8sResourceCommon & { spec: any }>({
+  const [networkClusterConfig, loaded] = useK8sWatchResource<{ spec: any } & K8sResourceCommon>({
     groupVersionKind: modelToGroupVersionKind(NetworkConfigModel),
     name: 'cluster',
   });

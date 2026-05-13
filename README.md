@@ -17,7 +17,7 @@ and higher. For using old `v1alpha1` API version us OpenShift version 4.10 or 4.
 For an example of a plugin that works with OpenShift 4.11, see the `release-4.11` branch.
 For a plugin that works with OpenShift 4.10, see the `release-4.10` branch.
 
-[Node.js](https://nodejs.org/en/) and [yarn](https://yarnpkg.com) are required
+[Node.js](https://nodejs.org/en/) and [npm](https://www.npmjs.com/) are required
 to build and run the example. To run OpenShift console in a container, either
 [Docker](https://www.docker.com) or [podman 3.2.0+](https://podman.io) and
 [oc](https://console.redhat.com/openshift/downloads) are required.
@@ -29,16 +29,16 @@ plugin name in the `consolePlugin` declaration of [package.json](package.json).
 
 ```json
 "consolePlugin": {
-  "name": "networking-console-plugin",
-  "version": "0.0.1",
-  "displayName": "My Plugin",
-  "description": "Enjoy this shiny, new console plugin!",
-  "exposedModules": {
-    "ExamplePage": "./components/ExamplePage"
-  },
-  "dependencies": {
-    "@console/pluginAPI": "*"
-  }
+"name": "networking-console-plugin",
+"version": "0.0.1",
+"displayName": "My Plugin",
+"description": "Enjoy this shiny, new console plugin!",
+"exposedModules": {
+"ExamplePage": "./components/ExamplePage"
+},
+"dependencies": {
+"@console/pluginAPI": "*"
+}
 }
 ```
 
@@ -56,13 +56,14 @@ to deploy it to a cluster.
 
 In one terminal window, run:
 
-1. `yarn install`
-2. `yarn run start`
+1. `npm install`
+2. `npm run start`
 
 In another terminal window, run:
 
-1. `oc login` (requires [oc](https://console.redhat.com/openshift/downloads) and an [OpenShift cluster](https://console.redhat.com/openshift/create))
-2. `yarn run start-console` (requires [Docker](https://www.docker.com) or [podman 3.2.0+](https://podman.io))
+1. `oc login` (requires [oc](https://console.redhat.com/openshift/downloads) and
+   an [OpenShift cluster](https://console.redhat.com/openshift/create))
+2. `npm run start-console` (requires [Docker](https://www.docker.com) or [podman 3.2.0+](https://podman.io))
 
 This will run the OpenShift console in a container connected to the cluster
 you've logged into. The plugin HTTP server runs on port 9001 with CORS enabled.
@@ -70,7 +71,7 @@ Navigate to <http://localhost:9000/example> to see the running plugin.
 
 #### Running start-console with Apple silicon and podman
 
-If you are using podman on a Mac with Apple silicon, `yarn run start-console`
+If you are using podman on a Mac with Apple silicon, `npm run start-console`
 might fail since it runs an amd64 image. You can workaround the problem with
 [qemu-user-static](https://github.com/multiarch/qemu-user-static) by running
 these commands:
@@ -101,7 +102,7 @@ OC_PASS=<password>
 ```
 
 2. `(Ctrl+Shift+P) => Remote Containers: Open Folder in Container...`
-3. `yarn run start`
+3. `npm run start`
 4. Navigate to <http://localhost:9000/example>
 
 ## Docker image
@@ -139,31 +140,38 @@ The following Helm parameters are required:
 
 `plugin.image`: The location of the image containing the plugin that was previously pushed
 
-Additional parameters can be specified if desired. Consult the chart [values](charts/openshift-console-plugin/values.yaml) file for the full set of supported parameters.
+Additional parameters can be specified if desired. Consult the
+chart [values](charts/openshift-console-plugin/values.yaml) file for the full set of supported parameters.
 
 ### Installing the Helm Chart
 
-Install the chart using the name of the plugin as the Helm release name into a new namespace or an existing namespace as specified by the `plugin_networking-console-plugin` parameter and providing the location of the image within the `plugin.image` parameter by using the following command:
+Install the chart using the name of the plugin as the Helm release name into a new namespace or an existing namespace as
+specified by the `plugin_networking-console-plugin` parameter and providing the location of the image within the
+`plugin.image` parameter by using the following command:
 
 ```shell
 helm upgrade -i  my-plugin charts/openshift-console-plugin -n plugin__networking-console-plugin --create-namespace --set plugin.image=my-plugin-image-location
 ```
 
-NOTE: When deploying on OpenShift 4.10, it is recommended to add the parameter `--set plugin.securityContext.enabled=false` which will omit configurations related to Pod Security.
+NOTE: When deploying on OpenShift 4.10, it is recommended to add the parameter
+`--set plugin.securityContext.enabled=false` which will omit configurations related to Pod Security.
 
-NOTE: When defining i18n namespace, adhere `plugin__<name-of-the-plugin>` format. The name of the plugin should be extracted from the `consolePlugin` declaration within the [package.json](package.json) file.
+NOTE: When defining i18n namespace, adhere `plugin__<name-of-the-plugin>` format. The name of the plugin should be
+extracted from the `consolePlugin` declaration within the [package.json](package.json) file.
 
 ## i18n
 
-The plugin template demonstrates how you can translate messages in with [react-i18next](https://react.i18next.com/). The i18n namespace must match
+The plugin template demonstrates how you can translate messages in with [react-i18next](https://react.i18next.com/). The
+i18n namespace must match
 the name of the `ConsolePlugin` resource with the `plugin__` prefix to avoid
 naming conflicts. For example, the plugin template uses the
 `plugin__networking-console-plugin` namespace. You can use the `useTranslation` hook
 with this namespace as follows:
 
 ```tsx
-conster Header: React.FC = () => {
-  const { t } = useTranslation('plugin__networking-console-plugin');
+conster
+Header: React.FC = () => {
+  const {t} = useTranslation('plugin__networking-console-plugin');
   return <h1>{t('Hello, World!')}</h1>;
 };
 ```
@@ -175,42 +183,30 @@ namespace. For example:
 
 ```json
   {
-    "type": "console.navigation/section",
-    "properties": {
-      "id": "admin-demo-section",
-      "perspective": "admin",
-      "name": "%plugin__networking-console-plugin~Plugin Template%"
-    }
+  "type": "console.navigation/section",
+  "properties": {
+    "id": "admin-demo-section",
+    "perspective": "admin",
+    "name": "%plugin__networking-console-plugin~Plugin Template%"
   }
+}
 ```
 
-Running `yarn i18n` updates the JSON files in the `locales` folder of the
+Running `npm run i18n` updates the JSON files in the `locales` folder of the
 plugin template when adding or changing messages.
 
 ## Linting
 
-This project adds prettier, eslint, and stylelint. Linting can be run with
-`yarn run lint`.
-
-The stylelint config disallows hex colors since these cause problems with dark
-mode (starting in OpenShift console 4.11). You should use the
-[PatternFly global CSS variables](https://patternfly-react-main.surge.sh/developer-resources/global-css-variables#global-css-variables)
-for colors instead.
-
-The stylelint config also disallows naked element selectors like `table` and
-`.pf-` or `.co-` prefixed classes. This prevents plugins from accidentally
-overwriting default console styles, breaking the layout of existing pages. The
-best practice is to prefix your CSS classnames with your plugin name to avoid
-conflicts. Please don't disable these rules without understanding how they can
-break console styles!
+This project adds prettier and eslint. Linting can be run with
+`npm run lint`.d
 
 ## Reporting
 
 Steps to generate reports
 
-1. In command prompt, navigate to root folder and execute the command `yarn run cypress-merge`
-2. Then execute command `yarn run cypress-generate`
-The cypress-report.html file is generated and should be in (/integration-tests/screenshots) directory
+1. In command prompt, navigate to root folder and execute the command `npm run cypress-merge`
+2. Then execute command `npm run cypress-generate`
+   The cypress-report.html file is generated and should be in (/integration-tests/screenshots) directory
 
 ## References
 
