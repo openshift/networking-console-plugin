@@ -11,10 +11,11 @@ import MutedText from '@utils/components/MutedText/MutedText';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { UserDefinedNetworkModel } from '@utils/models';
 import { getName, getNamespace } from '@utils/resources/shared';
-import { getModel, getMTU, getTopology } from '@utils/resources/udns/selectors';
+import { getModel, getMTU, getTopology, getUDNConditions } from '@utils/resources/udns/selectors';
 import { ClusterUserDefinedNetworkKind, UserDefinedNetworkKind } from '@utils/resources/udns/types';
 import { NO_DATA_DASH } from '@utils/utils/constants';
 import UDNActions from '@views/udns/actions/UDNActions';
+import UDNConditions from '@views/udns/list/components/UDNConditions';
 
 type UserDefinedNetworkRowType = RowProps<ClusterUserDefinedNetworkKind | UserDefinedNetworkKind>;
 
@@ -51,6 +52,9 @@ const UserDefinedNetworkRow: FC<UserDefinedNetworkRowType> = ({ activeColumnIDs,
       </TableData>
       <TableData activeColumnIDs={activeColumnIDs} id="mtu">
         {mtu || <MutedText content={t('Not available')} />}
+      </TableData>
+      <TableData activeColumnIDs={activeColumnIDs} id="conditions">
+        <UDNConditions conditions={getUDNConditions(obj)} />
       </TableData>
       <TableData activeColumnIDs={activeColumnIDs} className="pf-v6-c-table__action" id="">
         <UDNActions obj={obj} />
