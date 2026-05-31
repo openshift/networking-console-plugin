@@ -58,6 +58,10 @@ const useUDNColumns = (): { id: string; title: string }[] => {
         transforms: [sortable],
       },
       {
+        id: 'conditions',
+        title: t('Conditions'),
+      },
+      {
         id: '',
         props: { className: 'pf-v6-c-table__action' },
         title: '',
