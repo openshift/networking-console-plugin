@@ -1,6 +1,6 @@
 import { animals, colors, uniqueNamesGenerator } from 'unique-names-generator';
 
-import { ALL_NAMESPACES_KEY, DEFAULT_NAMESPACE } from '@utils/constants';
+import { ALL_NAMESPACES, ALL_NAMESPACES_KEY, DEFAULT_NAMESPACE } from '@utils/constants';
 
 export const networkConsole = console;
 
@@ -13,6 +13,9 @@ export const generateName = (prefix: string): string => {
     separator: '-',
   })}`;
 };
+
+export const createNamespacePath = (namespace: string) =>
+  namespace ? `ns/${namespace}` : ALL_NAMESPACES;
 
 export const getValidNamespace = (activeNamespace: string) =>
   activeNamespace === ALL_NAMESPACES_KEY ? DEFAULT_NAMESPACE : activeNamespace;
