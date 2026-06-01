@@ -4,6 +4,7 @@ import { Button } from '@patternfly/react-core';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 
 type ExternalLinkProps = {
+  children?: ReactNode;
   className?: string;
   dataTestID?: string;
   href: string;
