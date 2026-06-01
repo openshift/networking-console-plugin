@@ -19,9 +19,9 @@ import {
   EmptyStateFooter,
   Tooltip,
 } from '@patternfly/react-core';
-import { ALL_NAMESPACES } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { MultiNetworkPolicyModel } from '@utils/models';
+import { createNamespacePath } from '@utils/utils/helpers';
 import { NetworkConfigModel } from '@views/nads/form/utils/constants';
 
 import '@styles/list-management-group.scss';
@@ -63,7 +63,7 @@ const EnableMultiPage: FC<EnableMultiPageProps> = ({ namespace }) => {
         model: NetworkConfigModel,
         resource: networkClusterConfig,
       });
-      navigate(`/k8s/${namespace || ALL_NAMESPACES}/${modelToRef(MultiNetworkPolicyModel)}`);
+      navigate(`/k8s/${createNamespacePath(namespace)}/${modelToRef(MultiNetworkPolicyModel)}`);
     } catch (apiError) {
       setError(apiError);
     }
