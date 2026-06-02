@@ -1,0 +1,10 @@
+CI Test Stack deployed: {{ .Release.Name }}
+
+Console:  {{ include "ci-test-stack.consoleName" . }}
+Plugin:   {{ include "ci-test-stack.pluginName" . }}
+
+The console bridge URL for Cypress:
+  http://{{ include "ci-test-stack.consoleName" . }}.{{ .Release.Namespace }}.svc.cluster.local:9000
+
+The external console route:
+  oc get route {{ include "ci-test-stack.consoleName" . }} -n {{ .Release.Namespace }} -o jsonpath='{.spec.host}'

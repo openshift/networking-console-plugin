@@ -1,0 +1,19 @@
+pluginImage: ""
+pluginPort: 9001
+
+consoleImage: "quay.io/openshift/origin-console:latest"
+consolePort: 9000
+
+apiServerURL: ""
+bearerToken: ""
+
+i18nNamespaces: "plugin__networking-console-plugin"
+
+runnerServiceAccount: ""
+
+thanosURL: ""
+alertmanagerURL: ""
+
+pluginProxy: ""
+
+replicaCount: 1

@@ -1,0 +1,16 @@
+{{- if .Values.runnerServiceAccount }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ .Release.Name }}-runner-trigger
+  labels:
+    {{- include "ci-env-controller.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ .Release.Name }}-trigger
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Values.runnerServiceAccount }}
+    namespace: {{ .Release.Namespace }}
+{{- end }}
