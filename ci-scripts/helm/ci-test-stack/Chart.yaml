@@ -1,0 +1,6 @@
+apiVersion: v2
+name: ci-test-stack
+description: Deploy networking-console-plugin + OpenShift console for E2E CI testing
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

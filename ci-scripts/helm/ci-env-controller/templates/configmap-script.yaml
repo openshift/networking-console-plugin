@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-controller-script
+  labels:
+    {{- include "ci-env-controller.labels" . | nindent 4 }}
+data:
+  ci-env-controller.sh: |
+{{ .Files.Get "scripts/ci-env-controller.sh" | indent 4 }}
