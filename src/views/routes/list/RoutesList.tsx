@@ -54,7 +54,7 @@ const RoutesList: FC<RoutesListProps> = ({ namespace }) => {
 
   return (
     <ListEmptyState<RouteKind>
-      createButtonlink={routeCreateFormLink}
+      createButtonLink={routeCreateFormLink}
       data={routesFetch}
       error={loadError}
       kind={RouteModel.kind}

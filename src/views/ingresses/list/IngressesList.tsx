@@ -33,6 +33,12 @@ const IngressesList: FC<IngressesListProps> = ({ namespace }) => {
   const navigate = useNavigate();
   const validNamespace = getValidNamespace(namespace || activeNamespace);
 
+  const ingressURL = getResourceURL({
+    activeNamespace: validNamespace,
+    model: IngressModel,
+    path: SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML,
+  });
+
   const [ingress, loaded, loadError] = useK8sWatchResource<IoK8sApiNetworkingV1Ingress[]>({
     groupVersionKind: modelToGroupVersionKind(IngressModel),
     isList: true,
@@ -44,7 +50,7 @@ const IngressesList: FC<IngressesListProps> = ({ namespace }) => {
 
   return (
     <ListEmptyState<IoK8sApiNetworkingV1Ingress>
-      createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML}
+      createButtonLink={ingressURL}
       data={data}
       error={loadError}
       kind={IngressModel.kind}
@@ -59,15 +65,7 @@ const IngressesList: FC<IngressesListProps> = ({ namespace }) => {
             groupVersionKind: modelToGroupVersionKind(IngressModel),
             namespace: validNamespace,
           }}
-          onClick={() =>
-            navigate(
-              getResourceURL({
-                activeNamespace: validNamespace,
-                model: IngressModel,
-                path: SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML,
-              }),
-            )
-          }
+          onClick={() => navigate(ingressURL)}
         >
           {t('Create Ingress')}
         </ListPageCreateButton>

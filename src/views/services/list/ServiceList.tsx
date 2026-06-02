@@ -15,7 +15,7 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
 import { DOC_URL_NETWORK_SERVICE } from '@utils/constants/documentation';
-import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/constants/ui';
+import { SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML } from '@utils/constants/ui';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { resourcePathFromModel } from '@utils/resources/shared';
 import { getValidNamespace } from '@utils/utils';
@@ -47,13 +47,13 @@ const ServiceList: FC<ServiceListProps> = ({ namespace }) => {
     ServiceModel,
     null,
     validNamespace,
-  )}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}`;
+  )}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML}`;
 
   const title = t('Services');
 
   return (
     <ListEmptyState<IoK8sApiCoreV1Service>
-      createButtonlink={serviceCreateFormLink}
+      createButtonLink={serviceCreateFormLink}
       data={data}
       error={loadError}
       kind={ServiceModel.kind}
