@@ -1,5 +1,5 @@
 # Builder container
-FROM registry.ci.openshift.org/ocp/builder:rhel-9-base-nodejs-openshift-4.18 AS build
+FROM registry.ci.openshift.org/ocp/builder:rhel-9-base-nodejs-openshift-4.22 AS build
 
 # Copy app source
 COPY . /opt/app-root/src/app
