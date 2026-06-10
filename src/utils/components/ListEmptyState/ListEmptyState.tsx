@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { Trans } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom-v5-compat';
+import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { K8sResourceCommon, ListPageHeader } from '@openshift-console/dynamic-plugin-sdk';
 import {
@@ -24,7 +24,7 @@ type ListEmptyStateProps<T> = {
   canCreate?: boolean;
   children: ReactNode;
   createButtonAction?: ReactNode;
-  createButtonlink?: string;
+  createButtonLink?: string;
   data: T[];
   error: any;
   kind: string;
@@ -38,7 +38,7 @@ const ListEmptyState = <T extends K8sResourceCommon>({
   canCreate = true,
   children,
   createButtonAction,
-  createButtonlink,
+  createButtonLink,
   data,
   error,
   kind,
@@ -49,7 +49,6 @@ const ListEmptyState = <T extends K8sResourceCommon>({
 }: ListEmptyStateProps<T>) => {
   const { t } = useNetworkingTranslation();
   const navigate = useNavigate();
-  const params = useParams();
 
   if (error) return <ListErrorState error={error} title={title} />;
 
@@ -65,16 +64,7 @@ const ListEmptyState = <T extends K8sResourceCommon>({
 
   const defaultCreateButton = (
     <Button
-      onClick={
-        onCreate
-          ? onCreate
-          : () =>
-              navigate(
-                params?.ns
-                  ? createButtonlink
-                  : `/k8s/ns/default/${params.plural}/${createButtonlink}`,
-              )
-      }
+      onClick={onCreate ? onCreate : () => navigate(createButtonLink)}
       variant={ButtonVariant.primary}
     >
       {t('Create {{ kind }}', { kind })}

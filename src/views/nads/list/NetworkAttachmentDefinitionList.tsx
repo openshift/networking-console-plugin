@@ -21,7 +21,7 @@ import { documentationURLs, getDocumentationURL } from '@utils/constants/documen
 import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/constants/ui';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
-import { resourcePathFromModel } from '@utils/resources/shared';
+import { getResourceURL, resourcePathFromModel } from '@utils/resources/shared';
 import { isEmpty } from '@utils/utils';
 
 import NADListEmpty from './components/NADListEmpty/NADListEmpty';
@@ -57,7 +57,11 @@ const NetworkAttachmentDefinitionList: FC<NetworkAttachmentDefinitionListProps> 
   return (
     <ListEmptyState<NetworkAttachmentDefinitionKind>
       canCreate={canCreateNAD}
-      createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}
+      createButtonLink={getResourceURL({
+        activeNamespace: namespace,
+        model: NetworkAttachmentDefinitionModel,
+        path: SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM,
+      })}
       data={data}
       error={loadError}
       kind={NetworkAttachmentDefinitionModel.kind}
