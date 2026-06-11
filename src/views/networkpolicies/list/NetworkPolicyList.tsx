@@ -17,6 +17,7 @@ import { getNetworkPolicyDocURL } from '@utils/constants/documentation';
 import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/constants/ui';
 import usePagination from '@utils/hooks/usePagination/usePagination';
 import { paginationDefaultValues } from '@utils/hooks/usePagination/utils/constants';
+import { getResourceURL } from '@utils/resources/shared';
 import { isEmpty } from '@utils/utils';
 
 import NetworkPolicyEmptyState from './components/NetworkPolicyEmptyState';
@@ -45,7 +46,11 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
 
   return (
     <ListEmptyState<IoK8sApiNetworkingV1NetworkPolicy>
-      createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}
+      createButtonLink={getResourceURL({
+        activeNamespace: namespace,
+        model: { ...NetworkPolicyModel, crd: true },
+        path: SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM,
+      })}
       data={data}
       error={loadError}
       kind={NetworkPolicyModel.kind}

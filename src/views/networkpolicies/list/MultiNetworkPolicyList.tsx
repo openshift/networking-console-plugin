@@ -16,6 +16,7 @@ import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/constants/ui';
 import usePagination from '@utils/hooks/usePagination/usePagination';
 import { paginationDefaultValues } from '@utils/hooks/usePagination/utils/constants';
 import { MultiNetworkPolicyModel } from '@utils/models';
+import { getResourceURL } from '@utils/resources/shared';
 import { isEmpty } from '@utils/utils';
 
 import NetworkPolicyEmptyState from './components/NetworkPolicyEmptyState';
@@ -44,7 +45,11 @@ const MultiNetworkPolicyList: FC<MultiNetworkPolicyListProps> = ({ namespace }) 
   const paginatedData = filteredData?.slice(pagination.startIndex, pagination.endIndex);
   return (
     <ListEmptyState<IoK8sApiNetworkingV1NetworkPolicy>
-      createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}
+      createButtonLink={getResourceURL({
+        activeNamespace: namespace,
+        model: MultiNetworkPolicyModel,
+        path: SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM,
+      })}
       data={data}
       error={loadError}
       kind={MultiNetworkPolicyModel.kind}
