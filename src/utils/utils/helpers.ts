@@ -15,7 +15,7 @@ export const generateName = (prefix: string): string => {
 };
 
 export const createNamespacePath = (namespace: string) =>
-  namespace ? `ns/${namespace}` : ALL_NAMESPACES;
+  namespace === ALL_NAMESPACES || !namespace ? ALL_NAMESPACES : `ns/${namespace}`;
 
 export const getValidNamespace = (activeNamespace: string) =>
   activeNamespace === ALL_NAMESPACES_KEY ? DEFAULT_NAMESPACE : activeNamespace;
