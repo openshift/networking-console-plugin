@@ -64,10 +64,20 @@ export type UserDefinedNetworkSpec = {
   topology: string;
 };
 
+export type UDNCondition = {
+  lastTransitionTime?: string;
+  message?: string;
+  reason?: string;
+  status: string;
+  type: string;
+};
+
 export type ClusterUserDefinedNetworkKind = {
   spec?: ClusterUserDefinedNetworkSpec;
+  status?: { conditions?: UDNCondition[] };
 } & K8sResourceKind;
 
 export type UserDefinedNetworkKind = {
   spec?: UserDefinedNetworkSpec;
+  status?: { conditions?: UDNCondition[] };
 } & K8sResourceKind;

@@ -2,6 +2,7 @@ import { ClusterUserDefinedNetworkModel, UserDefinedNetworkModel } from '@utils/
 
 import {
   ClusterUserDefinedNetworkKind,
+  UDNCondition,
   UserDefinedNetworkKind,
   UserDefinedNetworkLayer3Subnet,
   UserDefinedNetworkLocalnet,
@@ -73,3 +74,7 @@ export const getLocalnet = (cudn: ClusterUserDefinedNetworkKind): UserDefinedNet
 
 export const getVLANID = (cudn: ClusterUserDefinedNetworkKind): number =>
   getLocalnet(cudn)?.vlan?.access?.id;
+
+export const getUDNConditions = (
+  obj: ClusterUserDefinedNetworkKind | UserDefinedNetworkKind,
+): UDNCondition[] => obj?.status?.conditions ?? [];
