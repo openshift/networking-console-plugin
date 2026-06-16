@@ -65,11 +65,15 @@ const UserDefinedNetworkCreateForm: FC<UserDefinedNetworkCreateFormProps> = ({
               id="input-udn-subnet"
               isRequired
               name="input-udn-subnet"
-              onChange={(_, newValue) =>
-                setValue(subnetField, newValue.split(','), {
+              onChange={(_, newValue) => {
+                const subnets = newValue
+                  ?.split(',')
+                  .map((s) => s.trim())
+                  .filter((s) => s);
+                setValue(subnetField, subnets, {
                   shouldValidate: true,
-                })
-              }
+                });
+              }}
               type="text"
               value={value?.join(',')}
             />
