@@ -1,5 +1,5 @@
 import React, { FC, useMemo } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom-v5-compat';
+import { useLocation, useNavigate, useParams } from 'react-router-dom-v5-compat';
 
 import { modelToGroupVersionKind, NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
 import { ListPageCreateButton, ListPageHeader } from '@openshift-console/dynamic-plugin-sdk';
@@ -21,9 +21,13 @@ export type NetworkPolicyPageNavProps = {
   namespace: string;
 };
 
-const NetworkPolicyPage: FC<NetworkPolicyPageNavProps> = ({ namespace }) => {
+const NetworkPolicyPage: FC<NetworkPolicyPageNavProps> = ({ namespace: namespaceProp }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { ns } = useParams<{ ns?: string }>();
+
+  // Use namespace from route params if available (for custom RoutePage), otherwise use prop
+  const namespace = ns || namespaceProp;
 
   const locationTabKey = useMemo(
     () => getActiveKeyFromPathname(location?.pathname),
