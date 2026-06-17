@@ -50,12 +50,12 @@ const EnableMultiPage: FC<EnableMultiPageProps> = ({ namespace }) => {
       await k8sPatch({
         data: [
           {
-            op: 'replace',
+            op: 'add',
             path: '/spec/disableMultiNetwork',
             value: false,
           },
           {
-            op: 'replace',
+            op: 'add',
             path: '/spec/useMultiNetworkPolicy',
             value: true,
           },
