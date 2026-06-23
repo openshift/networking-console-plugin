@@ -98,7 +98,6 @@ export const getPodColumnInfo = (t: NetworkingTFunction) =>
     traffic: { ...podColumnInfo.traffic, title: t('Receiving Traffic') },
   });
 
-
 const usePodColumns = (
   cpuUsageData: PrometheusResponse,
   memoryUsageData: PrometheusResponse,
