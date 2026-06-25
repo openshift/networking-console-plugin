@@ -1,6 +1,6 @@
-const UPSTREAM_LATEST = 'https://docs.okd.io/latest/';
+const UPSTREAM_LATEST = 'https://docs.okd.io/4.22/';
 const REDHAT_DOC_BASE =
-  'https://docs.redhat.com/en/documentation/openshift_container_platform/latest/';
+  'https://docs.redhat.com/en/documentation/openshift_container_platform/4.22/';
 
 // Use latest upstream docs if branding is 'okd', but fall back to Red Hat documentation.
 export const openshiftHelpBase =
