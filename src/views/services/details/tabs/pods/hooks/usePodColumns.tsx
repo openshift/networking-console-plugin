@@ -28,67 +28,54 @@ export const podColumnInfo = Object.freeze({
   cpu: {
     classes: classNames({ 'pf-v6-u-w-10-on-2xl': showMetrics }),
     id: 'cpu',
-    title: 'CPU',
   },
   created: {
     classes: classNames('pf-v6-u-w-10-on-2xl'),
     id: 'created',
-    title: 'Created',
   },
   ipaddress: {
     classes: '',
     id: 'ipaddress',
-    title: 'IP address',
   },
   labels: {
     classes: '',
     id: 'labels',
-    title: 'Labels',
   },
   memory: {
     classes: classNames({ 'pf-v6-u-w-10-on-2xl': showMetrics }),
     id: 'memory',
-    title: 'Memory',
   },
   name: {
     classes: '',
     id: 'name',
-    title: 'Name',
   },
   namespace: {
     classes: '',
     id: 'namespace',
-    title: 'Namespace',
   },
   node: {
     classes: '',
     id: 'node',
-    title: 'Node',
   },
   owner: {
     classes: '',
     id: 'owner',
-    title: 'Owner',
   },
   ready: {
     classes: classNames('pf-m-nowrap', 'pf-v6-u-w-10-on-lg', 'pf-v6-u-w-8-on-xl'),
     id: 'ready',
-    title: 'Ready',
   },
   restarts: {
     classes: classNames('pf-m-nowrap', 'pf-v6-u-w-8-on-2xl'),
     id: 'restarts',
-    title: 'Restarts',
   },
   status: {
     classes: '',
     id: 'status',
-    title: 'Status',
   },
   traffic: {
     classes: '',
     id: 'trafficStatus',
-    title: 'Receiving Traffic',
   },
 });
 
@@ -104,14 +91,14 @@ const usePodColumns = (
         id: podColumnInfo.name.id,
         props: { className: podColumnInfo.name.classes },
         sort: 'metadata.name',
-        title: t(podColumnInfo.name.title),
+        title: t('Name'),
         transforms: [sortable],
       },
       {
         id: podColumnInfo.namespace.id,
         props: { className: podColumnInfo.namespace.classes },
         sort: 'metadata.namespace',
-        title: t(podColumnInfo.namespace.title),
+        title: t('Namespace'),
         transforms: [sortable],
       },
       {
@@ -119,7 +106,7 @@ const usePodColumns = (
         props: { className: podColumnInfo.status.classes },
         sort: (data, direction) =>
           data.sort(sortResourceByValue<IoK8sApiCoreV1Pod>(direction, podPhase)),
-        title: t(podColumnInfo.status.title),
+        title: t('Status'),
         transforms: [sortable],
       },
       {
@@ -132,7 +119,7 @@ const usePodColumns = (
               (obj) => podReadiness(obj).readyCount,
             ),
           ),
-        title: t(podColumnInfo.ready.title),
+        title: t('Ready'),
         transforms: [sortable],
       },
       {
@@ -140,14 +127,14 @@ const usePodColumns = (
         props: { className: podColumnInfo.restarts.classes },
         sort: (data, direction) =>
           data.sort(sortResourceByValue<IoK8sApiCoreV1Pod>(direction, podRestarts)),
-        title: t(podColumnInfo.restarts.title),
+        title: t('Restarts'),
         transforms: [sortable],
       },
       {
         id: podColumnInfo.owner.id,
         props: { className: podColumnInfo.owner.classes },
         sort: 'metadata.ownerReferences[0].name',
-        title: t(podColumnInfo.owner.title),
+        title: t('Owner'),
         transforms: [sortable],
       },
       {
@@ -159,7 +146,7 @@ const usePodColumns = (
               getPodMemoryUsage(memoryUsageData, obj),
             ),
           ),
-        title: t(podColumnInfo.memory.title),
+        title: t('Memory'),
         transforms: [sortable],
       },
       {
@@ -171,14 +158,14 @@ const usePodColumns = (
               getPodCPUUsage(cpuUsageData, obj),
             ),
           ),
-        title: t(podColumnInfo.cpu.title),
+        title: t('CPU'),
         transforms: [sortable],
       },
       {
         id: podColumnInfo.created.id,
         props: { className: podColumnInfo.created.classes },
         sort: 'metadata.creationTimestamp',
-        title: t(podColumnInfo.created.title),
+        title: t('Created'),
         transforms: [sortable],
       },
       {
@@ -186,7 +173,7 @@ const usePodColumns = (
         id: podColumnInfo.node.id,
         props: { className: podColumnInfo.node.classes },
         sort: 'spec.nodeName',
-        title: t(podColumnInfo.node.title),
+        title: t('Node'),
         transforms: [sortable],
       },
       {
@@ -194,7 +181,7 @@ const usePodColumns = (
         id: podColumnInfo.labels.id,
         props: { className: podColumnInfo.labels.classes },
         sort: 'metadata.labels',
-        title: t(podColumnInfo.labels.title),
+        title: t('Labels'),
         transforms: [sortable],
       },
       {
@@ -202,14 +189,14 @@ const usePodColumns = (
         id: podColumnInfo.ipaddress.id,
         props: { className: podColumnInfo.ipaddress.classes },
         sort: 'status.podIP',
-        title: t(podColumnInfo.ipaddress.title),
+        title: t('IP address'),
         transforms: [sortable],
       },
       {
         additional: true,
         id: podColumnInfo.traffic.id,
         props: { className: podColumnInfo.traffic.classes },
-        title: t(podColumnInfo.traffic.title),
+        title: t('Receiving Traffic'),
       },
       {
         id: '',
