@@ -1,11 +1,15 @@
-const UPSTREAM_LATEST = 'https://docs.okd.io/latest/';
+const UPSTREAM_BASE = 'https://docs.okd.io/4.19/';
+const REDHAT_DOC_BASE =
+  'https://docs.redhat.com/en/documentation/openshift_container_platform/4.19/';
 
 // Prefer the documentation base URL passed as a flag, but fall back to the latest upstream docs if none was specified.
-export const openshiftHelpBase = window.SERVER_FLAGS.documentationBaseURL || UPSTREAM_LATEST;
+export const openshiftHelpBase =
+  window.SERVER_FLAGS.documentationBaseURL ||
+  (window.SERVER_FLAGS.branding === 'okd' ? UPSTREAM_BASE : REDHAT_DOC_BASE);
 
 export const DOC_URL_OPENSHIFT_WHATS_NEW = 'https://www.openshift.com/learn/whats-new';
 export const DOC_URL_OPERATORFRAMEWORK_SDK = 'https://sdk.operatorframework.io/';
-export const DOC_URL_PODDISRUPTIONBUDGET_POLICY = `${UPSTREAM_LATEST}rest_api/policy_apis/poddisruptionbudget-policy-v1.html#poddisruptionbudget-policy-v1`;
+export const DOC_URL_PODDISRUPTIONBUDGET_POLICY = `${UPSTREAM_BASE}rest_api/policy_apis/poddisruptionbudget-policy-v1.html#poddisruptionbudget-policy-v1`;
 export const DOC_URL_PODMAN = 'https://podman.io/';
 export const DOC_URL_RED_HAT_MARKETPLACE =
   'https://marketplace.redhat.com/en-us?utm_source=openshift_console';
@@ -43,7 +47,7 @@ export const documentationURLs: documentationURLsType = {
     upstream: 'applications/deployments/what-deployments-are.html',
   },
   multipleNetworks: {
-    downstream: 'html/networking/multiple-networks',
+    downstream: 'html/multiple_networks/understanding-multiple-networks',
     upstream: 'networking/multiple_networks/understanding-multiple-networks.html',
   },
   networkPolicy: {
@@ -102,15 +106,16 @@ export const documentationURLs: documentationURLsType = {
   },
 };
 
-export const isUpstream = () => window.SERVER_FLAGS.branding === 'okd';
+export const isUpstream = () =>
+  window.SERVER_FLAGS.branding === 'okd' || openshiftHelpBase === UPSTREAM_BASE;
 
 export const isManaged = () =>
   window.SERVER_FLAGS.branding === 'rosa' || window.SERVER_FLAGS.branding === 'dedicated';
 
 export const getDocumentationURL = (docURLs: docURLs) =>
   isUpstream()
-    ? `${UPSTREAM_LATEST}${docURLs.upstream}`
-    : `${window.SERVER_FLAGS.documentationBaseURL}${docURLs.downstream}`;
+    ? `${UPSTREAM_BASE}${docURLs.upstream}`
+    : `${openshiftHelpBase}${docURLs.downstream}`;
 
 export const getNetworkPolicyDocURL = (openshiftFlag: boolean): string => {
   const networkLink = getDocumentationURL(documentationURLs.networkPolicy);
