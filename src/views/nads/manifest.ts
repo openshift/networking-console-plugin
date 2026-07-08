@@ -1,6 +1,6 @@
 import {
-  DetailsItem,
   ResourceActionProvider,
+  ResourceDetailsPage,
   ResourceListPage,
   ResourceNSNavItem,
   RoutePage,
@@ -60,29 +60,6 @@ export const NADsExtensions: EncodedExtension[] = [
   } as EncodedExtension<RoutePage>,
   {
     properties: {
-      column: 'left',
-      component: { $codeRef: 'NetworkAttachmentDefintionDescriptionDetails' },
-      id: 'nad-description-detail-item',
-      model: NetworkAttachmentDefinitionExtensionModel,
-      path: 'metadata.annotations.description',
-      title: 'Description',
-    },
-    type: 'console.resource/details-item',
-  } as EncodedExtension<DetailsItem>,
-  {
-    properties: {
-      column: 'right',
-      component: { $codeRef: 'NetworkAttachmentDefintionTypeDetails' },
-      id: 'nad-type-detail-item',
-      model: NetworkAttachmentDefinitionExtensionModel,
-      path: 'spec.config.type',
-      title: 'Type',
-    },
-    type: 'console.resource/details-item',
-  } as EncodedExtension<DetailsItem>,
-
-  {
-    properties: {
       model: NetworkAttachmentDefinitionExtensionModel,
       name: 'default',
       template: {
@@ -100,13 +77,18 @@ export const NADsExtensions: EncodedExtension[] = [
     },
     type: 'console.action/resource-provider',
   } as EncodedExtension<ResourceActionProvider>,
+  {
+    properties: {
+      component: { $codeRef: 'NADDetailsPage' },
+      model: NetworkAttachmentDefinitionExtensionModel,
+    },
+    type: 'console.page/resource/details',
+  } as EncodedExtension<ResourceDetailsPage>,
 ];
 
 export const NADsExposedModules: ConsolePluginBuildMetadata['exposedModules'] = {
+  NADDetailsPage: './views/nads/details/NADDetailsPage.tsx',
   NetworkAttachmentDefinitionFormPage: './views/nads/form/NetworkAttachmentDefinitionFormPage.tsx',
   NetworkAttachmentDefinitionList: './views/nads/list/NetworkAttachmentDefinitionList.tsx',
-  NetworkAttachmentDefintionDescriptionDetails:
-    './views/nads/details/tabs/details/NADDescriptionDetails.tsx',
-  NetworkAttachmentDefintionTypeDetails: './views/nads/details/tabs/details/NADTypeDetails.tsx',
   useNADsActions: './views/nads/actions/hooks/useNADsActions.tsx',
 };
