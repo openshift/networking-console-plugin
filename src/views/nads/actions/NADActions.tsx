@@ -14,7 +14,11 @@ const NADsActions: FC<NADsActionsProps> = ({ isKebabToggle, obj }) => {
   const [actions] = useNADsActions(obj);
 
   return (
-    <ActionsDropdown actions={actions} id="network-attachment-definition-actions" isKebabToggle={isKebabToggle} />
+    <ActionsDropdown
+      actions={actions}
+      id="network-attachment-definition-actions"
+      isKebabToggle={isKebabToggle}
+    />
   );
 };
 

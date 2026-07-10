@@ -1,8 +1,10 @@
 import VirtualMachineModel from '@kubevirt-ui/kubevirt-api/console/models/VirtualMachineModel';
 import { V1Interface, V1Network, V1VirtualMachine } from '@kubevirt-ui/kubevirt-api/kubevirt';
 import { k8sPatch } from '@openshift-console/dynamic-plugin-sdk';
+import { ClusterUserDefinedNetworkModel, UserDefinedNetworkModel } from '@utils/models';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
 import { getName, getNamespace } from '@utils/resources/shared';
+import { ClusterUserDefinedNetworkKind, UserDefinedNetworkKind } from '@utils/resources/udns/types';
 
 import { INTERFACE_PATH, NETWORK_PATH } from './constants';
 import { getInterfaces, getNetworks, getVMStatus } from './selectors';
@@ -122,6 +124,103 @@ export const multusNetworkMatchesNAD = (
 
   return multusNetworkName === nadName && getNamespace(vm) === nadNamespace;
 };
+
+export type UDNResource = ClusterUserDefinedNetworkKind | UserDefinedNetworkKind;
+
+export const getUDNNetworkNamespace = (
+  udn: UDNResource,
+  vm: V1VirtualMachine,
+): string | undefined => {
+  if (udn.kind === UserDefinedNetworkModel.kind) {
+    return getNamespace(udn);
+  }
+
+  return getNamespace(vm);
+};
+
+export const isClusterUDN = (udn: UDNResource): udn is ClusterUserDefinedNetworkKind =>
+  udn.kind === ClusterUserDefinedNetworkModel.kind;
+
+const CLUSTER_UDN_NAD_NAME_PREFIX = 'cluster.udn.';
+
+const multusNetworkNameMatchesCandidates = (
+  multusNetworkName: string,
+  networkNamespace: string,
+  candidateNames: string[],
+  vmNamespace: string | undefined,
+): boolean =>
+  candidateNames.some((name) => {
+    const qualifiedName = `${networkNamespace}/${name}`;
+
+    if (multusNetworkName === qualifiedName) {
+      return true;
+    }
+
+    return multusNetworkName === name && vmNamespace === networkNamespace;
+  });
+
+export const getUDNNADNameCandidates = (udn: UDNResource): string[] => {
+  const udnName = getName(udn);
+
+  if (!udnName) {
+    return [];
+  }
+
+  if (isClusterUDN(udn)) {
+    return [udnName, `${CLUSTER_UDN_NAD_NAME_PREFIX}${udnName}`, `cluster-udn-${udnName}`];
+  }
+
+  return [udnName];
+};
+
+export const multusNetworkMatchesUDN = (
+  network: V1Network,
+  udn: UDNResource,
+  vm: V1VirtualMachine,
+): boolean => {
+  const multusNetworkName = network.multus?.networkName;
+
+  if (!multusNetworkName) {
+    return false;
+  }
+
+  const networkNamespace = getUDNNetworkNamespace(udn, vm);
+
+  if (!networkNamespace) {
+    return false;
+  }
+
+  return multusNetworkNameMatchesCandidates(
+    multusNetworkName,
+    networkNamespace,
+    getUDNNADNameCandidates(udn),
+    getNamespace(vm),
+  );
+};
+
+export const buildNADReferenceForUDN = (
+  udn: UDNResource,
+  vm: V1VirtualMachine,
+): NetworkAttachmentDefinitionKind | undefined => {
+  const udnName = getName(udn);
+  const namespace = getUDNNetworkNamespace(udn, vm);
+
+  if (!udnName || !namespace) {
+    return undefined;
+  }
+
+  return {
+    apiVersion: 'k8s.cni.cncf.io/v1',
+    kind: 'NetworkAttachmentDefinition',
+    metadata: { name: udnName, namespace },
+  } as NetworkAttachmentDefinitionKind;
+};
+
+export const findNADForUDN = (
+  _nads: NetworkAttachmentDefinitionKind[] | undefined,
+  udn: UDNResource,
+  vm: V1VirtualMachine,
+): NetworkAttachmentDefinitionKind | undefined => buildNADReferenceForUDN(udn, vm);
 
 type NADNetworkPair = {
   iface: V1Interface;
