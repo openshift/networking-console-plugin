@@ -44,7 +44,9 @@ const NADVirtualMachineRowActions: FC<NADVirtualMachineRowActionsProps> = ({
         <Trans ns="plugin__networking-console-plugin" t={t}>
           Are you sure you want to remove{' '}
           <ResourceLink
+            className="pf-v6-u-mr-0"
             groupVersionKind={modelToGroupVersionKind(VirtualMachineModel)}
+            inline
             name={vmName}
             namespace={vmNamespace}
           />{' '}

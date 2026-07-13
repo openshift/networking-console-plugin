@@ -32,6 +32,7 @@ import {
   useDataViewSelection,
   useDataViewSort,
 } from '@patternfly/react-data-view';
+import { SearchIcon } from '@patternfly/react-icons';
 import { Tbody, Td, Th, Thead, Tr } from '@patternfly/react-table';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
@@ -332,6 +333,7 @@ const AddUDNVirtualMachinesModal: FC<AddUDNVirtualMachinesModalProps> = ({
           </Tr>
         </Thead>
       ),
+      empty: <></>,
     }),
     [
       areAllPaginatedSelected,
@@ -350,9 +352,11 @@ const AddUDNVirtualMachinesModal: FC<AddUDNVirtualMachinesModalProps> = ({
         <Tbody>
           <Tr>
             <Td colSpan={COLUMN_COUNT}>
-              <Bullseye>
-                <EmptyState headingLevel="h4" titleText={t('No virtual machines found')} />
-              </Bullseye>
+              <EmptyState
+                headingLevel="h4"
+                icon={SearchIcon}
+                titleText={t('No virtual machines found')}
+              />
             </Td>
           </Tr>
         </Tbody>
