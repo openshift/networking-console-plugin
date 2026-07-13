@@ -2,19 +2,12 @@ import React, { FC, useCallback, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import * as _ from 'lodash';
 
-import { modelToGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console';
-import VirtualMachineModel from '@kubevirt-ui/kubevirt-api/console/models/VirtualMachineModel';
-import { ResourceLink } from '@openshift-console/dynamic-plugin-sdk';
 import {
-  Bullseye,
   Button,
   Card,
   CardBody,
-  EmptyState,
-  Label,
   PageSection,
   Pagination,
-  Spinner,
   Stack,
   StackItem,
 } from '@patternfly/react-core';
@@ -23,17 +16,21 @@ import {
   DataViewFilters,
   DataViewTable,
   DataViewTextFilter,
-  DataViewTh,
   DataViewToolbar,
   useDataViewFilters,
   useDataViewPagination,
   useDataViewSort,
 } from '@patternfly/react-data-view';
-import { Tbody, Td, Tr } from '@patternfly/react-table';
+import useVMNetworkTableColumns from '@utils/components/VMNetworkTable/useVMNetworkTableColumns';
+import VMNetworkColumnManagement from '@utils/components/VMNetworkTable/VMNetworkColumnManagement';
+import {
+  getVMNetworkTableSortValue,
+  useVMNetworkDataViewContent,
+} from '@utils/components/VMNetworkTable/vmNetworkDataViewContent';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import useVMResourceLookups from '@utils/hooks/useVMResourceLookups';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
-import { getName, getNamespace } from '@utils/resources/shared';
-import { getVMStatus } from '@utils/resources/vm/selectors';
+import { getName } from '@utils/resources/shared';
 
 import useNADVirtualMachines, { NADVirtualMachine } from '../../hooks/useNADVirtualMachines';
 
@@ -44,33 +41,21 @@ type NADVirtualMachineFilters = {
   name?: string;
 };
 
-const COLUMN_COUNT = 5;
 const DEFAULT_PER_PAGE = 20;
-const SORT_COLUMN_KEYS = ['name', 'namespace', 'status', 'interface'] as const;
-
-const getVMStatusLabelColor = (status: string) => {
-  if (!status) {
-    return 'grey';
-  }
-
-  if (status.includes('Error') || status === 'Stopped') {
-    return 'red';
-  }
-
-  if (status === 'Running') {
-    return 'green';
-  }
-
-  return 'orange';
-};
 
 const NADVirtualMachines: FC<{ obj?: NetworkAttachmentDefinitionKind }> = ({ obj: nad }) => {
   const { t } = useNetworkingTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const { appliedColumns, applyColumns, resetColumns } = useVMNetworkTableColumns();
 
   const { availableVirtualMachines, loaded, loadError, virtualMachines } =
     useNADVirtualMachines(nad);
+  const {
+    loaded: resourcesLoaded,
+    loadError: resourcesLoadError,
+    lookups: vmResourceLookups,
+  } = useVMResourceLookups();
 
   const { clearAllFilters, filters, onSetFilters } = useDataViewFilters<NADVirtualMachineFilters>({
     searchParams,
@@ -104,141 +89,41 @@ const NADVirtualMachines: FC<{ obj?: NetworkAttachmentDefinitionKind }> = ({ obj
       return filteredData;
     }
 
-    const getSortValue = (item: NADVirtualMachine) => {
-      switch (sortBy) {
-        case 'name':
-          return getName(item.vm) ?? '';
-        case 'namespace':
-          return getNamespace(item.vm) ?? '';
-        case 'status':
-          return getVMStatus(item.vm);
-        case 'interface':
-          return item.interfaceName;
-        default:
-          return '';
-      }
-    };
-
-    return _.orderBy(filteredData, [getSortValue], [direction === 'desc' ? 'desc' : 'asc']);
-  }, [direction, filteredData, sortBy]);
+    return _.orderBy(
+      filteredData,
+      [(item: NADVirtualMachine) => getVMNetworkTableSortValue(item, sortBy, vmResourceLookups)],
+      [direction === 'desc' ? 'desc' : 'asc'],
+    );
+  }, [direction, filteredData, sortBy, vmResourceLookups]);
 
   const paginatedData = useMemo(() => {
     const start = (page - 1) * perPage;
     return sortedData.slice(start, start + perPage);
   }, [page, perPage, sortedData]);
 
-  const getSortParams = useCallback(
-    (columnIndex: number) => ({
-      columnIndex,
-      onSort: (
-        event: MouseEvent | React.KeyboardEvent | React.MouseEvent,
-        _index: number | string,
-        newDirection: 'asc' | 'desc',
-      ) => onSort(event, SORT_COLUMN_KEYS[columnIndex], newDirection),
-      sortBy: { direction, index: columnIndex },
-    }),
-    [direction, onSort],
+  const renderActions = useCallback(
+    ({ interfaceName, vm }: NADVirtualMachine) =>
+      nad ? <NADVirtualMachineRowActions interfaceName={interfaceName} nad={nad} vm={vm} /> : null,
+    [nad],
   );
 
-  const columns = useMemo(
-    () => [
-      {
-        cell: (
-          <DataViewTh
-            content={t('Name')}
-            thProps={{
-              sort: getSortParams(0),
-            }}
-          />
-        ),
-      },
-      {
-        cell: (
-          <DataViewTh
-            content={t('Namespace')}
-            thProps={{
-              sort: getSortParams(1),
-            }}
-          />
-        ),
-      },
-      {
-        cell: (
-          <DataViewTh
-            content={t('Status')}
-            thProps={{
-              sort: getSortParams(2),
-            }}
-          />
-        ),
-      },
-      {
-        cell: (
-          <DataViewTh
-            content={t('Interface')}
-            thProps={{
-              sort: getSortParams(3),
-            }}
-          />
-        ),
-      },
-      {
-        cell: <DataViewTh content={t('Actions')} />,
-      },
-    ],
-    [getSortParams, t],
-  );
-
-  const rows = useMemo(
-    () =>
-      paginatedData.map(({ interfaceName, vm }) => {
-        const name = getName(vm);
-        const vmNamespace = getNamespace(vm);
-        const status = getVMStatus(vm);
-
-        return {
-          id: `${vmNamespace}/${name}`,
-          row: [
-            {
-              cell: (
-                <ResourceLink
-                  groupVersionKind={modelToGroupVersionKind(VirtualMachineModel)}
-                  name={name}
-                  namespace={vmNamespace}
-                />
-              ),
-            },
-            {
-              cell: <ResourceLink kind="Namespace" name={vmNamespace} />,
-            },
-            {
-              cell: (
-                <Label color={getVMStatusLabelColor(status)} isCompact>
-                  {status || '-'}
-                </Label>
-              ),
-            },
-            {
-              cell: interfaceName,
-            },
-            {
-              cell: nad && (
-                <NADVirtualMachineRowActions interfaceName={interfaceName} nad={nad} vm={vm} />
-              ),
-              props: { isActionCell: true },
-            },
-          ],
-        };
-      }),
-    [nad, paginatedData],
-  );
+  const { bodyStates, columns, rows } = useVMNetworkDataViewContent({
+    appliedColumns,
+    direction,
+    onSort,
+    paginatedData,
+    renderActions,
+    sortBy,
+    t,
+    vmResourceLookups,
+  });
 
   const activeState = useMemo(() => {
-    if (loadError) {
+    if (loadError || resourcesLoadError) {
       return 'error';
     }
 
-    if (!loaded) {
+    if (!loaded || !resourcesLoaded) {
       return 'loading';
     }
 
@@ -247,46 +132,7 @@ const NADVirtualMachines: FC<{ obj?: NetworkAttachmentDefinitionKind }> = ({ obj
     }
 
     return undefined;
-  }, [filteredData.length, loadError, loaded]);
-
-  const bodyStates = useMemo(
-    () => ({
-      empty: (
-        <Tbody>
-          <Tr>
-            <Td colSpan={COLUMN_COUNT}>
-              <Bullseye>
-                <EmptyState headingLevel="h4" titleText={t('No virtual machines found')} />
-              </Bullseye>
-            </Td>
-          </Tr>
-        </Tbody>
-      ),
-      error: (
-        <Tbody>
-          <Tr>
-            <Td colSpan={COLUMN_COUNT}>
-              <Bullseye>
-                <EmptyState headingLevel="h4" titleText={t('Error loading virtual machines')} />
-              </Bullseye>
-            </Td>
-          </Tr>
-        </Tbody>
-      ),
-      loading: (
-        <Tbody>
-          <Tr>
-            <Td colSpan={COLUMN_COUNT}>
-              <Bullseye>
-                <Spinner size="lg" />
-              </Bullseye>
-            </Td>
-          </Tr>
-        </Tbody>
-      ),
-    }),
-    [t],
-  );
+  }, [filteredData.length, loadError, loaded, resourcesLoadError, resourcesLoaded]);
 
   return (
     <PageSection>
@@ -315,15 +161,23 @@ const NADVirtualMachines: FC<{ obj?: NetworkAttachmentDefinitionKind }> = ({ obj
                     </DataViewFilters>
                   }
                   pagination={
-                    <Pagination
-                      isCompact
-                      itemCount={filteredData.length}
-                      onPerPageSelect={onPerPageSelect}
-                      onSetPage={onSetPage}
-                      page={page}
-                      perPage={perPage}
-                      variant="top"
-                    />
+                    <div className="pf-v6-u-display-flex pf-v6-u-align-items-center pf-v6-u-justify-content-flex-end pf-v6-u-gap-sm pf-v6-u-w-100">
+                      <VMNetworkColumnManagement
+                        appliedColumns={appliedColumns}
+                        applyColumns={applyColumns}
+                        onReset={resetColumns}
+                        ouiaId="nad-vm-column-management"
+                      />
+                      <Pagination
+                        isCompact
+                        itemCount={filteredData.length}
+                        onPerPageSelect={onPerPageSelect}
+                        onSetPage={onSetPage}
+                        page={page}
+                        perPage={perPage}
+                        variant="top"
+                      />
+                    </div>
                   }
                 />
                 <DataViewTable bodyStates={bodyStates} columns={columns} rows={rows} />
