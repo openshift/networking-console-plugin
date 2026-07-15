@@ -66,6 +66,7 @@ const NetworkPolicyPage: FC = () => {
           navigate(getNetworkPolicyURLTab(tabIndex, namespace || ALL_NAMESPACES));
         }}
         unmountOnExit
+        usePageInsets
       >
         <Tab
           eventKey={TAB_INDEXES.NETWORK}
