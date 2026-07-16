@@ -112,6 +112,7 @@
   },
   "overrides": {
     "serialize-javascript": "7.0.5",
-    "diff": "9.0.0"
+    "diff": "9.0.0",
+    "linkify-it": "^5.0.1"
   }
 }
