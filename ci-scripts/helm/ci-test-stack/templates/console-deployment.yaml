@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ci-test-stack.consoleName" . }}
+  labels:
+    app: {{ include "ci-test-stack.consoleName" . }}
+    {{- include "ci-test-stack.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "ci-test-stack.consoleName" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "ci-test-stack.consoleName" . }}
+    spec:
+      serviceAccountName: {{ include "ci-test-stack.consoleSAName" . }}
+      containers:
+        - name: console
+          image: {{ .Values.consoleImage }}
+          ports:
+            - containerPort: 9000
+              protocol: TCP
+          env:
+            - name: BRIDGE_USER_AUTH
+              value: "disabled"
+            - name: BRIDGE_K8S_MODE
+              value: "off-cluster"
+            - name: BRIDGE_K8S_AUTH
+              value: "bearer-token"
+            - name: BRIDGE_K8S_MODE_OFF_CLUSTER_SKIP_VERIFY_TLS
+              value: "true"
+            - name: BRIDGE_K8S_MODE_OFF_CLUSTER_ENDPOINT
+              value: {{ .Values.apiServerURL | quote }}
+            - name: BRIDGE_K8S_AUTH_BEARER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "ci-test-stack.consoleSAName" . }}-token
+                  key: token
+            - name: BRIDGE_USER_SETTINGS_LOCATION
+              value: "localstorage"
+            - name: BRIDGE_I18N_NAMESPACES
+              value: {{ .Values.i18nNamespaces | quote }}
+            - name: BRIDGE_PLUGINS
+              value: "networking-console-plugin=http://{{ include "ci-test-stack.pluginName" . }}:{{ .Values.pluginPort }}"
+            {{- if .Values.thanosURL }}
+            - name: BRIDGE_K8S_MODE_OFF_CLUSTER_THANOS
+              value: {{ .Values.thanosURL | quote }}
+            {{- end }}
+            {{- if .Values.alertmanagerURL }}
+            - name: BRIDGE_K8S_MODE_OFF_CLUSTER_ALERTMANAGER
+              value: {{ .Values.alertmanagerURL | quote }}
+            {{- end }}
+            {{- if .Values.pluginProxy }}
+            - name: BRIDGE_PLUGIN_PROXY
+              value: {{ .Values.pluginProxy | quote }}
+            {{- end }}
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 9000
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi

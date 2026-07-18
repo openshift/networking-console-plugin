@@ -6,3 +6,5 @@ integration-tests/screenshots
 integration-tests/.DS_Store
 yarn-error.log
 .DS_Store
+cypress/gui-test-screenshots/
+.env

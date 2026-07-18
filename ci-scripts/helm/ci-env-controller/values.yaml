@@ -1,0 +1,11 @@
+controllerImage: "registry.access.redhat.com/ubi9/ubi-minimal:latest"
+
+reconcileInterval: 15
+
+reapAfterMinutes: 120
+
+testStackChartPath: "/charts/ci-test-stack"
+
+runnerServiceAccount: ""
+
+consoleImageRegistry: "quay.io/openshift/origin-console"

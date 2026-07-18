@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-controller
+  labels:
+    {{- include "ci-env-controller.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-controller
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-controller
+    spec:
+      serviceAccountName: {{ .Release.Name }}-controller
+      containers:
+        - name: controller
+          image: {{ .Values.controllerImage }}
+          command: ["/bin/bash", "/scripts/ci-env-controller.sh"]
+          env:
+            - name: RECONCILE_INTERVAL
+              value: {{ .Values.reconcileInterval | quote }}
+            - name: REAP_AFTER_MINUTES
+              value: {{ .Values.reapAfterMinutes | quote }}
+            - name: CI_ENV_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: CONSOLE_IMAGE_REGISTRY
+              value: {{ .Values.consoleImageRegistry | quote }}
+            {{- if .Values.runnerServiceAccount }}
+            - name: RUNNER_SERVICE_ACCOUNT
+              value: {{ .Values.runnerServiceAccount | quote }}
+            {{- end }}
+          volumeMounts:
+            - name: script
+              mountPath: /scripts
+              readOnly: true
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+      volumes:
+        - name: script
+          configMap:
+            name: {{ .Release.Name }}-controller-script
+            defaultMode: 0755

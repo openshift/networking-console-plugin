@@ -1,0 +1,16 @@
+ci-env-controller deployed: {{ .Release.Name }}
+
+The controller watches for ConfigMaps in {{ .Release.Namespace }} with label:
+  ci.networking-console-plugin/type=test-environment
+
+To trigger a test environment manually:
+  oc create configmap my-test-env -n {{ .Release.Namespace }} \
+    --from-literal=desired-state=present \
+    --from-literal=plugin-image=YOUR_IMAGE \
+    --from-literal=test-namespace=YOUR_NS
+  oc label configmap my-test-env -n {{ .Release.Namespace }} \
+    ci.networking-console-plugin/type=test-environment
+
+To tear down:
+  oc patch configmap my-test-env -n {{ .Release.Namespace }} \
+    --type merge -p '{"data":{"desired-state":"absent"}}'

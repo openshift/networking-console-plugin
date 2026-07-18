@@ -1,0 +1,10 @@
+import './setup/login.cy.ts';
+import './setup/visit-pages.cy.ts';
+import './networking/udn.cy.ts';
+import './networking/nad-bridge.cy.ts';
+import './networking/nad-localnet.cy.ts';
+import './networking/nad-ovn.cy.ts';
+import './networking/services.cy.ts';
+import './networking/routes.cy.ts';
+import './networking/ingresses.cy.ts';
+import './networking/net-policies.cy.ts';
