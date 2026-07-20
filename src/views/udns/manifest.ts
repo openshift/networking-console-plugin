@@ -1,5 +1,5 @@
 import {
-  DetailsItem,
+  ResourceDetailsPage,
   ResourceListPage,
   ResourceNSNavItem,
   RoutePage,
@@ -77,46 +77,18 @@ export const UserDefinedNetworksExtensions: EncodedExtension[] = [
   } as EncodedExtension<YAMLTemplate>,
   {
     properties: {
-      column: 'right',
-      component: { $codeRef: 'UserDefinedNetworkTopologyDetails' },
-      id: 'cudn-topology-detail-item',
+      component: { $codeRef: 'UDNDetailsPage' },
       model: ClusterUserDefinedNetworkExtensionModel,
-      path: 'spec.network.topology',
-      title: 'Topology',
     },
-    type: 'console.resource/details-item',
-  } as EncodedExtension<DetailsItem>,
+    type: 'console.page/resource/details',
+  } as EncodedExtension<ResourceDetailsPage>,
   {
     properties: {
-      column: 'right',
-      component: { $codeRef: 'UserDefinedNetworkLayerDetails' },
-      id: 'cudn-layer-detail-item',
-      model: ClusterUserDefinedNetworkExtensionModel,
-      title: '',
-    },
-    type: 'console.resource/details-item',
-  } as EncodedExtension<DetailsItem>,
-  {
-    properties: {
-      column: 'right',
-      component: { $codeRef: 'UserDefinedNetworkTopologyDetails' },
-      id: 'udn-topology-detail-item',
+      component: { $codeRef: 'UDNDetailsPage' },
       model: UserDefinedNetworkExtensionModel,
-      path: 'spec.topology',
-      title: 'Topology',
     },
-    type: 'console.resource/details-item',
-  } as EncodedExtension<DetailsItem>,
-  {
-    properties: {
-      column: 'right',
-      component: { $codeRef: 'UserDefinedNetworkLayerDetails' },
-      id: 'udn-layer-detail-item',
-      model: UserDefinedNetworkExtensionModel,
-      title: '',
-    },
-    type: 'console.resource/details-item',
-  } as EncodedExtension<DetailsItem>,
+    type: 'console.page/resource/details',
+  } as EncodedExtension<ResourceDetailsPage>,
   {
     properties: {
       component: {
@@ -146,8 +118,7 @@ export const UserDefinedNetworksExtensions: EncodedExtension[] = [
 ];
 
 export const UserDefinedNetworksExposedModules: ConsolePluginBuildMetadata['exposedModules'] = {
+  UDNDetailsPage: './views/udns/details/UDNDetailsPage.tsx',
   UserDefinedNetworkFormPage: './views/udns/form/UserDefinedNetworkFormPage.tsx',
-  UserDefinedNetworkLayerDetails: './views/udns/details/tabs/details/UDNLayerDetails.tsx',
   UserDefinedNetworksList: './views/udns/list/UserDefinedNetworksList.tsx',
-  UserDefinedNetworkTopologyDetails: './views/udns/details/tabs/details/UDNTopologyDetails.tsx',
 };
