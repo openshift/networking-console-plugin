@@ -11,8 +11,6 @@ import {
   PageSection,
   TextArea,
   TextInput,
-  Content,
-  ContentVariants,
   ValidatedOptions,
 } from '@patternfly/react-core';
 import FormGroupHelperText from '@utils/components/FormGroupHelperText/FormGroupHelperText';

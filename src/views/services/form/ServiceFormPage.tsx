@@ -52,7 +52,9 @@ const ServiceFormPage: FC<ServiceFormPageProps> = ({ initialService }) => {
             : t('Create {{label}}', { label: ServiceModel.label })}
         </Title>
         <Content component={ContentVariants.p}>
-          {t('Create a Service using the form. Switch to YAML view for full control, including fields not shown in the form.')}
+          {t(
+            'Create a Service using the form. Switch to YAML view for full control, including fields not shown in the form.',
+          )}
         </Content>
       </PageSection>
 
