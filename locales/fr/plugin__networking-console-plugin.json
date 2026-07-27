@@ -160,7 +160,6 @@
   "Error details": "Détails de l’erreur",
   "Example: 100": "Exemple: 100",
   "Exceptions": "Exceptions",
-  "Expose an application running on a set of pods as a network service. Form fields sync with the YAML manifest.": "Expose an application running on a set of pods as a network service. Form fields sync with the YAML manifest.",
   "External IP": "IP externe",
   "External load balancer": "Équilibreur de charge externe",
   "External service name": "Nom du service externe",
