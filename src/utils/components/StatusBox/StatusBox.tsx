@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, ReactNode } from 'react';
 
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
@@ -6,6 +6,7 @@ import ErrorPage from '../ErrorPage/ErrorPage';
 import Loading from '../Loading/Loading';
 
 type StatusBoxProps = {
+  children?: ReactNode;
   error: any;
   loaded: boolean;
 };

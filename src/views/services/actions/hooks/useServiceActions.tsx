@@ -54,7 +54,7 @@ const useServiceActions: ServiceActionProps = (obj) => {
     },
     {
       accessReview: asAccessReview(ServiceModel, obj, 'update'),
-      cta: () => navigate(`/k8s/ns/${objNamespace}/${modelToRef(ServiceModel)}/${objName}/yaml`),
+      cta: () => navigate(`/k8s/ns/${objNamespace}/${modelToRef(ServiceModel)}/${objName}/form`),
       id: 'edit-services',
       label: t('Edit Service'),
     },
