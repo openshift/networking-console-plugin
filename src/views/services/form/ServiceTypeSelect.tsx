@@ -12,18 +12,18 @@ import {
 } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
-import { SERVICE_TYPE_FIELD_ID, SERVICE_TYPES } from './constants';
+import { SERVICE_TYPE_FIELD_ID, SERVICE_TYPES } from './utils/constants';
 
 const ServiceTypeSelect: FC = () => {
   const { t } = useNetworkingTranslation();
-  const { control } = useFormContext<IoK8sApiCoreV1Service>();
+  const { control, setValue } = useFormContext<IoK8sApiCoreV1Service>();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   return (
     <Controller
       control={control}
       name="spec.type"
-      render={({ field: { onChange, value } }) => (
+      render={({ field: { onChange, value }, fieldState: { error } }) => (
         <FormGroup fieldId={SERVICE_TYPE_FIELD_ID} isRequired label={t('Type')}>
           <Dropdown
             id={SERVICE_TYPE_FIELD_ID}
@@ -33,12 +33,14 @@ const ServiceTypeSelect: FC = () => {
             selected={value}
             toggle={(toggleRef: Ref<MenuToggleElement>) => (
               <MenuToggle
+                aria-invalid={Boolean(error)}
                 aria-label={t('Type')}
                 id="toggle-service-type"
                 isExpanded={isDropdownOpen}
                 isFullWidth
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 ref={toggleRef}
+                status={error ? 'danger' : undefined}
               >
                 {value || t('Type')}
               </MenuToggle>
@@ -46,7 +48,22 @@ const ServiceTypeSelect: FC = () => {
           >
             <DropdownList>
               {SERVICE_TYPES.map((type) => (
-                <DropdownItem key={type} onClick={() => onChange(type)} value={type}>
+                <DropdownItem
+                  key={type}
+                  onClick={() => {
+                    onChange(type);
+                    if (type === 'ExternalName') {
+                      setValue('spec.selector', undefined, { shouldDirty: true });
+                      setValue('spec.ports', undefined, { shouldDirty: true });
+                    } else {
+                      setValue('spec.externalName', undefined, {
+                        shouldDirty: true,
+                        shouldValidate: true,
+                      });
+                    }
+                  }}
+                  value={type}
+                >
                   {type}
                 </DropdownItem>
               ))}
@@ -54,7 +71,7 @@ const ServiceTypeSelect: FC = () => {
           </Dropdown>
         </FormGroup>
       )}
-      rules={{ required: true }}
+      rules={{ required: t('Type is required') }}
     />
   );
 };

@@ -11,24 +11,23 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 import { getValidNamespace } from '@utils/utils';
 import { LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY } from '@views/networkpolicies/new/utils/const';
 
-import { generateDefaultService } from './generateDefaultService';
+import { generateDefaultService } from './utils/utils';
 import ServiceForm from './ServiceForm';
 
 type ServiceFormPageProps = {
-  initialService?: IoK8sApiCoreV1Service;
+  serviceToEdit?: IoK8sApiCoreV1Service;
 };
 
-const ServiceFormPage: FC<ServiceFormPageProps> = ({ initialService }) => {
+const ServiceFormPage: FC<ServiceFormPageProps> = ({ serviceToEdit }) => {
   const { t } = useNetworkingTranslation();
-
-  const isEditing = Boolean(initialService);
-
   const [activeNamespace] = useActiveNamespace();
   const namespace = getValidNamespace(activeNamespace);
 
-  const k8sObj = useMemo(
-    () => initialService || generateDefaultService(namespace),
-    [initialService, namespace],
+  const isEditing = Boolean(serviceToEdit);
+
+  const initialService = useMemo(
+    () => serviceToEdit || generateDefaultService(namespace),
+    [namespace, serviceToEdit],
   );
 
   const YAMLEditor = useCallback(
@@ -61,7 +60,7 @@ const ServiceFormPage: FC<ServiceFormPageProps> = ({ initialService }) => {
       <SyncedEditor
         displayConversionError
         FormEditor={ServiceForm}
-        initialData={k8sObj}
+        initialData={initialService}
         initialType={EditorType.Form}
         lastViewUserSettingKey={LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY}
         YAMLEditor={YAMLEditor}

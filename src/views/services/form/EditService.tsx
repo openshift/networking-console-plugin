@@ -20,7 +20,7 @@ const EditService: FC = () => {
 
   return (
     <StatusBox error={error} loaded={loaded}>
-      <ServiceFormPage initialService={service} />
+      <ServiceFormPage serviceToEdit={service} />
     </StatusBox>
   );
 };

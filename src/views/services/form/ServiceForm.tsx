@@ -17,18 +17,29 @@ import FormGroupHelperText from '@utils/components/FormGroupHelperText/FormGroup
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { getName, getNamespace, resourcePathFromModel } from '@utils/resources/shared';
 
-import { NAME_FIELD_ID, NAMESPACE_FIELD_ID, PORTS_FIELD_ID, SELECTOR_FIELD_ID } from './constants';
-import ServiceFormActions from './ServiceFormActions';
-import ServiceTypeSelect from './ServiceTypeSelect';
-import useIsCreationForm from './useIsCreationForm';
+import useIsCreationForm from './hooks/useIsCreationForm';
 import {
+  NAME_FIELD_ID,
+  NAMESPACE_FIELD_ID,
+  PORTS_FIELD_ID,
+  SELECTOR_FIELD_ID,
+} from './utils/constants';
+import {
+  buildServiceSubmitPayload,
   portsToText,
   selectorToText,
   textToPorts,
   textToSelector,
+} from './utils/utils';
+import {
+  getServiceFormFieldErrors,
+  validateExternalName,
   validatePortsText,
   validateSelectorText,
-} from './utils';
+} from './utils/validationUtils';
+import ExternalNameField from './ExternalNameField';
+import ServiceFormActions from './ServiceFormActions';
+import ServiceTypeSelect from './ServiceTypeSelect';
 
 type ServiceFormProps = {
   formData: IoK8sApiCoreV1Service;
@@ -60,36 +71,45 @@ const ServiceForm: FC<ServiceFormProps> = ({ formData, onChange: onFormChange })
   } = methods;
 
   const service = watch();
+  const serviceType = watch('spec.type');
+  const externalName = watch('spec.externalName');
+  const isExternalName = serviceType === 'ExternalName';
+  const isFormValid = isExternalName
+    ? validateExternalName(externalName).isValid
+    : !selectorError && !portsError;
 
   useEffect(() => {
     onFormChange(service);
   }, [onFormChange, service]);
 
+  useEffect(() => {
+    if (isExternalName) {
+      setSelectorError(undefined);
+      setPortsError(undefined);
+    }
+  }, [isExternalName]);
+
   const onSelectorChange = (text: string) => {
     setSelectorText(text);
-    const validation = validateSelectorText(text);
-    setSelectorError(validation === true ? undefined : validation);
-    if (validation === true) {
+    const { errorMessage, isValid } = validateSelectorText(text);
+    setSelectorError(isValid ? undefined : errorMessage);
+    if (isValid) {
       setValue('spec.selector', textToSelector(text), { shouldDirty: true, shouldValidate: true });
     }
   };
 
   const onPortsChange = (text: string) => {
     setPortsText(text);
-    const validation = validatePortsText(text);
-    setPortsError(validation === true ? undefined : validation);
-    if (validation === true) {
+    const { errorMessage, isValid } = validatePortsText(text);
+    setPortsError(isValid ? undefined : errorMessage);
+    if (isValid) {
       setValue('spec.ports', textToPorts(text), { shouldDirty: true, shouldValidate: true });
     }
   };
 
   const onSubmit = (data: IoK8sApiCoreV1Service) => {
-    const nextSelectorError =
-      validateSelectorText(selectorText) === true
-        ? undefined
-        : (validateSelectorText(selectorText) as string);
-    const nextPortsError =
-      validatePortsText(portsText) === true ? undefined : (validatePortsText(portsText) as string);
+    const { portsError: nextPortsError, selectorError: nextSelectorError } =
+      getServiceFormFieldErrors(selectorText, portsText, data.spec?.type);
 
     setSelectorError(nextSelectorError);
     setPortsError(nextPortsError);
@@ -98,14 +118,7 @@ const ServiceForm: FC<ServiceFormProps> = ({ formData, onChange: onFormChange })
       return;
     }
 
-    const payload: IoK8sApiCoreV1Service = {
-      ...data,
-      spec: {
-        ...data.spec,
-        ports: textToPorts(portsText),
-        selector: textToSelector(selectorText),
-      },
-    };
+    const payload = buildServiceSubmitPayload(data, selectorText, portsText);
 
     const k8sPromise = isCreationForm
       ? k8sCreate({ data: payload, model: ServiceModel })
@@ -116,7 +129,7 @@ const ServiceForm: FC<ServiceFormProps> = ({ formData, onChange: onFormChange })
           ns: getNamespace(payload),
         });
 
-    k8sPromise
+    return k8sPromise
       .then(() => {
         navigate(resourcePathFromModel(ServiceModel, getName(payload), getNamespace(payload)));
       })
@@ -165,46 +178,55 @@ const ServiceForm: FC<ServiceFormProps> = ({ formData, onChange: onFormChange })
 
           <ServiceTypeSelect />
 
-          <FormGroup fieldId={SELECTOR_FIELD_ID} isRequired label={t('Selector')}>
-            <TextArea
-              aria-invalid={Boolean(selectorError)}
-              aria-label={t('Selector')}
-              id={SELECTOR_FIELD_ID}
-              onChange={(_event, text) => onSelectorChange(text)}
-              resizeOrientation="vertical"
-              rows={3}
-              validated={selectorError ? ValidatedOptions.error : ValidatedOptions.default}
-              value={selectorText}
-            />
-            <FormGroupHelperText
-              validated={selectorError ? ValidatedOptions.error : ValidatedOptions.default}
-            >
-              {selectorError || t('One label per line as key=value (e.g. app=MyApp).')}
-            </FormGroupHelperText>
-          </FormGroup>
+          {isExternalName ? (
+            <ExternalNameField />
+          ) : (
+            <>
+              <FormGroup fieldId={SELECTOR_FIELD_ID} isRequired label={t('Selector')}>
+                <TextArea
+                  aria-invalid={Boolean(selectorError)}
+                  aria-label={t('Selector')}
+                  id={SELECTOR_FIELD_ID}
+                  onChange={(_event, text) => onSelectorChange(text)}
+                  resizeOrientation="vertical"
+                  rows={3}
+                  validated={selectorError ? ValidatedOptions.error : ValidatedOptions.default}
+                  value={selectorText}
+                />
+                <FormGroupHelperText
+                  validated={selectorError ? ValidatedOptions.error : ValidatedOptions.default}
+                >
+                  {selectorError || t('One label per line as key=value (e.g. app=MyApp).')}
+                </FormGroupHelperText>
+              </FormGroup>
 
-          <FormGroup fieldId={PORTS_FIELD_ID} isRequired label={t('Ports')}>
-            <TextArea
-              aria-invalid={Boolean(portsError)}
-              aria-label={t('Ports')}
-              id={PORTS_FIELD_ID}
-              onChange={(_event, text) => onPortsChange(text)}
-              resizeOrientation="vertical"
-              rows={3}
-              validated={portsError ? ValidatedOptions.error : ValidatedOptions.default}
-              value={portsText}
-            />
-            <FormGroupHelperText
-              validated={portsError ? ValidatedOptions.error : ValidatedOptions.default}
-            >
-              {portsError || t('One port per line as port:targetPort/PROTOCOL (e.g. 80:9376/TCP).')}
-            </FormGroupHelperText>
-          </FormGroup>
+              <FormGroup fieldId={PORTS_FIELD_ID} isRequired label={t('Ports')}>
+                <TextArea
+                  aria-invalid={Boolean(portsError)}
+                  aria-label={t('Ports')}
+                  id={PORTS_FIELD_ID}
+                  onChange={(_event, text) => onPortsChange(text)}
+                  resizeOrientation="vertical"
+                  rows={3}
+                  validated={portsError ? ValidatedOptions.error : ValidatedOptions.default}
+                  value={portsText}
+                />
+                <FormGroupHelperText
+                  validated={portsError ? ValidatedOptions.error : ValidatedOptions.default}
+                >
+                  {portsError ||
+                    t(
+                      'One port per line as [name:]port:targetPort/PROTOCOL (e.g. http:80:9376/TCP).',
+                    )}
+                </FormGroupHelperText>
+              </FormGroup>
+            </>
+          )}
 
           <ServiceFormActions
             apiError={apiError}
             isCreationForm={isCreationForm}
-            isFormValid={!selectorError && !portsError}
+            isFormValid={isFormValid}
           />
         </Form>
       </FormProvider>
