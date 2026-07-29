@@ -2,14 +2,12 @@ import React, { FC } from 'react';
 import { useNavigate } from 'react-router';
 
 import { modelToGroupVersionKind, ServiceModel } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
   ListPageBody,
   ListPageCreateButton,
   ListPageFilter,
   ListPageHeader,
   useActiveNamespace,
-  useK8sWatchResource,
   useListPageFilter,
   VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
@@ -22,6 +20,7 @@ import { getValidNamespace } from '@utils/utils';
 
 import ServiceRow from './components/ServiceRow';
 import useServiceColumn from './hooks/useServiceColumn';
+import { ServiceWithHealth, useServiceListViewData } from './hooks/useServiceListViewData';
 
 type ServiceListProps = {
   kind: string;
@@ -34,25 +33,21 @@ const ServiceList: FC<ServiceListProps> = ({ namespace }) => {
   const [activeNamespace] = useActiveNamespace();
   const validNamespace = getValidNamespace(namespace || activeNamespace);
 
-  const [service, loaded, loadError] = useK8sWatchResource<IoK8sApiCoreV1Service[]>({
-    groupVersionKind: modelToGroupVersionKind(ServiceModel),
-    isList: true,
-    namespace,
-  });
+  const { data: services, error: loadError, loaded } = useServiceListViewData(namespace);
 
-  const [data, filteredData, onFilterChange] = useListPageFilter(service);
+  const [data, filteredData, onFilterChange] = useListPageFilter(services);
   const columns = useServiceColumn();
 
   const serviceCreateFormLink = `${resourcePathFromModel(
     ServiceModel,
-    null,
+    undefined,
     validNamespace,
   )}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}`;
 
   const title = t('Services');
 
   return (
-    <ListEmptyState<IoK8sApiCoreV1Service>
+    <ListEmptyState<ServiceWithHealth>
       createButtonLink={serviceCreateFormLink}
       data={data}
       error={loadError}
@@ -75,7 +70,7 @@ const ServiceList: FC<ServiceListProps> = ({ namespace }) => {
       </ListPageHeader>
       <ListPageBody>
         <ListPageFilter data={data} loaded={loaded} onFilterChange={onFilterChange} />
-        <VirtualizedTable<IoK8sApiCoreV1Service>
+        <VirtualizedTable<ServiceWithHealth>
           columns={columns}
           data={filteredData}
           loaded={loaded}
