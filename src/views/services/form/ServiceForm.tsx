@@ -14,31 +14,22 @@ import {
   ValidatedOptions,
 } from '@patternfly/react-core';
 import FormGroupHelperText from '@utils/components/FormGroupHelperText/FormGroupHelperText';
+import { recordToLabelPairs } from '@utils/components/SelectorPreview';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { getName, getNamespace, resourcePathFromModel } from '@utils/resources/shared';
 
 import useIsCreationForm from './hooks/useIsCreationForm';
-import {
-  NAME_FIELD_ID,
-  NAMESPACE_FIELD_ID,
-  PORTS_FIELD_ID,
-  SELECTOR_FIELD_ID,
-} from './utils/constants';
-import {
-  buildServiceSubmitPayload,
-  portsToText,
-  selectorToText,
-  textToPorts,
-  textToSelector,
-} from './utils/utils';
+import { NAME_FIELD_ID, NAMESPACE_FIELD_ID, PORTS_FIELD_ID } from './utils/constants';
+import { buildServiceSubmitPayload, portsToText, textToPorts } from './utils/utils';
 import {
   getServiceFormFieldErrors,
   validateExternalName,
   validatePortsText,
-  validateSelectorText,
+  validateSelectorPairs,
 } from './utils/validationUtils';
 import ExternalNameField from './ExternalNameField';
 import ServiceFormActions from './ServiceFormActions';
+import ServiceSelectorField from './ServiceSelectorField';
 import ServiceTypeSelect from './ServiceTypeSelect';
 
 type ServiceFormProps = {
@@ -52,9 +43,7 @@ const ServiceForm: FC<ServiceFormProps> = ({ formData, onChange: onFormChange })
   const [apiError, setError] = useState<Error>(null);
   const isCreationForm = useIsCreationForm();
 
-  const [selectorText, setSelectorText] = useState(() => selectorToText(formData.spec?.selector));
   const [portsText, setPortsText] = useState(() => portsToText(formData.spec?.ports));
-  const [selectorError, setSelectorError] = useState<string>();
   const [portsError, setPortsError] = useState<string>();
 
   const methods = useForm<IoK8sApiCoreV1Service>({
@@ -73,10 +62,14 @@ const ServiceForm: FC<ServiceFormProps> = ({ formData, onChange: onFormChange })
   const service = watch();
   const serviceType = watch('spec.type');
   const externalName = watch('spec.externalName');
+  const selector = watch('spec.selector');
+  const namespace = watch('metadata.namespace');
   const isExternalName = serviceType === 'ExternalName';
+
+  const selectorValidation = validateSelectorPairs(recordToLabelPairs(selector));
   const isFormValid = isExternalName
     ? validateExternalName(externalName).isValid
-    : !selectorError && !portsError;
+    : selectorValidation.isValid && !portsError;
 
   useEffect(() => {
     onFormChange(service);
@@ -84,19 +77,9 @@ const ServiceForm: FC<ServiceFormProps> = ({ formData, onChange: onFormChange })
 
   useEffect(() => {
     if (isExternalName) {
-      setSelectorError(undefined);
       setPortsError(undefined);
     }
   }, [isExternalName]);
-
-  const onSelectorChange = (text: string) => {
-    setSelectorText(text);
-    const { errorMessage, isValid } = validateSelectorText(text);
-    setSelectorError(isValid ? undefined : errorMessage);
-    if (isValid) {
-      setValue('spec.selector', textToSelector(text), { shouldDirty: true, shouldValidate: true });
-    }
-  };
 
   const onPortsChange = (text: string) => {
     setPortsText(text);
@@ -109,16 +92,19 @@ const ServiceForm: FC<ServiceFormProps> = ({ formData, onChange: onFormChange })
 
   const onSubmit = (data: IoK8sApiCoreV1Service) => {
     const { portsError: nextPortsError, selectorError: nextSelectorError } =
-      getServiceFormFieldErrors(selectorText, portsText, data.spec?.type);
+      getServiceFormFieldErrors(
+        recordToLabelPairs(data.spec?.selector),
+        portsText,
+        data.spec?.type,
+      );
 
-    setSelectorError(nextSelectorError);
     setPortsError(nextPortsError);
 
     if (nextSelectorError || nextPortsError) {
       return;
     }
 
-    const payload = buildServiceSubmitPayload(data, selectorText, portsText);
+    const payload = buildServiceSubmitPayload(data, portsText);
 
     const k8sPromise = isCreationForm
       ? k8sCreate({ data: payload, model: ServiceModel })
@@ -182,23 +168,7 @@ const ServiceForm: FC<ServiceFormProps> = ({ formData, onChange: onFormChange })
             <ExternalNameField />
           ) : (
             <>
-              <FormGroup fieldId={SELECTOR_FIELD_ID} isRequired label={t('Selector')}>
-                <TextArea
-                  aria-invalid={Boolean(selectorError)}
-                  aria-label={t('Selector')}
-                  id={SELECTOR_FIELD_ID}
-                  onChange={(_event, text) => onSelectorChange(text)}
-                  resizeOrientation="vertical"
-                  rows={3}
-                  validated={selectorError ? ValidatedOptions.error : ValidatedOptions.default}
-                  value={selectorText}
-                />
-                <FormGroupHelperText
-                  validated={selectorError ? ValidatedOptions.error : ValidatedOptions.default}
-                >
-                  {selectorError || t('One label per line as key=value (e.g. app=MyApp).')}
-                </FormGroupHelperText>
-              </FormGroup>
+              <ServiceSelectorField namespace={namespace} />
 
               <FormGroup fieldId={PORTS_FIELD_ID} isRequired label={t('Ports')}>
                 <TextArea

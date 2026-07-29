@@ -50,6 +50,27 @@ export const validateSelectorText = (text: string): ValidationResult => {
   return validResult();
 };
 
+export const validateSelectorPairs = (pairs: string[][]): ValidationResult => {
+  const completed = pairs.filter(([key]) => Boolean(key?.trim()));
+
+  if (!completed.length) {
+    return invalidResult(t('Selector is required'));
+  }
+
+  for (const [key, value] of completed) {
+    if (!isTagValid(`${key}=${value ?? ''}`, true)) {
+      return invalidResult(t('Selectors must use valid key=value pairs'));
+    }
+  }
+
+  const keys = completed.map(([key]) => key.trim());
+  if (new Set(keys).size !== keys.length) {
+    return invalidResult(t('Selector keys must be unique'));
+  }
+
+  return validResult();
+};
+
 export const validatePortsText = (text: string): ValidationResult => {
   const lines = text
     .split('\n')
@@ -122,9 +143,9 @@ export type ServiceFormFieldErrors = {
   selectorError?: string;
 };
 
-/** Validates selector and ports text fields used by ClusterIP/NodePort/LoadBalancer. */
+/** Validates selector pairs and ports text fields used by ClusterIP/NodePort/LoadBalancer. */
 export const getServiceFormFieldErrors = (
-  selectorText: string,
+  selectorPairs: string[][],
   portsText: string,
   serviceType?: string,
 ): ServiceFormFieldErrors => {
@@ -132,7 +153,7 @@ export const getServiceFormFieldErrors = (
     return {};
   }
 
-  const selectorValidation = validateSelectorText(selectorText);
+  const selectorValidation = validateSelectorPairs(selectorPairs);
   const portsValidation = validatePortsText(portsText);
 
   return {

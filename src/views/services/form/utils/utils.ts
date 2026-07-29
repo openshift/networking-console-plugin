@@ -178,7 +178,6 @@ const isSupportedServiceType = (type?: string): type is ServiceType =>
  */
 export const buildServiceSubmitPayload = (
   data: IoK8sApiCoreV1Service,
-  selectorText: string,
   portsText: string,
 ): IoK8sApiCoreV1Service => {
   const type = isSupportedServiceType(data.spec?.type) ? data.spec.type : 'ClusterIP';
@@ -203,7 +202,7 @@ export const buildServiceSubmitPayload = (
     spec: {
       ...specRest,
       ports: textToPorts(portsText),
-      selector: textToSelector(selectorText),
+      selector: data.spec?.selector || {},
       type,
     },
   };
