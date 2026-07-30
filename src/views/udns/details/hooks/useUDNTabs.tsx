@@ -5,7 +5,7 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 
 import UDNDetailsTab from '../tabs/details/UDNDetailsTab';
 import UDNVirtualMachines from '../tabs/virtualMachines/UDNVirtualMachines';
-import UDNYAML from '../tabs/yaml/UDNYAML';
+import UserDefinedNetworkYAML from '../tabs/yaml/UserDefinedNetworkYAML';
 
 export const useUDNTabs = (vmCount = 0) => {
   const { t } = useNetworkingTranslation();
@@ -17,7 +17,7 @@ export const useUDNTabs = (vmCount = 0) => {
       name: t('Details'),
     },
     {
-      component: UDNYAML,
+      component: UserDefinedNetworkYAML,
       href: 'yaml',
       name: t('YAML'),
     },

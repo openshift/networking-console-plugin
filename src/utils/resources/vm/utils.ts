@@ -1,18 +1,23 @@
 import VirtualMachineModel from '@kubevirt-ui/kubevirt-api/console/models/VirtualMachineModel';
 import { V1Interface, V1Network, V1VirtualMachine } from '@kubevirt-ui/kubevirt-api/kubevirt';
 import { k8sPatch } from '@openshift-console/dynamic-plugin-sdk';
-import { ClusterUserDefinedNetworkModel, UserDefinedNetworkModel } from '@utils/models';
-import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
+import { UserDefinedNetworkModel } from '@utils/models';
+import { NADNetworkPair, NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
 import { getName, getNamespace } from '@utils/resources/shared';
-import { ClusterUserDefinedNetworkKind, UserDefinedNetworkKind } from '@utils/resources/udns/types';
+import { getUDNNADNameCandidates, UDNResource } from '@utils/resources/udns/helper';
 
-import { INTERFACE_PATH, NETWORK_PATH } from './constants';
+import { INTERFACE_PATH, INTERFACE_STATE_ABSENT, NETWORK_PATH } from './constants';
 import { getInterfaces, getNetworks, getVMStatus } from './selectors';
 import { PatchItem } from './types';
 
+export type { UDNResource };
+
 // This file contains utils from kubevirt-plugin
 
-const markOneInterfaceAbsent = (iface: V1Interface) => ({ ...iface, state: 'absent' });
+const markOneInterfaceAbsent = (iface: V1Interface) => ({
+  ...iface,
+  state: INTERFACE_STATE_ABSENT,
+});
 
 const updateInterface = ({
   currentValue,
@@ -118,14 +123,10 @@ export const multusNetworkMatchesNAD = (
 
   const qualifiedName = `${nadNamespace}/${nadName}`;
 
-  if (multusNetworkName === qualifiedName) {
-    return true;
-  }
+  if (multusNetworkName === qualifiedName) return true;
 
   return multusNetworkName === nadName && getNamespace(vm) === nadNamespace;
 };
-
-export type UDNResource = ClusterUserDefinedNetworkKind | UserDefinedNetworkKind;
 
 export const getUDNNetworkNamespace = (
   udn: UDNResource,
@@ -137,11 +138,6 @@ export const getUDNNetworkNamespace = (
 
   return getNamespace(vm);
 };
-
-export const isClusterUDN = (udn: UDNResource): udn is ClusterUserDefinedNetworkKind =>
-  udn.kind === ClusterUserDefinedNetworkModel.kind;
-
-const CLUSTER_UDN_NAD_NAME_PREFIX = 'cluster.udn.';
 
 const multusNetworkNameMatchesCandidates = (
   multusNetworkName: string,
@@ -158,20 +154,6 @@ const multusNetworkNameMatchesCandidates = (
 
     return multusNetworkName === name && vmNamespace === networkNamespace;
   });
-
-export const getUDNNADNameCandidates = (udn: UDNResource): string[] => {
-  const udnName = getName(udn);
-
-  if (!udnName) {
-    return [];
-  }
-
-  if (isClusterUDN(udn)) {
-    return [udnName, `${CLUSTER_UDN_NAD_NAME_PREFIX}${udnName}`, `cluster-udn-${udnName}`];
-  }
-
-  return [udnName];
-};
 
 export const multusNetworkMatchesUDN = (
   network: V1Network,
@@ -226,13 +208,6 @@ export const findNADForUDN = (
   return nads?.find(
     (nad) => getNamespace(nad) === namespace && candidateNames.has(getName(nad) || ''),
   );
-};
-
-type NADNetworkPair = {
-  iface: V1Interface;
-  ifaceIndex: number;
-  network: V1Network;
-  networkIndex: number;
 };
 
 const getNADNetworkPairs = (
@@ -467,8 +442,8 @@ export const removeVMFromNAD = (vm: V1VirtualMachine, networkName: string) => {
 
 export const addVMToNAD = (vm: V1VirtualMachine, nad: NetworkAttachmentDefinitionKind) => {
   const pairs = getNADNetworkPairs(vm, nad);
-  const activePairs = pairs.filter(({ iface }) => iface.state !== 'absent');
-  const disconnectedPairs = pairs.filter(({ iface }) => iface.state === 'absent');
+  const activePairs = pairs.filter(({ iface }) => iface.state !== INTERFACE_STATE_ABSENT);
+  const disconnectedPairs = pairs.filter(({ iface }) => iface.state === INTERFACE_STATE_ABSENT);
 
   if (activePairs.length > 0) {
     return Promise.reject(new Error('Virtual machine is already connected to this network'));

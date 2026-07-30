@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import * as _ from 'lodash';
+import { size } from 'lodash';
 
 import { modelToGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console';
 import {
@@ -24,6 +24,7 @@ import DetailsSectionTitle from '@utils/components/DetailsSectionTitle/DetailsSe
 import Loading from '@utils/components/Loading/Loading';
 import { OwnerReferences } from '@utils/components/OwnerReference/owner-references';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { getAnnotations, getLabels, getName, getNamespace, getUID } from '@utils/resources/shared';
 import { getModel, getUDNConditions } from '@utils/resources/udns/selectors';
 import { ClusterUserDefinedNetworkKind, UserDefinedNetworkKind } from '@utils/resources/udns/types';
 import UDNConditions from '@views/udns/list/components/UDNConditions';
@@ -37,15 +38,16 @@ type UDNDetailsTabProps = {
 
 const UDNDetailsTab: FC<UDNDetailsTabProps> = ({ obj: udn }) => {
   const { t } = useNetworkingTranslation();
-  const metadata = udn?.metadata;
+  const name = getName(udn);
+  const namespace = getNamespace(udn);
   const model = udn ? getModel(udn) : undefined;
   const annotationsModalLauncher = useAnnotationsModal(udn);
   const labelsModalLauncher = useLabelsModal(udn);
 
   const [canUpdate] = useAccessReview({
     group: model?.apiGroup,
-    name: metadata?.name,
-    namespace: metadata?.namespace,
+    name,
+    namespace,
     resource: model?.plural,
     verb: 'patch',
   });
@@ -58,6 +60,8 @@ const UDNDetailsTab: FC<UDNDetailsTabProps> = ({ obj: udn }) => {
     );
   }
 
+  const annotationCount = size(getAnnotations(udn, {}));
+
   return (
     <PageSection>
       <DetailsSectionTitle titleText={t('{{kind}} details', { kind: model.kind })} />
@@ -65,13 +69,13 @@ const UDNDetailsTab: FC<UDNDetailsTabProps> = ({ obj: udn }) => {
         <GridItem md={6}>
           <DL className="co-m-pane__details" data-test-id="resource-summary">
             <DetailsItem label={t('Name')} obj={udn} path="metadata.name" />
-            {metadata?.namespace && (
+            {namespace && (
               <DetailsItem label={t('Namespace')} obj={udn} path="metadata.namespace">
                 <ResourceLink
                   kind="Namespace"
-                  name={metadata.namespace}
+                  name={namespace}
                   namespace={null}
-                  title={metadata.uid}
+                  title={getUID(udn)}
                 />
               </DetailsItem>
             )}
@@ -86,7 +90,7 @@ const UDNDetailsTab: FC<UDNDetailsTabProps> = ({ obj: udn }) => {
             >
               <LabelList
                 groupVersionKind={modelToGroupVersionKind(model)}
-                labels={metadata?.labels}
+                labels={getLabels(udn)}
               />
             </DetailsItem>
             <DetailsItem label={t('Annotations')} obj={udn} path="metadata.annotations">
@@ -100,17 +104,17 @@ const UDNDetailsTab: FC<UDNDetailsTabProps> = ({ obj: udn }) => {
                   variant={ButtonVariant.link}
                 >
                   {t('annotation', {
-                    count: _.size(metadata?.annotations),
+                    count: annotationCount,
                   })}
                 </Button>
               ) : (
                 t('annotation', {
-                  count: _.size(metadata?.annotations),
+                  count: annotationCount,
                 })
               )}
             </DetailsItem>
             <DetailsItem label={t('Created at')} obj={udn} path="metadata.creationTimestamp">
-              <Timestamp timestamp={metadata?.creationTimestamp} />
+              <Timestamp timestamp={udn.metadata?.creationTimestamp} />
             </DetailsItem>
             <DetailsItem label={t('Owner')} obj={udn} path="metadata.ownerReferences">
               <OwnerReferences resource={udn} />

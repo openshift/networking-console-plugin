@@ -4,11 +4,13 @@ import { ResourceYAMLEditor } from '@openshift-console/dynamic-plugin-sdk';
 import Loading from '@utils/components/Loading/Loading';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
 
-type NADYAMLProps = {
+type NetworkAttachmentDefinitionYAMLProps = {
   obj?: NetworkAttachmentDefinitionKind;
 };
 
-const NADYAML: FC<NADYAMLProps> = ({ obj: nad }) => {
+const NetworkAttachmentDefinitionYAML: FC<NetworkAttachmentDefinitionYAMLProps> = ({
+  obj: nad,
+}) => {
   return !nad ? (
     <Loading />
   ) : (
@@ -18,4 +20,4 @@ const NADYAML: FC<NADYAMLProps> = ({ obj: nad }) => {
   );
 };
 
-export default NADYAML;
+export default NetworkAttachmentDefinitionYAML;

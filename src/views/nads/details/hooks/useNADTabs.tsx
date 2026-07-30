@@ -5,7 +5,7 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 
 import NADDetails from '../tabs/details/NADDetails';
 import NADVirtualMachines from '../tabs/virtualMachines/NADVirtualMachines';
-import NADYAML from '../tabs/yaml/NADYAML';
+import NetworkAttachmentDefinitionYAML from '../tabs/yaml/NetworkAttachmentDefinitionYAML';
 
 export const useNADTabs = (vmCount = 0) => {
   const { t } = useNetworkingTranslation();
@@ -17,7 +17,7 @@ export const useNADTabs = (vmCount = 0) => {
       name: t('Details'),
     },
     {
-      component: NADYAML,
+      component: NetworkAttachmentDefinitionYAML,
       href: 'yaml',
       name: t('YAML'),
     },

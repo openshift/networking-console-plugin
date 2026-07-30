@@ -4,11 +4,11 @@ import { ResourceYAMLEditor } from '@openshift-console/dynamic-plugin-sdk';
 import Loading from '@utils/components/Loading/Loading';
 import { ClusterUserDefinedNetworkKind, UserDefinedNetworkKind } from '@utils/resources/udns/types';
 
-type UDNYAMLProps = {
+type UserDefinedNetworkYAMLProps = {
   obj?: ClusterUserDefinedNetworkKind | UserDefinedNetworkKind;
 };
 
-const UDNYAML: FC<UDNYAMLProps> = ({ obj: udn }) => {
+const UserDefinedNetworkYAML: FC<UserDefinedNetworkYAMLProps> = ({ obj: udn }) => {
   return !udn ? (
     <Loading />
   ) : (
@@ -18,4 +18,4 @@ const UDNYAML: FC<UDNYAMLProps> = ({ obj: udn }) => {
   );
 };
 
-export default UDNYAML;
+export default UserDefinedNetworkYAML;

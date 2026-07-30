@@ -36,12 +36,11 @@ import useNADVirtualMachines, { NADVirtualMachine } from '../../hooks/useNADVirt
 
 import AddNADVirtualMachinesModal from './components/AddNADVirtualMachinesModal';
 import NADVirtualMachineRowActions from './components/NADVirtualMachineRowActions';
+import { DEFAULT_PER_PAGE } from './constants';
 
 type NADVirtualMachineFilters = {
   name?: string;
 };
-
-const DEFAULT_PER_PAGE = 20;
 
 const NADVirtualMachines: FC<{ obj?: NetworkAttachmentDefinitionKind }> = ({ obj: nad }) => {
   const { t } = useNetworkingTranslation();

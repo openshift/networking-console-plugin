@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router';
-import * as _ from 'lodash';
+import { orderBy } from 'lodash';
 
 import {
   Button,
@@ -36,12 +36,11 @@ import useUDNVirtualMachines, { UDNVirtualMachine } from '../../hooks/useUDNVirt
 
 import AddUDNVirtualMachinesModal from './components/AddUDNVirtualMachinesModal';
 import UDNVirtualMachineRowActions from './components/UDNVirtualMachineRowActions';
+import { DEFAULT_PER_PAGE } from './constants';
 
 type UDNVirtualMachineFilters = {
   name?: string;
 };
-
-const DEFAULT_PER_PAGE = 20;
 
 const UDNVirtualMachines: FC<{
   obj?: ClusterUserDefinedNetworkKind | UserDefinedNetworkKind;
@@ -91,7 +90,7 @@ const UDNVirtualMachines: FC<{
       return filteredData;
     }
 
-    return _.orderBy(
+    return orderBy(
       filteredData,
       [(item: UDNVirtualMachine) => getVMNetworkTableSortValue(item, sortBy, vmResourceLookups)],
       [direction === 'desc' ? 'desc' : 'asc'],

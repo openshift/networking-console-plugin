@@ -1,3 +1,4 @@
+import { V1Interface, V1Network } from '@kubevirt-ui/kubevirt-api/kubevirt';
 import { K8sResourceKind } from '@openshift-console/dynamic-plugin-sdk';
 
 export const RESOURCE_NAME_ANNOTATION = 'k8s.v1.cni.cncf.io/resourceName';
@@ -45,3 +46,10 @@ export type NetworkAttachmentDefinitionSpec = {
 export type NetworkAttachmentDefinitionKind = {
   spec?: NetworkAttachmentDefinitionSpec;
 } & K8sResourceKind;
+
+export type NADNetworkPair = {
+  iface: V1Interface;
+  ifaceIndex: number;
+  network: V1Network;
+  networkIndex: number;
+};
