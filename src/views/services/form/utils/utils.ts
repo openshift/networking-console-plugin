@@ -48,6 +48,7 @@ export const textToSelector = (text: string): Record<string, string> =>
     }, {});
 
 const DNS_LABEL_REGEX = /^[a-z0-9](?:[-a-z0-9]*[a-z0-9])?$/;
+const MAX_DNS_LABEL_LENGTH = 63;
 const NUMERIC_TARGET_PORT_REGEX = /^\d+$/;
 
 /**
@@ -69,7 +70,7 @@ const parseTargetPort = (targetPort: string): IoK8sApiCoreV1ServicePort['targetP
     : targetPort) as IoK8sApiCoreV1ServicePort['targetPort'];
 
 export const isValidDNSLabel = (value: string): boolean =>
-  value.length <= 63 && DNS_LABEL_REGEX.test(value);
+  value.length <= MAX_DNS_LABEL_LENGTH && DNS_LABEL_REGEX.test(value);
 
 /** Parses a single ports-field line into port, targetPort, and protocol parts. */
 export const parsePortText = (text: string): null | ParsedPortText => {

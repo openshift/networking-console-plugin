@@ -9,7 +9,7 @@ import { ResourceIcon } from '@openshift-console/dynamic-plugin-sdk';
 import { Alert, AlertVariant, Label, TreeView, TreeViewDataItem } from '@patternfly/react-core';
 import Loading from '@utils/components/Loading/Loading';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { resourceListPathFromModel } from '@utils/resources/shared';
+import { getNamespace, resourceListPathFromModel } from '@utils/resources/shared';
 import { isEmpty } from '@utils/utils';
 import { labelsFilterQuery, matchedNamespaces, MAX_PREVIEW_RESOURCES } from '@utils/utils/selector';
 
@@ -45,14 +45,15 @@ const NetworkPolicyPodsPreview: FC<NetworkPolicyPodsPreviewProps> = ({
     let filteredPods = pods;
     if (namespaceSelector) {
       const nsSet = matchedNamespaces(namespaces);
-      filteredPods = filteredPods.filter(
-        (pod) => pod.metadata.namespace && nsSet.has(pod.metadata.namespace),
-      );
+      filteredPods = filteredPods.filter((pod) => {
+        const ns = getNamespace(pod);
+        return ns && nsSet.has(ns);
+      });
     }
     // Group pod TreeViewDataItem by namespace, up to a maximum of MAX_PREVIEW_RESOURCES entries
     const podsByNs: { [key: string]: TreeViewDataItem[] } = {};
     filteredPods.slice(0, MAX_PREVIEW_RESOURCES).forEach((pod) => {
-      const ns = pod?.metadata?.namespace;
+      const ns = getNamespace(pod);
       podsByNs[ns] ??= [];
       podsByNs[ns].push({
         icon: <ResourceIcon groupVersionKind={modelToGroupVersionKind(PodModel)} />,
