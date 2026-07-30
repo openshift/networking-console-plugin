@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import { defaults, isPlainObject } from 'lodash';
 
 import { VALUE_WITH_OPTIONAL_UNIT } from './constants';
 
@@ -55,7 +55,7 @@ const TYPES = {
 
 export const getType = (name) => {
   const type = TYPES[name];
-  if (!_.isPlainObject(type)) {
+  if (!isPlainObject(type)) {
     return {
       divisor: 1000,
       space: false,
@@ -67,10 +67,10 @@ export const getType = (name) => {
 
 const convertBaseValueToUnits = (value, unitArray, divisor, initialUnit, preferredUnit) => {
   const sliceIndex = initialUnit ? unitArray.indexOf(initialUnit) : 0;
-  const units_ = unitArray.slice(sliceIndex);
+  const remainingUnits = unitArray.slice(sliceIndex);
 
   if (preferredUnit || preferredUnit === '') {
-    const unitIndex = units_.indexOf(preferredUnit);
+    const unitIndex = remainingUnits.indexOf(preferredUnit);
     if (unitIndex !== -1) {
       return {
         unit: preferredUnit,
@@ -79,49 +79,12 @@ const convertBaseValueToUnits = (value, unitArray, divisor, initialUnit, preferr
     }
   }
 
-  let unit = units_.shift();
-  while (value >= divisor && units_.length > 0) {
+  let unit = remainingUnits.shift();
+  while (value >= divisor && remainingUnits.length > 0) {
     value = value / divisor;
-    unit = units_.shift();
+    unit = remainingUnits.shift();
   }
   return { unit, value };
-};
-
-const convertValueWithUnitsToBaseValue = (value, unitArray, divisor) => {
-  const defaultReturn = { unit: '', value };
-  if (typeof value !== 'string') {
-    return defaultReturn;
-  }
-
-  let units_ = unitArray.slice().reverse();
-
-  // find which unit we're given
-  let truncateStringAt = -1;
-  const startingUnitIndex = _.findIndex(units_, function (currentUnitValue) {
-    const index = value.indexOf(currentUnitValue);
-    if (index > -1) {
-      truncateStringAt = index;
-      return true;
-    }
-    return false;
-  });
-
-  if (startingUnitIndex < 0) {
-    // can't parse
-    return defaultReturn;
-  }
-
-  // get the numeric value & prepare unit array for conversion
-  units_ = units_.slice(startingUnitIndex);
-  let currentValue = _.toNumber(value.substring(0, truncateStringAt));
-
-  let unit = units_.shift();
-  while (units_.length > 0) {
-    currentValue *= divisor;
-    unit = units_.shift();
-  }
-
-  return { unit, value: currentValue };
 };
 
 const getDefaultFractionDigits = (value) => {
@@ -136,7 +99,7 @@ const getDefaultFractionDigits = (value) => {
 
 const formatValue = (value, options) => {
   const fractionDigits = getDefaultFractionDigits(value);
-  const { locales, ...rest } = _.defaults(options, {
+  const { locales, ...rest } = defaults(options, {
     maximumFractionDigits: fractionDigits,
   });
 
@@ -202,36 +165,38 @@ export const humanizeDecimalBytesPerSec = (v, initialUnit, preferredUnit) =>
 export const humanizeNumber = (v, initialUnit, preferredUnit) =>
   humanize(v, 'numeric', true, initialUnit, preferredUnit);
 
-units.dehumanize = (value, typeName) => {
-  const type = getType(typeName);
-  return convertValueWithUnitsToBaseValue(value, type.units, type.divisor);
-};
-
-validate.split = (value) => {
-  const match = VALUE_WITH_OPTIONAL_UNIT.exec(value);
-  if (!match) {
-    return [NaN];
-  }
-  return [parseFloat(match[1], 10), match[2] || undefined];
-};
-
-const validateNumber = (float = '') => {
-  if (float < 0) {
-    return 'must be positive';
-  }
-  if (!Number.isFinite(Number(float))) {
-    return 'must be a number';
-  }
+// Kubernetes quantity suffixes → base-unit multipliers (e.g. "2Gi", "512Mi")
+const QUANTITY_MULTIPLIERS = {
+  E: 1000 ** 6,
+  Ei: 1024 ** 6,
+  G: 1000 ** 3,
+  Gi: 1024 ** 3,
+  i: 1,
+  k: 1000,
+  Ki: 1024,
+  m: 0.001,
+  M: 1000 ** 2,
+  Mi: 1024 ** 2,
+  P: 1000 ** 5,
+  Pi: 1024 ** 5,
+  T: 1000 ** 4,
+  Ti: 1024 ** 4,
 };
 
 export const convertToBaseValue = (value) => {
-  if (!_.isString(value)) {
+  if (typeof value !== 'string') {
     return null;
   }
 
-  const [number, unit] = validate.split(value);
-  const validationError = validateNumber(number);
-  if (validationError) {
+  const match = VALUE_WITH_OPTIONAL_UNIT.exec(value);
+  if (!match) {
+    return null;
+  }
+
+  const number = Number(match[1]);
+  const unit = match[2] || '';
+
+  if (!Number.isFinite(number) || number < 0) {
     return null;
   }
 
@@ -239,17 +204,6 @@ export const convertToBaseValue = (value) => {
     return number;
   }
 
-  if (unit === 'm') {
-    return number / 1000;
-  }
-
-  if (TYPES.binaryBytesWithoutB.units.includes(unit)) {
-    return units.dehumanize(value, 'binaryBytesWithoutB').value;
-  }
-
-  if (TYPES.decimalBytesWithoutB.units.includes(unit)) {
-    return units.dehumanize(value, 'decimalBytesWithoutB').value;
-  }
-
-  return null;
+  const multiplier = QUANTITY_MULTIPLIERS[unit];
+  return multiplier === undefined ? null : number * multiplier;
 };
