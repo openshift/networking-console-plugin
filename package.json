@@ -116,7 +116,8 @@
     "webpack-dev-server": "^5.2.3"
   },
   "overrides": {
-    "serialize-javascript": "^7.0.5"
+    "serialize-javascript": "^7.0.5",
+    "linkify-it": "^5.0.2"
   },
   "resolutions": {
     "@types/react": "17.0.40",
