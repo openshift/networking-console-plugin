@@ -2,9 +2,8 @@ import { TFunction } from 'i18next';
 
 import { isTagValid } from '@utils/components/PodSelectorModal/selectorUtils';
 
-import { EXTERNAL_NAME_HOSTNAME_REGEX } from './constants';
 import type { ServiceFormFieldErrors, ValidationResult } from './types';
-import { isValidDNSLabel, parsePortText } from './utils';
+import { isValidDNSLabel, isValidExternalNameHostname, parsePortText } from './utils';
 
 const validResult = (): ValidationResult => ({ errorMessage: '', isValid: true });
 
@@ -128,7 +127,7 @@ export const validateExternalName = (t: TFunction, value?: string): ValidationRe
     return invalidResult(t('External name is required'));
   }
 
-  if (!EXTERNAL_NAME_HOSTNAME_REGEX.test(externalName)) {
+  if (!isValidExternalNameHostname(externalName)) {
     return invalidResult(t('External name must be a valid hostname'));
   }
 

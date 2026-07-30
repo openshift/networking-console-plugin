@@ -4,7 +4,12 @@ import {
   IoK8sApiCoreV1ServicePort,
 } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 
-import { SERVICE_TYPES, ServiceType } from './constants';
+import {
+  EXTERNAL_NAME_HOSTNAME_MAX_LENGTH,
+  EXTERNAL_NAME_HOSTNAME_REGEX,
+  SERVICE_TYPES,
+  ServiceType,
+} from './constants';
 import type { ParsedPortText } from './types';
 
 export const generateDefaultService = (namespace: string): IoK8sApiCoreV1Service => ({
@@ -71,6 +76,10 @@ const parseTargetPort = (targetPort: string): IoK8sApiCoreV1ServicePort['targetP
 
 export const isValidDNSLabel = (value: string): boolean =>
   value.length <= MAX_DNS_LABEL_LENGTH && DNS_LABEL_REGEX.test(value);
+
+export const isValidExternalNameHostname = (hostname: string): boolean =>
+  hostname.length <= EXTERNAL_NAME_HOSTNAME_MAX_LENGTH &&
+  EXTERNAL_NAME_HOSTNAME_REGEX.test(hostname);
 
 /** Parses a single ports-field line into port, targetPort, and protocol parts. */
 export const parsePortText = (text: string): null | ParsedPortText => {
