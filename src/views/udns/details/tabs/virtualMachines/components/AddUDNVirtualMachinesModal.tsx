@@ -122,7 +122,7 @@ const AddUDNVirtualMachinesModal: FC<AddUDNVirtualMachinesModalProps> = ({
           return [];
         }
 
-        networkConsole.warn('Failed to add virtual machine to network', 'add-failed');
+        networkConsole.warn('Failed to add virtual machine to network', result.reason);
         return [index];
       });
 

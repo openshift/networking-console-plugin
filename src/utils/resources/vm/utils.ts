@@ -204,10 +204,25 @@ export const findNADForUDN = (
   vm: V1VirtualMachine,
 ): NetworkAttachmentDefinitionKind | undefined => {
   const namespace = getUDNNetworkNamespace(udn, vm);
-  const candidateNames = new Set(getUDNNADNameCandidates(udn));
-  return nads?.find(
-    (nad) => getNamespace(nad) === namespace && candidateNames.has(getName(nad) || ''),
+  const udnName = getName(udn);
+  const candidateNames = getUDNNADNameCandidates(udn);
+
+  if (!namespace || !udnName || candidateNames.length === 0) {
+    return undefined;
+  }
+
+  const matchingNAD = nads?.find(
+    (nad) => getNamespace(nad) === namespace && candidateNames.includes(getName(nad) || ''),
   );
+
+  // Prefer a watched NAD when its metadata name is the Multus-facing short UDN name.
+  // CUDN-generated NADs are often named `cluster.udn.<name>`, but Multus networkName must
+  // still be the short UDN/CUDN name — return a Multus-facing reference in that case.
+  if (matchingNAD && getName(matchingNAD) === udnName) {
+    return matchingNAD;
+  }
+
+  return buildNADReferenceForUDN(udn, vm);
 };
 
 const getNADNetworkPairs = (
