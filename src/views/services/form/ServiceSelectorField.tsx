@@ -13,7 +13,8 @@ import {
 } from '@patternfly/react-core';
 import FormGroupHelperText from '@utils/components/FormGroupHelperText/FormGroupHelperText';
 import LabelSelectorEditor from '@utils/components/LabelSelectorEditor/LabelSelectorEditor';
-import SelectorPreview, { labelPairsToRecord } from '@utils/components/SelectorPreview';
+import SelectorPreview from '@utils/components/SelectorPreview/SelectorPreview';
+import { labelPairsToRecord } from '@utils/components/SelectorPreview/utils/utils';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { isEmpty } from '@utils/utils';
 
@@ -39,7 +40,7 @@ const ServiceSelectorField: FC<ServiceSelectorFieldProps> = ({
 
   const onPairsChange = (pairs: string[][]) => {
     const nextPairs = isEmpty(pairs) ? [['', '']] : pairs;
-    const { errorMessage, isValid } = validateSelectorPairs(nextPairs);
+    const { errorMessage, isValid } = validateSelectorPairs(t, nextPairs);
 
     onLabelPairsChange(nextPairs, isValid ? undefined : errorMessage);
 
@@ -86,6 +87,7 @@ const ServiceSelectorField: FC<ServiceSelectorFieldProps> = ({
         namespace={namespace}
         popoverRef={podsPreviewPopoverRef}
         resourceModel={PodModel}
+        resourceName={t('pods')}
       />
     </FormGroup>
   );

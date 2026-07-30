@@ -5,6 +5,7 @@ import {
 } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 
 import { SERVICE_TYPES, ServiceType } from './constants';
+import type { ParsedPortText } from './types';
 
 export const generateDefaultService = (namespace: string): IoK8sApiCoreV1Service => ({
   apiVersion: ServiceModel.apiVersion,
@@ -47,6 +48,7 @@ export const textToSelector = (text: string): Record<string, string> =>
     }, {});
 
 const DNS_LABEL_REGEX = /^[a-z0-9](?:[-a-z0-9]*[a-z0-9])?$/;
+const NUMERIC_TARGET_PORT_REGEX = /^\d+$/;
 
 /**
  * Matches `name:port:targetPort[/PROTOCOL]` (e.g. `http:80:9376/TCP`).
@@ -61,19 +63,12 @@ const PORT_LINE_WITH_NAME_REGEX =
  */
 const PORT_LINE_REGEX = /^(\d+)\s*:\s*([^/\s]+)\s*(?:\/\s*(\w+))?$/;
 
-export type ParsedPortText = {
-  name?: string;
-  port: string;
-  protocol: string;
-  targetPort: string;
-};
-
 const parseTargetPort = (targetPort: string): IoK8sApiCoreV1ServicePort['targetPort'] =>
-  (/^\d+$/.test(targetPort)
+  (NUMERIC_TARGET_PORT_REGEX.test(targetPort)
     ? Number(targetPort)
     : targetPort) as IoK8sApiCoreV1ServicePort['targetPort'];
 
-export const isValidDnsLabel = (value: string): boolean =>
+export const isValidDNSLabel = (value: string): boolean =>
   value.length <= 63 && DNS_LABEL_REGEX.test(value);
 
 /** Parses a single ports-field line into port, targetPort, and protocol parts. */
@@ -90,9 +85,7 @@ export const parsePortText = (text: string): null | ParsedPortText => {
   }
 
   const match = text.match(PORT_LINE_REGEX);
-  if (!match) {
-    return null;
-  }
+  if (!match) return null;
 
   const [, port, targetPort, protocol = 'TCP'] = match;
   return {
@@ -115,7 +108,7 @@ export const ensurePortNames = (
   );
 
   return ports.map((port) => {
-    if (port.name && isValidDnsLabel(port.name)) {
+    if (port.name && isValidDNSLabel(port.name)) {
       return port;
     }
 

@@ -1,12 +1,10 @@
+import { TFunction } from 'i18next';
+
 import { isTagValid } from '@utils/components/PodSelectorModal/selectorUtils';
-import { t } from '@utils/hooks/useNetworkingTranslation';
 
-import { isValidDnsLabel, parsePortText } from './utils';
-
-export type ValidationResult = {
-  errorMessage: string;
-  isValid: boolean;
-};
+import { EXTERNAL_NAME_HOSTNAME_REGEX } from './constants';
+import type { ServiceFormFieldErrors, ValidationResult } from './types';
+import { isValidDNSLabel, parsePortText } from './utils';
 
 const validResult = (): ValidationResult => ({ errorMessage: '', isValid: true });
 
@@ -17,7 +15,7 @@ const invalidResult = (errorMessage: string): ValidationResult => ({
 
 const SERVICE_PROTOCOLS = new Set(['TCP', 'UDP', 'SCTP']);
 
-export const validatePort = (value: unknown): ValidationResult => {
+export const validatePort = (t: TFunction, value: unknown): ValidationResult => {
   if (value === '' || value === null || value === undefined) {
     return invalidResult(t('Port is required'));
   }
@@ -31,7 +29,7 @@ export const validatePort = (value: unknown): ValidationResult => {
   return validResult();
 };
 
-export const validateSelectorText = (text: string): ValidationResult => {
+export const validateSelectorText = (t: TFunction, text: string): ValidationResult => {
   const lines = text
     .split('\n')
     .map((line) => line.trim())
@@ -50,7 +48,7 @@ export const validateSelectorText = (text: string): ValidationResult => {
   return validResult();
 };
 
-export const validateSelectorPairs = (pairs: string[][]): ValidationResult => {
+export const validateSelectorPairs = (t: TFunction, pairs: string[][]): ValidationResult => {
   // Ignore only fully empty rows; keep partially filled rows for validation.
   const active = pairs.filter(([key, value]) => Boolean(key?.trim()) || Boolean(value?.trim()));
 
@@ -72,7 +70,7 @@ export const validateSelectorPairs = (pairs: string[][]): ValidationResult => {
   return validResult();
 };
 
-export const validatePortsText = (text: string): ValidationResult => {
+export const validatePortsText = (t: TFunction, text: string): ValidationResult => {
   const lines = text
     .split('\n')
     .map((line) => line.trim())
@@ -92,7 +90,7 @@ export const validatePortsText = (text: string): ValidationResult => {
     }
 
     if (parsed.name) {
-      if (!isValidDnsLabel(parsed.name)) {
+      if (!isValidDNSLabel(parsed.name)) {
         return invalidResult(t('Port names must be valid DNS labels'));
       }
       if (seenNames.has(parsed.name)) {
@@ -101,17 +99,17 @@ export const validatePortsText = (text: string): ValidationResult => {
       seenNames.add(parsed.name);
     }
 
-    const portResult = validatePort(Number(parsed.port));
+    const portResult = validatePort(t, Number(parsed.port));
     if (!portResult.isValid) {
       return portResult;
     }
 
     if (/^\d+$/.test(parsed.targetPort)) {
-      const targetResult = validatePort(Number(parsed.targetPort));
+      const targetResult = validatePort(t, Number(parsed.targetPort));
       if (!targetResult.isValid) {
         return targetResult;
       }
-    } else if (!isValidDnsLabel(parsed.targetPort)) {
+    } else if (!isValidDNSLabel(parsed.targetPort)) {
       return invalidResult(t('Target port names must be valid DNS labels'));
     }
 
@@ -123,11 +121,7 @@ export const validatePortsText = (text: string): ValidationResult => {
   return validResult();
 };
 
-/** RFC-1123 subdomain / hostname used by ExternalName services. */
-const EXTERNAL_NAME_HOSTNAME_REGEX =
-  /^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)+$/i;
-
-export const validateExternalName = (value?: string): ValidationResult => {
+export const validateExternalName = (t: TFunction, value?: string): ValidationResult => {
   const externalName = value?.trim() ?? '';
 
   if (!externalName) {
@@ -141,13 +135,9 @@ export const validateExternalName = (value?: string): ValidationResult => {
   return validResult();
 };
 
-export type ServiceFormFieldErrors = {
-  portsError?: string;
-  selectorError?: string;
-};
-
 /** Validates selector pairs and ports text fields used by ClusterIP/NodePort/LoadBalancer. */
 export const getServiceFormFieldErrors = (
+  t: TFunction,
   selectorPairs: string[][],
   portsText: string,
   serviceType?: string,
@@ -156,8 +146,8 @@ export const getServiceFormFieldErrors = (
     return {};
   }
 
-  const selectorValidation = validateSelectorPairs(selectorPairs);
-  const portsValidation = validatePortsText(portsText);
+  const selectorValidation = validateSelectorPairs(t, selectorPairs);
+  const portsValidation = validatePortsText(t, portsText);
 
   return {
     portsError: portsValidation.isValid ? undefined : portsValidation.errorMessage,

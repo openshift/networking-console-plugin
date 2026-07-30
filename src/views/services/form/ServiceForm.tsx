@@ -5,21 +5,14 @@ import { useNavigate } from 'react-router';
 import { ServiceModel } from '@kubevirt-ui/kubevirt-api/console';
 import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { k8sCreate, k8sUpdate } from '@openshift-console/dynamic-plugin-sdk';
-import {
-  Form,
-  FormGroup,
-  PageSection,
-  TextArea,
-  TextInput,
-  ValidatedOptions,
-} from '@patternfly/react-core';
+import { Form, FormGroup, PageSection, TextInput, ValidatedOptions } from '@patternfly/react-core';
 import FormGroupHelperText from '@utils/components/FormGroupHelperText/FormGroupHelperText';
-import { recordToLabelPairs } from '@utils/components/SelectorPreview';
+import { recordToLabelPairs } from '@utils/components/SelectorPreview/utils/utils';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { getName, getNamespace, resourcePathFromModel } from '@utils/resources/shared';
 
 import useIsCreationForm from './hooks/useIsCreationForm';
-import { NAME_FIELD_ID, NAMESPACE_FIELD_ID, PORTS_FIELD_ID } from './utils/constants';
+import { NAME_FIELD_ID, NAMESPACE_FIELD_ID } from './utils/constants';
 import { buildServiceSubmitPayload, portsToText, textToPorts } from './utils/utils';
 import {
   getServiceFormFieldErrors,
@@ -27,9 +20,8 @@ import {
   validatePortsText,
   validateSelectorPairs,
 } from './utils/validationUtils';
-import ExternalNameField from './ExternalNameField';
 import ServiceFormActions from './ServiceFormActions';
-import ServiceSelectorField from './ServiceSelectorField';
+import ServiceTypeFields from './ServiceTypeFields';
 import ServiceTypeSelect from './ServiceTypeSelect';
 
 type ServiceFormProps = {
@@ -68,8 +60,8 @@ const ServiceForm: FC<ServiceFormProps> = ({ formData, onChange: onFormChange })
   const isExternalName = serviceType === 'ExternalName';
 
   const isFormValid = isExternalName
-    ? validateExternalName(externalName).isValid
-    : validateSelectorPairs(labelPairs).isValid && !portsError;
+    ? validateExternalName(t, externalName).isValid
+    : validateSelectorPairs(t, labelPairs).isValid && !portsError;
 
   useEffect(() => {
     onFormChange(service);
@@ -89,7 +81,7 @@ const ServiceForm: FC<ServiceFormProps> = ({ formData, onChange: onFormChange })
 
   const onPortsChange = (text: string) => {
     setPortsText(text);
-    const { errorMessage, isValid } = validatePortsText(text);
+    const { errorMessage, isValid } = validatePortsText(t, text);
     setPortsError(isValid ? undefined : errorMessage);
     if (isValid) {
       setValue('spec.ports', textToPorts(text), { shouldDirty: true, shouldValidate: true });
@@ -98,7 +90,7 @@ const ServiceForm: FC<ServiceFormProps> = ({ formData, onChange: onFormChange })
 
   const onSubmit = (data: IoK8sApiCoreV1Service) => {
     const { portsError: nextPortsError, selectorError: nextSelectorError } =
-      getServiceFormFieldErrors(labelPairs, portsText, data.spec?.type);
+      getServiceFormFieldErrors(t, labelPairs, portsText, data.spec?.type);
 
     setPortsError(nextPortsError);
     setSelectorError(nextSelectorError);
@@ -167,39 +159,16 @@ const ServiceForm: FC<ServiceFormProps> = ({ formData, onChange: onFormChange })
 
           <ServiceTypeSelect />
 
-          {isExternalName ? (
-            <ExternalNameField />
-          ) : (
-            <>
-              <ServiceSelectorField
-                labelPairs={labelPairs}
-                namespace={namespace}
-                onLabelPairsChange={onLabelPairsChange}
-                selectorError={selectorError}
-              />
-
-              <FormGroup fieldId={PORTS_FIELD_ID} isRequired label={t('Ports')}>
-                <TextArea
-                  aria-invalid={Boolean(portsError)}
-                  aria-label={t('Ports')}
-                  id={PORTS_FIELD_ID}
-                  onChange={(_event, text) => onPortsChange(text)}
-                  resizeOrientation="vertical"
-                  rows={3}
-                  validated={portsError ? ValidatedOptions.error : ValidatedOptions.default}
-                  value={portsText}
-                />
-                <FormGroupHelperText
-                  validated={portsError ? ValidatedOptions.error : ValidatedOptions.default}
-                >
-                  {portsError ||
-                    t(
-                      'One port per line as [name:]port:targetPort/PROTOCOL (e.g. http:80:9376/TCP).',
-                    )}
-                </FormGroupHelperText>
-              </FormGroup>
-            </>
-          )}
+          <ServiceTypeFields
+            isExternalName={isExternalName}
+            labelPairs={labelPairs}
+            namespace={namespace}
+            onLabelPairsChange={onLabelPairsChange}
+            onPortsChange={onPortsChange}
+            portsError={portsError}
+            portsText={portsText}
+            selectorError={selectorError}
+          />
 
           <ServiceFormActions
             apiError={apiError}

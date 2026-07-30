@@ -9,9 +9,9 @@ export type SelectorPreviewProps = {
   dataTest?: string;
   labelSelector?: string[][];
   namespace?: string;
-  namespaceSelector?: string[][];
   popoverRef: MutableRefObject<HTMLElement | undefined>;
   resourceModel: K8sModel;
+  resourceName: string;
 };
 
 /**
@@ -22,9 +22,9 @@ const SelectorPreview: FC<SelectorPreviewProps> = ({
   dataTest,
   labelSelector,
   namespace,
-  namespaceSelector,
   popoverRef,
   resourceModel,
+  resourceName,
 }) => (
   <Popover
     aria-label={dataTest ? `${dataTest}-list` : 'matching-resources-list'}
@@ -32,8 +32,8 @@ const SelectorPreview: FC<SelectorPreviewProps> = ({
       <SelectorPreviewContent
         labelSelector={labelSelector}
         namespace={namespace}
-        namespaceSelector={namespaceSelector}
         resourceModel={resourceModel}
+        resourceName={resourceName}
       />
     }
     data-test={dataTest ? `${dataTest}-popover` : 'selector-preview-popover'}

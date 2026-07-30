@@ -153,6 +153,9 @@ export const resourcePathFromModel = (
   return url;
 };
 
+export const resourceListPathFromModel = (model: K8sModel, namespace?: string) =>
+  resourcePathFromModel(model, null, namespace);
+
 export const getReference = ({
   group,
   kind,

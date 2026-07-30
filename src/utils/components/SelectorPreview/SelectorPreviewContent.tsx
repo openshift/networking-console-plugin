@@ -1,78 +1,56 @@
 import React, { FC, useMemo } from 'react';
 
 import { modelToGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console';
-import { K8sModel, K8sResourceCommon, ResourceIcon } from '@openshift-console/dynamic-plugin-sdk';
+import { K8sModel, ResourceIcon } from '@openshift-console/dynamic-plugin-sdk';
 import { Alert, AlertVariant, Label, List, ListItem } from '@patternfly/react-core';
 import Loading from '@utils/components/Loading/Loading';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { getName, getNamespace } from '@utils/resources/shared';
+import { getName, getNamespace, resourceListPathFromModel } from '@utils/resources/shared';
 import { isEmpty } from '@utils/utils';
+import { labelsFilterQuery, MAX_PREVIEW_RESOURCES } from '@utils/utils/selector';
 
 import useSelectorPreviewData from './hooks/useSelectorPreviewData';
-import { maxPreviewResources } from './utils/const';
-import { labelsFilterQuery, matchedNamespaces, resourceListPathFromModel } from './utils/utils';
 
 type SelectorPreviewContentProps = {
   labelSelector?: string[][];
   namespace?: string;
-  namespaceSelector?: string[][];
   resourceModel: K8sModel;
-};
-
-const getResourceLabel = (resource: K8sResourceCommon, showNamespace: boolean) => {
-  const name = getName(resource);
-  const ns = getNamespace(resource);
-  return showNamespace && ns ? `${ns}/${name}` : name;
+  resourceName: string;
 };
 
 const SelectorPreviewContent: FC<SelectorPreviewContentProps> = ({
   labelSelector,
   namespace,
-  namespaceSelector,
   resourceModel,
+  resourceName,
 }) => {
   const { t } = useNetworkingTranslation();
-  const { error, loaded, namespaces, resources, safeLabelSelector, safeNsSelector } =
-    useSelectorPreviewData({
-      labelSelector,
-      namespace,
-      namespaceSelector,
-      resourceModel,
-    });
+  const { error, loaded, resources, safeLabelSelector } = useSelectorPreviewData({
+    labelSelector,
+    namespace,
+    resourceModel,
+  });
 
   const { filteredResources, total } = useMemo(() => {
     if (!loaded) {
       return { filteredResources: [], total: 0 };
     }
 
-    let matched = resources;
-    if (namespaceSelector) {
-      const nsSet = matchedNamespaces(namespaces);
-      matched = matched.filter(
-        (resource) => resource.metadata?.namespace && nsSet.has(resource.metadata.namespace),
-      );
-    }
-
     return {
-      filteredResources: matched.slice(0, maxPreviewResources),
-      total: matched.length,
+      filteredResources: resources.slice(0, MAX_PREVIEW_RESOURCES),
+      total: resources.length,
     };
-  }, [loaded, namespaceSelector, namespaces, resources]);
+  }, [loaded, resources]);
 
   const labelsArray = Object.entries(safeLabelSelector.matchLabels || {});
   const labelList = labelsArray.map(([label, value]) => `${label}=${value}`);
-  const showNamespace =
-    Boolean(namespaceSelector) ||
-    filteredResources.some(
-      (resource) => getNamespace(resource) && getNamespace(resource) !== namespace,
-    );
 
   if (error) {
     return (
       <Alert
         data-test="selector-preview-alert"
         isInline
-        title={t("Can't preview matching resources")}
+        title={t("Can't preview matching {{resourceName}}", { resourceName })}
         variant={AlertVariant.danger}
       >
         {error.toString()}
@@ -86,7 +64,9 @@ const SelectorPreviewContent: FC<SelectorPreviewContentProps> = ({
 
   if (isEmpty(filteredResources)) {
     return (
-      <div data-test="selector-preview-title">{t('No resources matching the provided labels')}</div>
+      <div data-test="selector-preview-title">
+        {t('No {{resourceName}} matching the provided labels', { resourceName })}
+      </div>
     );
   }
 
@@ -95,7 +75,7 @@ const SelectorPreviewContent: FC<SelectorPreviewContentProps> = ({
       <div data-test="selector-preview-title">
         {!isEmpty(labelList) ? (
           <>
-            {t('List of resources matching')}{' '}
+            {t('List of {{resourceName}} matching', { resourceName })}{' '}
             {labelsArray.map(([label, value]) => (
               <Label color="green" key={label}>
                 {label}={value}
@@ -103,18 +83,18 @@ const SelectorPreviewContent: FC<SelectorPreviewContentProps> = ({
             ))}
           </>
         ) : (
-          t('List of matching resources')
+          t('List of matching {{resourceName}}', { resourceName })
         )}
       </div>
       <List data-test="selector-preview-list" isPlain>
         {filteredResources.map((resource) => (
           <ListItem key={`${getNamespace(resource)}/${getName(resource)}`}>
             <ResourceIcon groupVersionKind={modelToGroupVersionKind(resourceModel)} />{' '}
-            {getResourceLabel(resource, showNamespace)}
+            {getName(resource)}
           </ListItem>
         ))}
       </List>
-      {total > maxPreviewResources && isEmpty(Object.keys(safeNsSelector.matchLabels || {})) ? (
+      {total > MAX_PREVIEW_RESOURCES ? (
         <a
           data-test="selector-preview-footer-link"
           href={`${resourceListPathFromModel(resourceModel, namespace)}${labelsFilterQuery(
@@ -125,7 +105,7 @@ const SelectorPreviewContent: FC<SelectorPreviewContentProps> = ({
           target="_blank"
         >
           {t('Showing {{shown}} from {{total}} results', {
-            shown: maxPreviewResources,
+            shown: MAX_PREVIEW_RESOURCES,
             total,
           })}
         </a>

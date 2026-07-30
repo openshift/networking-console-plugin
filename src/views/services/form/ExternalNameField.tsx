@@ -27,7 +27,7 @@ const ExternalNameField: FC = () => {
         validated={externalNameError ? ValidatedOptions.error : ValidatedOptions.default}
         {...register('spec.externalName', {
           validate: (value) => {
-            const { errorMessage, isValid } = validateExternalName(value);
+            const { errorMessage, isValid } = validateExternalName(t, value);
             return isValid || errorMessage;
           },
         })}
