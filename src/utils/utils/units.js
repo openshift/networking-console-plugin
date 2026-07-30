@@ -1,5 +1,7 @@
 import * as _ from 'lodash';
 
+import { VALUE_WITH_OPTIONAL_UNIT } from './constants';
+
 export const units = {};
 export const validate = {};
 
@@ -206,16 +208,11 @@ units.dehumanize = (value, typeName) => {
 };
 
 validate.split = (value) => {
-  const index = value.search(/([a-zA-Z]+)/g);
-  let number;
-  let unit;
-  if (index === -1) {
-    number = value;
-  } else {
-    number = value.slice(0, index);
-    unit = value.slice(index);
+  const match = VALUE_WITH_OPTIONAL_UNIT.exec(value);
+  if (!match) {
+    return [NaN];
   }
-  return [parseFloat(number, 10), unit];
+  return [parseFloat(match[1], 10), match[2] || undefined];
 };
 
 const validateNumber = (float = '') => {

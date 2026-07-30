@@ -18,7 +18,7 @@ const networkUsesUDN = (network: V1Network, udn: UDNResource, vm: V1VirtualMachi
 
   const iface = getInterfaces(vm).find((item) => item.name === network.name);
 
-  return iface?.state !== INTERFACE_STATE_ABSENT;
+  return Boolean(iface && iface.state !== INTERFACE_STATE_ABSENT);
 };
 
 export const vmUsesUDN = (vm: V1VirtualMachine, udn: UDNResource | undefined): boolean => {

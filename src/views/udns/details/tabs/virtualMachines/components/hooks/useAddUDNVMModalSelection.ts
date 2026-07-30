@@ -110,6 +110,7 @@ const useAddUDNVMModalSelection = ({
     onSelectAll,
     selected,
     selection,
+    setSelected,
   };
 };
 

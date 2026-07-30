@@ -21,7 +21,7 @@ import {
 } from '@patternfly/react-data-view';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
-import { getName } from '@utils/resources/shared';
+import { getName, getNamespace } from '@utils/resources/shared';
 import { addVMToNAD } from '@utils/resources/vm/utils';
 
 import useAddNADVMModalData from './hooks/useAddNADVMModalData';
@@ -102,7 +102,7 @@ const AddNADVirtualMachinesModal: FC<AddNADVirtualMachinesModalProps> = ({
         }
 
         const name = getName(selected[index]);
-        return name ? [name] : [];
+        return name ? [`${getNamespace(selected[index])}/${name}`] : [];
       });
 
       if (failedNames.length > 0) {

@@ -29,6 +29,7 @@ type UseAddUDNVMModalTableParams = {
     direction: 'asc' | 'desc',
   ) => void;
   paginatedData: V1VirtualMachine[];
+  sortBy: string | undefined;
   t: TFunction;
 };
 
@@ -42,19 +43,31 @@ const useAddUDNVMModalTable = ({
   onSelectAll,
   onSort,
   paginatedData,
+  sortBy,
   t,
 }: UseAddUDNVMModalTableParams) => {
   const getSortParams = useCallback(
-    (columnIndex: number) => ({
-      columnIndex,
-      onSort: (
-        event: MouseEvent | React.KeyboardEvent | React.MouseEvent,
-        _index: number | string,
-        newDirection: 'asc' | 'desc',
-      ) => onSort(event, ADD_VM_MODAL_SORT_COLUMN_KEYS[columnIndex], newDirection),
-      sortBy: { direction, index: columnIndex },
-    }),
-    [direction, onSort],
+    (columnIndex: number) => {
+      const activeSortIndex = sortBy
+        ? ADD_VM_MODAL_SORT_COLUMN_KEYS.indexOf(
+            sortBy as (typeof ADD_VM_MODAL_SORT_COLUMN_KEYS)[number],
+          )
+        : -1;
+
+      return {
+        columnIndex,
+        onSort: (
+          event: MouseEvent | React.KeyboardEvent | React.MouseEvent,
+          _index: number | string,
+          newDirection: 'asc' | 'desc',
+        ) => onSort(event, ADD_VM_MODAL_SORT_COLUMN_KEYS[columnIndex], newDirection),
+        sortBy: {
+          direction: activeSortIndex === columnIndex ? direction : undefined,
+          index: columnIndex,
+        },
+      };
+    },
+    [direction, onSort, sortBy],
   );
 
   const columns = useMemo(

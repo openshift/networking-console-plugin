@@ -23,7 +23,7 @@ const networkUsesNAD = (
 
   const iface = getInterfaces(vm).find((item) => item.name === network.name);
 
-  return iface?.state !== INTERFACE_STATE_ABSENT;
+  return Boolean(iface && iface.state !== INTERFACE_STATE_ABSENT);
 };
 
 export const getNADVirtualMachines = (

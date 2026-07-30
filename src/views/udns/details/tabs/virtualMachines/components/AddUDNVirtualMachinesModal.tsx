@@ -62,15 +62,22 @@ const AddUDNVirtualMachinesModal: FC<AddUDNVirtualMachinesModalProps> = ({
     page,
     paginatedData,
     perPage,
+    sortBy,
   } = useAddUDNVMModalData(availableVMs);
 
-  const { areAllPaginatedSelected, areSomePaginatedSelected, onSelectAll, selected, selection } =
-    useAddUDNVMModalSelection({
-      isOpen,
-      isSubmitting,
-      onResetError,
-      paginatedData,
-    });
+  const {
+    areAllPaginatedSelected,
+    areSomePaginatedSelected,
+    onSelectAll,
+    selected,
+    selection,
+    setSelected,
+  } = useAddUDNVMModalSelection({
+    isOpen,
+    isSubmitting,
+    onResetError,
+    paginatedData,
+  });
 
   const { activeState, bodyStates, columns, headStates, rows } = useAddUDNVMModalTable({
     areAllPaginatedSelected,
@@ -82,6 +89,7 @@ const AddUDNVirtualMachinesModal: FC<AddUDNVirtualMachinesModalProps> = ({
     onSelectAll,
     onSort,
     paginatedData,
+    sortBy,
     t,
   });
 
@@ -101,7 +109,7 @@ const AddUDNVirtualMachinesModal: FC<AddUDNVirtualMachinesModalProps> = ({
           const nad = getNADForVM(vm);
 
           if (!nad) {
-            networkConsole.warn('Failed to add virtual machine to network: NAD not found', vm);
+            networkConsole.warn('Failed to add virtual machine to network', 'nad-not-found');
             return Promise.reject(new Error('Network attachment definition not found'));
           }
 
@@ -109,22 +117,24 @@ const AddUDNVirtualMachinesModal: FC<AddUDNVirtualMachinesModalProps> = ({
         }),
       );
 
-      const failedNames = results.flatMap((result, index) => {
+      const failedIndexes = results.flatMap((result, index) => {
         if (result.status === 'fulfilled') {
           return [];
         }
 
-        networkConsole.warn(
-          'Failed to add virtual machine to network',
-          selected[index],
-          result.reason,
-        );
-
-        const name = getName(selected[index]);
-        return name ? [name] : [];
+        networkConsole.warn('Failed to add virtual machine to network', 'add-failed');
+        return [index];
       });
 
-      if (failedNames.length > 0) {
+      if (failedIndexes.length > 0) {
+        const failedVMs = failedIndexes.map((index) => selected[index]);
+        setSelected(failedVMs);
+
+        const failedNames = failedVMs.flatMap((vm) => {
+          const name = getName(vm);
+          return name ? [name] : [];
+        });
+
         setErrorMessage(
           t('Failed to add the following virtual machines: {{names}}', {
             names: failedNames.join(', '),
