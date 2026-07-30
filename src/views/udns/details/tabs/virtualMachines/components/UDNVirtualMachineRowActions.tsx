@@ -4,8 +4,8 @@ import { Trans } from 'react-i18next';
 import { modelToGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console';
 import VirtualMachineModel from '@kubevirt-ui/kubevirt-api/console/models/VirtualMachineModel';
 import { V1VirtualMachine } from '@kubevirt-ui/kubevirt-api/kubevirt';
-import { Action, ResourceLink, useModal } from '@openshift-console/dynamic-plugin-sdk';
-import { ButtonVariant } from '@patternfly/react-core';
+import { Action, ResourceLink, useModal, useToast } from '@openshift-console/dynamic-plugin-sdk';
+import { AlertVariant, ButtonVariant } from '@patternfly/react-core';
 import ActionsDropdown from '@utils/components/ActionsDropdown/ActionsDropdown';
 import ConfirmModal, { ConfirmModalProps } from '@utils/components/ConfirmModal/ConfirmModal';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
@@ -27,6 +27,7 @@ const UDNVirtualMachineRowActions: FC<UDNVirtualMachineRowActionsProps> = ({
 }) => {
   const { t } = useNetworkingTranslation();
   const createModal = useModal();
+  const { addToast } = useToast();
   const vmName = getName(vm);
   const vmNamespace = getNamespace(vm);
   const udnName = getName(udn);
@@ -38,6 +39,13 @@ const UDNVirtualMachineRowActions: FC<UDNVirtualMachineRowActionsProps> = ({
       executeFn: () => {
         removeVMFromNAD(vm, interfaceName).catch((error) => {
           networkConsole.warn('Failed to remove virtual machine from network', error);
+          addToast({
+            content: error?.message || t('Failed to remove virtual machine from network'),
+            dismissible: true,
+            timeout: true,
+            title: t('An error occurred.'),
+            variant: AlertVariant.danger,
+          });
         });
       },
       message: (
@@ -55,7 +63,7 @@ const UDNVirtualMachineRowActions: FC<UDNVirtualMachineRowActionsProps> = ({
       ),
       title: t('Remove virtual machine from network?'),
     });
-  }, [createModal, interfaceName, t, udnName, vm, vmName, vmNamespace]);
+  }, [addToast, createModal, interfaceName, t, udnName, vm, vmName, vmNamespace]);
 
   const actions = useMemo<Action[]>(
     () => [

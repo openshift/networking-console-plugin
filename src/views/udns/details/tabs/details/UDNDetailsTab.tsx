@@ -99,12 +99,12 @@ const UDNDetailsTab: FC<UDNDetailsTabProps> = ({ obj: udn }) => {
                   onClick={annotationsModalLauncher}
                   variant={ButtonVariant.link}
                 >
-                  {t('{{count}} annotation', {
+                  {t('annotation', {
                     count: _.size(metadata?.annotations),
                   })}
                 </Button>
               ) : (
-                t('{{count}} annotation', {
+                t('annotation', {
                   count: _.size(metadata?.annotations),
                 })
               )}

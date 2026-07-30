@@ -46,7 +46,7 @@ const NADsRow: FC<NADsRowType> = ({ activeColumnIDs, obj }) => {
         {type || <MutedText content={t('Not available')} />}
       </TableData>
       <TableData activeColumnIDs={activeColumnIDs} className="pf-v6-c-table__action" id="">
-        <NADsActions obj={obj} />
+        <NADsActions isKebabToggle obj={obj} />
       </TableData>
     </>
   );

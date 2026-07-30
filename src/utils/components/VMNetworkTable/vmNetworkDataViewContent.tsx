@@ -18,6 +18,7 @@ import {
   getVMStatus,
   VMResourceLookups,
 } from '@utils/resources/vm/selectors';
+import { convertToBaseValue } from '@utils/utils';
 
 import { VM_NETWORK_TABLE_COLUMN_IDS } from './constants';
 
@@ -71,7 +72,7 @@ export const getVMNetworkTableSortValue = (
     case VM_NETWORK_TABLE_COLUMN_IDS.CREATED:
       return item.vm?.metadata?.creationTimestamp ?? '';
     case VM_NETWORK_TABLE_COLUMN_IDS.MEMORY:
-      return getVMMemory(item.vm, vmResourceLookups);
+      return convertToBaseValue(getVMMemory(item.vm, vmResourceLookups)) || 0;
     case VM_NETWORK_TABLE_COLUMN_IDS.CPU:
       return getVMCPUCount(item.vm, vmResourceLookups);
     case VM_NETWORK_TABLE_COLUMN_IDS.CONDITIONS:

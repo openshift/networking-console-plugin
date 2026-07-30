@@ -6,6 +6,8 @@ import VirtualMachineModel from '@kubevirt-ui/kubevirt-api/console/models/Virtua
 import { V1VirtualMachine } from '@kubevirt-ui/kubevirt-api/kubevirt';
 import { ResourceLink } from '@openshift-console/dynamic-plugin-sdk';
 import {
+  Alert,
+  AlertVariant,
   Bullseye,
   Button,
   EmptyState,
@@ -82,6 +84,7 @@ const AddUDNVirtualMachinesModal: FC<AddUDNVirtualMachinesModalProps> = ({
 }) => {
   const { t } = useNetworkingTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const { clearAllFilters, filters, onSetFilters } = useDataViewFilters<AddVMFilters>({});
 
@@ -105,6 +108,7 @@ const AddUDNVirtualMachinesModal: FC<AddUDNVirtualMachinesModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       setSelected([]);
+      setErrorMessage('');
     }
     // Only reset when the modal opens; setSelected is not stable across renders.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -199,9 +203,12 @@ const AddUDNVirtualMachinesModal: FC<AddUDNVirtualMachinesModalProps> = ({
         _index: number | string,
         newDirection: 'asc' | 'desc',
       ) => onSort(event, SORT_COLUMN_KEYS[columnIndex], newDirection),
-      sortBy: { direction, index: columnIndex },
+      sortBy: {
+        direction: sortBy === SORT_COLUMN_KEYS[columnIndex] ? direction : undefined,
+        index: columnIndex,
+      },
     }),
-    [direction, onSort],
+    [direction, onSort, sortBy],
   );
 
   const columns = useMemo(
@@ -382,20 +389,46 @@ const AddUDNVirtualMachinesModal: FC<AddUDNVirtualMachinesModalProps> = ({
     }
 
     setIsSubmitting(true);
+    setErrorMessage('');
 
     try {
-      await Promise.all(
+      const results = await Promise.allSettled(
         selected.map((vm) => {
           const nad = getNADForVM(vm);
 
           if (!nad) {
             networkConsole.warn('Failed to add virtual machine to network: NAD not found', vm);
-            return Promise.resolve();
+            return Promise.reject(new Error('Network attachment definition not found'));
           }
 
           return addVMToNAD(vm, nad);
         }),
       );
+
+      const failedNames = results.flatMap((result, index) => {
+        if (result.status === 'fulfilled') {
+          return [];
+        }
+
+        networkConsole.warn(
+          'Failed to add virtual machine to network',
+          selected[index],
+          result.reason,
+        );
+
+        const name = getName(selected[index]);
+        return name ? [name] : [];
+      });
+
+      if (failedNames.length > 0) {
+        setErrorMessage(
+          t('Failed to add the following virtual machines: {{names}}', {
+            names: failedNames.join(', '),
+          }),
+        );
+        return;
+      }
+
       onClose();
     } finally {
       setIsSubmitting(false);
@@ -409,6 +442,11 @@ const AddUDNVirtualMachinesModal: FC<AddUDNVirtualMachinesModalProps> = ({
         title={t('Add virtual machines')}
       />
       <ModalBody>
+        {errorMessage && (
+          <Alert isInline title={t('An error occurred.')} variant={AlertVariant.danger}>
+            {errorMessage}
+          </Alert>
+        )}
         <DataView activeState={activeState} selection={selection}>
           <DataViewToolbar
             clearAllFilters={clearAllFilters}

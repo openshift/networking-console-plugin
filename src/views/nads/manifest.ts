@@ -78,6 +78,9 @@ export const NADsExtensions: EncodedExtension[] = [
     type: 'console.action/resource-provider',
   } as EncodedExtension<ResourceActionProvider>,
   {
+    flags: {
+      required: [FLAG_NET_ATTACH_DEF, FLAG_KUBEVIRT],
+    },
     properties: {
       component: { $codeRef: 'NADDetailsPage' },
       model: NetworkAttachmentDefinitionExtensionModel,

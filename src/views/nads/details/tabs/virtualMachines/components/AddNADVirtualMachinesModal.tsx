@@ -6,6 +6,8 @@ import VirtualMachineModel from '@kubevirt-ui/kubevirt-api/console/models/Virtua
 import { V1VirtualMachine } from '@kubevirt-ui/kubevirt-api/kubevirt';
 import { ResourceLink } from '@openshift-console/dynamic-plugin-sdk';
 import {
+  Alert,
+  AlertVariant,
   Bullseye,
   Button,
   EmptyState,
@@ -81,6 +83,7 @@ const AddNADVirtualMachinesModal: FC<AddNADVirtualMachinesModalProps> = ({
 }) => {
   const { t } = useNetworkingTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const { clearAllFilters, filters, onSetFilters } = useDataViewFilters<AddVMFilters>({});
 
@@ -104,6 +107,7 @@ const AddNADVirtualMachinesModal: FC<AddNADVirtualMachinesModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       setSelected([]);
+      setErrorMessage('');
     }
     // Only reset when the modal opens; setSelected is not stable across renders.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -381,9 +385,28 @@ const AddNADVirtualMachinesModal: FC<AddNADVirtualMachinesModalProps> = ({
     }
 
     setIsSubmitting(true);
+    setErrorMessage('');
 
     try {
-      await Promise.all(selected.map((vm) => addVMToNAD(vm, nad)));
+      const results = await Promise.allSettled(selected.map((vm) => addVMToNAD(vm, nad)));
+      const failedNames = results.flatMap((result, index) => {
+        if (result.status === 'fulfilled') {
+          return [];
+        }
+
+        const name = getName(selected[index]);
+        return name ? [name] : [];
+      });
+
+      if (failedNames.length > 0) {
+        setErrorMessage(
+          t('Failed to add the following virtual machines: {{names}}', {
+            names: failedNames.join(', '),
+          }),
+        );
+        return;
+      }
+
       onClose();
     } finally {
       setIsSubmitting(false);
@@ -397,6 +420,11 @@ const AddNADVirtualMachinesModal: FC<AddNADVirtualMachinesModalProps> = ({
         title={t('Add virtual machines')}
       />
       <ModalBody>
+        {errorMessage && (
+          <Alert isInline title={t('An error occurred.')} variant={AlertVariant.danger}>
+            {errorMessage}
+          </Alert>
+        )}
         <DataView activeState={activeState} selection={selection}>
           <DataViewToolbar
             clearAllFilters={clearAllFilters}

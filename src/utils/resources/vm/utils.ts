@@ -217,10 +217,16 @@ export const buildNADReferenceForUDN = (
 };
 
 export const findNADForUDN = (
-  _nads: NetworkAttachmentDefinitionKind[] | undefined,
+  nads: NetworkAttachmentDefinitionKind[] | undefined,
   udn: UDNResource,
   vm: V1VirtualMachine,
-): NetworkAttachmentDefinitionKind | undefined => buildNADReferenceForUDN(udn, vm);
+): NetworkAttachmentDefinitionKind | undefined => {
+  const namespace = getUDNNetworkNamespace(udn, vm);
+  const candidateNames = new Set(getUDNNADNameCandidates(udn));
+  return nads?.find(
+    (nad) => getNamespace(nad) === namespace && candidateNames.has(getName(nad) || ''),
+  );
+};
 
 type NADNetworkPair = {
   iface: V1Interface;
@@ -471,23 +477,24 @@ export const addVMToNAD = (vm: V1VirtualMachine, nad: NetworkAttachmentDefinitio
   if (disconnectedPairs.length === 1) {
     const [pairToReconnect] = disconnectedPairs;
     const vmNamespace = getNamespace(vm);
+    const { state: _state, ...reconnectedInterface } = pairToReconnect.iface;
 
     return patchVM(vm, [
       ...replaceAtIndex({
         index: pairToReconnect.networkIndex,
         path: NETWORK_PATH,
         value: {
-          multus: { networkName: getMultusNetworkNameForNAD(nad, vmNamespace) },
-          name: pairToReconnect.network.name,
+          ...pairToReconnect.network,
+          multus: {
+            ...pairToReconnect.network.multus,
+            networkName: getMultusNetworkNameForNAD(nad, vmNamespace),
+          },
         },
       }),
       ...replaceAtIndex({
         index: pairToReconnect.ifaceIndex,
         path: INTERFACE_PATH,
-        value: {
-          bridge: {},
-          name: pairToReconnect.iface.name,
-        },
+        value: reconnectedInterface,
       }),
     ]);
   }
