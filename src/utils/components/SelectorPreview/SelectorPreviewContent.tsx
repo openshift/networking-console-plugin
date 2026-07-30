@@ -32,12 +32,13 @@ const SelectorPreviewContent: FC<SelectorPreviewContentProps> = ({
   resourceModel,
 }) => {
   const { t } = useNetworkingTranslation();
-  const { error, loaded, namespaces, resources, safeLabelSelector } = useSelectorPreviewData({
-    labelSelector,
-    namespace,
-    namespaceSelector,
-    resourceModel,
-  });
+  const { error, loaded, namespaces, resources, safeLabelSelector, safeNsSelector } =
+    useSelectorPreviewData({
+      labelSelector,
+      namespace,
+      namespaceSelector,
+      resourceModel,
+    });
 
   const { filteredResources, total } = useMemo(() => {
     if (!loaded) {
@@ -113,7 +114,7 @@ const SelectorPreviewContent: FC<SelectorPreviewContentProps> = ({
           </ListItem>
         ))}
       </List>
-      {total > maxPreviewResources ? (
+      {total > maxPreviewResources && isEmpty(Object.keys(safeNsSelector.matchLabels || {})) ? (
         <a
           data-test="selector-preview-footer-link"
           href={`${resourceListPathFromModel(resourceModel, namespace)}${labelsFilterQuery(

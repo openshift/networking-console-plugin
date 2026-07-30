@@ -47,27 +47,40 @@ const useSelectorPreviewData = ({
     [labelSelector],
   );
 
-  const [resources, loadedResources, resourcesError] = useK8sWatchResource<K8sResourceCommon[]>({
-    groupVersionKind: modelToGroupVersionKind(resourceModel),
-    isList: true,
-    namespace: hasNamespaceSelector ? undefined : namespace,
-    selector: safeLabelSelector,
-  });
+  // Empty matchLabels matches all resources — skip watches while a selector is invalid.
+  const hasInvalidSelector = Boolean(offendingLabelSelector || offendingNsSelector);
 
-  const [namespaces, loadedNamespaces, namespacesError] = useK8sWatchResource<K8sResourceCommon[]>({
-    isList: true,
-    kind: ProjectModel.kind,
-    selector: safeNsSelector,
-  });
+  const [resources, loadedResources, resourcesError] = useK8sWatchResource<K8sResourceCommon[]>(
+    hasInvalidSelector
+      ? null
+      : {
+          groupVersionKind: modelToGroupVersionKind(resourceModel),
+          isList: true,
+          namespace: hasNamespaceSelector ? undefined : namespace,
+          selector: safeLabelSelector,
+        },
+  );
+
+  const [namespaces, loadedNamespaces, namespacesError] = useK8sWatchResource<K8sResourceCommon[]>(
+    hasInvalidSelector
+      ? null
+      : {
+          isList: true,
+          kind: ProjectModel.kind,
+          selector: safeNsSelector,
+        },
+  );
 
   return {
     error:
       selectorError(offendingLabelSelector || offendingNsSelector) ||
       resourcesError ||
       (hasNamespaceSelector ? namespacesError : undefined),
-    loaded: loadedResources && (hasNamespaceSelector ? loadedNamespaces : true),
-    namespaces: namespaces || [],
-    resources: resources || [],
+    loaded: hasInvalidSelector
+      ? true
+      : loadedResources && (hasNamespaceSelector ? loadedNamespaces : true),
+    namespaces: hasInvalidSelector ? [] : namespaces || [],
+    resources: hasInvalidSelector ? [] : resources || [],
     safeLabelSelector,
     safeNsSelector,
   };

@@ -45,6 +45,8 @@ const ServiceForm: FC<ServiceFormProps> = ({ formData, onChange: onFormChange })
 
   const [portsText, setPortsText] = useState(() => portsToText(formData.spec?.ports));
   const [portsError, setPortsError] = useState<string>();
+  const [labelPairs, setLabelPairs] = useState(() => recordToLabelPairs(formData.spec?.selector));
+  const [selectorError, setSelectorError] = useState<string>();
 
   const methods = useForm<IoK8sApiCoreV1Service>({
     defaultValues: formData,
@@ -62,14 +64,12 @@ const ServiceForm: FC<ServiceFormProps> = ({ formData, onChange: onFormChange })
   const service = watch();
   const serviceType = watch('spec.type');
   const externalName = watch('spec.externalName');
-  const selector = watch('spec.selector');
   const namespace = watch('metadata.namespace');
   const isExternalName = serviceType === 'ExternalName';
 
-  const selectorValidation = validateSelectorPairs(recordToLabelPairs(selector));
   const isFormValid = isExternalName
     ? validateExternalName(externalName).isValid
-    : selectorValidation.isValid && !portsError;
+    : validateSelectorPairs(labelPairs).isValid && !portsError;
 
   useEffect(() => {
     onFormChange(service);
@@ -78,8 +78,14 @@ const ServiceForm: FC<ServiceFormProps> = ({ formData, onChange: onFormChange })
   useEffect(() => {
     if (isExternalName) {
       setPortsError(undefined);
+      setSelectorError(undefined);
     }
   }, [isExternalName]);
+
+  const onLabelPairsChange = (pairs: string[][], error?: string) => {
+    setLabelPairs(pairs);
+    setSelectorError(error);
+  };
 
   const onPortsChange = (text: string) => {
     setPortsText(text);
@@ -92,13 +98,10 @@ const ServiceForm: FC<ServiceFormProps> = ({ formData, onChange: onFormChange })
 
   const onSubmit = (data: IoK8sApiCoreV1Service) => {
     const { portsError: nextPortsError, selectorError: nextSelectorError } =
-      getServiceFormFieldErrors(
-        recordToLabelPairs(data.spec?.selector),
-        portsText,
-        data.spec?.type,
-      );
+      getServiceFormFieldErrors(labelPairs, portsText, data.spec?.type);
 
     setPortsError(nextPortsError);
+    setSelectorError(nextSelectorError);
 
     if (nextSelectorError || nextPortsError) {
       return;
@@ -168,7 +171,12 @@ const ServiceForm: FC<ServiceFormProps> = ({ formData, onChange: onFormChange })
             <ExternalNameField />
           ) : (
             <>
-              <ServiceSelectorField namespace={namespace} />
+              <ServiceSelectorField
+                labelPairs={labelPairs}
+                namespace={namespace}
+                onLabelPairsChange={onLabelPairsChange}
+                selectorError={selectorError}
+              />
 
               <FormGroup fieldId={PORTS_FIELD_ID} isRequired label={t('Ports')}>
                 <TextArea

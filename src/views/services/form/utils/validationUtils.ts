@@ -51,19 +51,20 @@ export const validateSelectorText = (text: string): ValidationResult => {
 };
 
 export const validateSelectorPairs = (pairs: string[][]): ValidationResult => {
-  const completed = pairs.filter(([key]) => Boolean(key?.trim()));
+  // Ignore only fully empty rows; keep partially filled rows for validation.
+  const active = pairs.filter(([key, value]) => Boolean(key?.trim()) || Boolean(value?.trim()));
 
-  if (!completed.length) {
+  if (!active.length) {
     return invalidResult(t('Selector is required'));
   }
 
-  for (const [key, value] of completed) {
+  for (const [key, value] of active) {
     if (!isTagValid(`${key}=${value ?? ''}`, true)) {
       return invalidResult(t('Selectors must use valid key=value pairs'));
     }
   }
 
-  const keys = completed.map(([key]) => key.trim());
+  const keys = active.map(([key]) => key.trim());
   if (new Set(keys).size !== keys.length) {
     return invalidResult(t('Selector keys must be unique'));
   }
@@ -110,6 +111,8 @@ export const validatePortsText = (text: string): ValidationResult => {
       if (!targetResult.isValid) {
         return targetResult;
       }
+    } else if (!isValidDnsLabel(parsed.targetPort)) {
+      return invalidResult(t('Target port names must be valid DNS labels'));
     }
 
     if (!SERVICE_PROTOCOLS.has(parsed.protocol)) {

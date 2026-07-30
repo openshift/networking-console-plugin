@@ -1,15 +1,19 @@
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, useRef } from 'react';
 import { useFormContext } from 'react-hook-form';
+import { Trans } from 'react-i18next';
 
 import { PodModel } from '@kubevirt-ui/kubevirt-api/console';
 import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
-import { Content, FormGroup, ValidatedOptions } from '@patternfly/react-core';
+import {
+  Button,
+  ButtonVariant,
+  Content,
+  FormGroup,
+  ValidatedOptions,
+} from '@patternfly/react-core';
 import FormGroupHelperText from '@utils/components/FormGroupHelperText/FormGroupHelperText';
 import LabelSelectorEditor from '@utils/components/LabelSelectorEditor/LabelSelectorEditor';
-import SelectorPreview, {
-  labelPairsToRecord,
-  recordToLabelPairs,
-} from '@utils/components/SelectorPreview';
+import SelectorPreview, { labelPairsToRecord } from '@utils/components/SelectorPreview';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { isEmpty } from '@utils/utils';
 
@@ -17,24 +21,27 @@ import { SELECTOR_FIELD_ID } from './utils/constants';
 import { validateSelectorPairs } from './utils/validationUtils';
 
 type ServiceSelectorFieldProps = {
+  labelPairs: string[][];
   namespace: string;
+  onLabelPairsChange: (pairs: string[][], error?: string) => void;
+  selectorError?: string;
 };
 
-const ServiceSelectorField: FC<ServiceSelectorFieldProps> = ({ namespace }) => {
+const ServiceSelectorField: FC<ServiceSelectorFieldProps> = ({
+  labelPairs,
+  namespace,
+  onLabelPairsChange,
+  selectorError,
+}) => {
   const { t } = useNetworkingTranslation();
-  const { setValue, watch } = useFormContext<IoK8sApiCoreV1Service>();
+  const { setValue } = useFormContext<IoK8sApiCoreV1Service>();
   const podsPreviewPopoverRef = useRef<HTMLElement>();
-
-  const selector = watch('spec.selector') || {};
-  const [labelPairs, setLabelPairs] = useState<string[][]>(() => recordToLabelPairs(selector));
-  const [selectorError, setSelectorError] = useState<string>();
 
   const onPairsChange = (pairs: string[][]) => {
     const nextPairs = isEmpty(pairs) ? [['', '']] : pairs;
-    setLabelPairs(nextPairs);
-
     const { errorMessage, isValid } = validateSelectorPairs(nextPairs);
-    setSelectorError(isValid ? undefined : errorMessage);
+
+    onLabelPairsChange(nextPairs, isValid ? undefined : errorMessage);
 
     if (isValid) {
       setValue('spec.selector', labelPairsToRecord(nextPairs), {
@@ -59,6 +66,20 @@ const ServiceSelectorField: FC<ServiceSelectorFieldProps> = ({ namespace }) => {
       >
         {selectorError}
       </FormGroupHelperText>
+      <Content component="p">
+        <Trans t={t}>
+          Show a preview of the{' '}
+          <Button
+            data-test="show-matching-pods"
+            isInline
+            ref={podsPreviewPopoverRef}
+            variant={ButtonVariant.link}
+          >
+            matching pods
+          </Button>{' '}
+          that this selector will apply to
+        </Trans>
+      </Content>
       <SelectorPreview
         dataTest="service-pods-preview"
         labelSelector={labelPairs}
