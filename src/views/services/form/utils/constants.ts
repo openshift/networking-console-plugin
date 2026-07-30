@@ -9,6 +9,6 @@ export const EXTERNAL_NAME_FIELD_ID = 'service-external-name';
 export const SELECTOR_FIELD_ID = 'service-selector';
 export const PORTS_FIELD_ID = 'service-ports';
 
-/** RFC-1123 subdomain / hostname used by ExternalName services. */
+/** Lowercase RFC-1123 subdomain / hostname used by ExternalName services. */
 export const EXTERNAL_NAME_HOSTNAME_REGEX =
-  /^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)+$/i;
+  /^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$/;
