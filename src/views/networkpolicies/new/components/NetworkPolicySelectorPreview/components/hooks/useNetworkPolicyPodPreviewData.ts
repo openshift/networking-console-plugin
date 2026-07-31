@@ -8,8 +8,7 @@ import {
   useActiveNamespace,
   useK8sWatchResource,
 } from '@openshift-console/dynamic-plugin-sdk';
-
-import { safeSelector, selectorError } from '../../utils/utils';
+import { safeSelector, selectorError } from '@utils/utils/selector';
 
 type UseNetworkPolicyPodPreviewDataArgs = {
   namespaceSelector: string[][];

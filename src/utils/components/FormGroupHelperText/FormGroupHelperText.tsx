@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, ReactNode } from 'react';
 
 import {
   FormHelperText,
@@ -8,6 +8,7 @@ import {
 } from '@patternfly/react-core';
 
 type FormGroupHelperTextProps = {
+  children?: ReactNode;
   validated?: ValidatedOptions;
 };
 
