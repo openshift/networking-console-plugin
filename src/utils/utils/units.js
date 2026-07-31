@@ -1,4 +1,6 @@
-import * as _ from 'lodash';
+import { defaults, isPlainObject } from 'lodash';
+
+import { VALUE_WITH_OPTIONAL_UNIT } from './constants';
 
 export const units = {};
 export const validate = {};
@@ -53,7 +55,7 @@ const TYPES = {
 
 export const getType = (name) => {
   const type = TYPES[name];
-  if (!_.isPlainObject(type)) {
+  if (!isPlainObject(type)) {
     return {
       divisor: 1000,
       space: false,
@@ -65,10 +67,10 @@ export const getType = (name) => {
 
 const convertBaseValueToUnits = (value, unitArray, divisor, initialUnit, preferredUnit) => {
   const sliceIndex = initialUnit ? unitArray.indexOf(initialUnit) : 0;
-  const units_ = unitArray.slice(sliceIndex);
+  const remainingUnits = unitArray.slice(sliceIndex);
 
   if (preferredUnit || preferredUnit === '') {
-    const unitIndex = units_.indexOf(preferredUnit);
+    const unitIndex = remainingUnits.indexOf(preferredUnit);
     if (unitIndex !== -1) {
       return {
         unit: preferredUnit,
@@ -77,10 +79,10 @@ const convertBaseValueToUnits = (value, unitArray, divisor, initialUnit, preferr
     }
   }
 
-  let unit = units_.shift();
-  while (value >= divisor && units_.length > 0) {
+  let unit = remainingUnits.shift();
+  while (value >= divisor && remainingUnits.length > 0) {
     value = value / divisor;
-    unit = units_.shift();
+    unit = remainingUnits.shift();
   }
   return { unit, value };
 };
@@ -97,7 +99,7 @@ const getDefaultFractionDigits = (value) => {
 
 const formatValue = (value, options) => {
   const fractionDigits = getDefaultFractionDigits(value);
-  const { locales, ...rest } = _.defaults(options, {
+  const { locales, ...rest } = defaults(options, {
     maximumFractionDigits: fractionDigits,
   });
 
@@ -162,3 +164,46 @@ export const humanizeDecimalBytesPerSec = (v, initialUnit, preferredUnit) =>
 
 export const humanizeNumber = (v, initialUnit, preferredUnit) =>
   humanize(v, 'numeric', true, initialUnit, preferredUnit);
+
+// Kubernetes quantity suffixes → base-unit multipliers (e.g. "2Gi", "512Mi")
+const QUANTITY_MULTIPLIERS = {
+  E: 1000 ** 6,
+  Ei: 1024 ** 6,
+  G: 1000 ** 3,
+  Gi: 1024 ** 3,
+  i: 1,
+  k: 1000,
+  Ki: 1024,
+  m: 0.001,
+  M: 1000 ** 2,
+  Mi: 1024 ** 2,
+  P: 1000 ** 5,
+  Pi: 1024 ** 5,
+  T: 1000 ** 4,
+  Ti: 1024 ** 4,
+};
+
+export const convertToBaseValue = (value) => {
+  if (typeof value !== 'string') {
+    return null;
+  }
+
+  const match = VALUE_WITH_OPTIONAL_UNIT.exec(value);
+  if (!match) {
+    return null;
+  }
+
+  const number = Number(match[1]);
+  const unit = match[2] || '';
+
+  if (!Number.isFinite(number) || number < 0) {
+    return null;
+  }
+
+  if (!unit) {
+    return number;
+  }
+
+  const multiplier = QUANTITY_MULTIPLIERS[unit];
+  return multiplier === undefined ? null : number * multiplier;
+};

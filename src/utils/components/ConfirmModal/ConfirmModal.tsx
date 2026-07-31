@@ -6,6 +6,7 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 
 export type ConfirmModalProps = {
   btnText: JSX.Element | string;
+  btnVariant?: ButtonVariant;
   closeModal?: () => void;
   executeFn: () => void;
   message: JSX.Element | string;
@@ -14,6 +15,7 @@ export type ConfirmModalProps = {
 
 const ConfirmModal: FC<ConfirmModalProps> = ({
   btnText,
+  btnVariant = ButtonVariant.primary,
   closeModal,
   executeFn,
   message,
@@ -27,17 +29,11 @@ const ConfirmModal: FC<ConfirmModalProps> = ({
   };
 
   return (
-    <Modal
-      id="confirm-modal"
-      isOpen
-      onClose={closeModal}
-      position={'top'}
-      variant={ModalVariant.small}
-    >
+    <Modal id="confirm-modal" isOpen onClose={closeModal} variant={ModalVariant.small}>
       <ModalHeader title={title} titleIconVariant="warning" />
       <ModalBody>{message}</ModalBody>
       <ModalFooter>
-        <Button onClick={submit} variant={ButtonVariant.primary}>
+        <Button onClick={submit} variant={btnVariant}>
           {btnText || t('Confirm')}
         </Button>
         <Button onClick={closeModal} variant={ButtonVariant.link}>
