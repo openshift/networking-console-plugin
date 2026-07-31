@@ -1,15 +1,41 @@
+import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { K8sResourceCommon, K8sResourceCondition } from '@openshift-console/dynamic-plugin-sdk';
 
-type EndpointSlice = {
-  kind?: string;
-  name?: string;
-  namespace?: string;
-  uid?: string;
+type EndpointSliceEndpoint = {
+  addresses?: string[];
+  conditions?: {
+    ready?: boolean;
+    serving?: boolean;
+    terminating?: boolean;
+  };
+  targetRef?: {
+    kind?: string;
+    name?: string;
+    namespace?: string;
+    uid?: string;
+  };
 };
 
 export type EndpointSliceKind = {
-  endpoints?: EndpointSlice[];
+  endpoints?: EndpointSliceEndpoint[];
 } & K8sResourceCommon;
+
+export enum EndpointHealthStatus {
+  Degraded = 'Degraded',
+  Down = 'Down',
+  Healthy = 'Healthy',
+  Unknown = 'Unknown',
+}
+
+export type ServiceEndpointHealth = {
+  ready: number;
+  status: EndpointHealthStatus;
+  total: number;
+};
+
+export type ServiceWithHealth = {
+  _health?: ServiceEndpointHealth;
+} & IoK8sApiCoreV1Service;
 
 export type RouteTarget = {
   kind: 'Service';
@@ -53,3 +79,7 @@ export type RouteKind = {
     url?: string;
   };
 } & K8sResourceCommon;
+
+export type RouteWithHealth = {
+  _backendHealth?: ServiceEndpointHealth;
+} & RouteKind;

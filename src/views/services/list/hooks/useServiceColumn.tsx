@@ -1,14 +1,15 @@
 import { useMemo } from 'react';
 
 import { ServiceModel } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { TableColumn, useActiveColumns } from '@openshift-console/dynamic-plugin-sdk';
 import { sortable } from '@patternfly/react-table';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { objectColumnSorting } from '@utils/utils/sorting';
+import { ServiceWithHealth } from '@utils/types';
+import { objectColumnSorting, sortByEndpointHealthStatus } from '@utils/utils/sorting';
 
 export const tableColumnClasses = [
   'pf-v6-u-w-25-on-xl',
+  'pf-m-hidden pf-m-visible-on-md',
   'pf-m-hidden pf-m-visible-on-md',
   'pf-m-hidden pf-m-visible-on-lg',
   'pf-m-hidden pf-m-visible-on-xl',
@@ -19,7 +20,7 @@ export const tableColumnClasses = [
 const useServiceColumn = (): { id: string; title: string }[] => {
   const { t } = useNetworkingTranslation();
 
-  const columns: TableColumn<IoK8sApiCoreV1Service>[] = useMemo(
+  const columns: TableColumn<ServiceWithHealth>[] = useMemo(
     () => [
       {
         id: 'name',
@@ -29,29 +30,36 @@ const useServiceColumn = (): { id: string; title: string }[] => {
         transforms: [sortable],
       },
       {
-        id: 'namespace',
+        id: 'health',
         props: { className: tableColumnClasses[1] },
+        sort: (data, direction) => sortByEndpointHealthStatus(data, '_health', direction),
+        title: t('Health'),
+        transforms: [sortable],
+      },
+      {
+        id: 'namespace',
+        props: { className: tableColumnClasses[2] },
         sort: 'metadata.namespace',
         title: t('Namespace'),
         transforms: [sortable],
       },
       {
         id: 'labels',
-        props: { className: tableColumnClasses[2] },
+        props: { className: tableColumnClasses[3] },
         sort: 'metadata.labels',
         title: t('Labels'),
         transforms: [sortable],
       },
       {
         id: 'pod-selector',
-        props: { className: tableColumnClasses[3] },
+        props: { className: tableColumnClasses[4] },
         sort: (data, direction) => objectColumnSorting(data, direction, null, 'spec.selector'),
         title: t('Pod selector'),
         transforms: [sortable],
       },
       {
         id: 'location',
-        props: { className: tableColumnClasses[4] },
+        props: { className: tableColumnClasses[5] },
         sort: 'spec.clusterIP',
         title: t('Location'),
         transforms: [sortable],
@@ -65,7 +73,7 @@ const useServiceColumn = (): { id: string; title: string }[] => {
     [t],
   );
 
-  const [activeColumns] = useActiveColumns<IoK8sApiCoreV1Service>({
+  const [activeColumns] = useActiveColumns<ServiceWithHealth>({
     columnManagementID: ServiceModel.kind,
     columns,
     showNamespaceOverride: false,

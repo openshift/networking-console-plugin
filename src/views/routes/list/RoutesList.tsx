@@ -8,7 +8,6 @@ import {
   ListPageFilter,
   ListPageHeader,
   useActiveNamespace,
-  useK8sWatchResource,
   useListPageFilter,
   VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
@@ -17,10 +16,13 @@ import { documentationURLs, getDocumentationURL } from '@utils/constants/documen
 import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/constants/ui';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { resourcePathFromModel } from '@utils/resources/shared';
-import { RouteKind } from '@utils/types';
 import { getValidNamespace } from '@utils/utils';
 import RouteRow from '@views/routes/list/components/RouteRow';
 import useRouteColumns from '@views/routes/list/hooks/useRouteColumns';
+import {
+  RouteWithHealth,
+  useRouteListViewData,
+} from '@views/routes/list/hooks/useRouteListViewData';
 
 import useRouteFilters from './hooks/useRouteFilters';
 
@@ -34,28 +36,24 @@ const RoutesList: FC<RoutesListProps> = ({ namespace }) => {
   const [activeNamespace] = useActiveNamespace();
   const validNamespace = getValidNamespace(namespace || activeNamespace);
 
-  const [routesFetch, loaded, loadError] = useK8sWatchResource<RouteKind[]>({
-    groupVersionKind: modelToGroupVersionKind(RouteModel),
-    isList: true,
-    namespace,
-  });
+  const { data: routes, error: loadError, loaded } = useRouteListViewData(namespace);
 
   const routeFilters = useRouteFilters();
-  const [data, filteredData, onFilterChange] = useListPageFilter(routesFetch, routeFilters);
+  const [data, filteredData, onFilterChange] = useListPageFilter(routes, routeFilters);
   const columns = useRouteColumns();
 
   const routeCreateFormLink = `${resourcePathFromModel(
     RouteModel,
-    null,
+    undefined,
     validNamespace,
   )}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}`;
 
   const title = t('Routes');
 
   return (
-    <ListEmptyState<RouteKind>
+    <ListEmptyState<RouteWithHealth>
       createButtonLink={routeCreateFormLink}
-      data={routesFetch}
+      data={data}
       error={loadError}
       kind={RouteModel.kind}
       learnMoreLink={getDocumentationURL(documentationURLs.routes)}
@@ -81,7 +79,7 @@ const RoutesList: FC<RoutesListProps> = ({ namespace }) => {
           onFilterChange={onFilterChange}
           rowFilters={routeFilters}
         />
-        <VirtualizedTable<RouteKind>
+        <VirtualizedTable<RouteWithHealth>
           columns={columns}
           data={filteredData}
           loaded={loaded}

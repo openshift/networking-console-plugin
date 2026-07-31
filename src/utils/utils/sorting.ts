@@ -1,5 +1,7 @@
 import { K8sResourceCommon } from '@openshift-console/dynamic-plugin-sdk';
+import { SortByDirection } from '@patternfly/react-table';
 import { PaginationState } from '@utils/hooks/usePagination/utils/types';
+import { EndpointHealthStatus, ServiceEndpointHealth } from '@utils/types';
 
 const getValueByPath = (obj: K8sResourceCommon, path: string) => {
   const pathArray = path?.split('.');
@@ -37,7 +39,7 @@ export const columnSorting = <T>(
   return data?.sort(predicate)?.slice(startIndex, endIndex);
 };
 
-export const objectColumnSorting = <T>(
+export const objectColumnSorting = <T extends K8sResourceCommon>(
   data: T[],
   direction: string,
   pagination: PaginationState,
@@ -46,7 +48,7 @@ export const objectColumnSorting = <T>(
   const endIndex = pagination?.endIndex || data.length;
   const startIndex = pagination?.startIndex || 0;
 
-  const sortMethod = (a, b) => {
+  const sortMethod = (a: T, b: T) => {
     const { first, second } =
       direction === 'asc' ? { first: a, second: b } : { first: b, second: a };
 
@@ -67,4 +69,32 @@ export const objectColumnSorting = <T>(
   };
 
   return data?.sort(sortMethod)?.slice(startIndex, endIndex);
+};
+
+const ENDPOINT_HEALTH_STATUS_SORT_ORDER: Record<EndpointHealthStatus, number> = {
+  [EndpointHealthStatus.Degraded]: 1,
+  [EndpointHealthStatus.Down]: 2,
+  [EndpointHealthStatus.Healthy]: 0,
+  [EndpointHealthStatus.Unknown]: 3,
+};
+
+const getServiceEndpointHealthSortOrder = (value: ServiceEndpointHealth) =>
+  ENDPOINT_HEALTH_STATUS_SORT_ORDER[value?.status ?? EndpointHealthStatus.Unknown];
+
+export const sortByEndpointHealthStatus = <T, K extends keyof T>(
+  data: T[],
+  statusField: K,
+  direction: SortByDirection,
+) => {
+  const compareFunction = (a: T, b: T) => {
+    const aValue = a[statusField] as ServiceEndpointHealth;
+    const bValue = b[statusField] as ServiceEndpointHealth;
+
+    return (
+      (direction === 'asc' ? 1 : -1) *
+      (getServiceEndpointHealthSortOrder(aValue) - getServiceEndpointHealthSortOrder(bValue))
+    );
+  };
+
+  return data.sort(compareFunction);
 };
