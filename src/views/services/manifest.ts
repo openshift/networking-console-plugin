@@ -2,6 +2,7 @@ import {
   ResourceDetailsPage,
   ResourceListPage,
   ResourceNSNavItem,
+  RoutePage,
   YAMLTemplate,
 } from '@openshift-console/dynamic-plugin-sdk';
 import {
@@ -53,9 +54,35 @@ export const ServicesExtensions: EncodedExtension[] = [
     },
     type: 'console.page/resource/details',
   } as EncodedExtension<ResourceDetailsPage>,
+  {
+    properties: {
+      component: {
+        $codeRef: 'ServiceFormPage',
+      },
+      exact: true,
+      path: [
+        `/k8s/ns/:ns/${ServiceExtensionModel.group}~${ServiceExtensionModel.version}~${ServiceExtensionModel.kind}/~new/form`,
+      ],
+    },
+    type: 'console.page/route',
+  } as EncodedExtension<RoutePage>,
+  {
+    properties: {
+      component: {
+        $codeRef: 'EditService',
+      },
+      exact: true,
+      path: [
+        `/k8s/ns/:namespace/${ServiceExtensionModel.group}~${ServiceExtensionModel.version}~${ServiceExtensionModel.kind}/:name/form`,
+      ],
+    },
+    type: 'console.page/route',
+  } as EncodedExtension<RoutePage>,
 ];
 
 export const ServicesExposedModules: ConsolePluginBuildMetadata['exposedModules'] = {
+  EditService: './views/services/form/EditService.tsx',
   ServiceDetails: './views/services/details/ServiceDetailsPage.tsx',
+  ServiceFormPage: './views/services/form/ServiceFormPage.tsx',
   ServiceList: './views/services/list/ServiceList.tsx',
 };

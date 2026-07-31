@@ -9,10 +9,9 @@ import { ResourceIcon } from '@openshift-console/dynamic-plugin-sdk';
 import { Alert, AlertVariant, Label, TreeView, TreeViewDataItem } from '@patternfly/react-core';
 import Loading from '@utils/components/Loading/Loading';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { getNamespace, resourceListPathFromModel } from '@utils/resources/shared';
 import { isEmpty } from '@utils/utils';
-
-import { maxPreviewPods } from '../utils/const';
-import { matchedNs, podsFilterQuery, resourceListPathFromModel } from '../utils/utils';
+import { labelsFilterQuery, matchedNamespaces, MAX_PREVIEW_RESOURCES } from '@utils/utils/selector';
 
 import useNetworkPolicyPodPreviewData from './hooks/useNetworkPolicyPodPreviewData';
 
@@ -33,7 +32,7 @@ const NetworkPolicyPodsPreview: FC<NetworkPolicyPodsPreviewProps> = ({
   const { error, loaded, namespaces, pods, safeNsSelector, safePodSelector } =
     useNetworkPolicyPodPreviewData({ namespaceSelector, podSelector });
 
-  // takes the first 'maxPreviewPods' received pods and groups them by namespace
+  // takes the first 'MAX_PREVIEW_RESOURCES' received pods and groups them by namespace
   const preview: {
     pods?: TreeViewDataItem[];
     total?: number;
@@ -45,14 +44,16 @@ const NetworkPolicyPodsPreview: FC<NetworkPolicyPodsPreviewProps> = ({
     // those from non-matching namespaces
     let filteredPods = pods;
     if (namespaceSelector) {
-      filteredPods = filteredPods.filter(
-        (pod) => pod.metadata.namespace && matchedNs(namespaces).has(pod.metadata.namespace),
-      );
+      const nsSet = matchedNamespaces(namespaces);
+      filteredPods = filteredPods.filter((pod) => {
+        const ns = getNamespace(pod);
+        return ns && nsSet.has(ns);
+      });
     }
-    // Group pod TreeViewDataItem by namespace, up to a maximum of maxPreviewedPods entries
+    // Group pod TreeViewDataItem by namespace, up to a maximum of MAX_PREVIEW_RESOURCES entries
     const podsByNs: { [key: string]: TreeViewDataItem[] } = {};
-    filteredPods.slice(0, maxPreviewPods).forEach((pod) => {
-      const ns = pod?.metadata?.namespace;
+    filteredPods.slice(0, MAX_PREVIEW_RESOURCES).forEach((pod) => {
+      const ns = getNamespace(pod);
       podsByNs[ns] ??= [];
       podsByNs[ns].push({
         icon: <ResourceIcon groupVersionKind={modelToGroupVersionKind(PodModel)} />,
@@ -125,15 +126,16 @@ const NetworkPolicyPodsPreview: FC<NetworkPolicyPodsPreviewProps> = ({
         data-test="pods-preview-tree"
         hasGuides
       />
-      {preview?.total > maxPreviewPods && isEmpty(Object.keys(safeNsSelector.matchLabels)) ? (
+      {preview?.total > MAX_PREVIEW_RESOURCES &&
+      isEmpty(Object.keys(safeNsSelector.matchLabels)) ? (
         <a
           data-test="pods-preview-footer-link"
-          href={`${resourceListPathFromModel(PodModel, namespace)}${podsFilterQuery(preview?.total, labelList)}`}
+          href={`${resourceListPathFromModel(PodModel, namespace)}${labelsFilterQuery(preview?.total, labelList)}`}
           rel="noopener noreferrer"
           target="_blank"
         >
           {t('Showing {{shown}} from {{total}} results', {
-            shown: maxPreviewPods,
+            shown: MAX_PREVIEW_RESOURCES,
             total: preview.total,
           })}
         </a>

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router';
 
-import { modelToRef, ServiceModel } from '@kubevirt-ui/kubevirt-api/console';
+import { ServiceModel } from '@kubevirt-ui/kubevirt-api/console';
 import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
   Action,
@@ -13,7 +13,12 @@ import PodSelectorModal, {
   PodSelectorModalProps,
 } from '@utils/components/PodSelectorModal/PodSelectorModal';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { asAccessReview, getName, getNamespace } from '@utils/resources/shared';
+import {
+  asAccessReview,
+  getName,
+  getNamespace,
+  resourcePathFromModel,
+} from '@utils/resources/shared';
 
 type ServiceActionProps = (obj: IoK8sApiCoreV1Service) => [actions: Action[]];
 
@@ -54,7 +59,7 @@ const useServiceActions: ServiceActionProps = (obj) => {
     },
     {
       accessReview: asAccessReview(ServiceModel, obj, 'update'),
-      cta: () => navigate(`/k8s/ns/${objNamespace}/${modelToRef(ServiceModel)}/${objName}/yaml`),
+      cta: () => navigate(`${resourcePathFromModel(ServiceModel, objName, objNamespace)}/form`),
       id: 'edit-services',
       label: t('Edit Service'),
     },
