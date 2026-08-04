@@ -22,6 +22,35 @@ export const getNetworks = (vm: V1VirtualMachine): V1Network[] =>
 export const getInterfaces = (vm: V1VirtualMachine): V1Interface[] =>
   vm?.spec?.template?.spec?.domain?.devices?.interfaces || [];
 
+export const getInterfaceByName = (
+  vm: V1VirtualMachine,
+  interfaceName: string,
+): undefined | V1Interface => getInterfaces(vm).find((iface) => iface.name === interfaceName);
+
+export const getVMInterfaceIPAddress = (
+  vm: V1VirtualMachine,
+  interfaceName: string,
+  lookups?: VMResourceLookups,
+): string => {
+  const vmi = lookups?.getVMI(vm);
+  const vmiInterface = vmi?.status?.interfaces?.find((iface) => iface.name === interfaceName);
+
+  return vmiInterface?.ipAddress || vmiInterface?.ipAddresses?.[0] || '';
+};
+
+/** KubeVirt defaults interface model to virtio when omitted from the spec. */
+const DEFAULT_INTERFACE_MODEL = 'virtio';
+
+export const getVMInterfaceModel = (vm: V1VirtualMachine, interfaceName: string): string => {
+  const iface = getInterfaceByName(vm, interfaceName);
+
+  if (!iface) {
+    return '';
+  }
+
+  return iface.model || DEFAULT_INTERFACE_MODEL;
+};
+
 export const getVMStatus = (vm: V1VirtualMachine): string => vm?.status?.printableStatus || '';
 
 export const getVMDomain = (vm: V1VirtualMachine): undefined | V1DomainSpec =>

@@ -33,6 +33,18 @@ export const getDefaultVMNetworkTableColumns = (t: TFunction): ColumnManagementM
     title: t('Interface'),
   },
   {
+    isShown: true,
+    isShownByDefault: true,
+    key: VM_NETWORK_TABLE_COLUMN_IDS.IP_ADDRESS,
+    title: t('IP address'),
+  },
+  {
+    isShown: false,
+    isShownByDefault: false,
+    key: VM_NETWORK_TABLE_COLUMN_IDS.ADAPTER_MODEL,
+    title: t('Adapter model'),
+  },
+  {
     isShown: false,
     isShownByDefault: false,
     key: VM_NETWORK_TABLE_COLUMN_IDS.CREATED,

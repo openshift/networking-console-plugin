@@ -14,6 +14,8 @@ import {
   getVMConditionsSummary,
   getVMCPUCount,
   getVMDeletionProtection,
+  getVMInterfaceIPAddress,
+  getVMInterfaceModel,
   getVMMemory,
   getVMStatus,
   VMResourceLookups,
@@ -69,6 +71,10 @@ export const getVMNetworkTableSortValue = (
       return getVMStatus(item.vm);
     case VM_NETWORK_TABLE_COLUMN_IDS.INTERFACE:
       return item.interfaceName;
+    case VM_NETWORK_TABLE_COLUMN_IDS.IP_ADDRESS:
+      return getVMInterfaceIPAddress(item.vm, item.interfaceName, vmResourceLookups);
+    case VM_NETWORK_TABLE_COLUMN_IDS.ADAPTER_MODEL:
+      return getVMInterfaceModel(item.vm, item.interfaceName);
     case VM_NETWORK_TABLE_COLUMN_IDS.CREATED:
       return item.vm?.metadata?.creationTimestamp ?? '';
     case VM_NETWORK_TABLE_COLUMN_IDS.MEMORY:
@@ -150,6 +156,14 @@ const buildColumnCell = (
       );
     case VM_NETWORK_TABLE_COLUMN_IDS.INTERFACE:
       return interfaceName;
+    case VM_NETWORK_TABLE_COLUMN_IDS.IP_ADDRESS: {
+      const ipAddress = getVMInterfaceIPAddress(vm, interfaceName, vmResourceLookups);
+      return ipAddress || '-';
+    }
+    case VM_NETWORK_TABLE_COLUMN_IDS.ADAPTER_MODEL: {
+      const model = getVMInterfaceModel(vm, interfaceName);
+      return model || '-';
+    }
     case VM_NETWORK_TABLE_COLUMN_IDS.CREATED:
       return vm?.metadata?.creationTimestamp ? (
         <Timestamp timestamp={vm.metadata.creationTimestamp} />

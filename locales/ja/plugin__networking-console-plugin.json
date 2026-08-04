@@ -22,6 +22,7 @@
   "Accessible outside the cluster": "クラスター外からアクセス可能",
   "Accessible within the cluster only": "クラスター内でのみアクセス可能",
   "Actions": "アクション",
+  "Adapter model": "Adapter model",
   "Add": "Add",
   "Add allowed destination": "許可される宛先の追加",
   "Add allowed source": "許可されるソースの追加",
