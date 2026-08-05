@@ -44,9 +44,7 @@ const DEFAULT_INTERFACE_MODEL = 'virtio';
 export const getVMInterfaceModel = (vm: V1VirtualMachine, interfaceName: string): string => {
   const iface = getInterfaceByName(vm, interfaceName);
 
-  if (!iface) {
-    return '';
-  }
+  if (!iface) return '';
 
   return iface.model || DEFAULT_INTERFACE_MODEL;
 };
