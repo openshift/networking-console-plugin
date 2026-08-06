@@ -22,6 +22,7 @@
   "Accessible outside the cluster": "在集群外可以访问",
   "Accessible within the cluster only": "仅在集群内可访问",
   "Actions": "行动",
+  "Adapter model": "Adapter model",
   "Add": "Add",
   "Add allowed destination": "添加允许的目的地",
   "Add allowed source": "添加允许的源",

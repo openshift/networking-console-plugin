@@ -22,6 +22,7 @@
   "Accessible outside the cluster": "클러스터 외부에서 액세스 가능",
   "Accessible within the cluster only": "클러스터 내에서만 액세스 가능",
   "Actions": "작업",
+  "Adapter model": "Adapter model",
   "Add": "Add",
   "Add allowed destination": "허용된 대상 추가",
   "Add allowed source": "허용된 소스 추가",

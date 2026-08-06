@@ -14,11 +14,14 @@ import {
   getVMConditionsSummary,
   getVMCPUCount,
   getVMDeletionProtection,
+  getVMInterfaceIPAddress,
+  getVMInterfaceModel,
   getVMMemory,
   getVMStatus,
   VMResourceLookups,
 } from '@utils/resources/vm/selectors';
 import { convertToBaseValue } from '@utils/utils';
+import { NO_DATA_DASH } from '@utils/utils/constants';
 
 import { VM_NETWORK_TABLE_COLUMN_IDS } from './constants';
 
@@ -69,6 +72,10 @@ export const getVMNetworkTableSortValue = (
       return getVMStatus(item.vm);
     case VM_NETWORK_TABLE_COLUMN_IDS.INTERFACE:
       return item.interfaceName;
+    case VM_NETWORK_TABLE_COLUMN_IDS.IP_ADDRESS:
+      return getVMInterfaceIPAddress(item.vm, item.interfaceName, vmResourceLookups);
+    case VM_NETWORK_TABLE_COLUMN_IDS.ADAPTER_MODEL:
+      return getVMInterfaceModel(item.vm, item.interfaceName);
     case VM_NETWORK_TABLE_COLUMN_IDS.CREATED:
       return item.vm?.metadata?.creationTimestamp ?? '';
     case VM_NETWORK_TABLE_COLUMN_IDS.MEMORY:
@@ -145,28 +152,36 @@ const buildColumnCell = (
     case VM_NETWORK_TABLE_COLUMN_IDS.STATUS:
       return (
         <Label color={getVMStatusLabelColor(status)} isCompact>
-          {status || '-'}
+          {status || NO_DATA_DASH}
         </Label>
       );
     case VM_NETWORK_TABLE_COLUMN_IDS.INTERFACE:
       return interfaceName;
+    case VM_NETWORK_TABLE_COLUMN_IDS.IP_ADDRESS: {
+      const ipAddress = getVMInterfaceIPAddress(vm, interfaceName, vmResourceLookups);
+      return ipAddress || NO_DATA_DASH;
+    }
+    case VM_NETWORK_TABLE_COLUMN_IDS.ADAPTER_MODEL: {
+      const model = getVMInterfaceModel(vm, interfaceName);
+      return model || NO_DATA_DASH;
+    }
     case VM_NETWORK_TABLE_COLUMN_IDS.CREATED:
       return vm?.metadata?.creationTimestamp ? (
         <Timestamp timestamp={vm.metadata.creationTimestamp} />
       ) : (
-        '-'
+        NO_DATA_DASH
       );
     case VM_NETWORK_TABLE_COLUMN_IDS.MEMORY: {
       const memory = getVMMemory(vm, vmResourceLookups);
-      return memory || '-';
+      return memory || NO_DATA_DASH;
     }
     case VM_NETWORK_TABLE_COLUMN_IDS.CPU: {
       const cpuCount = getVMCPUCount(vm, vmResourceLookups);
-      return cpuCount ? String(cpuCount) : '-';
+      return cpuCount ? String(cpuCount) : NO_DATA_DASH;
     }
     case VM_NETWORK_TABLE_COLUMN_IDS.CONDITIONS: {
       const conditions = getVMConditionsSummary(vm);
-      return conditions || '-';
+      return conditions || NO_DATA_DASH;
     }
     case VM_NETWORK_TABLE_COLUMN_IDS.DELETION_PROTECTION:
       return getVMDeletionProtection(vm) ? t('Enabled') : t('Disabled');
