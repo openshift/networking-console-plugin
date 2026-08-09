@@ -94,10 +94,27 @@ Remove after upload finishes. Download already maps `zh-cn` → `zh`.
 
 Never skip `export-pos` or hand-build English-only POs.
 
-### 3. English leak detection
+### 3. English placeholders must be empty in uploaded POs
 
-`i18next-parser` + `useKeysAsDefaultValue: true` can leave English in secondary
-locale JSON. After `export-pos`, flag msgstr identical to msgid.
+`i18next-parser` + `useKeysAsDefaultValue: true` can leave English text in
+secondary locale JSON. Old `i18n-to-po` copies that into `msgstr`, which Phrase
+may treat as already translated.
+
+**Desired PO state before upload:**
+
+| Locale JSON value | msgstr in PO |
+|-------------------|--------------|
+| Real non-English translation | Keep it (carry forward) |
+| Empty `""` | Empty (needs translation) |
+| English placeholder (== English source) | **Empty** (needs translation) |
+
+`export-pos.sh` runs `i18n-scripts/clear-english-msgstr.js` after generating POs
+to clear `msgstr` when it equals `msgid`. Because `memsource-upload.sh` re-runs
+`export-pos`, that clear also applies to the files that get uploaded.
+
+This clear step is **redundant** if the repo migrates to
+[`ocp-plugin-i18n-scripts`](https://github.com/avivtur/ocp-plugin-i18n-scripts),
+which filters English placeholders during PO generation.
 
 ### 4. Download clean-git check is wrong
 
@@ -122,7 +139,7 @@ Upload Progress:
 - [ ] Step 2: Get VERSION from user, auto-increment SPRINT
 - [ ] Step 3: Authenticate with Memsource
 - [ ] Step 4: Extract translation keys
-- [ ] Step 5: Create zh-cn symlink and generate PO files
+- [ ] Step 5: Create zh-cn symlink, generate PO files, clear English msgstr
 - [ ] Step 6: Validate PO files
 - [ ] Step 7: Show summary and get approval
 - [ ] Step 8: Upload to Memsource
@@ -163,26 +180,33 @@ git diff --stat -- locales/
 
 Require approval if the locale diff looks wrong.
 
-### Step 5: zh-cn symlink + export POs
+### Step 5: zh-cn symlink + export POs + clear English msgstr
 
 ```bash
 ln -sfn zh locales/zh-cn
 rm -rf po-files
 npm run export-pos
+# export-pos ends with: node ./i18n-scripts/clear-english-msgstr.js
 ```
 
-Keep the symlink until after Step 8 (`memsource-upload` re-runs `export-pos`).
+Keep the symlink until after Step 8 (`memsource-upload` re-runs `export-pos`,
+which also re-runs the clear step).
+
+If validating a hand-run export that skipped the script hook:
+
+```bash
+node ./i18n-scripts/clear-english-msgstr.js
+```
 
 ### Step 6: Validate PO files
 
-For each of `ja`, `zh-cn`, `ko`, `fr`, `es`:
+After the clear step, English placeholders should be empty. Report:
+
+- **translated** = non-empty msgstr and msgstr ≠ msgid (real carry-forward)
+- **needs translation** = empty msgstr (includes former English placeholders)
+- **english_leaks remaining** = msgstr == msgid (should be 0 after clear)
 
 ```bash
-for lang in ja zh-cn ko fr es; do
-  echo -n "$lang keys: "
-  rg -c '^msgid "' po-files/$lang/*.po 2>/dev/null || echo "0"
-done
-
 for lang in ja zh-cn ko fr es; do
   echo "=== $lang ==="
   python3 -c "
@@ -190,15 +214,16 @@ import re, glob, sys
 files = glob.glob(f'po-files/{sys.argv[1]}/*.po')
 content = ''.join(open(f).read() for f in files)
 entries = re.findall(r'msgid \"((?:\\\\.|[^\"])*)\"\s*msgstr \"((?:\\\\.|[^\"])*)\"', content)
-# skip header empty msgid
 entries = [(a,b) for a,b in entries if a]
 translated = sum(1 for a,b in entries if b and b != a)
+needs = sum(1 for a,b in entries if not b)
 leaks = sum(1 for a,b in entries if b and b == a)
-new = sum(1 for a,b in entries if not b)
-print(f'  total={len(entries)} translated={translated} new={new} english_leaks={leaks}')
+print(f'  total={len(entries)} translated={translated} needs_translation={needs} english_leaks_remaining={leaks}')
 " "$lang"
 done
 ```
+
+Warn if `english_leaks_remaining > 0`.
 
 ### Step 7: Show summary and get approval
 
@@ -337,7 +362,8 @@ EOF
 ## Important reminders
 
 - Always symlink `locales/zh-cn` → `zh` before upload `export-pos`; remove after upload
-- Never skip `export-pos`
-- Validate English leaks before upload
+- Never skip `export-pos` (it preserves real translations and clears English placeholders)
+- After export, `needs_translation` should cover empty msgstr; `english_leaks_remaining` should be 0
 - Clean root `locales/` before download
 - Update `state.json` after successful upload
+- If this repo migrates to `ocp-plugin-i18n-scripts`, remove `clear-english-msgstr.js` from `export-pos.sh` (redundant)

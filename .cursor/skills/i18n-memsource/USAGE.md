@@ -74,11 +74,12 @@ The skill will:
 1. Authenticate to Memsource
 2. Run `npm run i18n`
 3. Create a temporary `locales/zh-cn` → `zh` symlink (required — see below)
-4. Run `npm run export-pos` and validate POs
-5. Ask for your approval
-6. Run `npm run memsource-upload -- -v VERSION -s SPRINT`
-7. Clean up the symlink and update `state.json`
-8. Give you a draft email for the localization team
+4. Run `npm run export-pos` (builds POs, then clears English placeholders in msgstr)
+5. Validate POs (`translated` vs `needs_translation`; English leaks should be 0)
+6. Ask for your approval
+7. Run `npm run memsource-upload -- -v VERSION -s SPRINT`
+8. Clean up the symlink and update `state.json`
+9. Give you a draft email for the localization team
 
 ### Manual upload (without Cursor)
 
@@ -103,7 +104,8 @@ ln -sfn zh locales/zh-cn
 
 rm -rf po-files
 npm run export-pos
-# spot-check po-files/*/
+# export-pos also runs clear-english-msgstr.js so msgstr==msgid becomes empty
+# spot-check po-files/*/ — real translations kept, English placeholders empty
 
 npm run memsource-upload -- -v 4.20 -s 1
 
@@ -135,8 +137,19 @@ PO export does **not** upload English into every language blindly. For each lang
 2. Clear values
 3. Copy back any existing translation from `locales/<lang>/plugin__networking-console-plugin.json` into `msgstr`
 4. Leave new keys with empty `msgstr` for translators
+5. **Post-export clear:** if `msgstr` still equals `msgid` (English placeholder left by `i18next-parser`), clear it to empty so Phrase marks it as needing translation
+
+| Locale JSON value | msgstr uploaded to Phrase |
+|-------------------|---------------------------|
+| Real translation (e.g. Japanese) | Kept |
+| Empty | Empty (needs translation) |
+| English placeholder | Cleared to empty (needs translation) |
 
 That is why you must run `npm run export-pos` (never hand-edit English-only POs).
+
+### Optional future: migrate to `ocp-plugin-i18n-scripts`
+
+Forklift uses [`ocp-plugin-i18n-scripts`](https://github.com/avivtur/ocp-plugin-i18n-scripts), which filters English placeholders during PO generation. After that migration, `clear-english-msgstr.js` / the post-export clear step becomes **redundant** and can be removed.
 
 ---
 
@@ -185,6 +198,7 @@ done
 |---------|--------------|-----|
 | Skip `zh-cn` symlink on upload | Chinese translations wiped in the Phrase project | Always `ln -sfn zh locales/zh-cn` before export/upload |
 | Hand-build POs from English only | Existing ja/ko/fr/es/zh translations lost | Always use `npm run export-pos` |
+| Leave English in msgstr | Phrase may treat those strings as already translated | Use current `export-pos` (includes `clear-english-msgstr.js`) |
 | Trust download script's git clean check | Uncommitted `locales/` changes get overwritten | Run `git status -- locales/` yourself |
 | Forget `MEMSOURCE_TOKEN` | `npm run memsource-*` fails auth | Export token after `memsource auth login` as shown above |
 | Upload without reviewing `npm run i18n` | Unexpected key churn in locale files | Always review `git diff -- locales/` first |
