@@ -43,27 +43,32 @@ fi
 export PATH="$(dirname "$MEMSOURCE_BIN"):$PATH"
 ```
 
-### Authentication
+### Authentication (credentials stay with the user)
 
-Credentials live in `~/.memsourcerc`. Capture a token so npm child processes inherit auth:
+**Do not** read `~/.memsourcerc`, Memsource passwords, or long-lived tokens into
+the agent context. Phrase is a paid external service — treat credentials like
+any other secret.
+
+Preferred flow:
+
+1. Ask the user to authenticate in **their own terminal** and confirm
+   `memsource auth whoami` works (and that `MEMSOURCE_TOKEN` is exported in the
+   shell they will use for `npm run memsource-*`).
+2. The agent may run extract/export/validation without credentials.
+3. For upload/download/status, either:
+   - the user runs the `memsource-*` commands themselves after the agent prepares
+     artifacts, or
+   - the user has already exported a **short-lived** `MEMSOURCE_TOKEN` in the
+     shared shell (never paste the password into chat).
+
+If a shared shell already has `MEMSOURCE_TOKEN`, verify with:
 
 ```bash
-source ~/.memsourcerc
-export MEMSOURCE_TOKEN=$(memsource auth login \
-  --user-name "$MEMSOURCE_USERNAME" \
-  --password "$MEMSOURCE_PASSWORD" \
-  -f json \
-  | python3 -c "import sys,json; print(json.load(sys.stdin)['token'])")
-
-if [ -z "$MEMSOURCE_TOKEN" ]; then
-  echo "ERROR: Memsource authentication failed. Check ~/.memsourcerc credentials."
-  return 1
-fi
-
 memsource auth whoami
 ```
 
-Run this once at the start of every action. Do not ask the user to authenticate manually.
+If auth fails, stop and ask the user to refresh the token outside the agent.
+Also ensure `jq` is installed (`brew install jq`) — upload scripts need it.
 
 ---
 
@@ -75,13 +80,15 @@ Run this once at the start of every action. Do not ask the user to authenticate 
 Without a symlink, `i18n-to-po` cannot merge existing Chinese translations and
 uploads empty msgstr for Chinese.
 
-**Before any `export-pos` during upload:**
+**Before any `export-pos` during upload**, create the symlink and register
+unconditional cleanup (also on failure / cancel):
 
 ```bash
 ln -sfn zh locales/zh-cn
+trap 'rm -f locales/zh-cn; rm -rf po-files locales/tmp' EXIT
 ```
 
-Remove after upload finishes. Download already maps `zh-cn` → `zh`.
+Download already maps `zh-cn` → `zh`.
 
 ### 2. PO generation preserves existing translations
 
@@ -133,16 +140,16 @@ Trigger: "upload translations", "memsource upload", "i18n upload", "send for tra
 
 ### Checklist
 
-```
+```text
 Upload Progress:
 - [ ] Step 1: Load state
 - [ ] Step 2: Get VERSION from user, auto-increment SPRINT
-- [ ] Step 3: Authenticate with Memsource
+- [ ] Step 3: Confirm user-provided Memsource auth (no credential access)
 - [ ] Step 4: Extract translation keys
 - [ ] Step 5: Create zh-cn symlink, generate PO files, clear English msgstr
 - [ ] Step 6: Validate PO files
 - [ ] Step 7: Show summary and get approval
-- [ ] Step 8: Upload to Memsource
+- [ ] Step 8: Upload to Memsource (user shell / short-lived token only)
 - [ ] Step 9: Cleanup and update state
 ```
 
@@ -160,9 +167,11 @@ Read `.cursor/skills/i18n-memsource/state.json`.
 git branch --show-current
 ```
 
-### Step 3: Authenticate
+### Step 3: Confirm authentication
 
-Run the Prerequisites auth sequence and `memsource auth whoami`.
+Do **not** source `~/.memsourcerc` or request the password in chat. Ask the user
+to authenticate in their terminal, then verify `memsource auth whoami` in the
+shell that will run upload (or have the user run Step 8 themselves).
 
 ### Step 4: Extract translation keys
 
@@ -184,13 +193,15 @@ Require approval if the locale diff looks wrong.
 
 ```bash
 ln -sfn zh locales/zh-cn
+trap 'rm -f locales/zh-cn; rm -rf po-files locales/tmp' EXIT
 rm -rf po-files
 npm run export-pos
 # export-pos ends with: node ./i18n-scripts/clear-english-msgstr.js
 ```
 
 Keep the symlink until after Step 8 (`memsource-upload` re-runs `export-pos`,
-which also re-runs the clear step).
+which also re-runs the clear step). The `trap` ensures cleanup even if a later
+step fails.
 
 If validating a hand-run export that skipped the script hook:
 
@@ -249,7 +260,7 @@ Update `state.json` with `version`, `sprint`, `lastProjectId`, `memsourceProject
 
 Draft notification:
 
-```
+```text
 Subject: [OCP VERSION] Translation Upload - networking-console-plugin Sprint SPRINT
 
 Hi Localization Team,
@@ -276,10 +287,10 @@ Trigger: "download translations", "memsource download", "i18n download", "get tr
 
 ### Checklist
 
-```
+```text
 Download Progress:
 - [ ] Step 1: Load state / confirm PROJECT_ID
-- [ ] Step 2: Authenticate
+- [ ] Step 2: Confirm user-provided Memsource auth
 - [ ] Step 3: Check translation status
 - [ ] Step 4: Ensure locales/ is clean
 - [ ] Step 5: Download translations
@@ -291,9 +302,9 @@ Download Progress:
 
 Show `lastProjectId` from state; ask to confirm or override.
 
-### Step 2: Authenticate
+### Step 2: Confirm authentication
 
-Same auth sequence as upload.
+Same as upload Step 3 — user-owned credentials only; no `~/.memsourcerc` in agent context.
 
 ### Step 3: Status
 

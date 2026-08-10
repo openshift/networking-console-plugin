@@ -17,6 +17,16 @@ const path = require('path');
 
 const PO_ROOT = path.join(process.cwd(), 'po-files');
 
+function assertUnderPoRoot(candidatePath) {
+  const root = fs.realpathSync(PO_ROOT);
+  const resolved = fs.realpathSync(candidatePath);
+  const relative = path.relative(root, resolved);
+  if (relative === '..' || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative)) {
+    throw new Error(`PO path escapes ${PO_ROOT}: ${candidatePath}`);
+  }
+  return resolved;
+}
+
 function clearEnglishPlaceholders(content) {
   let cleared = 0;
   // Match single-line msgid/msgstr pairs produced by i18next-conv (foldLength: 0).
@@ -53,12 +63,18 @@ function walk(dir) {
     console.error(`Missing ${dir}; run export-pos first`);
     process.exit(1);
   }
-  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    const full = path.join(dir, entry.name);
+  const safeDir = assertUnderPoRoot(dir);
+  for (const entry of fs.readdirSync(safeDir, { withFileTypes: true })) {
+    // Skip symlinks so a crafted .po symlink cannot escape PO_ROOT.
+    if (entry.isSymbolicLink()) {
+      console.warn(`Skipping symlink under po-files: ${path.join(safeDir, entry.name)}`);
+      continue;
+    }
+    const full = path.resolve(safeDir, entry.name);
     if (entry.isDirectory()) {
-      walk(full);
+      walk(assertUnderPoRoot(full));
     } else if (entry.name.endsWith('.po')) {
-      processPoFile(full);
+      processPoFile(assertUnderPoRoot(full));
     }
   }
 }
