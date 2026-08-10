@@ -80,12 +80,17 @@ Also ensure `jq` is installed (`brew install jq`) — upload scripts need it.
 Without a symlink, `i18n-to-po` cannot merge existing Chinese translations and
 uploads empty msgstr for Chinese.
 
-**Before any `export-pos` during upload**, create the symlink and register
-unconditional cleanup (also on failure / cancel):
+**Before any `export-pos` during upload**, register cleanup first, then create
+the symlink (also cleans up on failure / cancel). Do not overwrite a
+pre-existing non-symlink `locales/zh-cn`:
 
 ```bash
-ln -sfn zh locales/zh-cn
 trap 'rm -f locales/zh-cn; rm -rf po-files locales/tmp' EXIT
+if [ -e locales/zh-cn ] && [ ! -L locales/zh-cn ]; then
+  echo "ERROR: locales/zh-cn exists and is not a symlink; resolve manually"
+  exit 1
+fi
+ln -sfn zh locales/zh-cn
 ```
 
 Download already maps `zh-cn` → `zh`.
@@ -116,8 +121,9 @@ may treat as already translated.
 | English placeholder (== English source) | **Empty** (needs translation) |
 
 `export-pos.sh` runs `i18n-scripts/clear-english-msgstr.js` after generating POs
-to clear `msgstr` when it equals `msgid`. Because `memsource-upload.sh` re-runs
-`export-pos`, that clear also applies to the files that get uploaded.
+to clear `msgstr` when it equals `msgid`. `memsource-upload.sh` re-runs the same
+`export-pos` pipeline before creating jobs, so Step 6 validation is of the same
+artifacts the upload script regenerates (not a different code path).
 
 This clear step is **redundant** if the repo migrates to
 [`ocp-plugin-i18n-scripts`](https://github.com/avivtur/ocp-plugin-i18n-scripts),
@@ -192,15 +198,19 @@ Require approval if the locale diff looks wrong.
 ### Step 5: zh-cn symlink + export POs + clear English msgstr
 
 ```bash
-ln -sfn zh locales/zh-cn
 trap 'rm -f locales/zh-cn; rm -rf po-files locales/tmp' EXIT
+if [ -e locales/zh-cn ] && [ ! -L locales/zh-cn ]; then
+  echo "ERROR: locales/zh-cn exists and is not a symlink; resolve manually"
+  exit 1
+fi
+ln -sfn zh locales/zh-cn
 rm -rf po-files
 npm run export-pos
 # export-pos ends with: node ./i18n-scripts/clear-english-msgstr.js
 ```
 
-Keep the symlink until after Step 8 (`memsource-upload` re-runs `export-pos`,
-which also re-runs the clear step). The `trap` ensures cleanup even if a later
+Keep the symlink until after Step 8 (`memsource-upload` re-runs the same
+`export-pos` + clear pipeline). The `trap` ensures cleanup even if a later
 step fails.
 
 If validating a hand-run export that skipped the script hook:
@@ -223,6 +233,8 @@ for lang in ja zh-cn ko fr es; do
   python3 -c "
 import re, glob, sys
 files = glob.glob(f'po-files/{sys.argv[1]}/*.po')
+if not files:
+  raise SystemExit(f'missing PO files for {sys.argv[1]}')
 content = ''.join(open(f).read() for f in files)
 entries = re.findall(r'msgid \"((?:\\\\.|[^\"])*)\"\s*msgstr \"((?:\\\\.|[^\"])*)\"', content)
 entries = [(a,b) for a,b in entries if a]
@@ -230,11 +242,13 @@ translated = sum(1 for a,b in entries if b and b != a)
 needs = sum(1 for a,b in entries if not b)
 leaks = sum(1 for a,b in entries if b and b == a)
 print(f'  total={len(entries)} translated={translated} needs_translation={needs} english_leaks_remaining={leaks}')
+if leaks:
+  raise SystemExit('english_leaks_remaining must be 0')
 " "$lang"
 done
 ```
 
-Warn if `english_leaks_remaining > 0`.
+Stop the upload if any language is missing POs or has `english_leaks_remaining > 0`.
 
 ### Step 7: Show summary and get approval
 
@@ -247,7 +261,9 @@ Ask for explicit approval before upload.
 npm run memsource-upload -- -v "$VERSION" -s "$SPRINT"
 ```
 
-Capture `PROJECT_ID` (`.uid`) from `memsource project create` output.
+Capture `PROJECT_ID` (`.uid`) from `memsource project create` output. If the
+command fails after project creation, persist that ID (or delete the orphan in
+Phrase) before retrying — otherwise a retry creates another project.
 
 ### Step 9: Cleanup and update state
 

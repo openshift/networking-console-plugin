@@ -17,8 +17,20 @@ const path = require('path');
 
 const PO_ROOT = path.join(process.cwd(), 'po-files');
 
-function assertUnderPoRoot(candidatePath) {
-  const root = fs.realpathSync(PO_ROOT);
+function resolvePoRoot() {
+  if (!fs.existsSync(PO_ROOT)) {
+    console.error(`Missing ${PO_ROOT}; run export-pos first`);
+    process.exit(1);
+  }
+  // Reject a symlinked po-files/ so realpath cannot widen the trust boundary
+  // to an external directory.
+  if (fs.lstatSync(PO_ROOT).isSymbolicLink()) {
+    throw new Error(`Refusing to process symlinked PO_ROOT: ${PO_ROOT}`);
+  }
+  return fs.realpathSync(PO_ROOT);
+}
+
+function assertUnderPoRoot(candidatePath, root) {
   const resolved = fs.realpathSync(candidatePath);
   const relative = path.relative(root, resolved);
   if (relative === '..' || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative)) {
@@ -58,12 +70,8 @@ function processPoFile(filePath) {
   );
 }
 
-function walk(dir) {
-  if (!fs.existsSync(dir)) {
-    console.error(`Missing ${dir}; run export-pos first`);
-    process.exit(1);
-  }
-  const safeDir = assertUnderPoRoot(dir);
+function walk(dir, root) {
+  const safeDir = assertUnderPoRoot(dir, root);
   for (const entry of fs.readdirSync(safeDir, { withFileTypes: true })) {
     // Skip symlinks so a crafted .po symlink cannot escape PO_ROOT.
     if (entry.isSymbolicLink()) {
@@ -72,11 +80,12 @@ function walk(dir) {
     }
     const full = path.resolve(safeDir, entry.name);
     if (entry.isDirectory()) {
-      walk(assertUnderPoRoot(full));
-    } else if (entry.name.endsWith('.po')) {
-      processPoFile(assertUnderPoRoot(full));
+      walk(full, root);
+    } else if (entry.isFile() && entry.name.endsWith('.po')) {
+      processPoFile(assertUnderPoRoot(full, root));
     }
   }
 }
 
-walk(PO_ROOT);
+const poRoot = resolvePoRoot();
+walk(poRoot, poRoot);

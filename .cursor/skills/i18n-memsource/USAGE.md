@@ -110,51 +110,62 @@ export MEMSOURCE_TOKEN=$(memsource auth login \
 npm run i18n
 git diff --stat -- locales/   # review before continuing
 
-# CRITICAL: without this, Chinese existing translations are lost on upload
-ln -sfn zh locales/zh-cn
+# CRITICAL: register cleanup BEFORE creating the symlink
 trap 'rm -f locales/zh-cn; rm -rf po-files locales/tmp' EXIT
+if [ -e locales/zh-cn ] && [ ! -L locales/zh-cn ]; then
+  echo "ERROR: locales/zh-cn exists and is not a symlink; resolve manually"
+  exit 1
+fi
+ln -sfn zh locales/zh-cn
 
 rm -rf po-files
 npm run export-pos
 # export-pos also runs clear-english-msgstr.js so msgstr==msgid becomes empty
-# validate: translated vs needs_translation; english_leaks_remaining should be 0
+# validate the same export-pos pipeline memsource-upload will re-run
+# (translated vs needs_translation; english_leaks_remaining should be 0)
 for lang in ja zh-cn ko fr es; do
   echo "=== $lang ==="
   python3 -c "
 import re, glob, sys
 files = glob.glob(f'po-files/{sys.argv[1]}/*.po')
+if not files:
+  raise SystemExit(f'missing PO files for {sys.argv[1]}')
 content = ''.join(open(f).read() for f in files)
 entries = [(a,b) for a,b in re.findall(r'msgid \"(.*?)\"\nmsgstr \"(.*?)\"', content) if a]
 translated = sum(1 for a,b in entries if b and b != a)
 needs = sum(1 for a,b in entries if not b)
 leaks = sum(1 for a,b in entries if b and b == a)
 print(f'total={len(entries)} translated={translated} needs_translation={needs} english_leaks_remaining={leaks}')
+if leaks:
+  raise SystemExit('english_leaks_remaining must be 0')
 " "$lang"
 done
 
-VERSION=5.0.0   # set from release / ask user
-SPRINT=1        # previous state.sprint + 1
+# Read current state; ask for VERSION; increment sprint (do not reuse literals)
+STATE=.cursor/skills/i18n-memsource/state.json
+VERSION=...   # ask / set from current OCP release — do not copy a stale example
+SPRINT=$(( $(jq -r '.sprint // 0' "$STATE") + 1 ))
 npm run memsource-upload -- -v "$VERSION" -s "$SPRINT"
 # capture PROJECT_ID from memsource project create output (.uid)
+# If upload fails after project create: save that PROJECT_ID into state.json
+# (or delete the orphan project in Phrase) before retrying — otherwise retry
+# creates a second project.
 ```
 
-After a successful upload, update `.cursor/skills/i18n-memsource/state.json`:
+After a successful upload, **merge** into `.cursor/skills/i18n-memsource/state.json`
+(append history; do not replace the whole file with a one-entry example):
 
-```json
-{
-  "version": "VERSION",
-  "sprint": 1,
-  "lastProjectId": "PROJECT_ID",
-  "memsourceProjectUrl": "https://cloud.memsource.com/web/project2/show/PROJECT_ID",
-  "history": [
-    {
-      "version": "VERSION",
-      "sprint": 1,
-      "projectId": "PROJECT_ID",
-      "date": "YYYY-MM-DD"
-    }
-  ]
-}
+```bash
+STATE=.cursor/skills/i18n-memsource/state.json
+PROJECT_ID=...   # from upload output
+TODAY=$(date +%F)
+jq --arg v "$VERSION" --argjson s "$SPRINT" --arg p "$PROJECT_ID" --arg d "$TODAY" '
+  .version = $v
+  | .sprint = $s
+  | .lastProjectId = $p
+  | .memsourceProjectUrl = ("https://cloud.memsource.com/web/project2/show/" + $p)
+  | .history = ((.history // []) + [{version:$v, sprint:$s, projectId:$p, date:$d}])
+' "$STATE" > "${STATE}.tmp" && mv "${STATE}.tmp" "$STATE"
 ```
 
 ---
@@ -166,9 +177,9 @@ After a successful upload, update `.cursor/skills/i18n-memsource/state.json`:
 
 `i18n-to-po` looks for `locales/zh-cn/` when building Chinese POs. If that path
 is missing, **all Chinese msgstr values are empty** and prior translations are
-not carried forward. Create `locales/zh-cn` → `zh` before export and remove it
-afterward (use a shell `trap` so cleanup runs even on failure). Download already
-remaps `zh-cn` → `zh`.
+not carried forward. Register an `EXIT` trap **before** `ln -sfn zh locales/zh-cn`,
+refuse to overwrite a non-symlink `locales/zh-cn`, and let the trap remove the
+symlink afterward (even on failure). Download already remaps `zh-cn` → `zh`.
 
 ---
 
