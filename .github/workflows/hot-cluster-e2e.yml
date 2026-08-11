@@ -51,6 +51,14 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha || github.ref }}
 
+      - name: Install oc CLI
+        run: |
+          if ! command -v oc &>/dev/null; then
+            curl -sL "https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/openshift-client-linux.tar.gz" \
+              | tar -xz -C /usr/local/bin oc kubectl
+          fi
+          oc version --client
+
       - name: Authenticate to cluster
         env:
           CLUSTER_API: ${{ secrets.CLUSTER_API }}
