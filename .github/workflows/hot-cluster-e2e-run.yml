@@ -158,7 +158,7 @@ jobs:
       - name: Build and push
         if: steps.check_image.outputs.IMAGE_EXISTS == 'false'
         run: |
-          podman build -t ${PLUGIN_IMAGE} -f Dockerfile .
+          podman build -t ${PLUGIN_IMAGE} -f Dockerfile.ci .
           podman push ${PLUGIN_IMAGE}
 
   run-e2e-tests:
