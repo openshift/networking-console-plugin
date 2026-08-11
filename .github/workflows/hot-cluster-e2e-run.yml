@@ -36,6 +36,7 @@ jobs:
     timeout-minutes: 15
     env:
       OPENSSL_FORCE_FIPS_MODE: '0'
+      GOLANG_FIPS: '0'
     steps:
       - name: Install oc CLI
         run: |
@@ -167,6 +168,7 @@ jobs:
     env:
       BRIDGE_E2E_BROWSER_NAME: electron
       OPENSSL_FORCE_FIPS_MODE: '0'
+      GOLANG_FIPS: '0'
 
     steps:
       - name: Checkout

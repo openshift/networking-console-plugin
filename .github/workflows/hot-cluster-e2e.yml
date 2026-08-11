@@ -47,6 +47,7 @@ jobs:
     timeout-minutes: 10
     env:
       OPENSSL_FORCE_FIPS_MODE: '0'
+      GOLANG_FIPS: '0'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
