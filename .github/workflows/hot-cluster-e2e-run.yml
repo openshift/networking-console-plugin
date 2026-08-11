@@ -40,7 +40,7 @@ jobs:
           if ! command -v oc &>/dev/null; then
             mkdir -p "${HOME}/bin"
             curl -sL "https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/openshift-client-linux.tar.gz" \
-              | tar -xz -C "${HOME}/bin" oc kubectl
+              | tar -xz --no-same-owner -C "${HOME}/bin" oc kubectl
             echo "${HOME}/bin" >> "$GITHUB_PATH"
             export PATH="${HOME}/bin:${PATH}"
           fi
@@ -173,7 +173,7 @@ jobs:
           if ! command -v oc &>/dev/null; then
             mkdir -p "${HOME}/bin"
             curl -sL "https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/openshift-client-linux.tar.gz" \
-              | tar -xz -C "${HOME}/bin" oc kubectl
+              | tar -xz --no-same-owner -C "${HOME}/bin" oc kubectl
             echo "${HOME}/bin" >> "$GITHUB_PATH"
             export PATH="${HOME}/bin:${PATH}"
           fi
