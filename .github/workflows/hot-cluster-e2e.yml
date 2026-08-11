@@ -45,6 +45,8 @@ jobs:
     needs: gate-pr
     runs-on: networking-console-plugin-ci
     timeout-minutes: 10
+    env:
+      OPENSSL_FORCE_FIPS_MODE: '0'
     steps:
       - name: Checkout
         uses: actions/checkout@v4

@@ -34,6 +34,8 @@ jobs:
     name: Check Runner Image
     runs-on: networking-console-plugin-ci
     timeout-minutes: 15
+    env:
+      OPENSSL_FORCE_FIPS_MODE: '0'
     steps:
       - name: Install oc CLI
         run: |
@@ -164,6 +166,7 @@ jobs:
     timeout-minutes: 60
     env:
       BRIDGE_E2E_BROWSER_NAME: electron
+      OPENSSL_FORCE_FIPS_MODE: '0'
 
     steps:
       - name: Checkout
