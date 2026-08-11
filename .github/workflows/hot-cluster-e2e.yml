@@ -48,6 +48,7 @@ jobs:
     env:
       OPENSSL_FORCE_FIPS_MODE: '0'
       GOLANG_FIPS: '0'
+      KUBECONFIG: /tmp/kubeconfig
     steps:
       - name: Checkout
         uses: actions/checkout@v4

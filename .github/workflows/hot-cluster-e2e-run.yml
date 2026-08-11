@@ -37,6 +37,7 @@ jobs:
     env:
       OPENSSL_FORCE_FIPS_MODE: '0'
       GOLANG_FIPS: '0'
+      KUBECONFIG: /tmp/kubeconfig
     steps:
       - name: Install oc CLI
         run: |
@@ -169,6 +170,7 @@ jobs:
       BRIDGE_E2E_BROWSER_NAME: electron
       OPENSSL_FORCE_FIPS_MODE: '0'
       GOLANG_FIPS: '0'
+      KUBECONFIG: /tmp/kubeconfig
 
     steps:
       - name: Checkout
