@@ -1,0 +1,79 @@
+name: Hot Cluster E2E
+
+on:
+  pull_request_target:
+    branches: [main, release-*]
+    types: [opened, synchronize, labeled]
+  workflow_dispatch:
+    inputs:
+      test_spec:
+        description: Cypress test spec to run
+        required: true
+        default: tests/all.cy.ts
+        type: string
+      cluster_name:
+        description: Cluster name
+        required: true
+        default: networking-console-plugin-ci
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: hot-cluster-e2e-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  CLUSTER_NAME: ${{ inputs.cluster_name || 'networking-console-plugin-ci' }}
+
+jobs:
+  gate-pr:
+    name: Gate PR
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.event.pull_request.head.repo.full_name == github.repository ||
+      contains(fromJSON('["MEMBER","OWNER","COLLABORATOR"]'), github.event.pull_request.author_association) ||
+      contains(github.event.pull_request.labels.*.name, 'ok-to-test')
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "PR is authorized for hot-cluster E2E"
+
+  cluster-health-check:
+    name: Cluster Health Check
+    needs: gate-pr
+    runs-on: networking-console-plugin-ci
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.ref }}
+
+      - name: Run health checks
+        run: bash ci-scripts/check-cluster-health.sh
+
+      - name: Health check summary
+        if: always()
+        run: |
+          echo "## Cluster Health Check" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Parameter | Value |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|-----------|-------|" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Cluster | \`${CLUSTER_NAME}\` |" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          if [[ "${{ job.status }}" == "success" ]]; then
+            echo "All health checks **passed**." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Health checks **failed**. E2E tests were not run." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  run-e2e-tests:
+    name: Run E2E Tests
+    needs: cluster-health-check
+    if: needs.cluster-health-check.result == 'success'
+    uses: ./.github/workflows/hot-cluster-e2e-run.yml
+    with:
+      test_spec: ${{ inputs.test_spec || 'tests/all.cy.ts' }}
+    secrets: inherit

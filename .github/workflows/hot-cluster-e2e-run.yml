@@ -1,0 +1,252 @@
+name: Hot Cluster E2E Run
+
+on:
+  workflow_dispatch:
+    inputs:
+      test_spec:
+        description: Cypress test spec to run
+        required: true
+        default: tests/all.cy.ts
+        type: string
+  workflow_call:
+    inputs:
+      test_spec:
+        description: Cypress test spec to run
+        type: string
+        required: false
+        default: tests/all.cy.ts
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  TEST_NS: networking-ci-test-${{ github.run_id }}
+  UDN_NS: networking-ci-udn-${{ github.run_id }}
+
+  PLUGIN_IMAGE: 'ttl.sh/networking-console-plugin-ci-${{ github.run_id }}-${{ github.run_attempt }}:2h'
+
+  CI_ENV_NS: ci-env
+  CI_ENV_CM: ci-env-${{ github.run_id }}
+
+jobs:
+  check-runner:
+    name: Check Runner Image
+    runs-on: networking-console-plugin-ci
+    timeout-minutes: 15
+    steps:
+      - name: Log environment summary
+        run: |
+          {
+            echo "<details><summary>Key Environment Variables</summary>"
+            echo ""
+            echo "| Variable | Value |"
+            echo "| --- | --- |"
+            for var in HOME USER RUNNER_NAME RUNNER_OS RUNNER_ARCH \
+                       GITHUB_REPOSITORY GITHUB_REF GITHUB_SHA GITHUB_RUN_ID GITHUB_RUN_NUMBER \
+                       TEST_NS UDN_NS PLUGIN_IMAGE; do
+              echo "| \`$var\` | \`${!var:-<unset>}\` |"
+            done
+            echo "</details>"
+            echo ""
+
+            echo "<details><summary>Tool Availability</summary>"
+            echo ""
+            echo "| Tool | Available |"
+            echo "| --- | --- |"
+            missing=0
+            for cmd in jq curl kubectl oc helm npm node; do
+              if command -v "$cmd" &>/dev/null; then
+                echo "| \`$cmd\` | ✅ |"
+              else
+                echo "| \`$cmd\` | ❌ |"
+                missing=1
+              fi
+            done
+            echo "</details>"
+            echo ""
+            if [[ "${missing}" -ne 0 ]]; then
+              echo "::error::Required tools are missing on the ARC runner"
+              exit 1
+            fi
+
+            echo "<details><summary>npm / Node Versions</summary>"
+            echo ""
+            echo "\`\`\`json"
+            npm version --json 2>/dev/null || echo "npm not found"
+            echo "\`\`\`"
+            echo "</details>"
+            echo ""
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Log Client / Server Versions
+        run: |
+          {
+            echo "<details><summary>Client / Server Versions</summary>"
+            echo ""
+            echo "| Tool | Client Version | Server Version |"
+            echo "| --- | --- | --- |"
+            failed=0
+            for cmd in oc; do
+              if command -v "$cmd" &>/dev/null; then
+                if ! version_output=$("$cmd" version 2>/dev/null); then
+                  echo "| \`$cmd\` | ❌ version failed | ❌ |"
+                  failed=1
+                  continue
+                fi
+                client=$(echo "$version_output" | grep -i "client" | head -1 | sed 's/^[[:space:]]*//')
+                server=$(echo "$version_output" | grep -i "server" | head -1 | sed 's/^[[:space:]]*//')
+                echo "| \`$cmd\` | ${client:-N/A} | ${server:-N/A} |"
+              else
+                echo "| \`$cmd\` | ❌ not found | — |"
+                failed=1
+              fi
+            done
+            echo "</details>"
+            echo ""
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+          if [[ "${failed}" -ne 0 ]]; then
+            echo "::error::Client/server version checks failed"
+            exit 1
+          fi
+
+  build-plugin-image:
+    name: Build Plugin Image
+    runs-on: ubuntu-latest
+    outputs:
+      plugin-image: ${{ env.PLUGIN_IMAGE }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.ref }}
+
+      - name: Check if plugin image exists in registry
+        id: check_image
+        run: |
+          if skopeo inspect docker://${PLUGIN_IMAGE} &>/dev/null; then
+            echo "IMAGE_EXISTS=true" >> $GITHUB_OUTPUT
+          else
+            echo "IMAGE_EXISTS=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build and push
+        if: steps.check_image.outputs.IMAGE_EXISTS == 'false'
+        run: |
+          podman build -t ${PLUGIN_IMAGE} -f Dockerfile .
+          podman push ${PLUGIN_IMAGE}
+
+  run-e2e-tests:
+    name: Run E2E Tests
+    needs: [check-runner, build-plugin-image]
+    runs-on: networking-console-plugin-ci
+    timeout-minutes: 60
+    env:
+      BRIDGE_E2E_BROWSER_NAME: electron
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.ref }}
+
+      - name: Provision CI test environment
+        id: ci-env
+        uses: ./.github/actions/ci-env-request
+        with:
+          plugin-image: ${{ env.PLUGIN_IMAGE }}
+          test-namespace: ${{ env.TEST_NS }}
+          configmap-name: ${{ env.CI_ENV_CM }}
+          ci-env-namespace: ${{ env.CI_ENV_NS }}
+
+      - name: Set up test namespaces
+        run: |
+          UDN_LABEL="k8s.ovn.org/primary-user-defined-network"
+
+          oc get namespace ${TEST_NS} 2>/dev/null || oc create namespace ${TEST_NS}
+
+          if ! oc get namespace ${UDN_NS} 2>/dev/null; then
+            cat <<EOF | oc create -f -
+          apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: ${UDN_NS}
+            labels:
+              ${UDN_LABEL}: ""
+          EOF
+          fi
+
+      - name: Install dependencies
+        run: |
+          npm ci --ignore-scripts --no-audit
+          npx cypress install
+
+      - name: Run E2E tests
+        uses: cypress-io/github-action@v6
+        env:
+          BRIDGE_BASE_ADDRESS: ${{ steps.ci-env.outputs.bridge-base-address }}
+        with:
+          summary-title: 'Networking E2E tests'
+          install: false
+          working-directory: ./cypress
+          env: openshift=true
+          spec: '${{ inputs.test_spec }}'
+
+      - name: Generate test report
+        if: always()
+        run: npm run cypress-postreport || true
+
+      - name: Upload test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-results-${{ github.run_id }}
+          path: |
+            cypress/gui-test-screenshots/
+            cypress/videos/
+          retention-days: 7
+          if-no-files-found: ignore
+
+      - name: Collect CI diagnostics — pod logs
+        if: always()
+        run: |
+          TMP=/tmp/e2e-ci-diagnostics/pod-logs
+          mkdir -p "${TMP}"
+
+          HELM_RELEASE="$(oc get configmap "${CI_ENV_CM}" -n "${CI_ENV_NS}" \
+            -o jsonpath='{.data.helm-release}' 2>/dev/null || echo "${CI_ENV_CM}")"
+
+          oc logs -n "${TEST_NS}" -l "app=${HELM_RELEASE}-console" --tail=-1 \
+            > "${TMP}/console.log" 2>&1 || true
+          oc logs -n "${TEST_NS}" -l "app=${HELM_RELEASE}-plugin" --tail=-1 \
+            > "${TMP}/networking-plugin.log" 2>&1 || true
+
+      - name: Collect CI diagnostics — cluster info
+        if: failure()
+        run: |
+          TMP=/tmp/e2e-ci-diagnostics/cluster
+          mkdir -p "${TMP}"
+
+          oc get nodes -o wide > "${TMP}/nodes.txt" 2>/dev/null || true
+          oc get events -n "${TEST_NS}" --sort-by='.lastTimestamp' > "${TMP}/test_ns_events.txt" 2>/dev/null || true
+          oc get pods -n "${TEST_NS}" -o wide > "${TMP}/test_ns_pods.txt" 2>/dev/null || true
+
+      - name: Upload CI diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-ci-diagnostics-${{ github.run_id }}
+          path: /tmp/e2e-ci-diagnostics/
+          retention-days: 7
+          if-no-files-found: ignore
+
+      - name: Clean up test resources
+        if: always()
+        run: bash ci-scripts/test-cleanup.sh
+
+      - name: Release CI test environment
+        if: always()
+        uses: ./.github/actions/ci-env-release
+        with:
+          configmap-name: ${{ env.CI_ENV_CM }}
+          ci-env-namespace: ${{ env.CI_ENV_NS }}

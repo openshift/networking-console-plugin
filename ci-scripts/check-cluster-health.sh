@@ -53,13 +53,18 @@ check "ARC AutoscalingRunnerSet in ${ARC_RUNNERS_NS}" bash -c "
   fi
 "
 
-check "ARC listener pod in ${ARC_RUNNERS_NS}" bash -c "
-  running=\$(oc get pods -n '${ARC_RUNNERS_NS}' --no-headers 2>/dev/null | grep -c 'Running')
+check "ARC listener pod" bash -c "
+  running=\$(oc get pods -n '${ARC_RUNNERS_NS}' -n arc-systems --no-headers 2>/dev/null | grep -c 'Running')
   if [[ \"\${running}\" -ge 1 ]]; then
     echo \"  \${running} Running pod(s) (listener/controller)\"
     exit 0
+  fi
+  running=\$(oc get pods -n '${ARC_RUNNERS_NS}' --no-headers 2>/dev/null | grep -c 'Running')
+  if [[ \"\${running}\" -ge 1 ]]; then
+    echo \"  \${running} Running pod(s) in ${ARC_RUNNERS_NS}\"
+    exit 0
   else
-    echo '  No Running pods in ${ARC_RUNNERS_NS}'
+    echo '  No Running listener pods found in arc-systems or ${ARC_RUNNERS_NS}'
     exit 1
   fi
 "
