@@ -1,0 +1,17 @@
+name: Test Runner
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: networking-console-plugin-ci
+    timeout-minutes: 5
+    steps:
+      - name: Hello from hot cluster
+        run: |
+          echo "Runner is working!"
+          echo "Hostname: $(hostname)"
+          echo "User: $(whoami)"
+          oc version 2>/dev/null || echo "oc not available"
+          echo "Done!"
