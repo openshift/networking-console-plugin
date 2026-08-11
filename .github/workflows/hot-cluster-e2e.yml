@@ -51,6 +51,13 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha || github.ref }}
 
+      - name: Authenticate to cluster
+        env:
+          CLUSTER_API: ${{ secrets.CLUSTER_API }}
+          CLUSTER_TOKEN: ${{ secrets.CLUSTER_TOKEN }}
+        run: |
+          oc login "${CLUSTER_API}" --token="${CLUSTER_TOKEN}" --insecure-skip-tls-verify
+
       - name: Run health checks
         run: bash ci-scripts/check-cluster-health.sh
 
