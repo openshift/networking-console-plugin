@@ -1,11 +1,11 @@
 export type NadData = {
-  name?: string;
-  description?: string;
-  type?: string;
   bridge?: string;
-  vlan?: string;
-  mtu?: string;
-  macSpoof?: boolean;
-  subnet?: string;
+  description?: string;
   exclude?: string;
+  macSpoof?: boolean;
+  mtu?: string;
+  name?: string;
+  subnet?: string;
+  type?: string;
+  vlan?: string;
 };

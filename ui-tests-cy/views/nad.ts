@@ -26,15 +26,19 @@ export const createNAD = (nad: NadData) => {
   cy.byButtonText('Create NetworkAttachmentDefinition').click();
   cy.get('#form').check();
   cy.get(name, { timeout: 10000 }).should('be.visible');
-  cy.get(name).clear().type(nad.name);
-  cy.get(description).clear().type(nad.description);
+  cy.get(name).clear();
+  cy.get(name).type(nad.name);
+  cy.get(description).clear();
+  cy.get(description).type(nad.description);
   cy.get(type).click();
   switch (nad.type) {
     case 'Bridge': {
       cy.byButtonText('Linux bridge').click();
-      cy.get(bridgeName).clear().type(nad.bridge);
+      cy.get(bridgeName).clear();
+      cy.get(bridgeName).type(nad.bridge);
       if (nad.vlan) {
-        cy.get(bridgeVlan).clear().type(nad.vlan);
+        cy.get(bridgeVlan).clear();
+        cy.get(bridgeVlan).type(nad.vlan);
       }
       if (!nad.macSpoof) {
         cy.get(macSpoofCHK).uncheck();
@@ -50,10 +54,13 @@ export const createNAD = (nad: NadData) => {
     }
     case 'Localnet': {
       cy.byButtonText('secondary localnet').click();
-      cy.get(bridgeMap).clear().type(nad.bridge);
-      cy.get(bridgeMTU).clear().type(nad.mtu);
+      cy.get(bridgeMap).clear();
+      cy.get(bridgeMap).type(nad.bridge);
+      cy.get(bridgeMTU).clear();
+      cy.get(bridgeMTU).type(nad.mtu);
       if (nad.vlan) {
-        cy.get(localnetVlan).clear().type(nad.vlan);
+        cy.get(localnetVlan).clear();
+        cy.get(localnetVlan).type(nad.vlan);
       }
       if (nad.subnet) {
         cy.get(localnetSubnet).type(nad.subnet);

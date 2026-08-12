@@ -3,8 +3,10 @@ import './selectors';
 import './commands';
 import './nav';
 
-Cypress.on('uncaught:exception', () => {
-  return false;
+Cypress.on('uncaught:exception', (err) => {
+  if (err.message.includes('ResizeObserver') || err.message.includes('Script error')) {
+    return false;
+  }
 });
 
 if (Cypress.env('HIDE_XHR')) {

@@ -40,7 +40,7 @@ Cypress.Commands.add('login', (provider: string, username: string, password: str
       });
       cy.get('#inputUsername', { timeout: 180000 }).should('be.visible');
       cy.get('#inputUsername').type(originUsr);
-      cy.get('#inputPassword').type(originPwd);
+      cy.get('#inputPassword').type(originPwd, { log: false });
       cy.get('button[type=submit]').click();
     },
   );
