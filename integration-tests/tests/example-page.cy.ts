@@ -1,7 +1,7 @@
 import { checkErrors } from '../support';
 
 const PLUGIN_TEMPLATE_NAME = 'networking-console-plugin';
-const PLUGIN_TEMPLATE_PULL_SPEC = Cypress.env('PLUGIN_TEMPLATE_PULL_SPEC');
+const PLUGIN_TEMPLATE_PULL_SPEC = Cypress.expose('PLUGIN_TEMPLATE_PULL_SPEC');
 export const isLocalDevEnvironment = Cypress.config('baseUrl').includes('localhost');
 
 const installHelmChart = (path: string) => {
