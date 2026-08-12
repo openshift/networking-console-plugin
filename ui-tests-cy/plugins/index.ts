@@ -1,6 +1,7 @@
 const wp = require('@cypress/webpack-preprocessor');
 const path = require('path');
 const dotenv = require('dotenv');
+const { execSync } = require('child_process');
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
@@ -22,6 +23,18 @@ module.exports = (on, config) => {
     },
   };
   on('file:preprocessor', wp(options));
+
+  on('task', {
+    execOc({ args }) {
+      try {
+        const result = execSync(`oc ${args.join(' ')}`, { encoding: 'utf-8', timeout: 300000 });
+        return result;
+      } catch (e) {
+        return null;
+      }
+    },
+  });
+
   config.baseUrl = `${process.env.BRIDGE_BASE_ADDRESS || 'http://localhost:9000/'}`;
   config.env.BRIDGE_KUBEADMIN_PASSWORD = process.env.BRIDGE_KUBEADMIN_PASSWORD;
   config.env.TEST_NS = process.env.TEST_NS;

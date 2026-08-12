@@ -1,0 +1,54 @@
+name: E2E Tests
+
+on:
+  pull_request:
+    branches: [main, release-*]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: e2e-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    name: Cypress E2E
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    env:
+      BRIDGE_BASE_ADDRESS: ${{ secrets.CONSOLE_URL }}
+      BRIDGE_E2E_BROWSER_NAME: electron
+      HIDE_XHR: 'true'
+      TEST_NS: cy-test-ns
+      UDN_NS: udn-test-ns
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: |
+          npm clean-install --ignore-scripts --no-audit
+          npx cypress install
+
+      - name: Run E2E tests
+        run: npm run test-e2e
+
+      - name: Upload test artifacts
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: e2e-results
+          path: ui-tests-cy/gui-test-screenshots/
+          retention-days: 7
