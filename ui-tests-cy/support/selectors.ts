@@ -29,7 +29,7 @@ declare global {
 Cypress.Commands.add(
   'byTestID',
   (selector: string, options?: Partial<Loggable & Shadow & Timeoutable & Withinable>) => {
-    cy.get(`[data-test="${selector}"]`, options);
+    return cy.get(`[data-test="${selector}"]`, options);
   },
 );
 

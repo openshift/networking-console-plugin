@@ -10,17 +10,12 @@ declare global {
 }
 
 Cypress.Commands.add('deleteResource', (kind: string, name: string, namespace?: string) => {
-  if (!namespace) {
-    cy.exec(`oc delete --ignore-not-found=true ${kind} ${name} --wait=true --timeout=300s`, {
-      failOnNonZeroExit: false,
-      timeout: 5 * MINUTE,
-    });
-    return;
+  const args = ['oc', 'delete', '--ignore-not-found=true'];
+  if (namespace) {
+    args.push('-n', namespace);
   }
-  cy.exec(
-    `oc delete --ignore-not-found=true -n ${namespace} ${kind} ${name} --wait=true --timeout=300s`,
-    { failOnNonZeroExit: false, timeout: 5 * MINUTE },
-  );
+  args.push(kind, name, '--wait=true', '--timeout=300s');
+  cy.exec(args.join(' '), { failOnNonZeroExit: false, timeout: 5 * MINUTE });
 });
 
 Cypress.Commands.add('switchProject', (projectName: string) => {
@@ -40,8 +35,10 @@ Cypress.Commands.add('switchProject', (projectName: string) => {
     { timeout: 10000 },
   )
     .first()
-    .clear()
-    .type(projectName);
+    .then(($input) => {
+      cy.wrap($input).clear();
+      cy.wrap($input).type(projectName);
+    });
   cy.contains('[data-test="dropdown-menu-item-link"], [role="option"], button', projectName, {
     timeout: 10000,
   }).click();
