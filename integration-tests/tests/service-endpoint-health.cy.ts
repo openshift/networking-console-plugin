@@ -17,19 +17,22 @@ const visitRoutes = () => {
 };
 
 const waitForHealthyService = () => {
-  cy.exec(
-    `oc wait --for=condition=available deployment/eph-healthy -n ${TEST_NS} --timeout=180s`,
-    { failOnNonZeroExit: false, timeout: 3 * MINUTE },
-  ).then((result) => {
+  cy.exec(`oc wait --for=condition=available deployment/eph-healthy -n ${TEST_NS} --timeout=180s`, {
+    failOnNonZeroExit: false,
+    timeout: 3 * MINUTE,
+  }).then((result) => {
     const code = result.code ?? 0;
-    expect(code, `wait for deployment failed: ${result.stderr || result.stdout}`).to.eq(0);
+    expect(code, 'wait for deployment failed').to.eq(0);
   });
 
   // EndpointSlice for the selector-based Service may lag the Deployment Available condition.
   cy.exec(
     `oc wait endpointslices -n ${TEST_NS} -l kubernetes.io/service-name=eph-healthy --for=jsonpath='{.endpoints[0].conditions.ready}'=true --timeout=120s`,
     { failOnNonZeroExit: false, timeout: 2 * MINUTE },
-  );
+  ).then((result) => {
+    const code = result.code ?? 0;
+    expect(code, 'wait for EndpointSlice failed').to.eq(0);
+  });
 };
 
 describe('OCPNETUI-59: Service and Route endpoint health', () => {
