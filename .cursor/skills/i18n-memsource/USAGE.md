@@ -115,12 +115,12 @@ npm run i18n
 git diff --stat -- locales/   # review before continuing
 
 set -euo pipefail
-# Register cleanup first, then reject a non-symlink locales/zh-cn path
-trap 'rm -f locales/zh-cn; rm -rf po-files locales/tmp' EXIT
+# Reject a non-symlink path before registering cleanup (avoid deleting real files)
 if [ -e locales/zh-cn ] && [ ! -L locales/zh-cn ]; then
   echo "ERROR: locales/zh-cn exists and is not a symlink; resolve manually"
   exit 1
 fi
+trap 'if [ -L locales/zh-cn ]; then rm -f locales/zh-cn; fi; rm -rf po-files locales/tmp' EXIT
 ln -sfn zh locales/zh-cn
 
 rm -rf po-files

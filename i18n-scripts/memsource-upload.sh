@@ -24,16 +24,20 @@ PROJECT_ID=$(echo "$PROJECT_INFO" | jq -r '.uid')
 
 # Own the zh-cn → zh symlink so re-running export-pos here works even when
 # preparation happened in a different shell (trap is session-local).
+# Only remove a symlink we (or prep) own — never a pre-existing regular path.
 cleanup_upload() {
-  rm -f locales/zh-cn
+  if [ -L locales/zh-cn ]; then
+    rm -f locales/zh-cn
+  fi
   rm -rf po-files locales/tmp
 }
-trap cleanup_upload EXIT
 
 if [ -e locales/zh-cn ] && [ ! -L locales/zh-cn ]; then
   echo "ERROR: locales/zh-cn exists and is not a symlink; resolve manually" >&2
   exit 1
 fi
+
+trap cleanup_upload EXIT
 ln -sfn zh locales/zh-cn
 
 echo "Exporting PO files"

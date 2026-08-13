@@ -90,17 +90,19 @@ Also ensure `jq` is installed (`brew install jq`) — upload scripts need it.
 Without a symlink, `i18n-to-po` cannot merge existing Chinese translations and
 uploads empty msgstr for Chinese.
 
-**Before any `export-pos` during upload prep**, register cleanup first, then create
-the symlink. Keep symlink + trap in the **same shell session** through validation.
-`memsource-upload.sh` also creates and cleans the symlink around its own
-`export-pos` re-run, so authenticated upload in a separate shell is safe:
+**Before any `export-pos` during upload prep**, reject a non-symlink `locales/zh-cn`,
+then register cleanup (symlink-only removal) and create the symlink. Keep symlink +
+trap in the **same shell session** through validation. `memsource-upload.sh` also
+creates and cleans the symlink around its own `export-pos` re-run, so authenticated
+upload in a separate shell is safe:
 
 ```bash
-trap 'rm -f locales/zh-cn; rm -rf po-files locales/tmp' EXIT
+# Reject a non-symlink path before registering cleanup (avoid deleting real files)
 if [ -e locales/zh-cn ] && [ ! -L locales/zh-cn ]; then
   echo "ERROR: locales/zh-cn exists and is not a symlink; resolve manually"
   exit 1
 fi
+trap 'if [ -L locales/zh-cn ]; then rm -f locales/zh-cn; fi; rm -rf po-files locales/tmp' EXIT
 ln -sfn zh locales/zh-cn
 ```
 
@@ -211,11 +213,11 @@ are caught early.
 
 ```bash
 set -euo pipefail
-trap 'rm -f locales/zh-cn; rm -rf po-files locales/tmp' EXIT
 if [ -e locales/zh-cn ] && [ ! -L locales/zh-cn ]; then
   echo "ERROR: locales/zh-cn exists and is not a symlink; resolve manually"
   exit 1
 fi
+trap 'if [ -L locales/zh-cn ]; then rm -f locales/zh-cn; fi; rm -rf po-files locales/tmp' EXIT
 ln -sfn zh locales/zh-cn
 rm -rf po-files
 npm run export-pos
@@ -256,10 +258,12 @@ before the user runs upload.
 
 ### Step 9: Cleanup and update state
 
-Explicit cleanup (trap also covers failure paths):
+Explicit cleanup (trap also covers failure paths; only remove a symlink):
 
 ```bash
-rm -f locales/zh-cn
+if [ -L locales/zh-cn ]; then
+  rm -f locales/zh-cn
+fi
 rm -rf po-files locales/tmp
 ```
 
