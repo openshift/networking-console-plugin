@@ -87,8 +87,10 @@ can read process environment variables; keep credentials in your terminal only.
    and validate POs. Provide the **OCP VERSION** when asked (sprint auto-increments
    from `state.json`).
 4. Review the locale diff and PO validation summary.
-5. **You** run the Memsource upload in your own authenticated terminal (see manual
-   upload below). Do not ask the agent to run authenticated Memsource commands.
+5. **You** run authenticated `npm run memsource-upload` in your own terminal
+   (see manual upload below). The upload script re-creates the `zh-cn` symlink
+   and re-runs `export-pos`, so a separate prep shell is safe. Do not ask the
+   agent to run authenticated Memsource commands.
 6. Update `state.json` after a successful upload (or ask the agent to, using the
    project ID from the upload output — not credentials).
 
@@ -112,25 +114,35 @@ memsource auth whoami
 npm run i18n
 git diff --stat -- locales/   # review before continuing
 
-# CRITICAL: without this, Chinese existing translations are lost on upload
-ln -sfn zh locales/zh-cn
+set -euo pipefail
+# Register cleanup first, then reject a non-symlink locales/zh-cn path
 trap 'rm -f locales/zh-cn; rm -rf po-files locales/tmp' EXIT
+if [ -e locales/zh-cn ] && [ ! -L locales/zh-cn ]; then
+  echo "ERROR: locales/zh-cn exists and is not a symlink; resolve manually"
+  exit 1
+fi
+ln -sfn zh locales/zh-cn
 
 rm -rf po-files
 npm run export-pos
 # export-pos also runs clear-english-msgstr.js so msgstr==msgid becomes empty
-# validate: translated vs needs_translation; english_leaks_remaining should be 0
+# validate: fail closed — missing POs / english leaks must stop upload
 for lang in ja zh-cn ko fr es; do
   echo "=== $lang ==="
   python3 -c "
 import re, glob, sys
 files = glob.glob(f'po-files/{sys.argv[1]}/*.po')
+if not files:
+  raise SystemExit(f'missing PO files for {sys.argv[1]}')
 content = ''.join(open(f).read() for f in files)
-entries = [(a,b) for a,b in re.findall(r'msgid \"(.*?)\"\nmsgstr \"(.*?)\"', content) if a]
+entries = re.findall(r'msgid \"((?:\\\\.|[^\"])*)\"\s*msgstr \"((?:\\\\.|[^\"])*)\"', content)
+entries = [(a,b) for a,b in entries if a]
 translated = sum(1 for a,b in entries if b and b != a)
 needs = sum(1 for a,b in entries if not b)
 leaks = sum(1 for a,b in entries if b and b == a)
 print(f'total={len(entries)} translated={translated} needs_translation={needs} english_leaks_remaining={leaks}')
+if leaks:
+  raise SystemExit('english_leaks_remaining must be 0')
 " "$lang"
 done
 
@@ -138,6 +150,7 @@ done
 STATE=.cursor/skills/i18n-memsource/state.json
 VERSION=...   # ask / set from current OCP release — do not copy a stale example
 SPRINT=$(( $(jq -r '.sprint // 0' "$STATE") + 1 ))
+# Upload owns zh-cn symlink + re-export; safe after the validation gate above
 npm run memsource-upload -- -v "$VERSION" -s "$SPRINT"
 # capture PROJECT_ID from memsource project create output (.uid)
 # If upload fails after project create: save that PROJECT_ID into state.json
@@ -233,9 +246,14 @@ done
 git status --short --untracked-files -- locales/
 # must be clean
 
-# Create/switch to the PR branch BEFORE download (script auto-commits)
+# Create/switch to the PR branch BEFORE download (script auto-commits).
+# Do NOT use `git switch -C` (resets the branch tip and can drop unpushed commits).
 BRANCH="chore/i18n-update-sprint-${SPRINT}"
-git switch -C "$BRANCH"
+if git show-ref --verify --quiet "refs/heads/$BRANCH"; then
+  git switch "$BRANCH"
+else
+  git switch -c "$BRANCH"
+fi
 
 npm run memsource-download -- -p "$PROJECT_ID"
 # Review full locale content (not only --stat) before pushing
@@ -252,9 +270,11 @@ Ask Cursor: "translation status"
 or:
 
 ```bash
+STATE=.cursor/skills/i18n-memsource/state.json
+PROJECT_ID=$(jq -r '.lastProjectId' "$STATE")   # or paste/override
 for lang in ja zh-cn ko fr es; do
   echo "=== $lang ==="
-  memsource job list --project-id PROJECT_ID --target-lang "$lang" -f json
+  memsource job list --project-id "$PROJECT_ID" --target-lang "$lang" -f json
 done
 ```
 

@@ -90,9 +90,10 @@ Also ensure `jq` is installed (`brew install jq`) — upload scripts need it.
 Without a symlink, `i18n-to-po` cannot merge existing Chinese translations and
 uploads empty msgstr for Chinese.
 
-**Before any `export-pos` during upload**, register cleanup first, then create
-the symlink. Keep symlink + trap in the **same shell session** through upload
-(do not rely on separate fenced blocks as separate shells):
+**Before any `export-pos` during upload prep**, register cleanup first, then create
+the symlink. Keep symlink + trap in the **same shell session** through validation.
+`memsource-upload.sh` also creates and cleans the symlink around its own
+`export-pos` re-run, so authenticated upload in a separate shell is safe:
 
 ```bash
 trap 'rm -f locales/zh-cn; rm -rf po-files locales/tmp' EXIT
@@ -161,7 +162,7 @@ Upload Progress:
 - [ ] Step 2: Get VERSION from user, auto-increment SPRINT
 - [ ] Step 3: Confirm user-provided Memsource auth (no credential access)
 - [ ] Step 4: Extract translation keys
-- [ ] Step 5–8: One shell — symlink, export, validate, approve, user-terminal upload
+- [ ] Step 5–8: Symlink + export + validate; user-terminal upload (script owns symlink)
 - [ ] Step 9: Cleanup and update state
 ```
 
@@ -201,14 +202,15 @@ git diff --stat -- locales/
 
 Require approval if the locale diff looks wrong.
 
-### Steps 5–8: One shell — symlink, export, validate, upload
+### Steps 5–8: Symlink, export, validate, then upload
 
-Run the following in **one continuous shell** so the `EXIT` trap stays active
-through upload (`memsource-upload` re-runs `export-pos`). Prefer the user runs
-the authenticated upload line in their terminal; the agent may prepare through
-validation without credentials.
+`memsource-upload.sh` **owns** the `locales/zh-cn` → `zh` symlink (creates it,
+re-runs `export-pos`, cleans up via `EXIT` trap). Agent prep and authenticated
+upload may be separate shells. Still validate POs before upload so English leaks
+are caught early.
 
 ```bash
+set -euo pipefail
 trap 'rm -f locales/zh-cn; rm -rf po-files locales/tmp' EXIT
 if [ -e locales/zh-cn ] && [ ! -L locales/zh-cn ]; then
   echo "ERROR: locales/zh-cn exists and is not a symlink; resolve manually"
@@ -219,7 +221,7 @@ rm -rf po-files
 npm run export-pos
 # export-pos ends with: node ./i18n-scripts/clear-english-msgstr.js
 
-# Validate (fail closed on missing POs / english leaks)
+# Validate (fail closed on missing POs / english leaks) — must exit before upload
 for lang in ja zh-cn ko fr es; do
   echo "=== $lang ==="
   python3 -c "
@@ -240,7 +242,7 @@ if leaks:
 done
 
 # After validation: present summary and get explicit approval, then
-# USER terminal (authenticated) only:
+# USER terminal (authenticated) only — upload re-exports with its own symlink:
 npm run memsource-upload -- -v "$VERSION" -s "$SPRINT"
 # capture PROJECT_ID (.uid) from memsource project create output
 ```
@@ -346,7 +348,13 @@ branch **before** download (the script auto-commits):
 STATE=.cursor/skills/i18n-memsource/state.json
 SPRINT=$(jq -r '.sprint' "$STATE")   # or ask user / override
 BRANCH="chore/i18n-update-sprint-${SPRINT}"
-git switch -C "$BRANCH"   # create or reset onto current HEAD if it already exists
+# Non-destructive: create the branch, or switch to it if it already exists.
+# Do NOT use `git switch -C` (resets the branch tip and can drop unpushed commits).
+if git show-ref --verify --quiet "refs/heads/$BRANCH"; then
+  git switch "$BRANCH"
+else
+  git switch -c "$BRANCH"
+fi
 
 # USER terminal (authenticated):
 npm run memsource-download -- -p "$PROJECT_ID"
