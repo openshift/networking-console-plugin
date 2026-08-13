@@ -292,6 +292,7 @@ done
 | Leave English in msgstr | Phrase may treat those strings as already translated | Use current `export-pos` (includes `clear-english-msgstr.js`) |
 | Trust download script's git clean check | Uncommitted `locales/` changes get overwritten | Run `git status -- locales/` yourself |
 | Download before jobs complete | Incomplete locale overwrite | Check job status first |
+| Re-download in a fresh git worktree without `node_modules` | PO download succeeds, then `po-to-i18n` fails with `Cannot find module 'minimist'` | In the worktree: `ln -s /path/to/main/repo/node_modules node_modules` or `npm install`, then re-run download / `po-to-i18n` |
 | Give Memsource password/token to the agent | Credential exposure | Authenticate only in your shell; never paste tokens into chat |
 | Forget to update `state.json` | Next download/status uses stale project ID | Update state after every upload |
 | Upload without reviewing `npm run i18n` | Unexpected key churn in locale files | Always review `git diff -- locales/` first |
