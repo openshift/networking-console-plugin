@@ -5,6 +5,23 @@
 # ExternalName: no endpoints → Unknown
 # Route: points at the Healthy service for Backend health assertions
 ---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: eph-healthy-ingress
+  labels:
+    app: eph-healthy
+spec:
+  podSelector:
+    matchLabels:
+      app: eph-healthy
+  policyTypes:
+    - Ingress
+  ingress:
+    - ports:
+        - protocol: TCP
+          port: 8080
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -23,17 +40,29 @@ spec:
     spec:
       automountServiceAccountToken: false
       containers:
-        - name: pause
-          image: registry.k8s.io/pause:3.9
+        - name: hello
+          image: quay.io/openshifttest/hello-openshift:1.2.0
           ports:
             - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 1
+            periodSeconds: 5
           resources:
             limits:
               cpu: 50m
-              memory: 32Mi
+              memory: 64Mi
             requests:
               cpu: 10m
-              memory: 16Mi
+              memory: 32Mi
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
