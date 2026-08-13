@@ -1,4 +1,4 @@
-// Import commands.js using ES2015 syntax:
+import './commands';
 import './login';
 
 export const checkErrors = () =>
