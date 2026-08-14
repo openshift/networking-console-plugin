@@ -66,14 +66,14 @@ to the Cursor agent. Treat Phrase like any other paid external service.
 
 Recommended split:
 
-1. **You** authenticate in a local terminal and run `memsource-*` / upload-download
-   commands that need `MEMSOURCE_TOKEN`.
+1. **You** authenticate in a local terminal and run all `memsource-*` /
+   upload-download / job-list commands there.
 2. The agent may help with extract/export/validation (`npm run i18n`,
    `export-pos`, PO checks) and drafting notifications — without reading
    `~/.memsourcerc`.
 
-If you temporarily export `MEMSOURCE_TOKEN` into a shell the agent uses, prefer
-a short-lived token and do not commit it or paste it into chat.
+**Do not** export `MEMSOURCE_TOKEN` into an agent-controlled shell. The agent
+can read process environment variables; keep credentials in your terminal only.
 
 ---
 
@@ -87,9 +87,10 @@ a short-lived token and do not commit it or paste it into chat.
    and validate POs. Provide the **OCP VERSION** when asked (sprint auto-increments
    from `state.json`).
 4. Review the locale diff and PO validation summary.
-5. **You** run the Memsource upload in your own authenticated terminal (see manual
-   upload below), or export a short-lived `MEMSOURCE_TOKEN` yourself before asking
-   the agent to run `npm run memsource-upload`.
+5. **You** run authenticated `npm run memsource-upload` in your own terminal
+   (see manual upload below). The upload script re-creates the `zh-cn` symlink
+   and re-runs `export-pos`, so a separate prep shell is safe. Do not ask the
+   agent to run authenticated Memsource commands.
 6. Update `state.json` after a successful upload (or ask the agent to, using the
    project ID from the upload output — not credentials).
 
@@ -99,30 +100,33 @@ a short-lived token and do not commit it or paste it into chat.
 cd networking-console-plugin
 
 # Auth in YOUR terminal only — do not paste password/token into Cursor chat
+export PATH="$HOME/Library/Python/3.9/bin:$PATH"
+# or: source "$HOME/git/memsource-cli-client/.memsource/bin/activate"
 source ~/.memsourcerc
-export PATH="$(dirname "$(python3 -c "import shutil; print(shutil.which('memsource') or '')")"):$PATH"
 export MEMSOURCE_TOKEN=$(memsource auth login \
   --user-name "$MEMSOURCE_USERNAME" \
   --password "$MEMSOURCE_PASSWORD" \
   -f json \
   | python3 -c "import sys,json; print(json.load(sys.stdin)['token'])")
+# Without MEMSOURCE_TOKEN, later commands fail with 401 "auth: not logged"
+memsource auth whoami
 
 npm run i18n
 git diff --stat -- locales/   # review before continuing
 
-# CRITICAL: register cleanup BEFORE creating the symlink
-trap 'rm -f locales/zh-cn; rm -rf po-files locales/tmp' EXIT
+set -euo pipefail
+# Reject a non-symlink path before registering cleanup (avoid deleting real files)
 if [ -e locales/zh-cn ] && [ ! -L locales/zh-cn ]; then
   echo "ERROR: locales/zh-cn exists and is not a symlink; resolve manually"
   exit 1
 fi
+trap 'if [ -L locales/zh-cn ]; then rm -f locales/zh-cn; fi; rm -rf po-files locales/tmp' EXIT
 ln -sfn zh locales/zh-cn
 
 rm -rf po-files
 npm run export-pos
 # export-pos also runs clear-english-msgstr.js so msgstr==msgid becomes empty
-# validate the same export-pos pipeline memsource-upload will re-run
-# (translated vs needs_translation; english_leaks_remaining should be 0)
+# validate: fail closed — missing POs / english leaks must stop upload
 for lang in ja zh-cn ko fr es; do
   echo "=== $lang ==="
   python3 -c "
@@ -131,7 +135,8 @@ files = glob.glob(f'po-files/{sys.argv[1]}/*.po')
 if not files:
   raise SystemExit(f'missing PO files for {sys.argv[1]}')
 content = ''.join(open(f).read() for f in files)
-entries = [(a,b) for a,b in re.findall(r'msgid \"(.*?)\"\nmsgstr \"(.*?)\"', content) if a]
+entries = re.findall(r'msgid \"((?:\\\\.|[^\"])*)\"\s*msgstr \"((?:\\\\.|[^\"])*)\"', content)
+entries = [(a,b) for a,b in entries if a]
 translated = sum(1 for a,b in entries if b and b != a)
 needs = sum(1 for a,b in entries if not b)
 leaks = sum(1 for a,b in entries if b and b == a)
@@ -145,6 +150,7 @@ done
 STATE=.cursor/skills/i18n-memsource/state.json
 VERSION=...   # ask / set from current OCP release — do not copy a stale example
 SPRINT=$(( $(jq -r '.sprint // 0' "$STATE") + 1 ))
+# Upload owns zh-cn symlink + re-export; safe after the validation gate above
 npm run memsource-upload -- -v "$VERSION" -s "$SPRINT"
 # capture PROJECT_ID from memsource project create output (.uid)
 # If upload fails after project create: save that PROJECT_ID into state.json
@@ -177,9 +183,9 @@ jq --arg v "$VERSION" --argjson s "$SPRINT" --arg p "$PROJECT_ID" --arg d "$TODA
 
 `i18n-to-po` looks for `locales/zh-cn/` when building Chinese POs. If that path
 is missing, **all Chinese msgstr values are empty** and prior translations are
-not carried forward. Register an `EXIT` trap **before** `ln -sfn zh locales/zh-cn`,
-refuse to overwrite a non-symlink `locales/zh-cn`, and let the trap remove the
-symlink afterward (even on failure). Download already remaps `zh-cn` → `zh`.
+not carried forward. Create `locales/zh-cn` → `zh` before export and remove it
+afterward (use a shell `trap` so cleanup runs even on failure). Download already
+remaps `zh-cn` → `zh`.
 
 ---
 
@@ -221,15 +227,18 @@ can go away (see migration note at the top).
 ```bash
 # Auth in YOUR terminal only (same as upload)
 
-PROJECT_ID=...   # from state.json
+PROJECT_ID=...   # from state.json lastProjectId
+SPRINT=1         # from state.json
 
 # Require completed jobs before download
+# Do not use comma-separated -c (CLI treats it as one column). Prefer no -c,
+# or: -c uid -c status -c target_lang
 for lang in ja zh-cn ko fr es; do
+  echo "=== $lang ==="
   memsource job list \
     --project-id "$PROJECT_ID" \
     --target-lang "$lang" \
-    -f json \
-    -c uid,status,targetLang
+    -f json
 done
 # Proceed only when every job status is COMPLETED / DELIVERED (or equivalent)
 
@@ -237,11 +246,21 @@ done
 git status --short --untracked-files -- locales/
 # must be clean
 
-npm run memsource-download -- -p "$PROJECT_ID"
-git diff HEAD~1 --stat -- locales/
-```
+# Create/switch to the PR branch BEFORE download (script auto-commits).
+# Do NOT use `git switch -C` (resets the branch tip and can drop unpushed commits).
+BRANCH="chore/i18n-update-sprint-${SPRINT}"
+if git show-ref --verify --quiet "refs/heads/$BRANCH"; then
+  git switch "$BRANCH"
+else
+  git switch -c "$BRANCH"
+fi
 
-Then push a branch / open a PR with the locale updates.
+npm run memsource-download -- -p "$PROJECT_ID"
+# Review full locale content (not only --stat) before pushing
+git diff HEAD~1 -- locales/
+git push -u origin HEAD
+# open PR as needed
+```
 
 ---
 
@@ -251,8 +270,11 @@ Ask Cursor: "translation status"
 or:
 
 ```bash
+STATE=.cursor/skills/i18n-memsource/state.json
+PROJECT_ID=$(jq -r '.lastProjectId' "$STATE")   # or paste/override
 for lang in ja zh-cn ko fr es; do
-  memsource job list --project-id PROJECT_ID --target-lang "$lang" -f json -c uid,status,targetLang
+  echo "=== $lang ==="
+  memsource job list --project-id "$PROJECT_ID" --target-lang "$lang" -f json
 done
 ```
 
@@ -262,12 +284,16 @@ done
 
 | Pitfall | What happens | Fix |
 |---------|--------------|-----|
+| `memsource` not on PATH | `command not found` | `export PATH="$HOME/Library/Python/3.9/bin:$PATH"` (or activate the memsource venv) |
+| Login without exporting token | 401 `auth: not logged` on whoami/job list | `export MEMSOURCE_TOKEN=$(memsource auth login … -f json \| …)` |
+| Comma-separated `-c uid,status,…` | CLI rejects columns as one name | Omit `-c`, or use `-c uid -c status -c target_lang` |
 | Skip `zh-cn` symlink on upload | Chinese translations wiped in the Phrase project | Always `ln -sfn zh locales/zh-cn` before export/upload |
 | Hand-build POs from English only | Existing ja/ko/fr/es/zh translations lost | Always use `npm run export-pos` |
 | Leave English in msgstr | Phrase may treat those strings as already translated | Use current `export-pos` (includes `clear-english-msgstr.js`) |
 | Trust download script's git clean check | Uncommitted `locales/` changes get overwritten | Run `git status -- locales/` yourself |
 | Download before jobs complete | Incomplete locale overwrite | Check job status first |
-| Give Memsource password/token to the agent | Credential exposure | Authenticate only in your shell |
+| Re-download in a fresh git worktree without `node_modules` | PO download succeeds, then `po-to-i18n` fails with `Cannot find module 'minimist'` | In the worktree: `ln -s /path/to/main/repo/node_modules node_modules` or `npm install`, then re-run download / `po-to-i18n` |
+| Give Memsource password/token to the agent | Credential exposure | Authenticate only in your shell; never paste tokens into chat |
 | Forget to update `state.json` | Next download/status uses stale project ID | Update state after every upload |
 | Upload without reviewing `npm run i18n` | Unexpected key churn in locale files | Always review `git diff -- locales/` first |
 
