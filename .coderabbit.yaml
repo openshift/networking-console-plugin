@@ -41,6 +41,5 @@ reviews:
     - "!package-lock.json"
     - "!locales/en/**"
     - "!**/*.snap"
-    - "!charts/**/*.yaml"
 chat:
   auto_reply: true
