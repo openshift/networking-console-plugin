@@ -133,18 +133,6 @@ docker push quay.io/my-repository/networking-console-plugin:latest
 
 On Apple silicon, add `--platform=linux/amd64`.
 
-## Deployment
-
-A [Helm chart](charts/openshift-console-plugin/) deploys the plugin to OpenShift:
-
-```bash
-helm upgrade -i networking-console-plugin charts/openshift-console-plugin \
-  -n plugin__networking-console-plugin --create-namespace \
-  --set plugin.image=<image-location>
-```
-
-See `charts/openshift-console-plugin/values.yaml` for all parameters.
-
 ## Testing
 
 ### Frontend Validation
