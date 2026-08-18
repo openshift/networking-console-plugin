@@ -202,7 +202,6 @@
   "IPAMLifecycle": "Cycle de vie IPAM",
   "IPAMLifecycle controls IP addresses management lifecycle.": "IPAMLifecycle contrôle le cycle de vie de la gestion des adresses IP.",
   "It is not recommended to set this field without explicit need and understanding of the OVN network topology.": "Il n'est pas recommandé de renseigner ce champ sans besoin explicite et sans compréhension de la topologie du réseau OVN.",
-  "Items per page": "",
   "JoinSubnets": "Joindre des sous-réseaux",
   "JoinSubnets are used inside the OVN network topology.": "Les sous-réseaux JoinSubnets sont utilisés au sein de la topologie du réseau OVN.",
   "Key": "Clé",

@@ -200,7 +200,6 @@
   "IPAMLifecycle": "IPAMLifecycle",
   "IPAMLifecycle controls IP addresses management lifecycle.": "IPAMLifecycle은 IP 주소 관리 라이프사이클을 제어합니다.",
   "It is not recommended to set this field without explicit need and understanding of the OVN network topology.": "OVN 네트워크 토폴로지에 대한 명확한 이해와 필요성이 없는 상태에서 이 필드를 설정하지 않는 것이 좋습니다.",
-  "Items per page": "",
   "JoinSubnets": "JoinSubnets",
   "JoinSubnets are used inside the OVN network topology.": "JoinSubnets는 OVN 네트워크 토폴로지 내에서 사용됩니다.",
   "Key": "키",

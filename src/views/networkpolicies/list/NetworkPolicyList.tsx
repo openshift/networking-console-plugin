@@ -99,7 +99,6 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
               perPage={pagination?.perPage}
               perPageOptions={paginationDefaultValues}
               titles={{
-                itemsPerPage: t('Items per page'),
                 ofWord: t('of'),
                 perPageSuffix: t('per page'),
               }}

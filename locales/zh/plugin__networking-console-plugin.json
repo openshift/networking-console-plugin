@@ -200,7 +200,6 @@
   "IPAMLifecycle": "IPAMLifecycle",
   "IPAMLifecycle controls IP addresses management lifecycle.": "IPAMLifecycle 控制 IP 地址管理生命周期。",
   "It is not recommended to set this field without explicit need and understanding of the OVN network topology.": "不建议在没有明确需要并了解 OVN 网络拓扑的情况下设置此字段。",
-  "Items per page": "",
   "JoinSubnets": "JoinSubnets",
   "JoinSubnets are used inside the OVN network topology.": "JoinSubnets 在 OVN 网络拓扑中使用。",
   "Key": "键",
