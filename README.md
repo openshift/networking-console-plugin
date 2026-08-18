@@ -52,24 +52,6 @@ rpm-ostree install qemu-user-static
 systemctl reboot
 ```
 
-### VS Code Dev Container
-
-An alternative setup uses Docker Compose with
-the [Remote Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
-extension:
-
-1. Create `.devcontainer/dev.env`:
-
-```bash
-OC_PLUGIN_NAME=networking-console-plugin
-OC_URL=https://api.example.com:6443
-OC_USER=kubeadmin
-OC_PASS=<password>
-```
-
-2. Open the folder in a dev container: `Ctrl+Shift+P` > `Remote Containers: Open Folder in Container...`
-3. Run `npm run start`
-
 ## Development
 
 ### Scripts
