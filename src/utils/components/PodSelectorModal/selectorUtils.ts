@@ -6,8 +6,8 @@ import { selectorToString } from '../Selector/utilts';
 import { requirementFromString } from './selectorRequirements';
 import { FromRequirementsOptions, Requirement } from './types';
 
-export const arrayify = (obj: any): string[] =>
-  Object.entries(obj).map(([key, value]) => (value ? `${key}=${value}` : key));
+export const arrayify = (obj?: null | Record<string, unknown>): string[] =>
+  Object.entries(obj ?? {}).map(([key, value]) => (value ? `${key}=${value}` : key));
 
 export const objectify = (arr: string[]): Record<string, any> =>
   arr.reduce((acc, item) => {
