@@ -30,6 +30,7 @@ export const MultiNetworkPolicyModel: K8sModel = {
   abbr: 'MNP',
   apiGroup: 'k8s.cni.cncf.io',
   apiVersion: 'v1beta1',
+  crd: true,
   id: 'multinetworkpolicy',
   kind: 'MultiNetworkPolicy',
   label: 'multi-networkpolicy',
