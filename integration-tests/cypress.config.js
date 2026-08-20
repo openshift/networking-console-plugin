@@ -9,6 +9,9 @@ module.exports = defineConfig({
     specPattern: 'tests/**/*.cy.{js,jsx,ts,tsx}',
     supportFile: 'support/index.ts',
   },
+  env: {
+    openshift: true,
+  },
   fixturesFolder: 'fixtures',
   reporter: '../../node_modules/cypress-multi-reporters',
   reporterOptions: {

@@ -1,38 +1,63 @@
 declare global {
   namespace Cypress {
     interface Chainable {
-      login(username?: string, password?: string): Chainable<Element>;
-      logout(): Chainable<Element>;
+      login(providerName?: string, username?: string, password?: string): Chainable<Element>;
+      logout(): void;
     }
   }
 }
 
 const KUBEADMIN_USERNAME = 'kubeadmin';
-const loginUsername = Cypress.env('BRIDGE_KUBEADMIN_PASSWORD') ? 'user-dropdown' : 'username';
+const KUBEADMIN_IDP = 'kube:admin';
+const TOUR_DISMISS = '[data-test="tour-step-footer-secondary"]';
+const MINUTE = 60 * 1000;
 
-// This will add 'cy.login(...)'
-// ex: cy.login('my-user', 'my-password')
-Cypress.Commands.add('login', (username: string, password: string) => {
-  // Check if auth is disabled (for a local development environment).
-  cy.visit('/'); // visits baseUrl which is set in plugins/index.js
+Cypress.Commands.add('login', (provider?: string, username?: string, password?: string) => {
+  const usr = username || KUBEADMIN_USERNAME;
+  const pwd = password || Cypress.env('BRIDGE_KUBEADMIN_PASSWORD');
+  const idp = provider || KUBEADMIN_IDP;
+
+  cy.visit('/');
   cy.window().then((win) => {
     if (win.SERVER_FLAGS?.authDisabled) {
       return;
     }
 
-    // Make sure we clear the cookie in case a previous test failed to logout.
     cy.clearCookie('openshift-session-token');
 
-    cy.get('#inputUsername').type(username || KUBEADMIN_USERNAME);
-    cy.get('#inputPassword').type(password || Cypress.env('BRIDGE_KUBEADMIN_PASSWORD'));
-    cy.get('button[type=submit]').click();
+    cy.origin(
+      Cypress.config('baseUrl').replace('console-openshift-console', 'oauth-openshift'),
+      { args: { idp, pwd, usr } },
+      ({ idp: originIdp, pwd: originPwd, usr: originUsr }) => {
+        cy.get('body', { timeout: 180000 }).should('be.visible');
+        cy.get('body').then(($body) => {
+          if ($body.find('#inputUsername').length === 0) {
+            if ($body.text().includes(originIdp)) {
+              cy.contains('a', originIdp).click();
+            } else if ($body.text().includes('kubeadmin')) {
+              cy.contains('a', 'kubeadmin').click();
+            } else {
+              cy.get('a').first().click();
+            }
+          }
+        });
+        cy.get('#inputUsername', { timeout: 180000 }).should('be.visible');
+        cy.get('#inputUsername').type(originUsr);
+        cy.get('#inputPassword').type(originPwd, { log: false });
+        cy.get('button[type=submit]').click();
+      },
+    );
 
-    cy.get(`[data-test="${loginUsername}"]`).should('be.visible');
+    cy.url({ timeout: 2 * MINUTE }).should('include', 'console-openshift-console');
+    cy.get('body').then(($body) => {
+      if ($body.find(TOUR_DISMISS).length) {
+        cy.get(TOUR_DISMISS).click();
+      }
+    });
   });
 });
 
 Cypress.Commands.add('logout', () => {
-  // Check if auth is disabled (for a local development environment).
   cy.window().then((win) => {
     if (win.SERVER_FLAGS?.authDisabled) {
       return;
