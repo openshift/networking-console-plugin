@@ -15,6 +15,7 @@ import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
 import { FLAGS } from '@utils/constants';
 import { getNetworkPolicyDocURL } from '@utils/constants/documentation';
 import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/constants/ui';
+import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import usePagination from '@utils/hooks/usePagination/usePagination';
 import { paginationDefaultValues } from '@utils/hooks/usePagination/utils/constants';
 import { getResourceURL } from '@utils/resources/shared';
@@ -31,6 +32,7 @@ type NetworkPolicyListProps = {
 };
 
 const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
+  const { t } = useNetworkingTranslation();
   const [networkPolicies, loaded, loadError] = useK8sWatchResource<
     IoK8sApiNetworkingV1NetworkPolicy[]
   >({
@@ -96,6 +98,10 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
               page={pagination?.page}
               perPage={pagination?.perPage}
               perPageOptions={paginationDefaultValues}
+              titles={{
+                ofWord: t('of'),
+                perPageSuffix: t('per page'),
+              }}
             />
           )}
         </div>
