@@ -48,6 +48,7 @@ const ServiceTypeFields: FC<ServiceTypeFieldsProps> = ({
         <TextArea
           aria-invalid={Boolean(portsError)}
           aria-label={t('Ports')}
+          data-test={PORTS_FIELD_ID}
           id={PORTS_FIELD_ID}
           onChange={(_event, text) => onPortsChange(text)}
           resizeOrientation="vertical"

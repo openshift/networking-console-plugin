@@ -1,6 +1,7 @@
 const { defineConfig } = require('cypress');
 
 module.exports = defineConfig({
+  chromeWebSecurity: false,
   defaultCommandTimeout: 30000,
   e2e: {
     setupNodeEvents(on, config) {
@@ -10,6 +11,7 @@ module.exports = defineConfig({
     supportFile: 'support/index.ts',
   },
   fixturesFolder: 'fixtures',
+  pageLoadTimeout: 120000,
   reporter: '../../node_modules/cypress-multi-reporters',
   reporterOptions: {
     configFile: 'reporter-config.json',
