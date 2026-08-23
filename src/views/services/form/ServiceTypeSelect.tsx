@@ -35,6 +35,7 @@ const ServiceTypeSelect: FC = () => {
               <MenuToggle
                 aria-invalid={Boolean(error)}
                 aria-label={t('Type')}
+                data-test={SERVICE_TYPE_FIELD_ID}
                 id="toggle-service-type"
                 isExpanded={isDropdownOpen}
                 isFullWidth
@@ -49,6 +50,7 @@ const ServiceTypeSelect: FC = () => {
             <DropdownList>
               {SERVICE_TYPES.map((type) => (
                 <DropdownItem
+                  data-test={`${SERVICE_TYPE_FIELD_ID}-${type}`}
                   key={type}
                   onClick={() => {
                     onChange(type);

@@ -23,6 +23,7 @@ const ExternalNameField: FC = () => {
       <TextInput
         aria-invalid={Boolean(externalNameError)}
         aria-label={t('External name')}
+        data-test={EXTERNAL_NAME_FIELD_ID}
         id={EXTERNAL_NAME_FIELD_ID}
         validated={externalNameError ? ValidatedOptions.error : ValidatedOptions.default}
         {...register('spec.externalName', {

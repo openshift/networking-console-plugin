@@ -45,7 +45,7 @@ const ServiceFormPage: FC<ServiceFormPageProps> = ({ serviceToEdit }) => {
   return (
     <>
       <PageSection>
-        <Title headingLevel="h2">
+        <Title data-test="service-form-title" headingLevel="h2">
           {isEditing
             ? t('Edit {{label}}', { label: ServiceModel.label })
             : t('Create {{label}}', { label: ServiceModel.label })}

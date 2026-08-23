@@ -50,6 +50,7 @@ const LabelSelectorEditor: FC<LabelSelectorEditorProps> = ({
                 <GridItem sm={5}>
                   <TextInput
                     aria-labelledby="editor-label-header"
+                    data-test="pairs-list-name"
                     id={`${index}-serial`}
                     onChange={(_, value) => onChange(value, labelSelectorPair[1], index)}
                     type="text"
@@ -59,6 +60,7 @@ const LabelSelectorEditor: FC<LabelSelectorEditorProps> = ({
                 <GridItem sm={5}>
                   <TextInput
                     aria-labelledby="editor-selector-header"
+                    data-test="pairs-list-value"
                     id={`${index}-serial`}
                     onChange={(_, value) => onChange(labelSelectorPair[0], value, index)}
                     type="text"
@@ -68,6 +70,7 @@ const LabelSelectorEditor: FC<LabelSelectorEditorProps> = ({
                 <GridItem sm={1}>
                   <Tooltip content={t('Remove')}>
                     <Button
+                      data-test="pairs-list-delete"
                       data-test-id="pairs-list__delete-from-btn"
                       icon={
                         <>
@@ -85,7 +88,12 @@ const LabelSelectorEditor: FC<LabelSelectorEditorProps> = ({
           );
         })}
         <GridItem>
-          <Button icon={<PlusCircleIcon />} onClick={onAddPair} variant={ButtonVariant.link}>
+          <Button
+            data-test="pairs-list-add"
+            icon={<PlusCircleIcon />}
+            onClick={onAddPair}
+            variant={ButtonVariant.link}
+          >
             {t('Add label')}
           </Button>
         </GridItem>

@@ -31,6 +31,7 @@ export const EditorToggle: FC<EditorToggleProps> = ({ onChange, value }) => {
           {t('Configure via:')}
         </label>
         <Radio
+          data-test={`${EditorType.Form}-view-input`}
           id={EditorType.Form}
           isChecked={value === EditorType.Form}
           label={t('Form view')}
