@@ -27,7 +27,8 @@
     "po-to-i18n": "node ./i18n-scripts/po-to-i18n.js"
   },
   "overrides": {
-      "serialize-javascript": "^7.0.5"
+      "serialize-javascript": "^7.0.5",
+      "linkify-it": "^5.0.2"
     },
   "dependencies": {
     "react-hook-form": "^7.51.1",
