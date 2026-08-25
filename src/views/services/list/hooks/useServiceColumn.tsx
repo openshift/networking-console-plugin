@@ -7,6 +7,8 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 import { ServiceWithHealth } from '@utils/types';
 import { objectColumnSorting, sortByEndpointHealthStatus } from '@utils/utils/sorting';
 
+import { sortServicesByLocation } from '../utils/utils';
+
 export const tableColumnClasses = [
   'pf-v6-u-w-25-on-xl',
   'pf-m-hidden pf-m-visible-on-md',
@@ -60,7 +62,7 @@ const useServiceColumn = (): { id: string; title: string }[] => {
       {
         id: 'location',
         props: { className: tableColumnClasses[5] },
-        sort: 'spec.clusterIP',
+        sort: (data, direction) => sortServicesByLocation(data, direction),
         title: t('Location'),
         transforms: [sortable],
       },
