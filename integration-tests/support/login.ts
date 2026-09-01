@@ -8,37 +8,78 @@ declare global {
 }
 
 const KUBEADMIN_USERNAME = 'kubeadmin';
-const loginUsername = Cypress.env('BRIDGE_KUBEADMIN_PASSWORD') ? 'user-dropdown' : 'username';
+const loggedInSelector =
+  '[data-test="user-dropdown-toggle"], [data-test="user-dropdown"], [data-test="username"]';
+const kubeadminAliases = new Set(['kubeadmin', 'kube:admin']);
+
+type ConsoleWindow = { SERVER_FLAGS?: { authDisabled?: boolean } } & Window;
+
+const typeLoginForm = (user: string, pwd: string) => {
+  cy.get('#inputUsername').type(user);
+  cy.get('#inputPassword').type(pwd, { log: false });
+  cy.get('#co-login-button, button[type=submit]').click();
+};
+
+const displayedIdentity = ($body: JQuery<HTMLElement>): string =>
+  $body.find(loggedInSelector).first().text().trim().toLowerCase();
+
+const isDisplayedUser = (user: string, $body: JQuery<HTMLElement>): boolean => {
+  const displayed = displayedIdentity($body);
+  const requested = user.toLowerCase();
+  if (kubeadminAliases.has(requested)) {
+    return kubeadminAliases.has(displayed) || displayed.includes('kube:admin');
+  }
+  return Boolean(displayed) && displayed.includes(requested);
+};
+
+const logoutFromMasthead = () => {
+  cy.get(loggedInSelector).first().click();
+  cy.get('[data-test="log-out"]').should('be.visible');
+  cy.get('[data-test="log-out"]').click({ force: true });
+};
 
 // This will add 'cy.login(...)'
 // ex: cy.login('my-user', 'my-password')
-Cypress.Commands.add('login', (username: string, password: string) => {
-  // Check if auth is disabled (for a local development environment).
-  cy.visit('/'); // visits baseUrl which is set in plugins/index.js
-  cy.window().then((win) => {
+Cypress.Commands.add('login', (username?: string, password?: string) => {
+  const user = username || KUBEADMIN_USERNAME;
+  const pwd = password || Cypress.env('BRIDGE_KUBEADMIN_PASSWORD');
+
+  cy.visit('/');
+  cy.window().then((win: ConsoleWindow) => {
     if (win.SERVER_FLAGS?.authDisabled) {
       return;
     }
 
-    // Make sure we clear the cookie in case a previous test failed to logout.
-    cy.clearCookie('openshift-session-token');
+    cy.get(`#inputUsername, ${loggedInSelector}`, { timeout: 60000 }).should('exist');
+    cy.get('body').then(($body) => {
+      if ($body.find('#inputUsername').length) {
+        typeLoginForm(user, pwd);
+        return;
+      }
 
-    cy.get('#inputUsername').type(username || KUBEADMIN_USERNAME);
-    cy.get('#inputPassword').type(password || Cypress.env('BRIDGE_KUBEADMIN_PASSWORD'));
-    cy.get('button[type=submit]').click();
+      const reuseSession = !username || isDisplayedUser(user, $body);
+      if (reuseSession) {
+        return;
+      }
 
-    cy.get(`[data-test="${loginUsername}"]`).should('be.visible');
+      logoutFromMasthead();
+      cy.get('#inputUsername', { timeout: 60000 }).should('be.visible');
+      typeLoginForm(user, pwd);
+    });
+    cy.get(loggedInSelector, { timeout: 120000 }).should('be.visible');
   });
 });
 
 Cypress.Commands.add('logout', () => {
-  // Check if auth is disabled (for a local development environment).
-  cy.window().then((win) => {
+  cy.window().then((win: ConsoleWindow) => {
     if (win.SERVER_FLAGS?.authDisabled) {
       return;
     }
-    cy.get('[data-test="user-dropdown"]').click();
-    cy.get('[data-test="log-out"]').should('be.visible');
-    cy.get('[data-test="log-out"]').click({ force: true });
+    cy.get('body').then(($body) => {
+      if (!$body.find(loggedInSelector).length) {
+        return;
+      }
+      logoutFromMasthead();
+    });
   });
 });

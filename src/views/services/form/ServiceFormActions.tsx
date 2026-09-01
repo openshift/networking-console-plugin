@@ -32,6 +32,7 @@ const ServiceFormActions: FC<ServiceFormActionsProps> = ({
       )}
       <ActionGroup>
         <Button
+          data-test="save-changes"
           id="save-changes"
           isDisabled={!isValid || !isFormValid || isSubmitting}
           isLoading={isSubmitting}
@@ -40,7 +41,12 @@ const ServiceFormActions: FC<ServiceFormActionsProps> = ({
         >
           {isCreationForm ? t('Create') : t('Save')}
         </Button>
-        <Button id="cancel" onClick={() => navigate(-1)} variant={ButtonVariant.secondary}>
+        <Button
+          data-test="cancel"
+          id="cancel"
+          onClick={() => navigate(-1)}
+          variant={ButtonVariant.secondary}
+        >
           {t('Cancel')}
         </Button>
       </ActionGroup>
