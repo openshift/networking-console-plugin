@@ -6,7 +6,9 @@ COPY . /opt/app-root/src/app
 WORKDIR /opt/app-root/src/app
 
 # Install dependencies and build
-RUN CYPRESS_INSTALL_BINARY=0 npm ci && npm run build
+USER 0
+ENV CYPRESS_INSTALL_BINARY=0
+RUN npm clean-install --ignore-scripts --no-audit && npm run build
 
 # Web server container
 FROM registry.ci.openshift.org/ocp/5.0:base-rhel9
