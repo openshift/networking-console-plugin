@@ -1,33 +1,27 @@
 # Builder container
-FROM registry.ci.openshift.org/ocp/builder:rhel-9-base-nodejs-openshift-4.22 AS build
+FROM registry.ci.openshift.org/ocp/builder:rhel-9-base-nodejs-openshift-5.0 AS build
 
 # Copy app source
 COPY . /opt/app-root/src/app
 WORKDIR /opt/app-root/src/app
 
-# Run install as supper tux
+# Install dependencies and build
 USER 0
-RUN npm ci && npm run build
+ENV CYPRESS_INSTALL_BINARY=0
+RUN npm clean-install --ignore-scripts --no-audit && npm run build
 
 # Web server container
-FROM registry.ci.openshift.org/ocp/4.22:base-rhel9
+FROM registry.ci.openshift.org/ocp/5.0:base-rhel9
 
 RUN INSTALL_PKGS="nginx" && \
     dnf install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
-    yum -y clean all --enablerepo='*' && rm -rf /var/cache/dnf/* && \
+    dnf -y clean all --enablerepo='*' && rm -rf /var/cache/dnf/* && \
     chown -R 1001:0 /var/lib/nginx /var/log/nginx /run && \
     chmod -R ug+rwX /var/lib/nginx /var/log/nginx /run
 
-# Use none-root user
+# Use non-root user
 USER 1001
-
-# Set nginx configuration
-# COPY nginx.conf /etc/nginx/nginx.conf
-
-# When using ubi9/nginx-120 defaults:
-#  listen       8080 default_server;
-#  root         /opt/app-root/src;
 
 COPY --from=build /opt/app-root/src/app/dist /opt/app-root/src
 
