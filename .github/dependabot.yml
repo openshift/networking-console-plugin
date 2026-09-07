@@ -1,0 +1,78 @@
+version: 2
+updates:
+  # Docker images are OpenShift CI streams, not Dependabot-managed
+  # - package-ecosystem: docker
+
+  # --- main (default branch) ---
+  - package-ecosystem: github-actions
+    directory: /
+    cooldown:
+      default-days: 5
+    schedule:
+      interval: monthly
+    groups:
+      github-actions:
+        patterns:
+          - '*'
+
+  - &npm-main-branch
+    package-ecosystem: npm
+    directory: /
+    cooldown:
+      default-days: 5
+    schedule:
+      interval: weekly
+      day: monday
+      time: '00:00'
+      timezone: UTC
+    allow:
+      - dependency-type: direct
+        update-types:
+          - version-update:semver-minor
+          - version-update:semver-patch
+    ignore:
+      # shared modules currently provided by Console (including unused) based on
+      # https://github.com/openshift/console/blob/c46e0aabe4c9cf330f1e56ad323076e7e8e7f7d8/frontend/packages/console-dynamic-plugin-sdk/src/shared-modules/shared-modules-meta.ts#L41
+      - dependency-name: '@openshift/dynamic-plugin-sdk'
+      - dependency-name: '@openshift-console/dynamic-plugin-sdk'
+      - dependency-name: '@openshift-console/dynamic-plugin-sdk-internal'
+      - dependency-name: '@patternfly/react-topology'
+      - dependency-name: react
+      - dependency-name: react-i18next
+      - dependency-name: react-redux
+      - dependency-name: react-router
+      - dependency-name: react-router-dom
+      - dependency-name: react-router-dom-v5-compat
+      - dependency-name: redux
+      - dependency-name: redux-thunk
+       # not shared but effectively pinned to Console version
+      - dependency-name: '@openshift-console/dynamic-plugin-sdk-webpack'
+    groups:
+      npm:
+        applies-to: version-updates
+        patterns:
+          - '*'
+      npm-security:
+        applies-to: security-updates
+        patterns:
+          - '*'
+
+  # --- release branches ---
+  - &npm-release-branch
+    <<: *npm-main-branch
+    target-branch: release-4.23
+    allow:
+      - dependency-type: direct
+        update-types:
+          - version-update:semver-patch
+
+  - <<: *npm-release-branch
+    target-branch: release-4.22
+  - <<: *npm-release-branch
+    target-branch: release-4.21
+  - <<: *npm-release-branch
+    target-branch: release-4.20
+  - <<: *npm-release-branch
+    target-branch: release-4.19
+  - <<: *npm-release-branch
+    target-branch: release-4.18
