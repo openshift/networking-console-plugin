@@ -1,0 +1,217 @@
+version: 2
+updates:
+  # Docker images are OpenShift CI streams, not Dependabot-managed
+  # - package-ecosystem: docker
+
+  # --- main (default branch) ---
+  - package-ecosystem: github-actions
+    directory: /
+    cooldown:
+      default-days: 5
+    schedule:
+      interval: monthly
+    groups:
+      github-actions:
+        patterns:
+          - '*'
+
+  - package-ecosystem: npm
+    directory: /
+    cooldown:
+      default-days: 5
+    schedule:
+      interval: weekly
+      day: monday
+      time: '07:00'
+      timezone: UTC
+    allow:
+      - dependency-type: all
+        update-types:
+          - version-update:semver-minor
+          - version-update:semver-patch
+    ignore:
+      # shared modules currently provided by Console (including unused) based on
+      # https://github.com/openshift/console/blob/c46e0aabe4c9cf330f1e56ad323076e7e8e7f7d8/frontend/packages/console-dynamic-plugin-sdk/src/shared-modules/shared-modules-meta.ts#L41
+      - dependency-name: '@openshift/dynamic-plugin-sdk'
+      - dependency-name: '@openshift-console/dynamic-plugin-sdk'
+      - dependency-name: '@openshift-console/dynamic-plugin-sdk-internal'
+      - dependency-name: '@patternfly/react-topology'
+      - dependency-name: react
+      - dependency-name: react-i18next
+      - dependency-name: react-redux
+      - dependency-name: react-router
+      - dependency-name: react-router-dom
+      - dependency-name: react-router-dom-v5-compat
+      - dependency-name: redux
+      - dependency-name: redux-thunk
+       # not shared but effectively pinned to Console version
+      - dependency-name: '@openshift-console/dynamic-plugin-sdk-webpack'
+    groups:
+      npm:
+        applies-to: version-updates
+        patterns:
+          - '*'
+      npm-security:
+        applies-to: security-updates
+        patterns:
+          - '*'
+
+  # --- release branches ---
+  # update also minor versions - reasoning is that:
+  # a) usually the latest minor version is the only version that receives security updates
+  # b) minor version should not contain breaking changes
+  # ignore list is limited to dynamic SDK packages which is only a subset of shared modules
+  # the remaining packages follow the regular dependency update process - reasoning is that:
+  # a) production code is unchanged and minor and patch versions should be backwards compatible
+  # b) the Console is updating their deps in parallel so an up-to-date cluster may be close to our versions
+  # c) shorter ignore list is more readable - note that dependabot does not support yml aliases (yet)
+  # d) the shared modules list changed in time and would require different ignore lists per branch
+  - package-ecosystem: npm
+    target-branch: release-4.23
+    directory: /
+    commit-message:
+      prefix: 'chores(4.23)'
+    cooldown:
+      default-days: 5
+    schedule:
+      interval: weekly
+      day: monday
+      time: '07:00'
+      timezone: UTC
+    ignore:
+      - dependency-name: '@openshift/dynamic-plugin-sdk'
+      - dependency-name: '@openshift-console/*'
+    allow:
+      - dependency-type: all
+        update-types:
+          - version-update:semver-minor
+          - version-update:semver-patch
+    groups:
+      npm:
+        patterns:
+          - '*'
+  
+  - package-ecosystem: npm
+    target-branch: release-4.22
+    directory: /
+    commit-message:
+      prefix: 'chores(4.22)'
+    cooldown:
+      default-days: 5
+    schedule:
+      interval: weekly
+      day: monday
+      time: '07:00'
+      timezone: UTC
+    ignore:
+      - dependency-name: '@openshift/dynamic-plugin-sdk'
+      - dependency-name: '@openshift-console/*'
+    allow:
+      - dependency-type: all
+        update-types:
+          - version-update:semver-minor
+          - version-update:semver-patch
+    groups:
+      npm:
+        patterns:
+          - '*'  
+  
+  - package-ecosystem: npm
+    target-branch: release-4.21
+    directory: /
+    commit-message:
+      prefix: 'chores(4.21)'
+    cooldown:
+      default-days: 5
+    schedule:
+      interval: weekly
+      day: monday
+      time: '07:00'
+      timezone: UTC
+    ignore:
+      - dependency-name: '@openshift/dynamic-plugin-sdk'
+      - dependency-name: '@openshift-console/*'
+    allow:
+      - dependency-type: all
+        update-types:
+          - version-update:semver-minor
+          - version-update:semver-patch
+    groups:
+      npm:
+        patterns:
+          - '*'
+  
+  - package-ecosystem: npm
+    target-branch: release-4.20
+    directory: /
+    commit-message:
+      prefix: 'chores(4.20)'
+    cooldown:
+      default-days: 5
+    schedule:
+      interval: weekly
+      day: monday
+      time: '07:00'
+      timezone: UTC
+    ignore:
+      - dependency-name: '@openshift/dynamic-plugin-sdk'
+      - dependency-name: '@openshift-console/*'
+    allow:
+      - dependency-type: all
+        update-types:
+          - version-update:semver-minor
+          - version-update:semver-patch
+    groups:
+      npm:
+        patterns:
+          - '*'
+  
+  - package-ecosystem: npm
+    target-branch: release-4.19
+    directory: /
+    commit-message:
+      prefix: 'chores(4.19)'
+    cooldown:
+      default-days: 5
+    schedule:
+      interval: weekly
+      day: monday
+      time: '07:00'
+      timezone: UTC
+    ignore:
+      - dependency-name: '@openshift/dynamic-plugin-sdk'
+      - dependency-name: '@openshift-console/*'
+    allow:
+      - dependency-type: all
+        update-types:
+          - version-update:semver-minor
+          - version-update:semver-patch
+    groups:
+      npm:
+        patterns:
+          - '*'
+  
+  - package-ecosystem: npm
+    target-branch: release-4.18
+    directory: /
+    commit-message:
+      prefix: 'chores(4.18)'
+    cooldown:
+      default-days: 5
+    schedule:
+      interval: weekly
+      day: monday
+      time: '07:00'
+      timezone: UTC
+    ignore:
+      - dependency-name: '@openshift/dynamic-plugin-sdk'
+      - dependency-name: '@openshift-console/*'
+    allow:
+      - dependency-type: all
+        update-types:
+          - version-update:semver-minor
+          - version-update:semver-patch
+    groups:
+      npm:
+        patterns:
+          - '*'
