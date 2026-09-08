@@ -6,6 +6,8 @@ updates:
   # --- main (default branch) ---
   - package-ecosystem: github-actions
     directory: /
+    commit-message:
+      prefix: 'maintenance'
     cooldown:
       default-days: 5
     schedule:
@@ -17,6 +19,8 @@ updates:
 
   - package-ecosystem: npm
     directory: /
+    commit-message:
+      prefix: 'maintenance'
     cooldown:
       default-days: 5
     schedule:
@@ -70,7 +74,7 @@ updates:
     target-branch: release-4.23
     directory: /
     commit-message:
-      prefix: 'chores(4.23)'
+      prefix: '[release-4.23] maintenance'
     cooldown:
       default-days: 5
     schedule:
@@ -95,7 +99,7 @@ updates:
     target-branch: release-4.22
     directory: /
     commit-message:
-      prefix: 'chores(4.22)'
+      prefix: '[release-4.22] maintenance'
     cooldown:
       default-days: 5
     schedule:
@@ -120,7 +124,7 @@ updates:
     target-branch: release-4.21
     directory: /
     commit-message:
-      prefix: 'chores(4.21)'
+      prefix: '[release-4.21] maintenance'
     cooldown:
       default-days: 5
     schedule:
@@ -145,7 +149,7 @@ updates:
     target-branch: release-4.20
     directory: /
     commit-message:
-      prefix: 'chores(4.20)'
+      prefix: '[release-4.20] maintenance'
     cooldown:
       default-days: 5
     schedule:
@@ -170,7 +174,7 @@ updates:
     target-branch: release-4.19
     directory: /
     commit-message:
-      prefix: 'chores(4.19)'
+      prefix: '[release-4.19] maintenance'
     cooldown:
       default-days: 5
     schedule:
@@ -190,28 +194,4 @@ updates:
       npm:
         patterns:
           - '*'
-  
-  - package-ecosystem: npm
-    target-branch: release-4.18
-    directory: /
-    commit-message:
-      prefix: 'chores(4.18)'
-    cooldown:
-      default-days: 5
-    schedule:
-      interval: weekly
-      day: monday
-      time: '07:00'
-      timezone: UTC
-    ignore:
-      - dependency-name: '@openshift/dynamic-plugin-sdk'
-      - dependency-name: '@openshift-console/*'
-    allow:
-      - dependency-type: all
-        update-types:
-          - version-update:semver-minor
-          - version-update:semver-patch
-    groups:
-      npm:
-        patterns:
-          - '*'
+
