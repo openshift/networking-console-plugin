@@ -1,5 +1,6 @@
 import './commands';
 import './login';
+import './selectors';
 
 declare global {
   interface Window {

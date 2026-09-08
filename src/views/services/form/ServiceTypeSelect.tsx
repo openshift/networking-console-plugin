@@ -39,6 +39,7 @@ const ServiceTypeSelect: FC = () => {
                 isExpanded={isDropdownOpen}
                 isFullWidth
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                ouiaId={SERVICE_TYPE_FIELD_ID}
                 ref={toggleRef}
                 status={error ? 'danger' : undefined}
               >
@@ -62,6 +63,7 @@ const ServiceTypeSelect: FC = () => {
                       });
                     }
                   }}
+                  ouiaId={`${SERVICE_TYPE_FIELD_ID}-${type}`}
                   value={type}
                 >
                   {type}

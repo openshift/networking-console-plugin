@@ -35,12 +35,18 @@ const ServiceFormActions: FC<ServiceFormActionsProps> = ({
           id="save-changes"
           isDisabled={!isValid || !isFormValid || isSubmitting}
           isLoading={isSubmitting}
+          ouiaId="save-changes"
           type="submit"
           variant={ButtonVariant.primary}
         >
           {isCreationForm ? t('Create') : t('Save')}
         </Button>
-        <Button id="cancel" onClick={() => navigate(-1)} variant={ButtonVariant.secondary}>
+        <Button
+          id="cancel"
+          onClick={() => navigate(-1)}
+          ouiaId="cancel"
+          variant={ButtonVariant.secondary}
+        >
           {t('Cancel')}
         </Button>
       </ActionGroup>

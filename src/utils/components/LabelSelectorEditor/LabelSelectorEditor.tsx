@@ -52,6 +52,7 @@ const LabelSelectorEditor: FC<LabelSelectorEditorProps> = ({
                     aria-labelledby="editor-label-header"
                     id={`${index}-serial`}
                     onChange={(_, value) => onChange(value, labelSelectorPair[1], index)}
+                    ouiaId="pairs-list-name"
                     type="text"
                     value={labelSelectorPair[0]}
                   />
@@ -61,6 +62,7 @@ const LabelSelectorEditor: FC<LabelSelectorEditorProps> = ({
                     aria-labelledby="editor-selector-header"
                     id={`${index}-serial`}
                     onChange={(_, value) => onChange(labelSelectorPair[0], value, index)}
+                    ouiaId="pairs-list-value"
                     type="text"
                     value={labelSelectorPair[1]}
                   />
@@ -76,6 +78,7 @@ const LabelSelectorEditor: FC<LabelSelectorEditorProps> = ({
                         </>
                       }
                       onClick={() => onRemove(index)}
+                      ouiaId="pairs-list-delete"
                       variant={ButtonVariant.plain}
                     />
                   </Tooltip>
@@ -85,7 +88,12 @@ const LabelSelectorEditor: FC<LabelSelectorEditorProps> = ({
           );
         })}
         <GridItem>
-          <Button icon={<PlusCircleIcon />} onClick={onAddPair} variant={ButtonVariant.link}>
+          <Button
+            icon={<PlusCircleIcon />}
+            onClick={onAddPair}
+            ouiaId="pairs-list-add"
+            variant={ButtonVariant.link}
+          >
             {t('Add label')}
           </Button>
         </GridItem>

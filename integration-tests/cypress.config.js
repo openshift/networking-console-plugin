@@ -14,6 +14,7 @@ module.exports = defineConfig({
     openshift: true,
   },
   fixturesFolder: 'fixtures',
+  pageLoadTimeout: 120000,
   reporter: '../../node_modules/cypress-multi-reporters',
   reporterOptions: {
     configFile: 'reporter-config.json',

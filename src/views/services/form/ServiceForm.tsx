@@ -129,6 +129,7 @@ const ServiceForm: FC<ServiceFormProps> = ({ formData, onChange: onFormChange })
               aria-label={t('Name')}
               id={NAME_FIELD_ID}
               isDisabled={!isCreationForm}
+              ouiaId={NAME_FIELD_ID}
               validated={errors?.metadata?.name ? ValidatedOptions.error : ValidatedOptions.default}
               {...register('metadata.name', { required: t('Name is required') })}
             />
@@ -145,6 +146,7 @@ const ServiceForm: FC<ServiceFormProps> = ({ formData, onChange: onFormChange })
               aria-label={t('Namespace')}
               id={NAMESPACE_FIELD_ID}
               isDisabled={!isCreationForm}
+              ouiaId={NAMESPACE_FIELD_ID}
               validated={
                 errors?.metadata?.namespace ? ValidatedOptions.error : ValidatedOptions.default
               }

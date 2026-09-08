@@ -24,6 +24,7 @@ const ExternalNameField: FC = () => {
         aria-invalid={Boolean(externalNameError)}
         aria-label={t('External name')}
         id={EXTERNAL_NAME_FIELD_ID}
+        ouiaId={EXTERNAL_NAME_FIELD_ID}
         validated={externalNameError ? ValidatedOptions.error : ValidatedOptions.default}
         {...register('spec.externalName', {
           validate: (value) => {
