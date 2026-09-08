@@ -2,3 +2,9 @@
 dist/
 node_modules/
 i18n-scripts/
+coverage/
+package-lock.json
+**/gui-test-screenshots/
+**/cypress-a11y-report.json
+charts/
+locales/

@@ -25,6 +25,7 @@ const ChartLegendTooltip: FC<
     stack?: boolean;
   } & Omit<ChartLegendTooltipProps, 'title'>
 > = (props) => {
+  /* eslint-disable perfectionist/sort-objects -- default values depend on earlier bindings */
   const {
     activePoints,
     center = { x: 0, y: 0 },
@@ -35,17 +36,17 @@ const ChartLegendTooltip: FC<
     getLabel,
     height,
     isCursorTooltip = true,
-    mainDataName, // eslint-disable-next-line perfectionist/sort-objects
+    mainDataName,
     labelComponent = <ChartLegendTooltipContent mainDataName={mainDataName} />,
     legendData,
     stack,
     text,
-    themeColor, // eslint-disable-next-line perfectionist/sort-objects
-    width, // eslint-disable-next-line perfectionist/sort-objects
-    // destructure last
-    theme = getTheme(themeColor), // eslint-disable-line perfectionist/sort-objects
+    themeColor,
+    width,
+    theme = getTheme(themeColor),
     ...rest
   } = props;
+  /* eslint-enable perfectionist/sort-objects */
   const title = (d) => {
     if (stack) {
       return formatDate(d);

@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import { Th, Thead, Tr } from '@patternfly/react-table';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
-const RulesHeader: FC = ({}) => {
+const RulesHeader: FC = () => {
   const { t } = useNetworkingTranslation();
 
   return (

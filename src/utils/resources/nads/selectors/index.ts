@@ -5,7 +5,7 @@ export const getConfigAsJSON = (
 ): NetworkAttachmentDefinitionConfig => {
   try {
     return JSON.parse(obj?.spec?.config);
-  } catch (e) {
+  } catch {
     // eslint-disable-next-line no-console
     console.error('Unable to parse NetworkAttachmentDefinition configuration');
     return null;

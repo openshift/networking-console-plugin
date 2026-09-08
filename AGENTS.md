@@ -47,7 +47,7 @@ webpack.config.ts         # Webpack config with ConsoleRemotePlugin
 Each view under `src/views/{resource}/` follows a consistent structure:
 
 | Directory     | Purpose                                                               |
-|---------------|-----------------------------------------------------------------------|
+| ------------- | --------------------------------------------------------------------- |
 | `actions/`    | Action provider hooks (delete, edit) registered as console extensions |
 | `details/`    | Detail page with tabbed views (details, YAML)                         |
 | `form/`       | Form-based create/edit using `react-hook-form`                        |
@@ -117,8 +117,9 @@ All routing uses `react-router` v7. Import `Link`, `useNavigate`, `useLocation`,
 When reviewing changes in this repo:
 
 - [ ] Import order follows `simple-import-sort` groups (run `npm run lint`)
+- [ ] Formatting matches Prettier (run `npm run format:check`)
 - [ ] All user-visible strings must use the `useNetworkingTranslation` hook or the `Trans` component; never hardcode
-  English text
+      English text
 - [ ] New translatable strings have been extracted (`npm run i18n`) and locale files committed
 - [ ] No `console.*` calls — use `networkConsole` from `@utils/utils/helpers`
 - [ ] No hex colors in SCSS — use PatternFly CSS variables
@@ -128,4 +129,4 @@ When reviewing changes in this repo:
 - [ ] Path aliases (`@utils/`, `@views/`, `@styles/`) used instead of deep relative imports
 - [ ] Console SDK hooks used for K8s resource operations (not direct API calls)
 - [ ] Component isolation — one component per file; single-use hooks stay co-located with their component, not in shared
-  `utils/hooks/`
+      `utils/hooks/`
