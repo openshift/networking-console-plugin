@@ -36,18 +36,20 @@ const ActionsDropdown: FC<ActionsDropdownProps> = ({
     });
   };
 
+  const toggleOuiaId = id ? `${id}-toggle` : 'actions-toggle';
+
   const Toggle = isKebabToggle
     ? KebabToggle({
-        'data-test': id ? `${id}-toggle` : 'actions-toggle',
         isExpanded: isOpen,
         onClick: onToggle,
+        ouiaId: toggleOuiaId,
       })
     : DropdownToggle({
         children: t('Actions'),
-        'data-test': id ? `${id}-toggle` : 'actions-toggle',
         isDisabled,
         isExpanded: isOpen,
         onClick: onToggle,
+        ouiaId: toggleOuiaId,
       });
 
   return (

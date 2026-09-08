@@ -27,12 +27,13 @@ const ActionDropdownItem: FC<ActionDropdownItemProps> = ({ action, setIsOpen }) 
 
   return (
     <DropdownItem
-      data-test={action?.id}
       data-test-id={`${action?.id}`}
       description={action?.description}
       isDisabled={action?.disabled || !actionAllowed}
       key={action?.id}
       onClick={handleClick}
+      // PatternFly OUIA is the preferred selector for new automation hooks.
+      ouiaId={action?.id}
       {...(isCloneDisabled && {
         tooltipProps: {
           content: t(`You don't have permission to perform this action`),

@@ -43,7 +43,11 @@ describe('Service creation and editing form', { testIsolation: false }, () => {
     createdServices.splice(0).forEach((name) => {
       cy.visit(`/k8s/ns/${SERVICE_FORM_NS}/core~v1~Service/${name}`, { failOnStatusCode: false });
       cy.get('body').then(($body) => {
-        if ($body.find('[data-test="service-actions-toggle"], button:contains("Actions")').length) {
+        if (
+          $body.find(
+            '[data-ouia-component-id="service-actions-toggle"], button:contains("Actions")',
+          ).length
+        ) {
           deleteServiceFromDetails(name);
         }
       });

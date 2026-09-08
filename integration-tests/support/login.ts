@@ -1,3 +1,6 @@
+// Cypress global augmentations require this file to be a module.
+export {};
+
 declare global {
   namespace Cypress {
     interface Chainable {

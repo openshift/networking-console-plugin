@@ -1,7 +1,8 @@
 export const SERVICE_FORM_NS = 'default';
 
-const byTestOr = (dataTest: string, fallback: string): Cypress.Chainable<JQuery<HTMLElement>> =>
-  cy.get(`[data-test="${dataTest}"], ${fallback}`);
+// Prefer PatternFly ouiaId selectors; keep id/data-test-id fallbacks for older plugin builds.
+const byOuiaOr = (ouiaId: string, fallback: string): Cypress.Chainable<JQuery<HTMLElement>> =>
+  cy.get(`[data-ouia-component-id="${ouiaId}"], ${fallback}`);
 
 export const uniqueServiceName = (prefix: string): string =>
   `${prefix}-${Date.now().toString().slice(-8)}`;
@@ -23,21 +24,21 @@ export const dismissGuidedTourIfPresent = (): void => {
   });
 };
 
-export const serviceNameField = () => byTestOr('service-name', '#service-name');
-export const serviceNamespaceField = () => byTestOr('service-namespace', '#service-namespace');
-export const serviceTypeToggle = () => byTestOr('service-type', '#toggle-service-type');
-export const servicePortsField = () => byTestOr('service-ports', '#service-ports');
+export const serviceNameField = () => byOuiaOr('service-name', '#service-name');
+export const serviceNamespaceField = () => byOuiaOr('service-namespace', '#service-namespace');
+export const serviceTypeToggle = () => byOuiaOr('service-type', '#toggle-service-type');
+export const servicePortsField = () => byOuiaOr('service-ports', '#service-ports');
 export const serviceExternalNameField = () =>
-  byTestOr('service-external-name', '#service-external-name');
-export const saveChangesButton = () => byTestOr('save-changes', '#save-changes');
+  byOuiaOr('service-external-name', '#service-external-name');
+export const saveChangesButton = () => byOuiaOr('save-changes', '#save-changes');
 export const selectorKeyField = () =>
-  byTestOr('pairs-list-name', 'input[aria-labelledby="editor-label-header"]');
+  byOuiaOr('pairs-list-name', 'input[aria-labelledby="editor-label-header"]');
 export const selectorValueField = () =>
-  byTestOr('pairs-list-value', 'input[aria-labelledby="editor-selector-header"]');
-export const addSelectorButton = () => byTestOr('pairs-list-add', 'button:contains("Add label")');
+  byOuiaOr('pairs-list-value', 'input[aria-labelledby="editor-selector-header"]');
+export const addSelectorButton = () => byOuiaOr('pairs-list-add', 'button:contains("Add label")');
 export const deleteSelectorButton = () =>
-  byTestOr('pairs-list-delete', '[data-test-id="pairs-list__delete-from-btn"]');
-export const actionsToggle = () => byTestOr('service-actions-toggle', 'button:contains("Actions")');
+  byOuiaOr('pairs-list-delete', '[data-test-id="pairs-list__delete-from-btn"]');
+export const actionsToggle = () => byOuiaOr('service-actions-toggle', 'button:contains("Actions")');
 
 export const visitServiceCreateForm = (namespace = SERVICE_FORM_NS): void => {
   cy.visit(serviceFormUrl(namespace));
@@ -59,7 +60,9 @@ export const selectServiceType = (
   type: 'ClusterIP' | 'ExternalName' | 'LoadBalancer' | 'NodePort',
 ) => {
   serviceTypeToggle().click();
-  cy.get(`[data-test="service-type-${type}"], [role="menuitem"]`).contains(type).click();
+  cy.get(`[data-ouia-component-id="service-type-${type}"], [role="menuitem"]`)
+    .contains(type)
+    .click();
   serviceTypeToggle().should('contain', type);
 };
 
@@ -215,7 +218,7 @@ export const deleteServiceFromDetails = (name: string, namespace = SERVICE_FORM_
   dismissGuidedTourIfPresent();
   cy.contains('h1', name, { timeout: 60000 }).should('be.visible');
   actionsToggle().should('be.visible').click();
-  cy.get('[data-test="delete-services"], [data-test-id="delete-services"]').click();
+  cy.get('[data-ouia-component-id="delete-services"], [data-test-id="delete-services"]').click();
   confirmDeleteModal(name);
   cy.location('pathname', { timeout: 30000 }).should('match', /service/i);
   cy.location('pathname').should('not.include', `/${name}`);

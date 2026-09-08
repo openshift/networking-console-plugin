@@ -50,9 +50,9 @@ const LabelSelectorEditor: FC<LabelSelectorEditorProps> = ({
                 <GridItem sm={5}>
                   <TextInput
                     aria-labelledby="editor-label-header"
-                    data-test="pairs-list-name"
                     id={`${index}-serial`}
                     onChange={(_, value) => onChange(value, labelSelectorPair[1], index)}
+                    ouiaId="pairs-list-name"
                     type="text"
                     value={labelSelectorPair[0]}
                   />
@@ -60,9 +60,9 @@ const LabelSelectorEditor: FC<LabelSelectorEditorProps> = ({
                 <GridItem sm={5}>
                   <TextInput
                     aria-labelledby="editor-selector-header"
-                    data-test="pairs-list-value"
                     id={`${index}-serial`}
                     onChange={(_, value) => onChange(labelSelectorPair[0], value, index)}
+                    ouiaId="pairs-list-value"
                     type="text"
                     value={labelSelectorPair[1]}
                   />
@@ -70,7 +70,6 @@ const LabelSelectorEditor: FC<LabelSelectorEditorProps> = ({
                 <GridItem sm={1}>
                   <Tooltip content={t('Remove')}>
                     <Button
-                      data-test="pairs-list-delete"
                       data-test-id="pairs-list__delete-from-btn"
                       icon={
                         <>
@@ -79,6 +78,7 @@ const LabelSelectorEditor: FC<LabelSelectorEditorProps> = ({
                         </>
                       }
                       onClick={() => onRemove(index)}
+                      ouiaId="pairs-list-delete"
                       variant={ButtonVariant.plain}
                     />
                   </Tooltip>
@@ -89,9 +89,9 @@ const LabelSelectorEditor: FC<LabelSelectorEditorProps> = ({
         })}
         <GridItem>
           <Button
-            data-test="pairs-list-add"
             icon={<PlusCircleIcon />}
             onClick={onAddPair}
+            ouiaId="pairs-list-add"
             variant={ButtonVariant.link}
           >
             {t('Add label')}

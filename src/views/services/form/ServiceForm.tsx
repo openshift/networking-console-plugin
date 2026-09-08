@@ -127,9 +127,9 @@ const ServiceForm: FC<ServiceFormProps> = ({ formData, onChange: onFormChange })
             <TextInput
               aria-invalid={Boolean(errors?.metadata?.name)}
               aria-label={t('Name')}
-              data-test={NAME_FIELD_ID}
               id={NAME_FIELD_ID}
               isDisabled={!isCreationForm}
+              ouiaId={NAME_FIELD_ID}
               validated={errors?.metadata?.name ? ValidatedOptions.error : ValidatedOptions.default}
               {...register('metadata.name', { required: t('Name is required') })}
             />
@@ -144,9 +144,9 @@ const ServiceForm: FC<ServiceFormProps> = ({ formData, onChange: onFormChange })
             <TextInput
               aria-invalid={Boolean(errors?.metadata?.namespace)}
               aria-label={t('Namespace')}
-              data-test={NAMESPACE_FIELD_ID}
               id={NAMESPACE_FIELD_ID}
               isDisabled={!isCreationForm}
+              ouiaId={NAMESPACE_FIELD_ID}
               validated={
                 errors?.metadata?.namespace ? ValidatedOptions.error : ValidatedOptions.default
               }

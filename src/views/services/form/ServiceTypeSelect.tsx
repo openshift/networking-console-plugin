@@ -35,11 +35,11 @@ const ServiceTypeSelect: FC = () => {
               <MenuToggle
                 aria-invalid={Boolean(error)}
                 aria-label={t('Type')}
-                data-test={SERVICE_TYPE_FIELD_ID}
                 id="toggle-service-type"
                 isExpanded={isDropdownOpen}
                 isFullWidth
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                ouiaId={SERVICE_TYPE_FIELD_ID}
                 ref={toggleRef}
                 status={error ? 'danger' : undefined}
               >
@@ -50,7 +50,6 @@ const ServiceTypeSelect: FC = () => {
             <DropdownList>
               {SERVICE_TYPES.map((type) => (
                 <DropdownItem
-                  data-test={`${SERVICE_TYPE_FIELD_ID}-${type}`}
                   key={type}
                   onClick={() => {
                     onChange(type);
@@ -64,6 +63,7 @@ const ServiceTypeSelect: FC = () => {
                       });
                     }
                   }}
+                  ouiaId={`${SERVICE_TYPE_FIELD_ID}-${type}`}
                   value={type}
                 >
                   {type}
