@@ -8,8 +8,7 @@ import {
   RESOURCE_NAME_ANNOTATION,
 } from '@utils/resources/nads/types';
 import { getName } from '@utils/resources/shared';
-import { isEmpty } from '@utils/utils';
-import { networkConsole } from '@utils/utils';
+import { isEmpty, networkConsole } from '@utils/utils';
 
 import { DEFAULT_MTU } from './constants';
 import { NetworkAttachmentDefinitionFormInput, NetworkTypeKeys, ovnK8sTopologyKeys } from './types';
@@ -50,6 +49,7 @@ const buildConfig = (
       mtu: parseInt(networkTypeData?.mtu, 10) || DEFAULT_MTU,
       name: networkTypeData?.bridgeMapping,
       netAttachDefName,
+      physicalNetworkName: networkTypeData?.bridgeMapping,
       subnets,
       topology: ovnK8sTopologyKeys.ovnK8sLocalnet,
       type: NetworkTypeKeys.ovnKubernetesNetworkType,
