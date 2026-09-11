@@ -34,6 +34,7 @@ declare global {
   namespace Cypress {
     interface Chainable {
       applyFixture(fixturePath: string, namespace: string): Chainable;
+      applyFixtureFile(fixturePath: string): Chainable;
       assertEndpointHealth(
         name: string,
         status: EndpointHealthStatus,
@@ -72,16 +73,28 @@ Cypress.Commands.add('ensureNamespace', (namespace: string) => {
 });
 
 Cypress.Commands.add('deleteNamespace', (namespace: string) => {
-  cy.exec(`oc delete namespace ${namespace} --ignore-not-found=true --wait=false`, {
-    failOnNonZeroExit: false,
-    timeout: 2 * MINUTE,
-  });
+  cy.exec(
+    `oc delete namespace ${namespace} --ignore-not-found=true --wait=false --request-timeout=30s`,
+    {
+      failOnNonZeroExit: false,
+      timeout: MINUTE,
+    },
+  );
 });
 
 Cypress.Commands.add('applyFixture', (fixturePath: string, namespace: string) => {
   cy.exec(`oc apply -n ${namespace} -f "${fixturePath}"`, {
     failOnNonZeroExit: false,
     timeout: 2 * MINUTE,
+  }).then((result) => {
+    assertOcSuccess(result, 'oc apply failed');
+  });
+});
+
+Cypress.Commands.add('applyFixtureFile', (fixturePath: string) => {
+  cy.exec(`oc apply -f "${fixturePath}"`, {
+    failOnNonZeroExit: false,
+    timeout: 5 * MINUTE,
   }).then((result) => {
     assertOcSuccess(result, 'oc apply failed');
   });

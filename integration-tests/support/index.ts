@@ -21,6 +21,14 @@ const isIgnorableWindowError = (raw: unknown): boolean => {
     return true;
   }
 
+  if (
+    message.includes('loadPlugin failed') ||
+    message.includes('plugin-manifest.json timed out') ||
+    message.includes('Failed to load plugin manifest')
+  ) {
+    return true;
+  }
+
   const parts = message
     .split(';')
     .map((part) => part.trim())
@@ -32,7 +40,15 @@ const isIgnorableWindowError = (raw: unknown): boolean => {
 
   return parts.every((part) => {
     const match = part.match(/Missing i18n key ".+" in namespace "([^"]+)"/);
-    return match !== null && match[1] !== NETWORKING_I18N_NS;
+    if (match !== null && match[1] !== NETWORKING_I18N_NS) {
+      return true;
+    }
+
+    return (
+      part.includes('loadPlugin failed') ||
+      part.includes('plugin-manifest.json timed out') ||
+      part.includes('Failed to load plugin manifest')
+    );
   });
 };
 
