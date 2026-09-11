@@ -37,8 +37,9 @@ const OVNK8sSecondaryLocalnetParameters: FC = () => {
   return (
     <>
       <FormGroup
+        fieldId="nads-ovn-physical-network-name"
         isRequired
-        label={t('Bridge mapping')}
+        label={t('Physical network name')}
         labelHelp={
           <PopoverHelpIcon
             bodyContent={t(
@@ -51,6 +52,8 @@ const OVNK8sSecondaryLocalnetParameters: FC = () => {
           {...register(`${baseId}.bridgeMapping`, {
             required: true,
           })}
+          data-test="nads-ovn-physical-network-name"
+          id="nads-ovn-physical-network-name"
         />
       </FormGroup>
       <FormGroup label={t('MTU')}>

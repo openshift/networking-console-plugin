@@ -48,8 +48,8 @@ const buildConfig = (
       cniVersion: '0.4.0',
       excludeSubnets: networkTypeData?.excludeSubnets ?? undefined,
       mtu: parseInt(networkTypeData?.mtu, 10) || DEFAULT_MTU,
-      name: networkTypeData?.bridgeMapping,
       netAttachDefName,
+      physicalNetworkName: networkTypeData?.bridgeMapping,
       subnets,
       topology: ovnK8sTopologyKeys.ovnK8sLocalnet,
       type: NetworkTypeKeys.ovnKubernetesNetworkType,
@@ -106,7 +106,7 @@ export const fromNADObjToFormData = (
       subnets: configParsed?.subnets,
     },
     [NetworkTypeKeys.ovnKubernetesSecondaryLocalnet]: {
-      bridgeMapping: configParsed?.name,
+      bridgeMapping: configParsed?.physicalNetworkName || configParsed?.name,
       excludeSubnets: configParsed?.excludeSubnets,
       mtu: (configParsed?.mtu || DEFAULT_MTU)?.toString(),
       subnets: configParsed?.subnets,
