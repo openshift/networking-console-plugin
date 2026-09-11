@@ -34,7 +34,7 @@ export const calcTrafficPercentage = (weight: number, route: any) => {
   const totalWeight = _.reduce(
     route.spec.alternateBackends,
     (result, alternate) => {
-      return (result += alternate.weight);
+      return result + alternate.weight;
     },
     route.spec.to.weight,
   );
