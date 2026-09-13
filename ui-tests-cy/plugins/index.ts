@@ -25,6 +25,19 @@ module.exports = (on, config) => {
   };
   on('file:preprocessor', wp(options));
 
+  let consoleErrorText = null;
+  let screenshotIndex = 0;
+  const errorDetailsDir = path.resolve(__dirname, '../gui-test-screenshots/error-details');
+
+  const isConsoleErrorDetailsShot = (details) => {
+    const name = String(details.name || '');
+    const shotPath = String(details.path || '');
+    return (
+      name.includes('console-error-details') ||
+      path.basename(shotPath).includes('console-error-details')
+    );
+  };
+
   on('task', {
     execOc({ args }) {
       try {
@@ -33,20 +46,36 @@ module.exports = (on, config) => {
         return null;
       }
     },
+    // Stashed by support/console-error-details.ts immediately before its screenshot.
+    setConsoleErrorText(text) {
+      consoleErrorText = typeof text === 'string' ? text : '';
+      return null;
+    },
   });
 
-  let screenshotIndex = 0;
-  on('after:screenshot', (details) => {
+  // The prefixed png basename exists only after this rename. Write the matching
+  // error-details txt here so its filename is that basename with .txt.
+  on('after:screenshot', async (details) => {
     const prefix = String(screenshotIndex).padStart(3, '0');
     screenshotIndex += 1;
     const renamed = path.join(
       path.dirname(details.path),
       `${prefix}.${path.basename(details.path)}`,
     );
+    const text = isConsoleErrorDetailsShot(details) ? consoleErrorText : null;
+    if (isConsoleErrorDetailsShot(details)) {
+      consoleErrorText = null;
+    }
 
-    return new Promise((resolve, reject) => {
-      fs.rename(details.path, renamed, (err) => (err ? reject(err) : resolve({ path: renamed })));
-    });
+    await fs.promises.rename(details.path, renamed);
+
+    if (text !== null) {
+      const txtPath = path.join(errorDetailsDir, `${path.parse(renamed).name}.txt`);
+      await fs.promises.mkdir(errorDetailsDir, { recursive: true });
+      await fs.promises.writeFile(txtPath, text, 'utf8');
+    }
+
+    return { path: renamed };
   });
 
   config.baseUrl = `${process.env.BRIDGE_BASE_ADDRESS || 'http://localhost:9000/'}`;
