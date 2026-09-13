@@ -1,0 +1,48 @@
+# Extra permissions for the hot-cluster runner ServiceAccount.
+# Namespace names are per-run, so these rules are cluster-scoped, but only
+# for the resource types the E2E cleanup deletes.
+# oc cluster-info is intentionally not enabled: it lists Services in kube-system.
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: arc-runner-networking
+  labels:
+    app.kubernetes.io/component: arc-runner-rbac
+rules:
+  - apiGroups: ['']
+    resources: ['services']
+    verbs: ['get', 'list', 'delete']
+  - apiGroups: ['networking.k8s.io']
+    resources: ['ingresses', 'networkpolicies']
+    verbs: ['get', 'list', 'delete']
+  - apiGroups: ['route.openshift.io']
+    resources: ['routes']
+    verbs: ['get', 'list', 'delete']
+  - apiGroups: ['k8s.cni.cncf.io']
+    resources: ['network-attachment-definitions', 'multi-networkpolicies']
+    verbs: ['get', 'list', 'delete']
+  - apiGroups: ['k8s.ovn.org']
+    resources: ['userdefinednetworks']
+    verbs: ['get', 'list', 'delete']
+  - apiGroups: ['k8s.ovn.org']
+    resources: ['clusteruserdefinednetworks']
+    verbs: ['get', 'list', 'delete']
+  - apiGroups: ['nmstate.io']
+    resources: ['nodenetworkconfigurationpolicies']
+    verbs: ['get', 'list', 'delete']
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: arc-runner-networking
+  labels:
+    app.kubernetes.io/component: arc-runner-rbac
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: arc-runner-networking
+subjects:
+  - kind: ServiceAccount
+    name: networking-console-plugin-ci-gha-rs-no-permission
+    namespace: arc-runners

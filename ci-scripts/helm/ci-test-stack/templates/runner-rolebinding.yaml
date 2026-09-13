@@ -8,9 +8,9 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ .Release.Name }}-test-runner
+  name: {{ .Values.testRunnerClusterRole }}
 subjects:
   - kind: ServiceAccount
     name: {{ .Values.runnerServiceAccount }}
-    namespace: {{ .Release.Namespace }}
+    namespace: {{ .Values.runnerServiceAccountNamespace }}
 {{- end }}

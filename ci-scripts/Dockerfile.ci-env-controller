@@ -1,0 +1,16 @@
+# Controller image for ci-env-controller.
+# The reconcile script is mounted from a ConfigMap at /scripts.
+# This image supplies oc, helm, and the test-stack chart.
+FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
+
+RUN microdnf install -y tar gzip findutils curl-minimal && microdnf clean all \
+    && curl -sL https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/openshift-client-linux.tar.gz \
+       | tar -xz -C /usr/local/bin oc kubectl \
+    && curl -sL https://get.helm.sh/helm-v3.16.4-linux-amd64.tar.gz \
+       | tar -xz -C /usr/local/bin --strip-components=1 linux-amd64/helm \
+    && chmod 755 /usr/local/bin/oc /usr/local/bin/kubectl /usr/local/bin/helm
+
+COPY helm/ci-test-stack /charts/ci-test-stack
+
+ENV GOLANG_FIPS=0 \
+    OPENSSL_FORCE_FIPS_MODE=0

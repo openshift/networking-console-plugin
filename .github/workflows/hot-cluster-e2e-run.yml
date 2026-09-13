@@ -87,20 +87,6 @@ jobs:
           chmod 600 "${KUBECONFIG}"
           echo "✓ kubeconfig created at ${KUBECONFIG}"
 
-      - name: Install oc CLI
-        run: |
-          if ! command -v oc &>/dev/null; then
-            OC_DIR="${RUNNER_TEMP}/oc-bin"
-            mkdir -p "${OC_DIR}"
-            cd "${OC_DIR}"
-            curl -sL "https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/openshift-client-linux.tar.gz" -o oc.tar.gz
-            tar -xzf oc.tar.gz oc kubectl
-            chmod +x oc kubectl
-            echo "${OC_DIR}" >> "$GITHUB_PATH"
-            export PATH="${OC_DIR}:${PATH}"
-          fi
-          oc version --client
-
       - name: Log environment summary
         run: |
           {
@@ -121,7 +107,7 @@ jobs:
             echo "| Tool | Available |"
             echo "| --- | --- |"
             missing=0
-            for cmd in jq curl kubectl oc helm npm node; do
+            for cmd in jq curl helm npm node; do
               if command -v "$cmd" &>/dev/null; then
                 echo "| \`$cmd\` | ✅ |"
               else
@@ -144,37 +130,6 @@ jobs:
             echo "</details>"
             echo ""
           } | tee -a "$GITHUB_STEP_SUMMARY"
-
-      - name: Log Client / Server Versions
-        run: |
-          {
-            echo "<details><summary>Client / Server Versions</summary>"
-            echo ""
-            echo "| Tool | Client Version | Server Version |"
-            echo "| --- | --- | --- |"
-            failed=0
-            for cmd in oc; do
-              if command -v "$cmd" &>/dev/null; then
-                if ! version_output=$("$cmd" version 2>/dev/null); then
-                  echo "| \`$cmd\` | ❌ version failed | ❌ |"
-                  failed=1
-                  continue
-                fi
-                client=$(echo "$version_output" | grep -i "client" | head -1 | sed 's/^[[:space:]]*//')
-                server=$(echo "$version_output" | grep -i "server" | head -1 | sed 's/^[[:space:]]*//')
-                echo "| \`$cmd\` | ${client:-N/A} | ${server:-N/A} |"
-              else
-                echo "| \`$cmd\` | ❌ not found | — |"
-                failed=1
-              fi
-            done
-            echo "</details>"
-            echo ""
-          } | tee -a "$GITHUB_STEP_SUMMARY"
-          if [[ "${failed}" -ne 0 ]]; then
-            echo "::error::Client/server version checks failed"
-            exit 1
-          fi
 
   build-plugin-image:
     name: Build Plugin Image
@@ -222,6 +177,20 @@ jobs:
         with:
           ref: ${{ inputs.branch || github.ref }}
 
+      - name: Install oc CLI
+        run: |
+          if ! command -v oc &>/dev/null; then
+            OC_DIR="${RUNNER_TEMP}/oc-bin"
+            mkdir -p "${OC_DIR}"
+            cd "${OC_DIR}"
+            curl -sL "https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/openshift-client-linux.tar.gz" -o oc.tar.gz
+            tar -xzf oc.tar.gz oc kubectl
+            chmod +x oc kubectl
+            echo "${OC_DIR}" >> "$GITHUB_PATH"
+            export PATH="${OC_DIR}:${PATH}"
+          fi
+          oc version --client
+
       - name: Set up kubeconfig from ServiceAccount token
         run: |
           SA_TOKEN="/var/run/secrets/kubernetes.io/serviceaccount/token"
@@ -263,22 +232,9 @@ jobs:
           chmod 600 "${KUBECONFIG}"
           echo "✓ kubeconfig created at ${KUBECONFIG}"
 
-          # Verify connectivity
-          oc cluster-info
-
-      - name: Install oc CLI
-        run: |
-          if ! command -v oc &>/dev/null; then
-            OC_DIR="${RUNNER_TEMP}/oc-bin"
-            mkdir -p "${OC_DIR}"
-            cd "${OC_DIR}"
-            curl -sL "https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/openshift-client-linux.tar.gz" -o oc.tar.gz
-            tar -xzf oc.tar.gz oc kubectl
-            chmod +x oc kubectl
-            echo "${OC_DIR}" >> "$GITHUB_PATH"
-            export PATH="${OC_DIR}:${PATH}"
-          fi
-          oc version --client
+          # oc cluster-info lists services in kube-system, which this
+          # ServiceAccount cannot do. whoami only checks the mounted token.
+          oc whoami
 
       - name: Provision CI test environment
         id: ci-env
@@ -309,10 +265,11 @@ jobs:
       - name: Install dependencies
         run: |
           npm ci --ignore-scripts --no-audit
-          npx cypress install
+          # The runner image sets CYPRESS_INSTALL_BINARY=0, which skips the download.
+          env -u CYPRESS_INSTALL_BINARY npx cypress install
 
       - name: Run E2E tests
-        uses: cypress-io/github-action@v7
+        uses: cypress-io/github-action@v6
         env:
           BRIDGE_BASE_ADDRESS: ${{ steps.ci-env.outputs.bridge-base-address }}
         with:
