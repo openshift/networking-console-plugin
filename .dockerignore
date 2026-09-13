@@ -1,0 +1,12 @@
+.git
+node_modules
+dist
+.idea
+.vscode
+.devcontainer
+.github
+ci-scripts
+ui-tests-cy
+integration-tests
+problem
+.env

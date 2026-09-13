@@ -7,3 +7,5 @@ yarn.lock
 /gui-test-screenshots
 cypress/gui-test-screenshots
 cypress/cypress-a11y-report.json
+ui-tests-cy/gui-test-screenshots/
+ui-tests-cy/ci-hot-cluster-e2e/
