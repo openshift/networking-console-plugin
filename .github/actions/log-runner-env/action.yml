@@ -1,0 +1,84 @@
+name: Log runner environment
+description: >
+  Write runner env vars, tool availability, npm/node versions, and oc
+  client/server versions to the GitHub step summary.
+
+runs:
+  using: composite
+  steps:
+    - name: Log environment summary
+      shell: bash
+      run: |
+        {
+          echo "<details><summary>Key Environment Variables</summary>"
+          echo ""
+          echo "| Variable | Value |"
+          echo "| --- | --- |"
+          for var in HOME USER RUNNER_NAME RUNNER_OS RUNNER_ARCH \
+                     GITHUB_REPOSITORY GITHUB_REF GITHUB_SHA GITHUB_RUN_ID GITHUB_RUN_NUMBER \
+                     TEST_NS UDN_NS PLUGIN_IMAGE; do
+            echo "| \`$var\` | \`${!var:-<unset>}\` |"
+          done
+          echo "</details>"
+          echo ""
+
+          echo "<details><summary>Tool Availability</summary>"
+          echo ""
+          echo "| Tool | Available |"
+          echo "| --- | --- |"
+          missing=0
+          for cmd in jq curl kubectl oc helm npm node; do
+            if command -v "$cmd" &>/dev/null; then
+              echo "| \`$cmd\` | ✅ |"
+            else
+              echo "| \`$cmd\` | ❌ |"
+              missing=1
+            fi
+          done
+          echo "</details>"
+          echo ""
+          if [[ "${missing}" -ne 0 ]]; then
+            echo "::error::Required tools are missing on the ARC runner"
+            exit 1
+          fi
+
+          echo "<details><summary>npm / Node Versions</summary>"
+          echo ""
+          echo "\`\`\`json"
+          npm version --json 2>/dev/null || echo "npm not found"
+          echo "\`\`\`"
+          echo "</details>"
+          echo ""
+        } | tee -a "$GITHUB_STEP_SUMMARY"
+
+    - name: Log Client / Server Versions
+      shell: bash
+      run: |
+        {
+          echo "<details><summary>Client / Server Versions</summary>"
+          echo ""
+          echo "| Tool | Client Version | Server Version |"
+          echo "| --- | --- |"
+          failed=0
+          for cmd in oc; do
+            if command -v "$cmd" &>/dev/null; then
+              if ! version_output=$("$cmd" version 2>/dev/null); then
+                echo "| \`$cmd\` | ❌ version failed | ❌ |"
+                failed=1
+                continue
+              fi
+              client=$(echo "$version_output" | grep -i "client" | head -1 | sed 's/^[[:space:]]*//')
+              server=$(echo "$version_output" | grep -i "server" | head -1 | sed 's/^[[:space:]]*//')
+              echo "| \`$cmd\` | ${client:-N/A} | ${server:-N/A} |"
+            else
+              echo "| \`$cmd\` | ❌ not found | — |"
+              failed=1
+            fi
+          done
+          echo "</details>"
+          echo ""
+        } | tee -a "$GITHUB_STEP_SUMMARY"
+        if [[ "${failed}" -ne 0 ]]; then
+          echo "::error::Client/server version checks failed"
+          exit 1
+        fi
