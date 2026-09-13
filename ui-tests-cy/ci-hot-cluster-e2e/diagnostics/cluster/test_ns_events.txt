@@ -1,0 +1,17 @@
+LAST SEEN   TYPE     REASON              OBJECT                                             MESSAGE
+7m9s        Normal   Scheduled           pod/ci-test-36306233879-console-9dbf8dd96-5z56b    Successfully assigned networking-ci-test-36306233879/ci-test-36306233879-console-9dbf8dd96-5z56b to uit-510-0927-rbngq-worker-0-nz45n
+7m9s        Normal   Scheduled           pod/ci-test-36306233879-plugin-869fdfb988-pcx4r    Successfully assigned networking-ci-test-36306233879/ci-test-36306233879-plugin-869fdfb988-pcx4r to uit-510-0927-rbngq-worker-0-nz45n
+7m9s        Normal   Pulling             pod/ci-test-36306233879-plugin-869fdfb988-pcx4r    Pulling image "ttl.sh/networking-console-plugin-ci-36306233879-1:2h"
+7m9s        Normal   AddedInterface      pod/ci-test-36306233879-console-9dbf8dd96-5z56b    Add eth0 [10.129.2.62/23] from ovn-kubernetes
+7m9s        Normal   Pulling             pod/ci-test-36306233879-console-9dbf8dd96-5z56b    Pulling image "quay.io/openshift/origin-console:5.1"
+7m9s        Normal   ScalingReplicaSet   deployment/ci-test-36306233879-plugin              Scaled up replica set ci-test-36306233879-plugin-869fdfb988 from 0 to 1
+7m9s        Normal   SuccessfulCreate    replicaset/ci-test-36306233879-plugin-869fdfb988   Created pod: ci-test-36306233879-plugin-869fdfb988-pcx4r
+7m9s        Normal   SuccessfulCreate    replicaset/ci-test-36306233879-console-9dbf8dd96   Created pod: ci-test-36306233879-console-9dbf8dd96-5z56b
+7m9s        Normal   ScalingReplicaSet   deployment/ci-test-36306233879-console             Scaled up replica set ci-test-36306233879-console-9dbf8dd96 from 0 to 1
+7m9s        Normal   AddedInterface      pod/ci-test-36306233879-plugin-869fdfb988-pcx4r    Add eth0 [10.129.2.61/23] from ovn-kubernetes
+7m5s        Normal   Created             pod/ci-test-36306233879-plugin-869fdfb988-pcx4r    Container created
+7m5s        Normal   Pulled              pod/ci-test-36306233879-plugin-869fdfb988-pcx4r    Successfully pulled image "ttl.sh/networking-console-plugin-ci-36306233879-1:2h" in 3.392s (3.392s including waiting). Image size: 178055735 bytes.
+7m5s        Normal   Started             pod/ci-test-36306233879-plugin-869fdfb988-pcx4r    Container started
+7m2s        Normal   Started             pod/ci-test-36306233879-console-9dbf8dd96-5z56b    Container started
+7m2s        Normal   Created             pod/ci-test-36306233879-console-9dbf8dd96-5z56b    Container created
+7m2s        Normal   Pulled              pod/ci-test-36306233879-console-9dbf8dd96-5z56b    Successfully pulled image "quay.io/openshift/origin-console:5.1" in 6.498s (6.498s including waiting). Image size: 482628786 bytes.

@@ -1,0 +1,18 @@
+I0927 08:32:35.623410       1 main.go:276] Console plugins are enabled in following order:
+I0927 08:32:35.623451       1 main.go:278]  - networking-console-plugin
+W0927 08:32:35.623463       1 authoptions.go:112] Flag inactivity-timeout is set to less then 300 seconds and will be ignored!
+W0927 08:32:35.623608       1 main.go:653] DEPRECATED: --k8s-auth is deprecated and setting it has no effect
+W0927 08:32:35.624220       1 authoptions.go:265] running with AUTHENTICATION DISABLED -- for development use only!
+I0927 08:32:35.626373       1 main.go:780] Binding to 0.0.0.0:9000...
+I0927 08:32:35.626385       1 main.go:782] Not using TLS
+I0927 08:32:38.626296       1 metrics.go:133] serverconfig.Metrics: Update ConsolePlugin metrics...
+I0927 08:32:38.676719       1 metrics.go:143] serverconfig.Metrics: Update ConsolePlugin metrics: &map[kubevirt:map[disabled:1] monitoring:map[disabled:1] networking:map[enabled:1] nmstate:map[disabled:1] odf:map[disabled:1] unknown:map[disabled:1]] (took 50.38167ms)
+I0927 08:32:40.626217       1 metrics.go:80] usage.Metrics: Count console users...
+I0927 08:32:41.131386       1 metrics.go:156] usage.Metrics: Update console users metrics: 1 kubeadmin, 0 cluster-admins, 0 developers, 0 unknown/errors (took 505.100627ms)
+I0927 08:34:35.919902       1 proxy.go:266] CheckOrigin: Proxy has no configured Origin. Allowing origin [http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000] to wss://api.uit-510-0927.rhos-psi.cnv-qe.rhood.us:6443/apis/console.openshift.io/v1/consolenotifications?watch=true&resourceVersion=147372
+I0927 08:34:38.018052       1 proxy.go:266] CheckOrigin: Proxy has no configured Origin. Allowing origin [http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000] to wss://api.uit-510-0927.rhos-psi.cnv-qe.rhood.us:6443/apis/user.openshift.io/v1/groups?watch=true&resourceVersion=147372
+I0927 08:34:38.228163       1 proxy.go:266] CheckOrigin: Proxy has no configured Origin. Allowing origin [http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000] to wss://api.uit-510-0927.rhos-psi.cnv-qe.rhood.us:6443/apis/console.openshift.io/v1/consolequickstarts?watch=true&resourceVersion=147372
+I0927 08:34:38.919432       1 proxy.go:266] CheckOrigin: Proxy has no configured Origin. Allowing origin [http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000] to wss://api.uit-510-0927.rhos-psi.cnv-qe.rhood.us:6443/apis/apiextensions.k8s.io/v1/customresourcedefinitions?watch=true&resourceVersion=147339
+I0927 08:34:38.923344       1 proxy.go:266] CheckOrigin: Proxy has no configured Origin. Allowing origin [http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000] to wss://api.uit-510-0927.rhos-psi.cnv-qe.rhood.us:6443/apis/config.openshift.io/v1/clusterversions?watch=true&fieldSelector=metadata.name%3Dversion
+I0927 08:34:39.145376       1 proxy.go:266] CheckOrigin: Proxy has no configured Origin. Allowing origin [http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000] to wss://api.uit-510-0927.rhos-psi.cnv-qe.rhood.us:6443/apis/console.openshift.io/v1/consolelinks?watch=true&resourceVersion=147372
+I0927 08:34:39.252329       1 proxy.go:266] CheckOrigin: Proxy has no configured Origin. Allowing origin [http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000] to wss://api.uit-510-0927.rhos-psi.cnv-qe.rhood.us:6443/apis/project.openshift.io/v1/projects?watch=true

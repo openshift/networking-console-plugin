@@ -1,0 +1,262 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 7,
+    "passes": 1,
+    "pending": 1,
+    "failures": 5,
+    "testsRegistered": 7,
+    "passPercent": 14.285714285714286,
+    "pendingPercent": 14.285714285714286,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false,
+    "start": "2026-09-27T08:34:24.402Z",
+    "end": "2026-09-27T08:39:35.036Z",
+    "duration": 310634
+  },
+  "results": [
+    {
+      "uuid": "3a992b3e-d486-4a95-ad4f-85826aacf3fe",
+      "title": "",
+      "fullFile": "tests/all.cy.ts",
+      "file": "tests/all.cy.ts",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "d8b714cb-0f26-4764-b368-26671905ae77",
+          "title": "Login",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "login to OpenShift console",
+              "fullTitle": "Login login to OpenShift console",
+              "timedOut": null,
+              "duration": 2061,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.login();",
+              "err": {},
+              "uuid": "619fc1c6-e5de-4cb2-a2aa-490590567dad",
+              "parentUUID": "d8b714cb-0f26-4764-b368-26671905ae77",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "619fc1c6-e5de-4cb2-a2aa-490590567dad"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 2061,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        },
+        {
+          "uuid": "d8c88b02-70b4-4bae-9737-bb395478c461",
+          "title": "Visit networking pages",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "visit NetworkAttachmentDefinitions page",
+              "fullTitle": "Visit networking pages visit NetworkAttachmentDefinitions page",
+              "timedOut": null,
+              "duration": 0,
+              "state": "pending",
+              "speed": null,
+              "pass": false,
+              "fail": false,
+              "pending": true,
+              "context": null,
+              "code": "cy.get(\"#page-sidebar\", { timeout: _utils_const_base__WEBPACK_IMPORTED_MODULE_0__.MINUTE }).contains(\"Networking\", { timeout: _utils_const_base__WEBPACK_IMPORTED_MODULE_0__.MINUTE }).should(\"be.visible\");\ncy.clickNavLink([\"Networking\", \"NetworkAttachmentDefinitions\"]);\ncy.checkTitle(\"NetworkAttachmentDefinitions\", _utils_const_base__WEBPACK_IMPORTED_MODULE_0__.MINUTE);",
+              "err": {},
+              "uuid": "6bafabb3-8f6b-4337-9b2b-507e32480cd9",
+              "parentUUID": "d8c88b02-70b4-4bae-9737-bb395478c461",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "visit UserDefinedNetworks page",
+              "fullTitle": "Visit networking pages visit UserDefinedNetworks page",
+              "timedOut": null,
+              "duration": 62492,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "cy.clickNavLink([\"Networking\", \"UserDefinedNetworks\"]);\ncy.checkTitle(\"UserDefinedNetworks\", _utils_const_base__WEBPACK_IMPORTED_MODULE_0__.MINUTE);",
+              "err": {
+                "message": "CypressError: Timed out retrying after 60050ms: `cy.click()` failed because this element is not visible:\n\n`<a data-test=\"nav\" data-quickstart-id=\"qs-nav-udns\" data-test-id=\"udns-nav-item\" class=\"pf-v6-c-nav__link\" href=\"/k8s/all-namespaces/k8s.ovn.org~v1~UserDefinedNetwork\">UserDef...</a>`\n\nThis element `<a.pf-v6-c-nav__link>` is not visible because its parent `<li.pf-v6-c-nav__item>` has CSS property: `visibility: hidden`\n\nFix this problem, or use `{force: true}` to disable error checking.\n\nhttps://on.cypress.io/element-cannot-be-interacted-with",
+                "estack": "CypressError: Timed out retrying after 60050ms: `cy.click()` failed because this element is not visible:\n\n`<a data-test=\"nav\" data-quickstart-id=\"qs-nav-udns\" data-test-id=\"udns-nav-item\" class=\"pf-v6-c-nav__link\" href=\"/k8s/all-namespaces/k8s.ovn.org~v1~UserDefinedNetwork\">UserDef...</a>`\n\nThis element `<a.pf-v6-c-nav__link>` is not visible because its parent `<li.pf-v6-c-nav__item>` has CSS property: `visibility: hidden`\n\nFix this problem, or use `{force: true}` to disable error checking.\n\nhttps://on.cypress.io/element-cannot-be-interacted-with\n    at runVisibilityCheck (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:155895:58)\n    at Object.isStrictlyVisible (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:155909:10)\n    at runAllChecks (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:113134:26)\n    at retryActionability (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:113203:16)\n    at tryCatcher (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:1777:23)\n    at Promise.attempt.Promise.try (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:4285:29)\n    at whenStable (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:154603:70)\n    at <unknown> (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:154503:14)\n    at tryCatcher (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:1777:23)\n    at Promise._settlePromiseFromHandler (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:1489:31)\n    at Promise._settlePromise (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:1546:18)\n    at Promise._settlePromise0 (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:1591:10)\n    at Promise._settlePromises (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:1671:18)\n    at Promise._fulfill (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:1615:18)\n    at <unknown> (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:5420:46)\nFrom Your Spec Code:\n    at Object.proxyGetter [as get] (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:78698:22)\n    at exists (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:153699:26)\n    at elExists (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:153714:10)\n    at ensureExistence (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:153895:22)\n    at onFailFn (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:153924:53)",
+                "diff": null
+              },
+              "uuid": "4789684e-d196-4deb-9434-dfcea3975f61",
+              "parentUUID": "d8c88b02-70b4-4bae-9737-bb395478c461",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "visit Services page",
+              "fullTitle": "Visit networking pages visit Services page",
+              "timedOut": null,
+              "duration": 60528,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "cy.clickNavLink([\"Networking\", \"Services\"]);\ncy.checkTitle(\"Services\", _utils_const_base__WEBPACK_IMPORTED_MODULE_0__.MINUTE);",
+              "err": {
+                "message": "AssertionError: Timed out retrying after 60000ms: Expected to find content: 'Services' within the selector: 'h1' but never did.",
+                "estack": "AssertionError: Timed out retrying after 60000ms: Expected to find content: 'Services' within the selector: 'h1' but never did.\n    at Context.eval (webpack:///./support/selectors.ts:69:45)\n    at wrapped (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:148790:43)",
+                "diff": null
+              },
+              "uuid": "f824fe6f-6251-42f7-8b84-f08faceff44b",
+              "parentUUID": "d8c88b02-70b4-4bae-9737-bb395478c461",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "visit Routes page",
+              "fullTitle": "Visit networking pages visit Routes page",
+              "timedOut": null,
+              "duration": 60358,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "cy.clickNavLink([\"Networking\", \"Routes\"]);\ncy.checkTitle(\"Routes\", _utils_const_base__WEBPACK_IMPORTED_MODULE_0__.MINUTE);",
+              "err": {
+                "message": "AssertionError: Timed out retrying after 60000ms: Expected to find content: 'Routes' within the selector: 'h1' but never did.",
+                "estack": "AssertionError: Timed out retrying after 60000ms: Expected to find content: 'Routes' within the selector: 'h1' but never did.\n    at Context.eval (webpack:///./support/selectors.ts:69:45)\n    at wrapped (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:148790:43)",
+                "diff": null
+              },
+              "uuid": "d5199ed2-7b3c-4b31-8cc6-a3a37769c0ea",
+              "parentUUID": "d8c88b02-70b4-4bae-9737-bb395478c461",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "visit Ingresses page",
+              "fullTitle": "Visit networking pages visit Ingresses page",
+              "timedOut": null,
+              "duration": 60439,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "cy.clickNavLink([\"Networking\", \"Ingresses\"]);\ncy.checkTitle(\"Ingresses\", _utils_const_base__WEBPACK_IMPORTED_MODULE_0__.MINUTE);",
+              "err": {
+                "message": "AssertionError: Timed out retrying after 60000ms: Expected to find content: 'Ingresses' within the selector: 'h1' but never did.",
+                "estack": "AssertionError: Timed out retrying after 60000ms: Expected to find content: 'Ingresses' within the selector: 'h1' but never did.\n    at Context.eval (webpack:///./support/selectors.ts:69:45)\n    at wrapped (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:148790:43)",
+                "diff": null
+              },
+              "uuid": "f4592444-0ce5-4019-9c5b-33ff6e7f5df5",
+              "parentUUID": "d8c88b02-70b4-4bae-9737-bb395478c461",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "visit NetworkPolicies page",
+              "fullTitle": "Visit networking pages visit NetworkPolicies page",
+              "timedOut": null,
+              "duration": 60460,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "cy.clickNavLink([\"Networking\", \"NetworkPolicies\"]);\ncy.checkTitle(\"NetworkPolicies\", _utils_const_base__WEBPACK_IMPORTED_MODULE_0__.MINUTE);",
+              "err": {
+                "message": "AssertionError: Timed out retrying after 60000ms: Expected to find content: 'NetworkPolicies' within the selector: 'h1' but never did.",
+                "estack": "AssertionError: Timed out retrying after 60000ms: Expected to find content: 'NetworkPolicies' within the selector: 'h1' but never did.\n    at Context.eval (webpack:///./support/selectors.ts:69:45)\n    at wrapped (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:148790:43)",
+                "diff": null
+              },
+              "uuid": "f6e64dbe-7e88-46ec-9402-002f429fb847",
+              "parentUUID": "d8c88b02-70b4-4bae-9737-bb395478c461",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [],
+          "failures": [
+            "4789684e-d196-4deb-9434-dfcea3975f61",
+            "f824fe6f-6251-42f7-8b84-f08faceff44b",
+            "d5199ed2-7b3c-4b31-8cc6-a3a37769c0ea",
+            "f4592444-0ce5-4019-9c5b-33ff6e7f5df5",
+            "f6e64dbe-7e88-46ec-9402-002f429fb847"
+          ],
+          "pending": [
+            "6bafabb3-8f6b-4337-9b2b-507e32480cd9"
+          ],
+          "skipped": [],
+          "duration": 304277,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.2.0"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "cypress_report",
+        "saveHtml": true,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.4"
+    },
+    "marge": {
+      "options": {
+        "id": "default",
+        "reportDir": "./gui-test-screenshots/",
+        "reportFilename": "cypress_report",
+        "overwrite": false,
+        "html": true,
+        "json": true
+      },
+      "version": "6.3.2"
+    }
+  }
+}

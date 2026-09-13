@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="310.634" tests="7" failures="5" skipped="1">
+  <testsuite name="Root Suite" timestamp="2026-09-27T08:34:24" tests="0" file="tests/all.cy.ts" time="0.000" failures="0">
+  </testsuite>
+  <testsuite name="Login" timestamp="2026-09-27T08:34:24" tests="1" time="2.234" failures="0">
+    <testcase name="Login login to OpenShift console" time="2.061" classname="login to OpenShift console">
+    </testcase>
+  </testsuite>
+  <testsuite name="Visit networking pages" timestamp="2026-09-27T08:34:26" tests="6" time="308.389" failures="5">
+    <testcase name="Visit networking pages visit UserDefinedNetworks page" time="0.000" classname="visit UserDefinedNetworks page">
+      <failure message="Timed out retrying after 60050ms: `cy.click()` failed because this element is not visible:
+
+`&lt;a data-test=&quot;nav&quot; data-quickstart-id=&quot;qs-nav-udns&quot; data-test-id=&quot;udns-nav-item&quot; class=&quot;pf-v6-c-nav__link&quot; href=&quot;/k8s/all-namespaces/k8s.ovn.org~v1~UserDefinedNetwork&quot;&gt;UserDef...&lt;/a&gt;`
+
+This element `&lt;a.pf-v6-c-nav__link&gt;` is not visible because its parent `&lt;li.pf-v6-c-nav__item&gt;` has CSS property: `visibility: hidden`
+
+Fix this problem, or use `{force: true}` to disable error checking.
+
+https://on.cypress.io/element-cannot-be-interacted-with" type="CypressError"><![CDATA[CypressError: Timed out retrying after 60050ms: `cy.click()` failed because this element is not visible:
+
+`<a data-test="nav" data-quickstart-id="qs-nav-udns" data-test-id="udns-nav-item" class="pf-v6-c-nav__link" href="/k8s/all-namespaces/k8s.ovn.org~v1~UserDefinedNetwork">UserDef...</a>`
+
+This element `<a.pf-v6-c-nav__link>` is not visible because its parent `<li.pf-v6-c-nav__item>` has CSS property: `visibility: hidden`
+
+Fix this problem, or use `{force: true}` to disable error checking.
+
+https://on.cypress.io/element-cannot-be-interacted-with
+    at runVisibilityCheck (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:155895:58)
+    at Object.isStrictlyVisible (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:155909:10)
+    at runAllChecks (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:113134:26)
+    at retryActionability (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:113203:16)
+    at tryCatcher (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:1777:23)
+    at Promise.attempt.Promise.try (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:4285:29)
+    at whenStable (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:154603:70)
+    at <unknown> (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:154503:14)
+    at tryCatcher (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:1777:23)
+    at Promise._settlePromiseFromHandler (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:1489:31)
+    at Promise._settlePromise (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:1546:18)
+    at Promise._settlePromise0 (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:1591:10)
+    at Promise._settlePromises (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:1671:18)
+    at Promise._fulfill (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:1615:18)
+    at <unknown> (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:5420:46)
+From Your Spec Code:
+    at Object.proxyGetter [as get] (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:78698:22)
+    at exists (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:153699:26)
+    at elExists (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:153714:10)
+    at ensureExistence (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:153895:22)
+    at onFailFn (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:153924:53)]]></failure>
+    </testcase>
+    <testcase name="Visit networking pages visit Services page" time="0.000" classname="visit Services page">
+      <failure message="Timed out retrying after 60000ms: Expected to find content: &apos;Services&apos; within the selector: &apos;h1&apos; but never did." type="AssertionError"><![CDATA[AssertionError: Timed out retrying after 60000ms: Expected to find content: 'Services' within the selector: 'h1' but never did.
+    at Context.eval (webpack:///./support/selectors.ts:69:45)
+    at wrapped (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:148790:43)]]></failure>
+    </testcase>
+    <testcase name="Visit networking pages visit Routes page" time="0.000" classname="visit Routes page">
+      <failure message="Timed out retrying after 60000ms: Expected to find content: &apos;Routes&apos; within the selector: &apos;h1&apos; but never did." type="AssertionError"><![CDATA[AssertionError: Timed out retrying after 60000ms: Expected to find content: 'Routes' within the selector: 'h1' but never did.
+    at Context.eval (webpack:///./support/selectors.ts:69:45)
+    at wrapped (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:148790:43)]]></failure>
+    </testcase>
+    <testcase name="Visit networking pages visit Ingresses page" time="0.000" classname="visit Ingresses page">
+      <failure message="Timed out retrying after 60000ms: Expected to find content: &apos;Ingresses&apos; within the selector: &apos;h1&apos; but never did." type="AssertionError"><![CDATA[AssertionError: Timed out retrying after 60000ms: Expected to find content: 'Ingresses' within the selector: 'h1' but never did.
+    at Context.eval (webpack:///./support/selectors.ts:69:45)
+    at wrapped (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:148790:43)]]></failure>
+    </testcase>
+    <testcase name="Visit networking pages visit NetworkPolicies page" time="0.000" classname="visit NetworkPolicies page">
+      <failure message="Timed out retrying after 60000ms: Expected to find content: &apos;NetworkPolicies&apos; within the selector: &apos;h1&apos; but never did." type="AssertionError"><![CDATA[AssertionError: Timed out retrying after 60000ms: Expected to find content: 'NetworkPolicies' within the selector: 'h1' but never did.
+    at Context.eval (webpack:///./support/selectors.ts:69:45)
+    at wrapped (http://ci-test-36306233879-console.networking-ci-test-36306233879.svc.cluster.local:9000/__cypress/runner/cypress_runner.js:148790:43)]]></failure>
+    </testcase>
+  </testsuite>
+</testsuites>

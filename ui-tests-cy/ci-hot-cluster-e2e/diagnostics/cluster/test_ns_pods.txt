@@ -1,0 +1,3 @@
+NAME                                          READY   STATUS    RESTARTS   AGE    IP            NODE                                NOMINATED NODE   READINESS GATES
+ci-test-36306233879-console-9dbf8dd96-5z56b   1/1     Running   0          7m9s   10.129.2.62   uit-510-0927-rbngq-worker-0-nz45n   <none>           <none>
+ci-test-36306233879-plugin-869fdfb988-pcx4r   1/1     Running   0          7m9s   10.129.2.61   uit-510-0927-rbngq-worker-0-nz45n   <none>           <none>
