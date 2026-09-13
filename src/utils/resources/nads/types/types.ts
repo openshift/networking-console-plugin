@@ -28,6 +28,7 @@ export type NetworkAttachmentDefinitionConfig = {
   mtu?: number;
   name: string;
   netAttachDefName?: string;
+  physicalNetworkName?: string;
   plugins?: NetworkAttachmentDefinitionPlugin[];
   preserveDefaultVlan?: boolean;
   role?: string;
