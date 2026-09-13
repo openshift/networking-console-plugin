@@ -1,0 +1,93 @@
+# Custom ARC Runner Image
+# Pre-installs oc, helm, Node.js, and Cypress dependencies.
+#
+# Build: docker build -t networking-console-plugin-arc-runner:latest -f ci-scripts/Dockerfile.arc-runner .
+# Push:  docker tag networking-console-plugin-arc-runner:latest quay.io/rhn_support_lkladnit/networking-console-plugin-arc-runner:latest
+#        docker push quay.io/rhn_support_lkladnit/networking-console-plugin-arc-runner:latest
+# Future team repository, once an openshift-org admin creates it:
+#        quay.io/openshift/networking-console-plugin-arc-runner:v1
+
+FROM ghcr.io/actions/actions-runner:2.338.1@sha256:e275409999c37162649aa050ca573f03eab2eabcb3a1e7fcc47548de6b4f9690
+
+USER root
+
+# Install system dependencies for oc, helm, and Cypress
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    wget \
+    ca-certificates \
+    git \
+    gnupg \
+    lsb-release \
+    xz-utils \
+    xvfb \
+    xauth \
+    libgtk-3-0t64 \
+    libgbm1 \
+    libnss3 \
+    libxss1 \
+    libasound2t64 \
+    libxtst6 \
+    fonts-liberation \
+    xdg-utils \
+    jq \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install OpenShift CLI (oc) 4.22.18
+RUN set -e; \
+    curl -fsSL "https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/4.22.18/openshift-client-linux.tar.gz" \
+      -o /tmp/oc.tar.gz && \
+    echo "07751676809553e012448cdb3a755ffa7b11d7e25b8a6cc60a5a62a9f4b18159  /tmp/oc.tar.gz" | sha256sum -c - && \
+    tar -xzf /tmp/oc.tar.gz -C /usr/local/bin oc kubectl && \
+    chmod +x /usr/local/bin/oc /usr/local/bin/kubectl && \
+    rm -f /tmp/oc.tar.gz && \
+    oc version --client
+
+# Install Helm 3.16.4
+RUN set -e; \
+    curl -fsSL "https://get.helm.sh/helm-v3.16.4-linux-amd64.tar.gz" \
+      -o /tmp/helm.tar.gz && \
+    echo "fc307327959aa38ed8f9f7e66d45492bb022a66c3e5da6063958254b9767d179  /tmp/helm.tar.gz" | sha256sum -c - && \
+    tar -xzf /tmp/helm.tar.gz -C /tmp && \
+    mv /tmp/linux-amd64/helm /usr/local/bin/helm && \
+    chmod +x /usr/local/bin/helm && \
+    rm -rf /tmp/helm.tar.gz /tmp/linux-amd64 && \
+    helm version
+
+# Install Node.js 22.21.0 (matches Cypress 15)
+RUN set -e; \
+    curl -fsSL "https://nodejs.org/dist/v22.21.0/node-v22.21.0-linux-x64.tar.xz" \
+      -o /tmp/node.tar.xz && \
+    echo "71a04f4b9144870c9407b8019fe912514229e50246bc706862eded3ac8e9025d  /tmp/node.tar.xz" | sha256sum -c - && \
+    tar -xJf /tmp/node.tar.xz -C /usr/local --strip-components=1 && \
+    rm -f /tmp/node.tar.xz && \
+    node --version && npm --version
+
+# Install Cypress 15.21.1, the version used by this repo
+RUN npm install -g cypress@15.21.1 && \
+    cypress verify && \
+    npm cache clean --force
+
+# Set environment variables for Cypress and FIPS
+ENV CYPRESS_INSTALL_BINARY=0 \
+    OPENSSL_FORCE_FIPS_MODE=0 \
+    GOLANG_FIPS=0 \
+    RUNNER_ALLOW_RUNASROOT=true
+
+# Switch back to runner user
+USER runner
+
+# Verify all tools are installed and accessible
+RUN set -e; \
+    echo "=== Tool Verification ==="; \
+    echo "oc: $(oc version --client)"; \
+    echo "kubectl: $(kubectl version --client)"; \
+    echo "helm: $(helm version --short)"; \
+    echo "node: $(node --version)"; \
+    echo "npm: $(npm --version)"; \
+    echo "cypress: $(cypress --version)"; \
+    echo "git: $(git --version)"; \
+    echo "curl: $(curl --version | head -1)"; \
+    echo "jq: $(jq --version)"
+
+ENTRYPOINT ["/home/runner/run.sh"]

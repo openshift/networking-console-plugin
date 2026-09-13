@@ -22,9 +22,11 @@ export default tseslint.config(
       'ui-tests-cy/gui-test-screenshots/',
       'ui-tests-cy/ci-hot-cluster-e2e/',
       '.env',
-      //legacy
+      // legacy / artifacts
       'i18n-scripts/',
-      //generated
+      'cypress/gui-test-screenshots/',
+      'cypress/cypress-a11y-report.json',
+      // generated
       'package-lock.json',
       'locales/',
       // Helm charts contain Go templates that prettier cannot parse

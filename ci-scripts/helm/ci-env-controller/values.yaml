@@ -1,4 +1,6 @@
-controllerImage: "registry.access.redhat.com/ubi9/ubi-minimal:latest"
+# Must contain oc, helm, and /charts/ci-test-stack.
+# Built from ci-scripts/Dockerfile.ci-env-controller.
+controllerImage: "image-registry.openshift-image-registry.svc:5000/ci-env/ci-env-controller:latest"
 
 reconcileInterval: 15
 
@@ -7,5 +9,10 @@ reapAfterMinutes: 120
 testStackChartPath: "/charts/ci-test-stack"
 
 runnerServiceAccount: ""
+
+runnerServiceAccountNamespace: ""
+
+# Copied into each test namespace so the plugin pod can pull a private image.
+pluginPullSecret: "quay-pull"
 
 consoleImageRegistry: "quay.io/openshift/origin-console"

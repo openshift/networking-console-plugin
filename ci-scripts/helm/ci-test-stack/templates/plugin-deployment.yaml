@@ -15,6 +15,10 @@ spec:
       labels:
         app: {{ include "ci-test-stack.pluginName" . }}
     spec:
+      {{- if .Values.pluginImagePullSecret }}
+      imagePullSecrets:
+        - name: {{ .Values.pluginImagePullSecret }}
+      {{- end }}
       containers:
         - name: plugin
           image: {{ .Values.pluginImage }}
