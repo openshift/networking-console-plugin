@@ -62,14 +62,12 @@ const NetworkPolicyPodsPreview: FC<NetworkPolicyPodsPreviewProps> = ({
     });
     // Then convert the above groups of pod TreeViewDataItems to subchildren of
     // the namespaces' TreeViewDataItems
-    const podTreeEntries = Object.entries(podsByNs).map(
-      ([ns, podsTree]): TreeViewDataItem => ({
-        children: podsTree,
-        defaultExpanded: true,
-        icon: <ResourceIcon kind={NamespaceModel.kind} />,
-        name: ns,
-      }),
-    );
+    const podTreeEntries = Object.entries(podsByNs).map(([ns, podsTree]): TreeViewDataItem => ({
+      children: podsTree,
+      defaultExpanded: true,
+      icon: <ResourceIcon kind={NamespaceModel.kind} />,
+      name: ns,
+    }));
     return {
       pods: podTreeEntries,
       total: filteredPods.length,
