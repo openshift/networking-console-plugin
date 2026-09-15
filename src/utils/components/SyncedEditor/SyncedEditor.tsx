@@ -54,12 +54,15 @@ export const SyncedEditor: FC<SyncedEditorProps> = ({
   const [yamlWarning, setYAMLWarning] = useState<boolean>(false);
   const [editorType, setEditorType, loaded] = useEditorType(lastViewUserSettingKey, initialType);
 
-  const handleFormDataChange = (newFormData: K8sResourceKind = {}) => {
-    if (!_.isEqual(newFormData, formData)) {
-      setFormData(newFormData);
-      onChange(newFormData);
-    }
-  };
+  const handleFormDataChange = useCallback(
+    (newFormData: K8sResourceKind = {}) => {
+      if (!_.isEqual(newFormData, formData)) {
+        setFormData(newFormData);
+        onChange(newFormData);
+      }
+    },
+    [formData, onChange],
+  );
 
   const handleYAMLChange = useCallback(
     (newYAML = '') => {
@@ -71,7 +74,7 @@ export const SyncedEditor: FC<SyncedEditorProps> = ({
         })
         .catch((err) => setSwitchError(String(err)));
     },
-    [formData, prune],
+    [formData, prune, yaml, handleFormDataChange],
   );
 
   const changeEditorType = (newType: EditorType): void => {

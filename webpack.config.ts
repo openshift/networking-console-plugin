@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-env node */
+/* eslint-disable @typescript-eslint/no-require-imports */
 
 import * as path from 'path';
 

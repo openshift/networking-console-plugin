@@ -9,7 +9,7 @@ For initial setup (prerequisites, clone, install, dev server), see [README.md](R
 ### TypeScript and React
 
 - Target ES2016 with ESNext modules. The project uses `esbuild-loader` for fast transpilation.
-- Follow the ESLint config in `.eslintrc.json` — run `npm run lint` before submitting.
+- Follow the ESLint config in `eslint.config.mjs` — run `npm run lint` before submitting.
 - Import ordering is enforced by `simple-import-sort`: Node builtins, packages (React first), internal `@`-prefixed
   paths, relative paths, then styles.
 - Use `@utils/*`, `@views/*`, `@styles/*` path aliases rather than deep relative paths.

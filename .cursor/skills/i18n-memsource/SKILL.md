@@ -22,14 +22,14 @@ Read and update `.cursor/skills/i18n-memsource/state.json` after each upload.
 
 ## Plugin config
 
-| Field | Value |
-|-------|-------|
-| Namespace / locale file | `plugin__networking-console-plugin` |
-| Memsource template ID | `zBOwr4BxYwEq7xlJ37c1F3` |
-| Project title | `[OCP $VERSION] UI Localization networking-console-plugin - Sprint $SPRINT/Branch $BRANCH` |
-| Languages | `ja`, `zh-cn`, `ko`, `fr`, `es` |
-| Locale dirs on disk | `en`, `es`, `fr`, `ja`, `ko`, **`zh`** (not `zh-cn`) |
-| PO filename pattern | `po-files/<lang>/plugin__networking-console-plugin.po` (no `public__` prefix) |
+| Field                   | Value                                                                                      |
+| ----------------------- | ------------------------------------------------------------------------------------------ |
+| Namespace / locale file | `plugin__networking-console-plugin`                                                        |
+| Memsource template ID   | `zBOwr4BxYwEq7xlJ37c1F3`                                                                   |
+| Project title           | `[OCP $VERSION] UI Localization networking-console-plugin - Sprint $SPRINT/Branch $BRANCH` |
+| Languages               | `ja`, `zh-cn`, `ko`, `fr`, `es`                                                            |
+| Locale dirs on disk     | `en`, `es`, `fr`, `ja`, `ko`, **`zh`** (not `zh-cn`)                                       |
+| PO filename pattern     | `po-files/<lang>/plugin__networking-console-plugin.po` (no `public__` prefix)              |
 
 ## Prerequisites
 
@@ -127,10 +127,10 @@ may treat as already translated.
 
 **Desired PO state before upload:**
 
-| Locale JSON value | msgstr in PO |
-|-------------------|--------------|
-| Real non-English translation | Keep it (carry forward) |
-| Empty `""` | Empty (needs translation) |
+| Locale JSON value                       | msgstr in PO                  |
+| --------------------------------------- | ----------------------------- |
+| Real non-English translation            | Keep it (carry forward)       |
+| Empty `""`                              | Empty (needs translation)     |
 | English placeholder (== English source) | **Empty** (needs translation) |
 
 `export-pos.sh` runs `i18n-scripts/clear-english-msgstr.js` after generating POs

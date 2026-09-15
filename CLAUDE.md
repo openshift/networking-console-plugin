@@ -20,10 +20,10 @@ Read these files for full context before working on this codebase:
   namespace `plugin__networking-console-plugin`
 - **Imports:** sorted by `eslint-plugin-simple-import-sort` — React → external packages → internal `src/` →
   `@kubevirt-ui` → `@openshift-console` → `@patternfly` → CSS
-- **Routing: `react-router` v7 (not `react-router-dom`)
+- \*\*Routing: `react-router` v7 (not `react-router-dom`)
 - No `console.*` — use `networkConsole` from `@utils/utils/helpers`
 - No hex colors — PatternFly CSS variables only
-- **Linting:** ESLint + Prettier, single quotes, trailing commas, 100-char width, `simple-import-sort`
+- **Linting:** ESLint and Prettier as separate steps, single quotes, trailing commas, 100-char width, `simple-import-sort`
 - **Views follow**: `actions/`, `details/`, `form/`, `list/`, `manifest.ts`
 - **Feature flags**: `NET_ATTACH_DEF`, `KUBEVIRT_DYNAMIC`, `FLAG_UDN_ENABLED`
 - **SDK hooks for K8s ops**: `useK8sWatchResource`, `k8sCreate`, `k8sPatch`, `k8sDelete`
