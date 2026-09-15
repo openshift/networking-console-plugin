@@ -74,5 +74,4 @@ export interface CallbackArgs {
 }
 
 export type ValueOrAccessor<ValueType, PropsType = CallbackArgs> =
-  | ((props: PropsType) => ValueType)
-  | ValueType;
+  ((props: PropsType) => ValueType) | ValueType;
