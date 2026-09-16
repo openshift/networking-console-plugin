@@ -16,6 +16,7 @@ jobs:
   e2e:
     name: Cypress E2E
     runs-on: ubuntu-latest
+    if: ${{ secrets.CONSOLE_URL != '' }}
     timeout-minutes: 30
 
     env:

@@ -69,16 +69,13 @@ check "ARC listener pod" bash -c "
   fi
 "
 
-check "default StorageClass" bash -c '
-  default_sc=$(oc get storageclass -o jsonpath="{.items[?(@.metadata.annotations.storageclass\.kubernetes\.io/is-default-class==\"true\")].metadata.name}" 2>/dev/null)
-  if [[ -n "${default_sc}" ]]; then
-    echo "  Default StorageClass: ${default_sc}"
-    exit 0
-  else
-    echo "  No default StorageClass found"
-    exit 1
-  fi
-'
+echo -n "Checking default StorageClass... "
+default_sc=$(oc get storageclass -o jsonpath='{.items[?(@.metadata.annotations.storageclass\.kubernetes\.io/is-default-class=="true")].metadata.name}' 2>/dev/null)
+if [[ -n "${default_sc}" ]]; then
+  echo "OK (${default_sc})"
+else
+  echo "WARN (none found — not required for networking tests)"
+fi
 
 check "console route accessible" bash -c '
   console_url=$(oc get consoles.config.openshift.io cluster -o jsonpath="{.status.consoleURL}" 2>/dev/null)
