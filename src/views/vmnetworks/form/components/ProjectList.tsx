@@ -25,12 +25,10 @@ const ProjectList: FC<ProjectListProps> = ({ errorLoadingProjects, loadedProject
   const matchExpressions = watch('network.spec.namespaceSelector.matchExpressions');
   const projectOptions = useMemo(
     () =>
-      projects?.map(
-        (project): SelectOptionProps => ({
-          hasCheckbox: true,
-          value: getName(project),
-        }),
-      ),
+      projects?.map((project): SelectOptionProps => ({
+        hasCheckbox: true,
+        value: getName(project),
+      })),
     [projects],
   );
 
