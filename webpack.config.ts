@@ -50,6 +50,13 @@ const config: Configuration = {
   module: {
     rules: [
       {
+        test: /\.m?js/,
+        include: /node_modules\/@patternfly\/.*/,
+        resolve: {
+          fullySpecified: false,
+        },
+      },
+      {
         exclude: /node_modules\/(?!(@kubevirt-ui)\/kubevirt-api).*/,
         test: /\.(jsx?|tsx?)$/,
         use: [

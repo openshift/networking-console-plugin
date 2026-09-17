@@ -21,9 +21,9 @@ import {
 } from '@patternfly/react-core';
 import { PencilAltIcon } from '@patternfly/react-icons/dist/esm/icons/pencil-alt-icon';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import LinkifyExternal from '@views/routes/details/components/tabs/detailsTab/components/RouteIngressStatusSection/LinkifyExternal';
 
 import { getPropertyDescription } from './swagger';
-import LinkifyExternal from '@views/routes/details/components/tabs/detailsTab/components/RouteIngressStatusSection/LinkifyExternal';
 
 export const PropertyPath: FC<{
   kind: string;
