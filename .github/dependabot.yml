@@ -71,10 +71,10 @@ updates:
   # c) shorter ignore list is more readable - note that dependabot does not support yml aliases (yet)
   # d) the shared modules list changed in time and would require different ignore lists per branch
   - package-ecosystem: npm
-    target-branch: release-4.23
+    target-branch: release-5.0
     directory: /
     commit-message:
-      prefix: '[release-4.23] maintenance'
+      prefix: '[release-5.0] maintenance'
     cooldown:
       default-days: 5
     schedule:
