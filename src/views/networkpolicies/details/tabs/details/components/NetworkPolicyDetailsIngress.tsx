@@ -30,7 +30,7 @@ const NetworkPolicyDetailsIngress: FC<NetworkPolicyDetailsIngressProps> = ({ net
   if (!affectsIngress) return null;
 
   const ingressDenied =
-    affectsIngress && (!networkPolicy.spec.ingress || isEmpty(networkPolicy.spec.ingress));
+    affectsIngress && (!networkPolicy.spec?.ingress || isEmpty(networkPolicy.spec?.ingress));
 
   return (
     <>
@@ -61,7 +61,7 @@ const NetworkPolicyDetailsIngress: FC<NetworkPolicyDetailsIngressProps> = ({ net
             <GridItem span={4}>{t('To ports')}</GridItem>
           </Grid>
           <Divider />
-          {(networkPolicy.spec.ingress || []).map((rule, i) =>
+          {(networkPolicy.spec?.ingress || []).map((rule, i) =>
             consolidatePeers(rule.from).map((row, j) => (
               <NetworkPolicyDetailsRow
                 key={`${i}_${j}`}

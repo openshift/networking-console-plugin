@@ -44,12 +44,12 @@ const NetworkPolicyRow: FC<NetworkPolicyRowType> = ({ activeColumnIDs, obj }) =>
         className="pf-m-hidden pf-m-visible-on-md"
         id="pod-selector"
       >
-        {isEmpty(obj.spec.podSelector) ? (
-          <Link to={`/search/ns/${obj.metadata.namespace}?kind=Pod`}>
-            {t('All pods within {{namespace}}', { namespace: obj.metadata.namespace })}
+        {isEmpty(obj.spec?.podSelector) ? (
+          <Link to={`/search/ns/${namespace}?kind=Pod`}>
+            {t('All pods within {{namespace}}', { namespace })}
           </Link>
         ) : (
-          <Selector namespace={obj.metadata.namespace} selector={obj.spec.podSelector} />
+          <Selector namespace={namespace} selector={obj.spec.podSelector} />
         )}
       </TableData>
       <TableData activeColumnIDs={activeColumnIDs} className="pf-v6-c-table__action" id="">
