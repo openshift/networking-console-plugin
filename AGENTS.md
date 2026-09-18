@@ -37,7 +37,6 @@ integration-tests/        # Cypress E2E tests
   fixtures/               # Test data
   support/                # Cypress support files
 locales/                  # i18n translation files (en, es, fr, ja, ko, zh)
-charts/                   # Helm chart for cluster deployment
 plugin-manifest.ts        # Console plugin entry point — registers all extensions and exposed modules
 webpack.config.ts         # Webpack config with ConsoleRemotePlugin
 ```
