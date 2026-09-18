@@ -5,8 +5,17 @@ FROM registry.ci.openshift.org/ocp/builder:rhel-9-base-nodejs-openshift-5.0 AS b
 COPY . /opt/app-root/src/app
 WORKDIR /opt/app-root/src/app
 
-# Install dependencies and build
 USER 0
+
+# prevent npm registry timeouts when building OKD images
+# use 10min fetch timeout and up to 1min between retries
+# retry config details: https://www.npmjs.com/package/retry
+RUN npm config set loglevel http 
+RUN npm config set fetch-timeout 600000
+RUN npm config set fetch-retries 9
+RUN npm config set fetch-retry-factor 2
+
+# Install dependencies and build
 ENV CYPRESS_INSTALL_BINARY=0
 RUN npm clean-install --ignore-scripts --no-audit && npm run build
 
