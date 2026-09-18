@@ -19,9 +19,9 @@ const NetworkPolicyDetailsEgress = ({ networkPolicy }) => {
 
   const affectsEgress = networkPolicy?.spec?.policyTypes
     ? networkPolicy.spec.policyTypes.includes('Egress')
-    : !!networkPolicy.spec.egress;
+    : !!networkPolicy.spec?.egress;
   const egressDenied =
-    affectsEgress && (!networkPolicy.spec.egress || networkPolicy.spec.egress.length === 0);
+    affectsEgress && (!networkPolicy.spec?.egress || networkPolicy.spec?.egress.length === 0);
 
   return (
     <>
@@ -56,11 +56,11 @@ const NetworkPolicyDetailsEgress = ({ networkPolicy }) => {
             </Tr>
           </Thead>
           <Tbody>
-            {(networkPolicy.spec.egress || []).map((rule, i) =>
+            {(networkPolicy.spec?.egress || []).map((rule, i) =>
               consolidatePeers(rule.to).map((row, j) => (
                 <NetworkPolicyDetailsRow
                   key={`${i}_${j}`}
-                  mainPodSelector={networkPolicy.spec.podSelector}
+                  mainPodSelector={networkPolicy.spec?.podSelector}
                   namespace={networkPolicy.metadata.namespace}
                   ports={rule.ports}
                   row={row}
