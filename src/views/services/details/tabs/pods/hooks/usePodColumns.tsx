@@ -15,7 +15,7 @@ import { PROMETHEUS_BASE_PATH, PROMETHEUS_TENANCY_BASE_PATH } from '../constants
 import {
   getPodCPUUsage,
   getPodMemoryUsage,
-  podPhase,
+  getPodPhase,
   podReadiness,
   podRestarts,
   sortResourceByValue,
@@ -105,7 +105,7 @@ const usePodColumns = (
         id: podColumnInfo.status.id,
         props: { className: podColumnInfo.status.classes },
         sort: (data, direction) =>
-          data.sort(sortResourceByValue<IoK8sApiCoreV1Pod>(direction, podPhase)),
+          data.sort(sortResourceByValue<IoK8sApiCoreV1Pod>(direction, getPodPhase)),
         title: t('Status'),
         transforms: [sortable],
       },
