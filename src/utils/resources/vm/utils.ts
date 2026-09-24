@@ -4,7 +4,7 @@ import { k8sPatch } from '@openshift-console/dynamic-plugin-sdk';
 import { UserDefinedNetworkModel } from '@utils/models';
 import { NADNetworkPair, NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
 import { getName, getNamespace } from '@utils/resources/shared';
-import { getUDNNADNameCandidates, UDNResource } from '@utils/resources/udns/helper';
+import { getUDNNADNameCandidates, isPrimaryUDN, UDNResource } from '@utils/resources/udns/helper';
 
 import { INTERFACE_PATH, INTERFACE_STATE_ABSENT, NETWORK_PATH } from './constants';
 import { getInterfaces, getNetworks, getVMStatus } from './selectors';
@@ -131,13 +131,8 @@ export const multusNetworkMatchesNAD = (
 export const getUDNNetworkNamespace = (
   udn: UDNResource,
   vm: V1VirtualMachine,
-): string | undefined => {
-  if (udn.kind === UserDefinedNetworkModel.kind) {
-    return getNamespace(udn);
-  }
-
-  return getNamespace(vm);
-};
+): string | undefined =>
+  udn.kind === UserDefinedNetworkModel.kind ? getNamespace(udn) : getNamespace(vm);
 
 const multusNetworkNameMatchesCandidates = (
   multusNetworkName: string,
@@ -178,6 +173,49 @@ export const multusNetworkMatchesUDN = (
     getUDNNADNameCandidates(udn),
     getNamespace(vm),
   );
+};
+
+export const vmUsesUDN = (
+  vm: V1VirtualMachine,
+  udn: UDNResource,
+  cudnNamespaces?: string[],
+): boolean => {
+  if (!udn) return false;
+
+  const networks = getNetworks(vm);
+  const interfaces = getInterfaces(vm);
+
+  // Check for secondary UDN connection via multus networks
+  const hasSecondaryConnection = networks.some((network) => {
+    if (!multusNetworkMatchesUDN(network, udn, vm)) return false;
+
+    const iface = interfaces.find((item) => item.name === network.name);
+    return Boolean(iface && iface.state !== INTERFACE_STATE_ABSENT);
+  });
+
+  if (hasSecondaryConnection) return true;
+
+  // Check for primary UDN connection via pod network
+  // Primary UDNs replace the default pod network for VMs in the same namespace
+  if (isPrimaryUDN(udn)) {
+    const vmNamespace = getNamespace(vm);
+    const udnNamespace = getNamespace(udn);
+
+    // For namespace-scoped primary UDNs, VM must be in the same namespace
+    if (udnNamespace && vmNamespace === udnNamespace) {
+      // Check if VM has a pod network (which would use the primary UDN)
+      const hasPodNetwork = networks.some((network) => Boolean(network.pod));
+      if (hasPodNetwork) return true;
+    }
+
+    // For cluster-scoped primary CUDNs, check if VM's namespace is in the active namespaces
+    if (!udnNamespace && cudnNamespaces) {
+      const hasPodNetwork = networks.some((network) => Boolean(network.pod));
+      if (hasPodNetwork && cudnNamespaces.includes(vmNamespace)) return true;
+    }
+  }
+
+  return false;
 };
 
 export const buildNADReferenceForUDN = (

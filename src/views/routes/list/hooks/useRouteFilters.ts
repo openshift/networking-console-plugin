@@ -3,7 +3,7 @@ import { RoutesStatuses } from '@utils/constants/routes';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { RouteKind } from '@utils/types';
 
-import { routeStatus } from '../utils/utils';
+import { getRouteStatus } from '../utils/utils';
 
 const useRouteFilters = (): RowFilter<RouteKind>[] => {
   const { t } = useNetworkingTranslation();
@@ -13,13 +13,13 @@ const useRouteFilters = (): RowFilter<RouteKind>[] => {
       filter: ({ selected }, obj) => {
         if (selected?.length === 0) return true;
 
-        const status = routeStatus(obj);
+        const status = getRouteStatus(obj);
 
         return selected.includes(status);
       },
       filterGroupName: t('Status'),
       items: RoutesStatuses.map((status) => ({ id: status, title: status })),
-      reducer: (obj) => routeStatus(obj),
+      reducer: (obj) => getRouteStatus(obj),
       type: 'route-status',
     },
   ];
