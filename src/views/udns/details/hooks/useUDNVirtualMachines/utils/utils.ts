@@ -22,9 +22,7 @@ const networkUsesUDN = (network: V1Network, udn: UDNResource, vm: V1VirtualMachi
 };
 
 export const vmUsesUDN = (vm: V1VirtualMachine, udn: UDNResource | undefined): boolean => {
-  if (!udn) {
-    return false;
-  }
+  if (!udn) return false;
 
   return getNetworks(vm).some((network) => networkUsesUDN(network, udn, vm));
 };
