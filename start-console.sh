@@ -68,7 +68,7 @@ for arg in "$@"; do
     cd "$BASE_DIR"
 done
 
-CONSOLE_IMAGE=${CONSOLE_IMAGE:-"quay.io/openshift/origin-console:latest"}
+CONSOLE_IMAGE=${CONSOLE_IMAGE:-"quay.io/openshift/origin-console:5.1"}
 CONSOLE_PORT=${CONSOLE_PORT:-9000}
 
 echo "Starting local OpenShift console..."
