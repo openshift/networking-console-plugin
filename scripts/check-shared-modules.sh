@@ -45,11 +45,13 @@ echo ""
 
 # Extract shared module names from the dependabot ignore list,
 # excluding @patternfly (checked above) and glob patterns.
+# TODO: unignore @openshift/dynamic-plugin-sdk once it is updated to 4.23.0-prerelease.5
 shared_modules=$(grep "dependency-name:" .github/dependabot.yml \
   | sed "s/.*dependency-name: *'\\?//" \
   | sed "s/'$//" \
   | grep -v '@patternfly/' \
   | grep -v '\*' \
+  | grep -v '@openshift/dynamic-plugin-sdk' \
   | sort -u)
 
 for pkg in $shared_modules; do
