@@ -1,0 +1,16 @@
+name: Check shared modules
+
+on:
+  pull_request:
+    paths:
+      - package-lock.json
+
+jobs:
+  check-shared-modules:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Verify single resolution per shared module
+        run: ./scripts/check-shared-modules.sh
