@@ -53,3 +53,8 @@ export type NetworkAttachmentDefinitionFormInput = {
   name: string;
   networkType: string;
 };
+
+export type CreateNADYAMLEditorProps = {
+  initialYAML?: string;
+  onChange?: (yaml: string) => void;
+};
