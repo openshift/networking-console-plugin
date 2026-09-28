@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom-v5-compat';
+import { useLocation, useNavigate } from 'react-router';
 
 import { NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
 import { Button, EmptyState, EmptyStateActions, EmptyStateFooter } from '@patternfly/react-core';

@@ -1,5 +1,5 @@
 import React, { FC, MouseEvent, ReactNode, SFC } from 'react';
-import * as _ from 'lodash-es';
+import * as _ from 'lodash';
 
 import {
   getGroupVersionKindForResource,

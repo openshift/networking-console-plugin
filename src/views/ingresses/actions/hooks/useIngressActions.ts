@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { useNavigate } from 'react-router';
 
 import { IngressModel } from '@kubevirt-ui/kubevirt-api/console';
 import { IoK8sApiNetworkingV1Ingress } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
