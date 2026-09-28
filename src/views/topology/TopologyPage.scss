@@ -1,0 +1,21 @@
+.networking-topology {
+  &__layout {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - var(--pf-v6-c-page__main-section--PaddingTop, 0px));
+    overflow: hidden;
+  }
+
+  &__sticky-header {
+    flex-shrink: 0;
+  }
+
+  &__topology-content {
+    flex: 1;
+    height: 100%;
+    min-height: 600px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+}

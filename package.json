@@ -29,6 +29,7 @@
     "po-to-i18n": "node ./i18n-scripts/po-to-i18n.js"
   },
   "dependencies": {
+    "@patternfly/react-topology": "^6.6.0",
     "react-hook-form": "^7.88.0",
     "react-linkify": "^1.0.0-alpha",
     "react-tagsinput": "^3.20.3"
