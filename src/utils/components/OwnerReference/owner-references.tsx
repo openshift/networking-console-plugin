@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import * as _ from 'lodash-es';
+import * as _ from 'lodash';
 
 import {
   K8sResourceKind,

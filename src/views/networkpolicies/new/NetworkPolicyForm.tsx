@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom-v5-compat';
+import { useParams } from 'react-router';
 
 import { NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
 import { ResourceYAMLEditor } from '@openshift-console/dynamic-plugin-sdk';
