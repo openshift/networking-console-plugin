@@ -7,3 +7,4 @@ yarn-error.log
 .DS_Store
 ui-tests-cy/gui-test-screenshots/
 .env
+ui-tests-cy/ci-hot-cluster-e2e/

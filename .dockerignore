@@ -1,0 +1,17 @@
+node_modules
+dist
+.git
+.idea
+.vscode
+.devcontainer
+.github
+ci-scripts
+cypress
+integration-tests
+problem
+*.md
+.env
+.gitignore
+.dockerignore
+.prettierignore
+.eslintignore
