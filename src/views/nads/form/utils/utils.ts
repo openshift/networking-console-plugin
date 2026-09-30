@@ -1,5 +1,9 @@
+import { TFunction } from 'i18next';
+
 import NetworkAttachmentDefinitionModel from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
 import { k8sCreate } from '@openshift-console/dynamic-plugin-sdk';
+import { safeYAMLToJS } from '@utils/components/SyncedEditor/yaml';
+import { getType } from '@utils/resources/nads/selectors';
 import {
   IPAMConfig,
   NetworkAttachmentDefinitionAnnotations,
@@ -159,3 +163,34 @@ export const getLocalnetTopologyType = (networkType: string, networkTopology?: s
   networkTopology === ovnK8sTopologyKeys.ovnK8sLocalnet
     ? NetworkTypeKeys.ovnKubernetesSecondaryLocalnet
     : networkType;
+
+export const getBridgeMappingError = (
+  content: string,
+  physicalNetworkNames: string[],
+  t: TFunction,
+) => {
+  const nad = safeYAMLToJS(content);
+  let config;
+
+  try {
+    config =
+      typeof nad?.spec?.config === 'string' ? JSON.parse(nad.spec.config) : nad?.spec?.config;
+  } catch {
+    return undefined;
+  }
+
+  if (
+    !config ||
+    getLocalnetTopologyType(getType(config), config.topology) !==
+      NetworkTypeKeys.ovnKubernetesSecondaryLocalnet
+  ) {
+    return undefined;
+  }
+
+  const physicalNetworkName = (config.physicalNetworkName || config.name || '').trim();
+  if (physicalNetworkNames.includes(physicalNetworkName)) {
+    return undefined;
+  }
+
+  return t('No matching OVN bridge mapping found for "{{name}}".', { name: physicalNetworkName });
+};

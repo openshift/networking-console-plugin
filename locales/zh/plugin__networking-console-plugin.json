@@ -288,6 +288,7 @@
   "No description": "没有描述",
   "No hosts": "没有主机",
   "No labels": "没有标签",
+  "No matching OVN bridge mapping found for \"{{name}}\".": "No matching OVN bridge mapping found for \"{{name}}\".",
   "No matching projects": "没有匹配项目",
   "No namespace is configured for a primary user-defined network": "没有为主用户定义的网络配置命名空间",
   "No NetworkAttachmentDefinition found": "没有找到 NetworkAttachmentDefinition",

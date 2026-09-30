@@ -288,6 +288,7 @@
   "No description": "No description",
   "No hosts": "No hosts",
   "No labels": "No labels",
+  "No matching OVN bridge mapping found for \"{{name}}\".": "No matching OVN bridge mapping found for \"{{name}}\".",
   "No matching projects": "No matching projects",
   "No namespace is configured for a primary user-defined network": "No namespace is configured for a primary user-defined network",
   "No NetworkAttachmentDefinition found": "No NetworkAttachmentDefinition found",

@@ -288,6 +288,7 @@
   "No description": "説明がありません",
   "No hosts": "ホストなし",
   "No labels": "ラベルがありません",
+  "No matching OVN bridge mapping found for \"{{name}}\".": "No matching OVN bridge mapping found for \"{{name}}\".",
   "No matching projects": "一致するプロジェクトがありません",
   "No namespace is configured for a primary user-defined network": "プライマリーユーザー定義ネットワークに namespace が設定されていません",
   "No NetworkAttachmentDefinition found": "NetworkAttachmentDefinition が見つかりません",

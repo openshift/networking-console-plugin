@@ -1,15 +1,12 @@
-import React, { FC } from 'react';
-import { useFormContext } from 'react-hook-form';
+import React, { FC, useEffect } from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
 
-import {
-  FormGroup,
-  /*Grid, GridItem,*/ TextInput /*ValidatedOptions*/,
-} from '@patternfly/react-core';
-// import FormGroupHelperText from '@utils/components/FormGroupHelperText/FormGroupHelperText';
-// import { handleBlur } from '@utils/components/FormGroupHelperText/utils/utils';
+import { FormGroup, /*Grid, GridItem,*/ TextInput, ValidatedOptions } from '@patternfly/react-core';
+import FormGroupHelperText from '@utils/components/FormGroupHelperText/FormGroupHelperText';
 import PopoverHelpIcon from '@utils/components/PopoverHelpIcon/PopoverHelpIcon';
 // import TechPreview from '@utils/components/TechPreview/TechPreview';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import useOVNBridgeMappings from '@views/nads/form/hooks/useOVNBridgeMappings';
 import {
   NetworkAttachmentDefinitionFormInput,
   NetworkTypeKeys,
@@ -21,18 +18,22 @@ import './OVNK8sSecondaryLocalnetParameters.scss';
 
 const OVNK8sSecondaryLocalnetParameters: FC = () => {
   const { t } = useNetworkingTranslation();
-
+  const physicalNetworkNames = useOVNBridgeMappings();
   const {
-    // clearErrors,
-    // formState: { errors },
+    control,
+    formState: { errors },
     register,
-    // setError,
+    trigger,
   } = useFormContext<NetworkAttachmentDefinitionFormInput>();
 
   const baseId = NetworkTypeKeys.ovnKubernetesSecondaryLocalnet;
+  const fieldName = `${baseId}.bridgeMapping`;
+  const bridgeMappingError = errors?.[baseId]?.bridgeMapping;
+  const physicalNetworkNamesKey = physicalNetworkNames.join(',');
 
-  // const excludeSubnetsError = errors?.[baseId]?.excludeSubnets;
-  // const subnetsError = errors?.[baseId]?.subnets;
+  useEffect(() => {
+    void trigger(fieldName);
+  }, [fieldName, physicalNetworkNamesKey, trigger]);
 
   return (
     <>
@@ -48,13 +49,32 @@ const OVNK8sSecondaryLocalnetParameters: FC = () => {
           />
         }
       >
-        <TextInput
-          {...register(`${baseId}.bridgeMapping`, {
+        <Controller
+          control={control}
+          name={fieldName}
+          render={({ field: { onBlur, onChange, value } }) => (
+            <TextInput
+              data-test="nads-ovn-physical-network-name"
+              id="nads-ovn-physical-network-name"
+              onBlur={onBlur}
+              onChange={(_event, newValue) => onChange(newValue)}
+              validated={bridgeMappingError ? ValidatedOptions.error : ValidatedOptions.default}
+              value={value || ''}
+            />
+          )}
+          rules={{
             required: true,
-          })}
-          data-test="nads-ovn-physical-network-name"
-          id="nads-ovn-physical-network-name"
+            validate: (value: string) =>
+              !value || physicalNetworkNames.includes(value.trim())
+                ? true
+                : t('No matching OVN bridge mapping found for "{{name}}".', { name: value }),
+          }}
         />
+        {bridgeMappingError?.message && (
+          <FormGroupHelperText validated={ValidatedOptions.error}>
+            {bridgeMappingError.message}
+          </FormGroupHelperText>
+        )}
       </FormGroup>
       <FormGroup label={t('MTU')}>
         <TextInput {...register(`${baseId}.mtu`)} />

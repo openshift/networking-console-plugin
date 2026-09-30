@@ -291,6 +291,7 @@
   "No description": "Sin descripción",
   "No hosts": "No se encontraron hosts",
   "No labels": "Sin etiquetas",
+  "No matching OVN bridge mapping found for \"{{name}}\".": "No matching OVN bridge mapping found for \"{{name}}\".",
   "No matching projects": "No hay proyectos que coincidan",
   "No namespace is configured for a primary user-defined network": "No hay ningún espacio de nombre configurado para una red principal definida por el usuario",
   "No NetworkAttachmentDefinition found": "No se encontró NetworkAttachmentDefinition",

@@ -51,6 +51,7 @@ const NetworkAttachmentDefinitionForm: FC<NetworkAttachmentDefinitionFormProps> 
 
   const methods = useForm<NetworkAttachmentDefinitionFormInput>({
     defaultValues: fromNADObjToFormData(formData),
+    mode: 'onChange',
   });
 
   const {

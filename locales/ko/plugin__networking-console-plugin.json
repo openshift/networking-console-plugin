@@ -288,6 +288,7 @@
   "No description": "설명 없음",
   "No hosts": "호스트 없음",
   "No labels": "라벨 없음",
+  "No matching OVN bridge mapping found for \"{{name}}\".": "No matching OVN bridge mapping found for \"{{name}}\".",
   "No matching projects": "일치하는 프로젝트 없음",
   "No namespace is configured for a primary user-defined network": "기본 사용자 정의 네트워크에 대해 네임스페이스가 구성되지 않음",
   "No NetworkAttachmentDefinition found": "NetworkAttachmentDefinition을 찾을 수 없음",
