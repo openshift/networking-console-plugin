@@ -10,6 +10,11 @@ on:
         type: string
   workflow_call:
     inputs:
+      branch:
+        description: Branch to test
+        type: string
+        required: false
+        default: main
       test_spec:
         description: Cypress test spec to run
         type: string
@@ -137,7 +142,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
         with:
-          ref: ${{ github.event.pull_request.head.sha || github.ref }}
+          ref: ${{ inputs.branch || github.event.pull_request.head.sha || github.ref }}
 
       - name: Check if plugin image exists in registry
         id: check_image
@@ -172,7 +177,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
         with:
-          ref: ${{ github.event.pull_request.head.sha || github.ref }}
+          ref: ${{ inputs.branch || github.event.pull_request.head.sha || github.ref }}
 
       - name: Install oc CLI
         run: |
