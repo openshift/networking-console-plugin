@@ -29,7 +29,7 @@
     "shared-modules:sync": "./scripts/align-shared-modules.sh"
   },
   "dependencies": {
-    "react-hook-form": "^7.88.0",
+    "react-hook-form": "^7.89.0",
     "react-linkify": "^1.0.0-alpha",
     "react-tagsinput": "^3.20.3"
   },
@@ -87,7 +87,7 @@
     "react-i18next": "16.5.8",
     "react-router": "7.18.1",
     "resolve-url-loader": "^5.0.0",
-    "sass": "^1.105.0",
+    "sass": "^1.105.1",
     "sass-loader": "^16.0.8",
     "style-loader": "^3.3.1",
     "ts-node": "^10.9.2",
