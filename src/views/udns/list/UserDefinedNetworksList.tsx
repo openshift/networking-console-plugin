@@ -9,7 +9,6 @@ import {
   useActiveNamespace,
   useK8sWatchResources,
   useListPageFilter,
-  useModal,
   VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
 import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
@@ -24,7 +23,6 @@ import {
 import { ClusterUserDefinedNetworkKind, UserDefinedNetworkKind } from '@utils/resources/udns/types';
 
 import UDNListCreateButton from './components/UDNListCreateButton';
-import UserDefinedNetworkCreateModal from './components/UserDefinedNetworkCreateModal';
 import UserDefinedNetworkRow from './components/UserDefinedNetworkRow';
 import useUDNColumns from './hooks/useUDNColumns';
 import useUDNFilters from './hooks/useUDNFilters';
@@ -37,7 +35,6 @@ const UserDefinedNetworksList: FC<UserDefinedNetworksListProps> = ({
   namespace: namespaceProp,
 }) => {
   const { t } = useNetworkingTranslation();
-  const createModal = useModal();
   const location = useLocation();
   const [activeNamespace] = useActiveNamespace();
 
@@ -81,17 +78,16 @@ const UserDefinedNetworksList: FC<UserDefinedNetworksListProps> = ({
     <>
       {isClusterPath && <NamespaceBar />}
       <ListEmptyState<ClusterUserDefinedNetworkKind | UserDefinedNetworkKind>
-        createButtonAction={<UDNListCreateButton allUDNs={allResources} namespace={namespace} />}
+        createButtonAction={<UDNListCreateButton namespace={namespace} />}
         data={data}
         error={loadError}
         kind={UserDefinedNetworkModel.kind}
         learnMoreLink={getDocumentationURL(documentationURLs.multipleNetworks)}
         loaded={loaded}
-        onCreate={() => createModal(UserDefinedNetworkCreateModal, {})}
         title={title}
       >
         <ListPageHeader title={title}>
-          <UDNListCreateButton allUDNs={allResources} namespace={namespace} />
+          <UDNListCreateButton namespace={namespace} />
         </ListPageHeader>
         <ListPageBody>
           <ListPageFilter

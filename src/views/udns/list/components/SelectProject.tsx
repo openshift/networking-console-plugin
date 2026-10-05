@@ -7,23 +7,35 @@ import Loading from '@utils/components/Loading/Loading';
 import SelectTypeahead from '@utils/components/SelectTypeahead/SelectTypeahead';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { ProjectGroupVersionKind } from '@utils/hooks/useProjects/constants';
-import useProjectsWithPrimaryUserDefinedLabel from '@utils/hooks/useProjectsWithPrimaryUserDefinedLabel';
+import useProjects from '@utils/hooks/useProjects/useProjects';
 import { getName } from '@utils/resources/shared';
 
-import { PROJECT_NAME } from '../constants';
+import { PRIMARY_USER_DEFINED_LABEL, PROJECT_NAME } from '../constants';
 
 import { UDNForm } from './constants';
 
-const SelectProject: FC = () => {
+type SelectProjectProps = {
+  labeledOnly?: boolean;
+};
+
+const SelectProject: FC<SelectProjectProps> = ({ labeledOnly = true }) => {
   const { t } = useNetworkingTranslation();
 
   const { control } = useFormContext<UDNForm>();
 
-  const [projects, loaded] = useProjectsWithPrimaryUserDefinedLabel();
+  const [projects, loaded] = useProjects();
+  const visibleProjects = useMemo(
+    () =>
+      (projects ?? []).filter(
+        (project) =>
+          !labeledOnly || project?.metadata?.labels?.[PRIMARY_USER_DEFINED_LABEL] !== undefined,
+      ),
+    [labeledOnly, projects],
+  );
 
   const projectsOptions = useMemo(
     () =>
-      projects.map((project) => ({
+      visibleProjects.map((project) => ({
         children: (
           <>
             {' '}
@@ -33,7 +45,7 @@ const SelectProject: FC = () => {
         key: getName(project),
         value: getName(project),
       })),
-    [projects],
+    [visibleProjects],
   );
 
   if (!loaded) return <Loading />;
@@ -52,7 +64,7 @@ const SelectProject: FC = () => {
             setSelected={(newSelection) => onChange(newSelection)}
           >
             <>
-              {projects?.map((project) => {
+              {visibleProjects?.map((project) => {
                 const projectName = getName(project);
                 return (
                   <SelectOption

@@ -14,10 +14,12 @@ import {
 } from '@patternfly/react-core';
 import FailedToGetProjectsAlert from '@utils/components/ProjectsPrimaryUDNAlerts/FailedToGetProjectsAlert';
 import NoProjectReadyForPrimaryUDNAlert from '@utils/components/ProjectsPrimaryUDNAlerts/NoProjectReadyForPrimaryUDNAlert';
+import { ALL_NAMESPACES_KEY } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import useProjectsWithPrimaryUserDefinedLabel from '@utils/hooks/useProjectsWithPrimaryUserDefinedLabel';
 import { ClusterUserDefinedNetworkModel, UserDefinedNetworkModel } from '@utils/models';
 import { getName, getNamespace, resourcePathFromModel } from '@utils/resources/shared';
+import { UserDefinedNetworkRole } from '@utils/resources/udns/types';
 import {
   CUDN_CREATION_FAILED,
   CUDN_CREATION_STARTED,
@@ -35,7 +37,7 @@ import { PROJECT_NAME } from '../constants';
 
 import { UDNForm } from './constants';
 import UserDefinedNetworkCreateForm from './UserDefinedNetworkCreateForm';
-import { getDefaultUDN, isUDNValid } from './utils';
+import { getDefaultUDN, isUDNValid, udnRoleField } from './utils';
 
 import './userdefinednetworkcreatemodal.scss';
 
@@ -60,14 +62,6 @@ const UserDefinedNetworkCreateModal: FC<UserDefinedNetworkCreateModalProps> = ({
   const [projectsReadyForPrimaryUDN, loadedPrimaryUDN, errorLoadingPrimaryUDN] =
     useProjectsWithPrimaryUserDefinedLabel();
 
-  const showFailedToRetrieveProjectsError =
-    !isClusterUDN && loadedPrimaryUDN && errorLoadingPrimaryUDN;
-  const showNoProjectReadyForPrimaryUDNError =
-    !isClusterUDN &&
-    !showFailedToRetrieveProjectsError &&
-    loadedPrimaryUDN &&
-    projectsReadyForPrimaryUDN?.length === 0;
-
   const methods = useForm<UDNForm>({
     defaultValues: getDefaultUDN(isClusterUDN),
     mode: 'all',
@@ -81,9 +75,26 @@ const UserDefinedNetworkCreateModal: FC<UserDefinedNetworkCreateModalProps> = ({
   } = methods;
 
   const selectedProject = watch(PROJECT_NAME);
+  const isSecondary = watch(udnRoleField(isClusterUDN)) === UserDefinedNetworkRole.Secondary;
+  const requiresPrimaryProject = !isClusterUDN && !isSecondary;
+
+  const showFailedToRetrieveProjectsError =
+    requiresPrimaryProject && loadedPrimaryUDN && Boolean(errorLoadingPrimaryUDN);
+  const showNoProjectReadyForPrimaryUDNError =
+    requiresPrimaryProject &&
+    !showFailedToRetrieveProjectsError &&
+    loadedPrimaryUDN &&
+    projectsReadyForPrimaryUDN?.length === 0;
 
   useEffect(() => {
     if (selectedProject || isClusterUDN) {
+      return;
+    }
+
+    if (isSecondary) {
+      if (activeNamespace && activeNamespace !== ALL_NAMESPACES_KEY) {
+        setValue(PROJECT_NAME, activeNamespace);
+      }
       return;
     }
 
@@ -92,7 +103,14 @@ const UserDefinedNetworkCreateModal: FC<UserDefinedNetworkCreateModalProps> = ({
     } else if (projectsReadyForPrimaryUDN?.length === 1) {
       setValue(PROJECT_NAME, projectsReadyForPrimaryUDN[0].metadata.name);
     }
-  }, [activeNamespace, selectedProject, isClusterUDN, projectsReadyForPrimaryUDN, setValue]);
+  }, [
+    activeNamespace,
+    isClusterUDN,
+    isSecondary,
+    projectsReadyForPrimaryUDN,
+    selectedProject,
+    setValue,
+  ]);
 
   const [error, setIsError] = useState<Error>();
   const submit = async (udn: UDNForm) => {
@@ -151,10 +169,9 @@ const UserDefinedNetworkCreateModal: FC<UserDefinedNetworkCreateModalProps> = ({
           isDisabled={
             isSubmitting ||
             !isUDNValid(udn) ||
-            !loadedPrimaryUDN ||
-            showFailedToRetrieveProjectsError
+            (requiresPrimaryProject && (!loadedPrimaryUDN || showFailedToRetrieveProjectsError))
           }
-          isLoading={isSubmitting || !loadedPrimaryUDN}
+          isLoading={isSubmitting || (requiresPrimaryProject && !loadedPrimaryUDN)}
           key="submit"
           type="submit"
           variant={ButtonVariant.primary}

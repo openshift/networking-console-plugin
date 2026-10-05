@@ -10,37 +10,27 @@ import {
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import {
   ClusterUserDefinedNetworkModel,
-  ClusterUserDefinedNetworkModelGroupVersionKind,
-  UserDefinedNetworkModel,
   UserDefinedNetworkModelGroupVersionKind,
 } from '@utils/models';
-import { getNamespace } from '@utils/resources/shared';
-import { isPrimaryUDN } from '@utils/resources/udns/helper';
-import { ClusterUserDefinedNetworkKind, UserDefinedNetworkKind } from '@utils/resources/udns/types';
 
 import UserDefinedNetworkCreateModal from './UserDefinedNetworkCreateModal';
 
 type UDNListCreateButtonProps = {
-  allUDNs: Array<ClusterUserDefinedNetworkKind | UserDefinedNetworkKind>;
   namespace: string;
 };
 
-const UDNListCreateButton: FC<UDNListCreateButtonProps> = ({ allUDNs, namespace }) => {
+const UDNListCreateButton: FC<UDNListCreateButtonProps> = ({ namespace }) => {
   const { t } = useNetworkingTranslation();
   const createModal = useModal();
-
-  const namespaceHavePrimaryUDN = allUDNs?.find(
-    (udn) =>
-      udn.kind === UserDefinedNetworkModel.kind &&
-      getNamespace(udn) === namespace &&
-      isPrimaryUDN(udn),
-  );
 
   const [canCreateClusterUDN] = useAccessReview({
     group: ClusterUserDefinedNetworkModel.apiGroup,
     resource: ClusterUserDefinedNetworkModel.plural,
     verb: 'create' as K8sVerb,
   });
+
+  const openCreateModal = (isClusterUDN: boolean) =>
+    createModal(UserDefinedNetworkCreateModal, { isClusterUDN });
 
   if (!canCreateClusterUDN) {
     return (
@@ -50,32 +40,9 @@ const UDNListCreateButton: FC<UDNListCreateButtonProps> = ({ allUDNs, namespace 
           groupVersionKind: UserDefinedNetworkModelGroupVersionKind,
           namespace,
         }}
-        onClick={() =>
-          createModal(UserDefinedNetworkCreateModal, {
-            isClusterUDN: false,
-          })
-        }
+        onClick={() => openCreateModal(false)}
       >
         {t('Create UserDefinedNetwork')}
-      </ListPageCreateButton>
-    );
-  }
-
-  if (namespaceHavePrimaryUDN) {
-    return (
-      <ListPageCreateButton
-        className="list-page-create-button-margin"
-        createAccessReview={{
-          groupVersionKind: ClusterUserDefinedNetworkModelGroupVersionKind,
-          namespace,
-        }}
-        onClick={() =>
-          createModal(UserDefinedNetworkCreateModal, {
-            isClusterUDN: true,
-          })
-        }
-      >
-        {t('Create ClusterUserDefinedNetwork')}
       </ListPageCreateButton>
     );
   }
@@ -90,11 +57,7 @@ const UDNListCreateButton: FC<UDNListCreateButtonProps> = ({ allUDNs, namespace 
         ClusterUserDefinedNetwork: t('ClusterUserDefinedNetwork'),
         UserDefinedNetwork: t('UserDefinedNetwork'),
       }}
-      onClick={(item) =>
-        createModal(UserDefinedNetworkCreateModal, {
-          isClusterUDN: item === 'ClusterUserDefinedNetwork',
-        })
-      }
+      onClick={(item) => openCreateModal(item === 'ClusterUserDefinedNetwork')}
     >
       {t('Create')}
     </ListPageCreateDropdown>

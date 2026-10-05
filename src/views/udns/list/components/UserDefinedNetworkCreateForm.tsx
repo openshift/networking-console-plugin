@@ -1,16 +1,31 @@
-import React, { FC, FormEventHandler } from 'react';
+import React, { FC, FormEvent, FormEventHandler, useRef } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Trans } from 'react-i18next';
 import { Link } from 'react-router';
 
-import { Alert, AlertVariant, Content, Form, FormGroup, TextInput } from '@patternfly/react-core';
+import {
+  Alert,
+  AlertVariant,
+  Content,
+  Flex,
+  Form,
+  FormGroup,
+  Radio,
+  TextInput,
+} from '@patternfly/react-core';
 import SubnetCIDRHelperText from '@utils/components/SubnetCIDRHelperText/SubnetCIDRHelperText';
 import { documentationURLs, getDocumentationURL } from '@utils/constants/documentation';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { FIXED_PRIMARY_UDN_NAME } from '@utils/resources/udns/constants';
+import { UserDefinedNetworkRole } from '@utils/resources/udns/types';
+import { generateName } from '@utils/utils';
+
+import { PROJECT_NAME } from '../constants';
 
 import ClusterUDNNamespaceSelector from './ClusterUDNNamespaceSelector';
 import { UDNForm } from './constants';
 import SelectProject from './SelectProject';
+import { udnRoleField } from './utils';
 
 type UserDefinedNetworkCreateFormProps = {
   error: Error;
@@ -25,26 +40,83 @@ const UserDefinedNetworkCreateForm: FC<UserDefinedNetworkCreateFormProps> = ({
 }) => {
   const { t } = useNetworkingTranslation();
 
-  const { control, register, setValue } = useFormContext<UDNForm>();
+  const { control, register, setValue, watch } = useFormContext<UDNForm>();
 
+  const roleField = udnRoleField(isClusterUDN);
+  const role = watch(roleField);
+  const isSecondary = role === UserDefinedNetworkRole.Secondary;
   const subnetField = isClusterUDN ? 'spec.network.layer2.subnets' : 'spec.layer2.subnets';
+  const lastSecondaryName = useRef('');
+
+  const onRoleSelect = (event: FormEvent<HTMLInputElement>, checked: boolean) => {
+    if (!checked) {
+      return;
+    }
+
+    const newRole = event.currentTarget.value as UserDefinedNetworkRole;
+    setValue(roleField, newRole);
+
+    if (isClusterUDN) {
+      return;
+    }
+
+    const currentName = watch('metadata.name');
+
+    if (newRole === UserDefinedNetworkRole.Primary) {
+      if (currentName && currentName !== FIXED_PRIMARY_UDN_NAME) {
+        lastSecondaryName.current = currentName;
+      }
+      setValue('metadata.name', FIXED_PRIMARY_UDN_NAME);
+      setValue(PROJECT_NAME, '');
+      return;
+    }
+
+    setValue('metadata.name', lastSecondaryName.current || generateName('udn'));
+  };
 
   return (
     <Form id="create-udn-form" onSubmit={onSubmit}>
       <Content component="p">
-        <Trans t={t}>
-          Define the network used by VirtualMachines and Pods to communicate in the given project.
-          Learn more about{' '}
-          <Link target="_blank" to={getDocumentationURL(documentationURLs.primaryUDN)}>
-            primary user-defined network
-          </Link>
-          .
-        </Trans>
+        {isSecondary ? (
+          t(
+            'Secondary network is only assigned to pods that use k8s.v1.cni.cncf.io/networks annotation to select given network.',
+          )
+        ) : (
+          <Trans t={t}>
+            Define the network used by VirtualMachines and Pods to communicate in the given project.
+            Learn more about{' '}
+            <Link target="_blank" to={getDocumentationURL(documentationURLs.primaryUDN)}>
+              primary user-defined network
+            </Link>
+            .
+          </Trans>
+        )}
       </Content>
 
-      {!isClusterUDN && <SelectProject />}
+      <FormGroup fieldId="udn-role" isRequired label={t('Role')}>
+        <Flex>
+          <Radio
+            id="udn-role-primary"
+            isChecked={!isSecondary}
+            label={UserDefinedNetworkRole.Primary}
+            name="udn-role"
+            onChange={onRoleSelect}
+            value={UserDefinedNetworkRole.Primary}
+          />
+          <Radio
+            id="udn-role-secondary"
+            isChecked={isSecondary}
+            label={UserDefinedNetworkRole.Secondary}
+            name="udn-role"
+            onChange={onRoleSelect}
+            value={UserDefinedNetworkRole.Secondary}
+          />
+        </Flex>
+      </FormGroup>
 
-      {isClusterUDN && (
+      {!isClusterUDN && <SelectProject labeledOnly={!isSecondary} />}
+
+      {(isClusterUDN || isSecondary) && (
         <FormGroup fieldId="input-name" isRequired label={t('Name')}>
           <TextInput
             autoFocus
@@ -60,7 +132,7 @@ const UserDefinedNetworkCreateForm: FC<UserDefinedNetworkCreateFormProps> = ({
           name={subnetField}
           render={({ field: { value } }) => (
             <TextInput
-              autoFocus
+              autoFocus={!isClusterUDN && !isSecondary}
               data-test="input-udn-subnet"
               id="input-udn-subnet"
               isRequired
