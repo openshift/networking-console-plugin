@@ -49,10 +49,19 @@ export const getDefaultUDN = (isClusterUDN: boolean): UDNForm => {
   return isClusterUDN ? createClusterUDN(generateName('cluster-udn')) : createUDN();
 };
 
+export const udnRoleField = (isClusterUDN: boolean) =>
+  isClusterUDN ? ('spec.network.layer2.role' as const) : ('spec.layer2.role' as const);
+
 export const isUDNValid = (udn: UDNForm): boolean => {
   const clusterUDNConnected =
     !isEmpty(udn?.spec?.namespaceSelector?.matchExpressions) ||
     !isEmpty(udn?.spec?.namespaceSelector?.matchLabels);
 
-  return !isEmpty(udn?.metadata?.namespace) || clusterUDNConnected;
+  if (clusterUDNConnected || udn?.kind === ClusterUserDefinedNetworkModel.kind) {
+    return clusterUDNConnected;
+  }
+
+  const isSecondary = udn?.spec?.layer2?.role === UserDefinedNetworkRole.Secondary;
+
+  return !isEmpty(udn?.metadata?.namespace) && (!isSecondary || !isEmpty(udn?.metadata?.name));
 };
