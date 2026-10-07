@@ -98,9 +98,9 @@ export const DetailsItem: FC<DetailsItemProps> = ({
                 headerContent={<div>{label}</div>}
                 {...(popoverContent && {
                   bodyContent: (
-                    <LinkifyExternal>
-                      <div className="co-pre-line">{popoverContent}</div>
-                    </LinkifyExternal>
+                    <div className="co-pre-line">
+                      <LinkifyExternal text={popoverContent ?? ''} />
+                    </div>
                   ),
                 })}
                 {...(path && {
