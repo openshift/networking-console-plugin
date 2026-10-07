@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { IoK8sApiNetworkingV1Ingress } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+import { IoK8sApiNetworkingV1Ingress } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import { Table } from '@patternfly/react-table';
 import DetailsSectionTitle from '@utils/components/DetailsSectionTitle/DetailsSectionTitle';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';

@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
-import { modelToGroupVersionKind, NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+import { modelToGroupVersionKind, NetworkPolicyModel } from '@kubevirt-ui-ext/kubevirt-api/console';
+import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import {
   ListPageBody,
   ListPageFilter,

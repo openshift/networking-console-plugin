@@ -1,4 +1,4 @@
-import { ServiceModel } from '@kubevirt-ui/kubevirt-api/console';
+import { ServiceModel } from '@kubevirt-ui-ext/kubevirt-api/console';
 
 export const ServiceYAMLTemplates = `
 apiVersion: ${ServiceModel.apiVersion}

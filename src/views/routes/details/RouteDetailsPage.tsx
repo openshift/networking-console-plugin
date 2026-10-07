@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { modelToGroupVersionKind, RouteModel } from '@kubevirt-ui/kubevirt-api/console';
+import { modelToGroupVersionKind, RouteModel } from '@kubevirt-ui-ext/kubevirt-api/console';
 import { HorizontalNav, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import StatusBox from '@utils/components/StatusBox/StatusBox';
 import { RouteKind } from '@utils/types';

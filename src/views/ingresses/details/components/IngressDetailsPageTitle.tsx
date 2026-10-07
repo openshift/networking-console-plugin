@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
 
-import { IngressModel, modelToRef } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiNetworkingV1Ingress } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+import { modelToRef } from '@kubevirt-ui-ext/kubevirt-api/console';
+import { IngressModel } from '@utils/models';
+import { IoK8sApiNetworkingV1Ingress } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import { Title } from '@patternfly/react-core';
 import DetailsPageTitle from '@utils/components/DetailsPageTitle/DetailsPageTitle';
 import { useLastNamespacePath } from '@utils/hooks/useLastNamespacePath';

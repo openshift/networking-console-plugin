@@ -1,6 +1,6 @@
 import React, { FC, useMemo } from 'react';
 
-import { NetworkAttachmentDefinitionModelGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console';
+import { NetworkAttachmentDefinitionModelGroupVersionKind } from '@kubevirt-ui-ext/kubevirt-api/console';
 import { useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { Alert, AlertVariant, FormGroup } from '@patternfly/react-core';
 import Loading from '@utils/components/Loading/Loading';

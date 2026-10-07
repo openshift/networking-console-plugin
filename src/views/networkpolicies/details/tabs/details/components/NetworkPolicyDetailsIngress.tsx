@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Trans } from 'react-i18next';
 
-import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import { useFlag } from '@openshift-console/dynamic-plugin-sdk';
 import { Divider, Grid, GridItem } from '@patternfly/react-core';
 import DetailsSectionTitle from '@utils/components/DetailsSectionTitle/DetailsSectionTitle';

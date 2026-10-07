@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom-v5-compat';
 
-import { NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
+import { NetworkPolicyModel } from '@kubevirt-ui-ext/kubevirt-api/console';
 import { Button, EmptyState, EmptyStateActions, EmptyStateFooter } from '@patternfly/react-core';
 import { DEFAULT_NAMESPACE } from '@utils/constants';
 import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/constants/ui';

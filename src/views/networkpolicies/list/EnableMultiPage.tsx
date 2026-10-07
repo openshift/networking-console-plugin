@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
-import { modelToGroupVersionKind, modelToRef } from '@kubevirt-ui/kubevirt-api/console';
+import { modelToGroupVersionKind, modelToRef } from '@kubevirt-ui-ext/kubevirt-api/console';
 import {
   k8sPatch,
   K8sResourceCommon,

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { IoK8sApiNetworkingV1Ingress } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+import { IoK8sApiNetworkingV1Ingress } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import ActionsDropdown from '@utils/components/ActionsDropdown/ActionsDropdown';
 import useIngressActions from '@views/ingresses/actions/hooks/useIngressActions';
 

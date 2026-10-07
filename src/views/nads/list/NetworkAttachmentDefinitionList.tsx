@@ -1,9 +1,10 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
-import NetworkAttachmentDefinitionModel, {
+import {
+  NetworkAttachmentDefinitionModel,
   NetworkAttachmentDefinitionModelGroupVersionKind,
-} from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
+} from '@kubevirt-ui-ext/kubevirt-api/console';
 import {
   ListPageBody,
   ListPageCreateButton,

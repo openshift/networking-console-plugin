@@ -1,4 +1,4 @@
-import { NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
+import { NetworkPolicyModel } from '@kubevirt-ui-ext/kubevirt-api/console';
 import { K8sResourceCommon } from '@openshift-console/dynamic-plugin-sdk';
 import { MultiNetworkPolicyModel } from '@utils/models';
 

@@ -4,7 +4,7 @@ import {
   modelToGroupVersionKind,
   NamespaceModel,
   PodModel,
-} from '@kubevirt-ui/kubevirt-api/console';
+} from '@kubevirt-ui-ext/kubevirt-api/console';
 import { ResourceIcon } from '@openshift-console/dynamic-plugin-sdk';
 import { Alert, AlertVariant, Label, TreeView, TreeViewDataItem } from '@patternfly/react-core';
 import Loading from '@utils/components/Loading/Loading';

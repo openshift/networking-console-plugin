@@ -2,8 +2,8 @@ import React, { FC } from 'react';
 import classNames from 'classnames';
 import * as _ from 'lodash';
 
-import { modelToGroupVersionKind, PodModel } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiCoreV1Pod } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+import { modelToGroupVersionKind, PodModel } from '@kubevirt-ui-ext/kubevirt-api/console';
+import { IoK8sApiCoreV1Pod } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import {
   PrometheusResponse,
   ResourceLink,

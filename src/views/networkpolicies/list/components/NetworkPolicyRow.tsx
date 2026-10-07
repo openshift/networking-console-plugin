@@ -2,9 +2,9 @@ import React, { FC } from 'react';
 import { Link } from 'react-router-dom-v5-compat';
 import { isEmpty } from 'lodash';
 
-import { NamespaceModel } from '@kubevirt-ui/kubevirt-api/console';
-import { modelToGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console/modelUtils';
-import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+import { NamespaceModel } from '@kubevirt-ui-ext/kubevirt-api/console';
+import { modelToGroupVersionKind } from '@kubevirt-ui-ext/kubevirt-api/console';
+import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import {
   getGroupVersionKindForModel,
   ResourceLink,

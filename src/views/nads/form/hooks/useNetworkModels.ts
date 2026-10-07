@@ -1,5 +1,5 @@
-import { SriovNetworkNodePolicyModelRef } from '@kubevirt-ui/kubevirt-api/console';
-import { HyperConvergedModelRef } from '@kubevirt-ui/kubevirt-api/console/models/HyperConvergedModel';
+import { SriovNetworkNodePolicyModelRef } from '@kubevirt-ui-ext/kubevirt-api/console';
+import { HyperConvergedModelRef } from '@kubevirt-ui-ext/kubevirt-api/console';
 import { useK8sModels } from '@openshift-console/dynamic-plugin-sdk';
 
 const useNetworkModels = (): [hasHyperConvergedCRD: boolean, hasSriovNetNodePolicyCRD: boolean] => {

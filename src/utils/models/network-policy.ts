@@ -1,11 +1,11 @@
 import * as _ from 'lodash';
 
-import { NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
+import { NetworkPolicyModel } from '@kubevirt-ui-ext/kubevirt-api/console';
 import {
   IoK8sApiNetworkingV1NetworkPolicy,
   IoK8sApiNetworkingV1NetworkPolicyIngressRule,
   IoK8sApiNetworkingV1NetworkPolicyPort,
-} from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+} from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import { Selector } from '@openshift-console/dynamic-plugin-sdk';
 import { t } from '@utils/hooks/useNetworkingTranslation';
 import {

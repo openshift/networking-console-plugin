@@ -1,4 +1,4 @@
-import { modelToRef, NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
+import { modelToRef, NetworkPolicyModel } from '@kubevirt-ui-ext/kubevirt-api/console';
 import { ALL_NAMESPACES } from '@utils/constants';
 import { MultiNetworkPolicyModel } from '@utils/models';
 

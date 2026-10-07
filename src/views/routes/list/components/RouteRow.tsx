@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import classNames from 'classnames';
 
-import { NamespaceModel, RouteModel, ServiceModel } from '@kubevirt-ui/kubevirt-api/console';
+import { NamespaceModel, RouteModel, ServiceModel } from '@kubevirt-ui-ext/kubevirt-api/console';
 import {
   getGroupVersionKindForModel,
   ResourceLink,

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+import { IoK8sApiCoreV1Service } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import HostDetails from '@utils/components/HostData/HostDetails';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 

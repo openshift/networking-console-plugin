@@ -1,4 +1,4 @@
-import { RouteModel } from '@kubevirt-ui/kubevirt-api/console';
+import { RouteModel } from '@kubevirt-ui-ext/kubevirt-api/console';
 
 export const RouteYAMLTemplates = `
 apiVersion: ${RouteModel.apiGroup}/${RouteModel.apiVersion}

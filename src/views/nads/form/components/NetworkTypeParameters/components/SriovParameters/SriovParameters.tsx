@@ -1,7 +1,7 @@
 import React, { FC, Ref, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import SriovNetworkNodePolicyModel from '@kubevirt-ui/kubevirt-api/console/models/SriovNetworkNodePolicyModel';
+import { SriovNetworkNodePolicyModel } from '@kubevirt-ui-ext/kubevirt-api/console';
 import {
   getGroupVersionKindForModel,
   K8sResourceKind,

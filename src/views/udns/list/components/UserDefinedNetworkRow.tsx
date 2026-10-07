@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { modelToGroupVersionKind, NamespaceModel } from '@kubevirt-ui/kubevirt-api/console';
+import { modelToGroupVersionKind, NamespaceModel } from '@kubevirt-ui-ext/kubevirt-api/console';
 import {
   getGroupVersionKindForModel,
   ResourceLink,

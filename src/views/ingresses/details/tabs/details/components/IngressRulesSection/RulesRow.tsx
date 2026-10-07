@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { ServiceModel } from '@kubevirt-ui/kubevirt-api/console';
+import { ServiceModel } from '@kubevirt-ui-ext/kubevirt-api/console';
 import { getGroupVersionKindForModel, ResourceLink } from '@openshift-console/dynamic-plugin-sdk';
 import { Td, Tr } from '@patternfly/react-table';
 import { IngressPathRule } from '@views/ingresses/details/tabs/details/utils/types';
