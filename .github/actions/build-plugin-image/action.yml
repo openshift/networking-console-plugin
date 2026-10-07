@@ -1,0 +1,33 @@
+name: Build plugin image
+description: >
+  Build Dockerfile.ci and push to PLUGIN_IMAGE if the tag is not already
+  in the registry.
+
+inputs:
+  plugin-image:
+    description: Full image reference to build and push
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Check if plugin image exists in registry
+      id: check_image
+      shell: bash
+      env:
+        PLUGIN_IMAGE: ${{ inputs.plugin-image }}
+      run: |
+        if skopeo inspect docker://${PLUGIN_IMAGE} &>/dev/null; then
+          echo "IMAGE_EXISTS=true" >> $GITHUB_OUTPUT
+        else
+          echo "IMAGE_EXISTS=false" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Build and push
+      if: steps.check_image.outputs.IMAGE_EXISTS == 'false'
+      shell: bash
+      env:
+        PLUGIN_IMAGE: ${{ inputs.plugin-image }}
+      run: |
+        podman build -t ${PLUGIN_IMAGE} -f Dockerfile.ci .
+        podman push ${PLUGIN_IMAGE}
