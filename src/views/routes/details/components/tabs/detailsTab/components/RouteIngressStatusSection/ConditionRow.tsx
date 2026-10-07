@@ -49,7 +49,7 @@ const ConditionRow: FC<ConditionRowProps> = ({ condition, index, type }) => {
         data-test={`condition[${index}].message`}
         visibility={['hidden', 'visibleOnSm']}
       >
-        <LinkifyExternal>{condition.message?.trim() || '-'}</LinkifyExternal>
+        <LinkifyExternal text={condition.message?.trim() || '-'} />
       </Td>
     </Tr>
   );
