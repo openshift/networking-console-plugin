@@ -6,4 +6,5 @@ integration-tests/.DS_Store
 yarn-error.log
 .DS_Store
 ui-tests-cy/gui-test-screenshots/
+ui-tests-cy/ci-hot-cluster-e2e/
 .env
