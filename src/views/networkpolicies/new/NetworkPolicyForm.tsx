@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { useParams } from 'react-router-dom-v5-compat';
 
-import { NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
+import { NetworkPolicyModel } from '@kubevirt-ui-ext/kubevirt-api/console';
 import { ResourceYAMLEditor } from '@openshift-console/dynamic-plugin-sdk';
 import { Content, PageSection, Title } from '@patternfly/react-core';
 import { EditorType } from '@utils/components/SyncedEditor/EditorToggle';
