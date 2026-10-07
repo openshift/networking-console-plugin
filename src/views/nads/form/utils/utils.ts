@@ -1,4 +1,4 @@
-import NetworkAttachmentDefinitionModel from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
+import { NetworkAttachmentDefinitionModel } from '@kubevirt-ui-ext/kubevirt-api/console';
 import { k8sCreate } from '@openshift-console/dynamic-plugin-sdk';
 import {
   IPAMConfig,
@@ -8,8 +8,7 @@ import {
   RESOURCE_NAME_ANNOTATION,
 } from '@utils/resources/nads/types';
 import { getName } from '@utils/resources/shared';
-import { isEmpty } from '@utils/utils';
-import { networkConsole } from '@utils/utils';
+import { isEmpty, networkConsole } from '@utils/utils';
 
 import { NetworkAttachmentDefinitionFormInput, NetworkTypeKeys, ovnK8sTopologyKeys } from './types';
 
