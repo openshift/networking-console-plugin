@@ -10,7 +10,6 @@ import { ConsoleRemotePlugin } from '@openshift-console/dynamic-plugin-sdk-webpa
 
 import { extensions, pluginMetadata } from './plugin-manifest';
 
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 interface Configuration extends WebpackConfiguration {
@@ -102,6 +101,7 @@ const config: Configuration = {
     minimize: false,
   },
   output: {
+    copy: [{ from: '../locales', to: 'locales' }],
     chunkFilename: '[name]-chunk.js',
     filename: '[name]-bundle.js',
     path: path.resolve(__dirname, 'dist'),
@@ -110,9 +110,6 @@ const config: Configuration = {
     new ConsoleRemotePlugin({
       extensions,
       pluginMetadata,
-    }),
-    new CopyWebpackPlugin({
-      patterns: [{ from: path.resolve(__dirname, 'locales'), to: 'locales' }],
     }),
   ],
   resolve: {
