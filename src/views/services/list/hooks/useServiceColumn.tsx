@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 
-import { ServiceModel } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { TableColumn, useActiveColumns } from '@openshift-console/dynamic-plugin-sdk';
 import { sortable } from '@patternfly/react-table';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { ServiceModel } from '@utils/models';
+import { Service } from '@utils/types/k8sTypes';
 import { objectColumnSorting } from '@utils/utils/sorting';
 
 export const tableColumnClasses = [
@@ -19,7 +19,7 @@ export const tableColumnClasses = [
 const useServiceColumn = (): { id: string; title: string }[] => {
   const { t } = useNetworkingTranslation();
 
-  const columns: TableColumn<IoK8sApiCoreV1Service>[] = useMemo(
+  const columns: TableColumn<Service>[] = useMemo(
     () => [
       {
         id: 'name',
@@ -65,7 +65,7 @@ const useServiceColumn = (): { id: string; title: string }[] => {
     [t],
   );
 
-  const [activeColumns] = useActiveColumns<IoK8sApiCoreV1Service>({
+  const [activeColumns] = useActiveColumns<Service>({
     columnManagementID: ServiceModel.kind,
     columns,
     showNamespaceOverride: false,

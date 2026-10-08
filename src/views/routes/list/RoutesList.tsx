@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
-import { modelToGroupVersionKind, RouteModel } from '@kubevirt-ui/kubevirt-api/console';
 import {
   ListPageBody,
   ListPageCreateButton,
@@ -16,6 +15,7 @@ import { DEFAULT_NAMESPACE } from '@utils/constants';
 import { documentationURLs, getDocumentationURL } from '@utils/constants/documentation';
 import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/constants/ui';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { getGroupVersionKindForModel, RouteModel } from '@utils/models';
 import { resourcePathFromModel } from '@utils/resources/shared';
 import { RouteKind } from '@utils/types';
 import RouteRow from '@views/routes/list/components/RouteRow';
@@ -32,7 +32,7 @@ const RoutesList: FC<RoutesListProps> = ({ namespace }) => {
   const navigate = useNavigate();
 
   const [routesFetch, loaded, loadError] = useK8sWatchResource<RouteKind[]>({
-    groupVersionKind: modelToGroupVersionKind(RouteModel),
+    groupVersionKind: getGroupVersionKindForModel(RouteModel),
     isList: true,
     namespace,
   });
@@ -56,7 +56,7 @@ const RoutesList: FC<RoutesListProps> = ({ namespace }) => {
         <ListPageCreateButton
           className="list-page-create-button-margin"
           createAccessReview={{
-            groupVersionKind: modelToGroupVersionKind(RouteModel),
+            groupVersionKind: getGroupVersionKindForModel(RouteModel),
             namespace,
           }}
           onClick={() =>

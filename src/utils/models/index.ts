@@ -1,6 +1,12 @@
+export * from './k8sModels';
 export * from './network-policy';
-import { modelToGroupVersionKind, modelToRef } from '@kubevirt-ui/kubevirt-api/console';
+
+import { getGroupVersionKindForModel } from '@openshift-console/dynamic-plugin-sdk';
 import { K8sModel } from '@openshift-console/dynamic-plugin-sdk';
+import { getReferenceForModel } from '@utils/resources/shared';
+
+export { getGroupVersionKindForModel } from '@openshift-console/dynamic-plugin-sdk';
+export { getReferenceForModel } from '@utils/resources/shared';
 
 export const QuickStartModel: K8sModel = {
   abbr: 'CQS',
@@ -76,8 +82,8 @@ export const UserDefinedNetworkModel: K8sModel = {
 };
 
 export const UserDefinedNetworkModelGroupVersionKind =
-  modelToGroupVersionKind(UserDefinedNetworkModel);
-export const UserDefinedNetworkModelRef = modelToRef(UserDefinedNetworkModel);
+  getGroupVersionKindForModel(UserDefinedNetworkModel);
+export const UserDefinedNetworkModelRef = getReferenceForModel(UserDefinedNetworkModel);
 
 export const ClusterUserDefinedNetworkModel: K8sModel = {
   abbr: 'CUDN',
@@ -96,7 +102,52 @@ export const ClusterUserDefinedNetworkModel: K8sModel = {
   plural: 'clusteruserdefinednetworks',
 };
 
-export const ClusterUserDefinedNetworkModelGroupVersionKind = modelToGroupVersionKind(
+export const ClusterUserDefinedNetworkModelGroupVersionKind = getGroupVersionKindForModel(
   ClusterUserDefinedNetworkModel,
 );
-export const ClusterUserDefinedNetworkModelRef = modelToRef(ClusterUserDefinedNetworkModel);
+export const ClusterUserDefinedNetworkModelRef = getReferenceForModel(
+  ClusterUserDefinedNetworkModel,
+);
+
+export const NetworkAttachmentDefinitionModelGroupVersionKind = getGroupVersionKindForModel(
+  // Avoid circular: import directly
+  {
+    abbr: 'NAD',
+    apiGroup: 'k8s.cni.cncf.io',
+    apiVersion: 'v1',
+    kind: 'NetworkAttachmentDefinition',
+    label: 'Network Attachment Definition',
+    labelPlural: 'Network Attachment Definitions',
+    plural: 'network-attachment-definitions',
+  },
+);
+
+export const NetworkAttachmentDefinitionModelRef = getReferenceForModel({
+  abbr: 'NAD',
+  apiGroup: 'k8s.cni.cncf.io',
+  apiVersion: 'v1',
+  kind: 'NetworkAttachmentDefinition',
+  label: 'Network Attachment Definition',
+  labelPlural: 'Network Attachment Definitions',
+  plural: 'network-attachment-definitions',
+});
+
+export const SriovNetworkNodePolicyModelRef = getReferenceForModel({
+  abbr: 'SRNNPM',
+  apiGroup: 'sriovnetwork.openshift.io',
+  apiVersion: 'v1',
+  kind: 'SriovNetworkNodePolicy',
+  label: 'SriovNetworkNodePolicy',
+  labelPlural: 'SriovNetworkNodePolicies',
+  plural: 'sriovnetworknodepolicies',
+});
+
+export const HyperConvergedModelRef = getReferenceForModel({
+  abbr: 'HC',
+  apiGroup: 'hco.kubevirt.io',
+  apiVersion: 'v1beta1',
+  kind: 'HyperConverged',
+  label: 'HyperConverged',
+  labelPlural: 'HyperConvergeds',
+  plural: 'hyperconvergeds',
+});

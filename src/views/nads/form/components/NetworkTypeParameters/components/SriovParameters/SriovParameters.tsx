@@ -1,7 +1,6 @@
 import React, { FC, Ref, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import SriovNetworkNodePolicyModel from '@kubevirt-ui/kubevirt-api/console/models/SriovNetworkNodePolicyModel';
 import {
   getGroupVersionKindForModel,
   K8sResourceKind,
@@ -19,6 +18,7 @@ import {
 } from '@patternfly/react-core';
 import PopoverHelpIcon from '@utils/components/PopoverHelpIcon/PopoverHelpIcon';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { SriovNetworkNodePolicyModel } from '@utils/models';
 import {
   NetworkAttachmentDefinitionFormInput,
   NetworkTypeKeys,

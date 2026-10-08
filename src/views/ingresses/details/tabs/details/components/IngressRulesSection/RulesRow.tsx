@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 
-import { ServiceModel } from '@kubevirt-ui/kubevirt-api/console';
 import { getGroupVersionKindForModel, ResourceLink } from '@openshift-console/dynamic-plugin-sdk';
 import { Td, Tr } from '@patternfly/react-table';
+import { ServiceModel } from '@utils/models';
 import { IngressPathRule } from '@views/ingresses/details/tabs/details/utils/types';
 
 type RulesRowProps = {

@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 
-import { IngressModel } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiNetworkingV1Ingress } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { TableColumn, useActiveColumns } from '@openshift-console/dynamic-plugin-sdk';
 import { sortable } from '@patternfly/react-table';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { IngressModel } from '@utils/models';
+import { Ingress } from '@utils/types/k8sTypes';
 import { objectColumnSorting } from '@utils/utils/sorting';
 import { tableColumnClasses } from '@views/services/list/hooks/useServiceColumn';
 
@@ -15,7 +15,7 @@ type UseIngressColumns = () => { id: string; title: string }[];
 const useIngressColumns: UseIngressColumns = () => {
   const { t } = useNetworkingTranslation();
 
-  const columns: TableColumn<IoK8sApiNetworkingV1Ingress>[] = useMemo(() => {
+  const columns: TableColumn<Ingress>[] = useMemo(() => {
     return [
       {
         id: 'name',
@@ -53,7 +53,7 @@ const useIngressColumns: UseIngressColumns = () => {
     ];
   }, [t]);
 
-  const [activeColumns] = useActiveColumns<IoK8sApiNetworkingV1Ingress>({
+  const [activeColumns] = useActiveColumns<Ingress>({
     columnManagementID: IngressModel.kind,
     columns,
     showNamespaceOverride: false,

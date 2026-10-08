@@ -1,12 +1,12 @@
 import React, { FC, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom-v5-compat';
 
-import { modelToGroupVersionKind, NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
 import { ListPageCreateButton, ListPageHeader } from '@openshift-console/dynamic-plugin-sdk';
 import { Tab, Tabs, TabTitleText } from '@patternfly/react-core';
 import { ALL_NAMESPACES, DEFAULT_NAMESPACE } from '@utils/constants';
 import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/constants/ui';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { getGroupVersionKindForModel, NetworkPolicyModel } from '@utils/models';
 import { MultiNetworkPolicyModel } from '@utils/models';
 import { resourcePathFromModel } from '@utils/resources/shared';
 
@@ -42,7 +42,7 @@ const NetworkPolicyPage: FC<NetworkPolicyPageNavProps> = ({ namespace }) => {
           <ListPageCreateButton
             className="list-page-create-button-margin"
             createAccessReview={{
-              groupVersionKind: modelToGroupVersionKind(selectedModel),
+              groupVersionKind: getGroupVersionKindForModel(selectedModel),
               namespace,
             }}
             onClick={() =>

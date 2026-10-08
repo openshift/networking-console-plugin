@@ -1,21 +1,21 @@
 import { useCallback } from 'react';
 
-import { NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { TableColumn, useActiveColumns } from '@openshift-console/dynamic-plugin-sdk';
 import { sortable } from '@patternfly/react-table';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { PaginationState } from '@utils/hooks/usePagination/utils/types';
+import { NetworkPolicyModel } from '@utils/models';
+import { NetworkPolicy } from '@utils/types/k8sTypes';
 import { columnSorting, objectColumnSorting } from '@utils/utils/sorting';
 
 type UseNetworkPolicyListColumnsValues = [
-  columns: TableColumn<IoK8sApiNetworkingV1NetworkPolicy>[],
-  activeColumns: TableColumn<IoK8sApiNetworkingV1NetworkPolicy>[],
+  columns: TableColumn<NetworkPolicy>[],
+  activeColumns: TableColumn<NetworkPolicy>[],
 ];
 
 type UseNetworkPolicyListColumns = (
   pagination: PaginationState,
-  data: IoK8sApiNetworkingV1NetworkPolicy[],
+  data: NetworkPolicy[],
 ) => UseNetworkPolicyListColumnsValues;
 
 const useNetworkPolicyColumn: UseNetworkPolicyListColumns = (pagination, data) => {
@@ -31,7 +31,7 @@ const useNetworkPolicyColumn: UseNetworkPolicyListColumns = (pagination, data) =
     [data, pagination],
   );
 
-  const columns: TableColumn<IoK8sApiNetworkingV1NetworkPolicy>[] = [
+  const columns: TableColumn<NetworkPolicy>[] = [
     {
       id: 'name',
       sort: (_, direction) => sorting(direction, 'metadata.name'),
@@ -58,7 +58,7 @@ const useNetworkPolicyColumn: UseNetworkPolicyListColumns = (pagination, data) =
     },
   ];
 
-  const [activeColumns] = useActiveColumns<IoK8sApiNetworkingV1NetworkPolicy>({
+  const [activeColumns] = useActiveColumns<NetworkPolicy>({
     columnManagementID: NetworkPolicyModel.kind,
     columns,
     showNamespaceOverride: false,

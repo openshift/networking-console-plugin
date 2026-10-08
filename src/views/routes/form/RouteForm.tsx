@@ -2,7 +2,6 @@ import React, { FC, useEffect, useState } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
-import { RouteModel } from '@kubevirt-ui/kubevirt-api/console';
 import { k8sCreate, k8sUpdate, useActiveNamespace } from '@openshift-console/dynamic-plugin-sdk';
 import {
   Checkbox,
@@ -14,6 +13,7 @@ import {
 } from '@patternfly/react-core';
 import FormGroupHelperText from '@utils/components/FormGroupHelperText/FormGroupHelperText';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { RouteModel } from '@utils/models';
 import { getName, getNamespace, resourcePathFromModel } from '@utils/resources/shared';
 import { RouteKind } from '@utils/types';
 import { getValidNamespace } from '@utils/utils';

@@ -1,7 +1,5 @@
 import { useNavigate } from 'react-router-dom-v5-compat';
 
-import { NetworkAttachmentDefinitionModelRef } from '@kubevirt-ui/kubevirt-api/console';
-import NetworkAttachmentDefinitionModel from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
 import {
   Action,
   useAnnotationsModal,
@@ -9,6 +7,8 @@ import {
   useLabelsModal,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { NetworkAttachmentDefinitionModelRef } from '@utils/models';
+import { NetworkAttachmentDefinitionModel } from '@utils/models';
 import { isUserDefinedNetworkNAD } from '@utils/resources/nads/helpers';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
 import { asAccessReview, getName, getNamespace } from '@utils/resources/shared';

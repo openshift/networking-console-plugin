@@ -1,6 +1,5 @@
 import { useHistory } from 'react-router';
 
-import { modelToRef, RouteModel } from '@kubevirt-ui/kubevirt-api/console';
 import {
   Action,
   useAnnotationsModal,
@@ -8,6 +7,7 @@ import {
   useLabelsModal,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { getReferenceForModel, RouteModel } from '@utils/models';
 import { asAccessReview, getName, getNamespace } from '@utils/resources/shared';
 import { RouteKind } from '@utils/types';
 
@@ -40,7 +40,9 @@ const useRouteActions: UseRouteActions = (route) => {
     {
       accessReview: asAccessReview(RouteModel, route, 'update'),
       cta: () =>
-        history.push(`/k8s/ns/${routeNamespace}/${modelToRef(RouteModel)}/${routeName}/form`),
+        history.push(
+          `/k8s/ns/${routeNamespace}/${getReferenceForModel(RouteModel)}/${routeName}/form`,
+        ),
       id: 'edit-routes',
       label: t('Edit Route'),
     },

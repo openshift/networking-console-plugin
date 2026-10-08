@@ -1,8 +1,6 @@
 import React, { FC } from 'react';
 import * as _ from 'lodash';
 
-import { modelToGroupVersionKind, ServiceModel } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
   ResourceLink,
   Timestamp,
@@ -27,12 +25,14 @@ import Loading from '@utils/components/Loading/Loading';
 import { OwnerReferences } from '@utils/components/OwnerReference/owner-references';
 import { Selector } from '@utils/components/Selector/Selector';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { getGroupVersionKindForModel, ServiceModel } from '@utils/models';
+import { Service } from '@utils/types/k8sTypes';
 
 import ServiceAddress from './ServiceAddress';
 import ServicePortMapping from './ServicePortMapping';
 
 type DetailsProps = {
-  obj: IoK8sApiCoreV1Service;
+  obj: Service;
 };
 
 const ServiceDetails: FC<DetailsProps> = ({ obj: service }) => {
@@ -83,7 +83,7 @@ const ServiceDetails: FC<DetailsProps> = ({ obj: service }) => {
               valueClassName="co-editable-label-group"
             >
               <LabelList
-                groupVersionKind={modelToGroupVersionKind(ServiceModel)}
+                groupVersionKind={getGroupVersionKindForModel(ServiceModel)}
                 labels={metadata?.labels}
               />
             </DetailsItem>

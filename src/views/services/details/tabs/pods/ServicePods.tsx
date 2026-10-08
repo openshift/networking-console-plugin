@@ -1,10 +1,5 @@
 import React, { FC } from 'react';
 
-import { modelToGroupVersionKind, PodModel } from '@kubevirt-ui/kubevirt-api/console';
-import {
-  IoK8sApiCoreV1Pod,
-  IoK8sApiCoreV1Service,
-} from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
   ListPageFilter,
   PrometheusEndpoint,
@@ -14,7 +9,9 @@ import {
   VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { PageSection } from '@patternfly/react-core';
+import { getGroupVersionKindForModel, PodModel } from '@utils/models';
 import { getNamespace } from '@utils/resources/shared';
+import { Pod, Service } from '@utils/types/k8sTypes';
 
 import PodRow from './components/PodRow';
 import usePodColumns from './hooks/usePodColumns';
@@ -23,7 +20,7 @@ import { MIGRATION__PROMETHEUS_DELAY } from './constants';
 import { getCPUUsageQuery, getMemoryUsageQuery } from './utils';
 
 type ServicePodsProps = {
-  obj?: IoK8sApiCoreV1Service;
+  obj?: Service;
 };
 
 const ServicePods: FC<ServicePodsProps> = ({ obj: service }) => {
@@ -44,8 +41,8 @@ const ServicePods: FC<ServicePodsProps> = ({ obj: service }) => {
     query: getCPUUsageQuery(namespace),
   });
 
-  const [pods, loaded, loadError] = useK8sWatchResource<IoK8sApiCoreV1Pod[]>({
-    groupVersionKind: modelToGroupVersionKind(PodModel),
+  const [pods, loaded, loadError] = useK8sWatchResource<Pod[]>({
+    groupVersionKind: getGroupVersionKindForModel(PodModel),
     isList: true,
     namespace,
     selector,
@@ -59,7 +56,7 @@ const ServicePods: FC<ServicePodsProps> = ({ obj: service }) => {
   return (
     <PageSection>
       <ListPageFilter data={data} loaded={loaded} onFilterChange={onFilterChange} />
-      <VirtualizedTable<IoK8sApiCoreV1Pod>
+      <VirtualizedTable<Pod>
         columns={columns}
         data={filteredData}
         loaded={loaded}

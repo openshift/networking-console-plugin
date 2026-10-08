@@ -1,12 +1,12 @@
 import * as _ from 'lodash';
 
-import { IoK8sApiCoreV1Pod } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { RowFilter } from '@openshift-console/dynamic-plugin-sdk';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { Pod } from '@utils/types/k8sTypes';
 
 import { podPhaseFilterReducer } from '../utils';
 
-export const usePodFilters = (): RowFilter<IoK8sApiCoreV1Pod>[] => {
+export const usePodFilters = (): RowFilter<Pod>[] => {
   const { t } = useNetworkingTranslation();
 
   return [

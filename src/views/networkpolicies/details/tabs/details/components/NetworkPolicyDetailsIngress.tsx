@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import { Trans } from 'react-i18next';
 
-import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { useFlag } from '@openshift-console/dynamic-plugin-sdk';
 import { Divider, Grid, GridItem } from '@patternfly/react-core';
 import DetailsSectionTitle from '@utils/components/DetailsSectionTitle/DetailsSectionTitle';
@@ -9,6 +8,7 @@ import ExternalLink from '@utils/components/ExternalLink/ExternalLink';
 import { FLAGS } from '@utils/constants';
 import { getNetworkPolicyDocURL, isManaged } from '@utils/constants/documentation';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { NetworkPolicy } from '@utils/types/k8sTypes';
 import { isEmpty } from '@utils/utils';
 
 import { consolidatePeers } from '../utils/utils';
@@ -16,7 +16,7 @@ import { consolidatePeers } from '../utils/utils';
 import NetworkPolicyDetailsRow from './NetworkPolicyDetailsRow/NetworkPolicyDetailsRow';
 
 type NetworkPolicyDetailsIngressProps = {
-  networkPolicy: IoK8sApiNetworkingV1NetworkPolicy;
+  networkPolicy: NetworkPolicy;
 };
 
 const NetworkPolicyDetailsIngress: FC<NetworkPolicyDetailsIngressProps> = ({ networkPolicy }) => {

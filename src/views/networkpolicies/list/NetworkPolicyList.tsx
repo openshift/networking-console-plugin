@@ -1,7 +1,5 @@
 import React, { FC } from 'react';
 
-import { modelToGroupVersionKind, NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
   ListPageBody,
   ListPageFilter,
@@ -17,6 +15,8 @@ import { getNetworkPolicyDocURL } from '@utils/constants/documentation';
 import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/constants/ui';
 import usePagination from '@utils/hooks/usePagination/usePagination';
 import { paginationDefaultValues } from '@utils/hooks/usePagination/utils/constants';
+import { getGroupVersionKindForModel, NetworkPolicyModel } from '@utils/models';
+import { NetworkPolicy } from '@utils/types/k8sTypes';
 import { isEmpty } from '@utils/utils';
 
 import NetworkPolicyEmptyState from './components/NetworkPolicyEmptyState';
@@ -30,10 +30,8 @@ type NetworkPolicyListProps = {
 };
 
 const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
-  const [networkPolicies, loaded, loadError] = useK8sWatchResource<
-    IoK8sApiNetworkingV1NetworkPolicy[]
-  >({
-    groupVersionKind: modelToGroupVersionKind(NetworkPolicyModel),
+  const [networkPolicies, loaded, loadError] = useK8sWatchResource<NetworkPolicy[]>({
+    groupVersionKind: getGroupVersionKindForModel(NetworkPolicyModel),
     isList: true,
     namespace,
   });
@@ -44,7 +42,7 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
   const hasOpenshiftFlag = useFlag(FLAGS.OPENSHIFT);
 
   return (
-    <ListEmptyState<IoK8sApiNetworkingV1NetworkPolicy>
+    <ListEmptyState<NetworkPolicy>
       createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}
       data={data}
       error={loadError}
@@ -94,7 +92,7 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
             />
           )}
         </div>
-        <VirtualizedTable<IoK8sApiNetworkingV1NetworkPolicy>
+        <VirtualizedTable<NetworkPolicy>
           columns={activeColumns}
           data={filteredData}
           loaded={loaded}

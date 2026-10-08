@@ -1,4 +1,4 @@
-import { RouteModel } from '@kubevirt-ui/kubevirt-api/console';
+import { RouteModel } from '@utils/models';
 import { RouteKind, RouteTLS } from '@utils/types';
 import { generateName } from '@utils/utils';
 

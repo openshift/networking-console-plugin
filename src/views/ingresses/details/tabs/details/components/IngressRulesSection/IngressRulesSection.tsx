@@ -1,15 +1,15 @@
 import React, { FC } from 'react';
 
-import { IoK8sApiNetworkingV1Ingress } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { Table } from '@patternfly/react-table';
 import DetailsSectionTitle from '@utils/components/DetailsSectionTitle/DetailsSectionTitle';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { getNamespace } from '@utils/resources/shared';
+import { Ingress } from '@utils/types/k8sTypes';
 import RulesHeader from '@views/ingresses/details/tabs/details/components/IngressRulesSection/RulesHeader';
 import RulesRows from '@views/ingresses/details/tabs/details/components/IngressRulesSection/RulesRows';
 
 type IngressRulesSectionProps = {
-  ingress: IoK8sApiNetworkingV1Ingress;
+  ingress: Ingress;
 };
 
 const IngressRulesSection: FC<IngressRulesSectionProps> = ({ ingress }) => {

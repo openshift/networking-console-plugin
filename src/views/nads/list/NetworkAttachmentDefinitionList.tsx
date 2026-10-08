@@ -1,9 +1,6 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
-import NetworkAttachmentDefinitionModel, {
-  NetworkAttachmentDefinitionModelGroupVersionKind,
-} from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
 import {
   ListPageBody,
   ListPageCreateButton,
@@ -18,6 +15,10 @@ import { DEFAULT_NAMESPACE } from '@utils/constants';
 import { documentationURLs, getDocumentationURL } from '@utils/constants/documentation';
 import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/constants/ui';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import {
+  NetworkAttachmentDefinitionModel,
+  NetworkAttachmentDefinitionModelGroupVersionKind,
+} from '@utils/models';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
 import { resourcePathFromModel } from '@utils/resources/shared';
 import { isEmpty } from '@utils/utils';

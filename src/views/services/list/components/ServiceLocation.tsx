@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
 
-import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import HostDetails from '@utils/components/HostData/HostDetails';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { Service } from '@utils/types/k8sTypes';
 
 type ServiceLocationProps = {
-  service: IoK8sApiCoreV1Service;
+  service: Service;
 };
 
 const ServiceLocation: FC<ServiceLocationProps> = ({ service }) => {

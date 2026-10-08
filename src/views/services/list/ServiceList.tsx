@@ -1,8 +1,6 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
-import { modelToGroupVersionKind, ServiceModel } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
   ListPageBody,
   ListPageCreateButton,
@@ -20,7 +18,9 @@ import {
   SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML,
 } from '@utils/constants/ui';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { getGroupVersionKindForModel, ServiceModel } from '@utils/models';
 import { resourcePathFromModel } from '@utils/resources/shared';
+import { Service } from '@utils/types/k8sTypes';
 
 import ServiceRow from './components/ServiceRow';
 import useServiceColumn from './hooks/useServiceColumn';
@@ -34,8 +34,8 @@ const ServiceList: FC<ServiceListProps> = ({ namespace }) => {
   const { t } = useNetworkingTranslation();
   const navigate = useNavigate();
 
-  const [service, loaded, loadError] = useK8sWatchResource<IoK8sApiCoreV1Service[]>({
-    groupVersionKind: modelToGroupVersionKind(ServiceModel),
+  const [service, loaded, loadError] = useK8sWatchResource<Service[]>({
+    groupVersionKind: getGroupVersionKindForModel(ServiceModel),
     isList: true,
     namespace,
   });
@@ -45,7 +45,7 @@ const ServiceList: FC<ServiceListProps> = ({ namespace }) => {
   const title = t('Services');
 
   return (
-    <ListEmptyState<IoK8sApiCoreV1Service>
+    <ListEmptyState<Service>
       createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}
       data={data}
       error={loadError}
@@ -58,7 +58,7 @@ const ServiceList: FC<ServiceListProps> = ({ namespace }) => {
         <ListPageCreateButton
           className="list-page-create-button-margin"
           createAccessReview={{
-            groupVersionKind: modelToGroupVersionKind(ServiceModel),
+            groupVersionKind: getGroupVersionKindForModel(ServiceModel),
             namespace,
           }}
           onClick={() =>
@@ -76,7 +76,7 @@ const ServiceList: FC<ServiceListProps> = ({ namespace }) => {
       </ListPageHeader>
       <ListPageBody>
         <ListPageFilter data={data} loaded={loaded} onFilterChange={onFilterChange} />
-        <VirtualizedTable<IoK8sApiCoreV1Service>
+        <VirtualizedTable<Service>
           columns={columns}
           data={filteredData}
           loaded={loaded}

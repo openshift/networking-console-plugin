@@ -1,13 +1,12 @@
 import React, { FC, FormEvent, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom-v5-compat';
 
-import { NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { k8sCreate, useModal } from '@openshift-console/dynamic-plugin-sdk';
 import { Form, PageSection, Title } from '@patternfly/react-core';
 import ConfirmModal, { ConfirmModalProps } from '@utils/components/ConfirmModal/ConfirmModal';
 import { useClusterNetworkFeatures } from '@utils/hooks/useClusterNetworkFeatures';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { NetworkPolicyModel } from '@utils/models';
 import {
   checkNetworkPolicyValidity,
   isNetworkPolicyConversionError,
@@ -18,6 +17,7 @@ import {
   networkPolicyToK8sResource,
 } from '@utils/models/index';
 import { resourcePathFromModel } from '@utils/resources/shared';
+import { NetworkPolicy } from '@utils/types/k8sTypes';
 
 import NetworkPolicyFormActionButtons from './components/NetworkPolicyFormActionButtons';
 import NetworkPolicyFormAlert from './components/NetworkPolicyFormAlert';
@@ -31,8 +31,8 @@ import useIsMultiNetworkPolicy from './hooks/useIsMultiNetworkPolicy';
 import NADsSelector from './NADsSelector';
 
 type NetworkPolicyFormSectionsProps = {
-  formData: IoK8sApiNetworkingV1NetworkPolicy;
-  onChange: (newFormData: IoK8sApiNetworkingV1NetworkPolicy) => void;
+  formData: NetworkPolicy;
+  onChange: (newFormData: NetworkPolicy) => void;
 };
 
 const NetworkPolicyFormSections: FC<NetworkPolicyFormSectionsProps> = ({ formData, onChange }) => {

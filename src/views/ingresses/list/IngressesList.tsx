@@ -1,8 +1,6 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
-import { IngressModel, modelToGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiNetworkingV1Ingress } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
   ListPageBody,
   ListPageCreateButton,
@@ -17,7 +15,9 @@ import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
 import { DOC_URL_NETWORK_INGRESS } from '@utils/constants/documentation';
 import { SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML } from '@utils/constants/ui';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { getGroupVersionKindForModel, IngressModel } from '@utils/models';
 import { getResourceURL } from '@utils/resources/shared';
+import { Ingress } from '@utils/types/k8sTypes';
 import { getValidNamespace } from '@utils/utils';
 import useIngressColumns from '@views/ingresses/list/hooks/useIngressColumns';
 
@@ -33,8 +33,8 @@ const IngressesList: FC<IngressesListProps> = ({ namespace }) => {
   const navigate = useNavigate();
   const validNamespace = getValidNamespace(namespace || activeNamespace);
 
-  const [ingress, loaded, loadError] = useK8sWatchResource<IoK8sApiNetworkingV1Ingress[]>({
-    groupVersionKind: modelToGroupVersionKind(IngressModel),
+  const [ingress, loaded, loadError] = useK8sWatchResource<Ingress[]>({
+    groupVersionKind: getGroupVersionKindForModel(IngressModel),
     isList: true,
     namespace,
   });
@@ -43,7 +43,7 @@ const IngressesList: FC<IngressesListProps> = ({ namespace }) => {
   const title = t('Ingresses');
 
   return (
-    <ListEmptyState<IoK8sApiNetworkingV1Ingress>
+    <ListEmptyState<Ingress>
       createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML}
       data={data}
       error={loadError}
@@ -56,7 +56,7 @@ const IngressesList: FC<IngressesListProps> = ({ namespace }) => {
         <ListPageCreateButton
           className="list-page-create-button-margin"
           createAccessReview={{
-            groupVersionKind: modelToGroupVersionKind(IngressModel),
+            groupVersionKind: getGroupVersionKindForModel(IngressModel),
             namespace: validNamespace,
           }}
           onClick={() =>
@@ -74,7 +74,7 @@ const IngressesList: FC<IngressesListProps> = ({ namespace }) => {
       </ListPageHeader>
       <ListPageBody>
         <ListPageFilter data={data} loaded={loaded} onFilterChange={onFilterChange} />
-        <VirtualizedTable<IoK8sApiNetworkingV1Ingress>
+        <VirtualizedTable<Ingress>
           columns={columns}
           data={filteredData}
           loaded={loaded}

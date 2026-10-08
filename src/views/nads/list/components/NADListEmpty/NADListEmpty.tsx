@@ -1,8 +1,6 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
-import NetworkAttachmentDefinitionModel from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
-import { modelToGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console/modelUtils';
 import { useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { QuickStart } from '@patternfly/quickstarts';
 import {
@@ -16,6 +14,8 @@ import { RocketIcon } from '@patternfly/react-icons/dist/esm/icons/rocket-icon';
 import { DEFAULT_NAMESPACE } from '@utils/constants';
 import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/constants/ui';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { NetworkAttachmentDefinitionModel } from '@utils/models';
+import { getGroupVersionKindForModel } from '@utils/models';
 import { QuickStartModel } from '@utils/models';
 import { resourcePathFromModel } from '@utils/resources/shared';
 
@@ -29,7 +29,7 @@ const NADListEmpty: FC<NADListEmptyProps> = ({ namespace }) => {
 
   const searchText = 'network attachment definition';
   const [quickStarts, quickStartsLoaded] = useK8sWatchResource<QuickStart[]>({
-    groupVersionKind: modelToGroupVersionKind(QuickStartModel),
+    groupVersionKind: getGroupVersionKindForModel(QuickStartModel),
     isList: true,
   });
   const hasQuickStarts =

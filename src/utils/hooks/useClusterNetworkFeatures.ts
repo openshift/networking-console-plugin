@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import { ConfigMapModel, modelToGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console';
 import { K8sResourceKind, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
+import { ConfigMapModel, getGroupVersionKindForModel } from '@utils/models';
 
 const networkConfigMapName = 'openshift-network-features';
 const networkConfigMapNamespace = 'openshift-config-managed';
@@ -37,7 +37,7 @@ export const useClusterNetworkFeatures = (): [ClusterNetworkFeatures, boolean] =
   const [featuresLoaded, setFeaturesLoaded] = useState(false);
 
   const [config, configLoaded] = useK8sWatchResource<K8sResourceKind>({
-    groupVersionKind: modelToGroupVersionKind(ConfigMapModel),
+    groupVersionKind: getGroupVersionKindForModel(ConfigMapModel),
     name: networkConfigMapName,
     namespace: networkConfigMapNamespace,
   });

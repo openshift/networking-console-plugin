@@ -1,7 +1,5 @@
 import { useNavigate } from 'react-router-dom-v5-compat';
 
-import { modelToRef } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
   Action,
   useAnnotationsModal,
@@ -9,10 +7,12 @@ import {
   useLabelsModal,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { getReferenceForModel } from '@utils/models';
 import { getPolicyModel } from '@utils/resources/networkpolicies/utils';
 import { asAccessReview, getName, getNamespace } from '@utils/resources/shared';
+import { NetworkPolicy } from '@utils/types/k8sTypes';
 
-type NetworkPolicyActionProps = (obj: IoK8sApiNetworkingV1NetworkPolicy) => [actions: Action[]];
+type NetworkPolicyActionProps = (obj: NetworkPolicy) => [actions: Action[]];
 
 const useNetworkPolicyActions: NetworkPolicyActionProps = (obj) => {
   const { t } = useNetworkingTranslation();
@@ -42,7 +42,8 @@ const useNetworkPolicyActions: NetworkPolicyActionProps = (obj) => {
     },
     {
       accessReview: asAccessReview(policyModel, obj, 'update'),
-      cta: () => navigate(`/k8s/ns/${objNamespace}/${modelToRef(policyModel)}/${objName}/yaml`),
+      cta: () =>
+        navigate(`/k8s/ns/${objNamespace}/${getReferenceForModel(policyModel)}/${objName}/yaml`),
       id: 'edit-network-policies',
       label: t('Edit {{kind}}', { kind: policyModel.kind }),
     },

@@ -1,14 +1,10 @@
 import React, { FC, useMemo } from 'react';
 
-import {
-  modelToGroupVersionKind,
-  NamespaceModel,
-  PodModel,
-} from '@kubevirt-ui/kubevirt-api/console';
 import { ResourceIcon } from '@openshift-console/dynamic-plugin-sdk';
 import { Alert, AlertVariant, Label, TreeView, TreeViewDataItem } from '@patternfly/react-core';
 import Loading from '@utils/components/Loading/Loading';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { getGroupVersionKindForModel, NamespaceModel, PodModel } from '@utils/models';
 import { isEmpty } from '@utils/utils';
 
 import { maxPreviewPods } from '../utils/const';
@@ -55,7 +51,7 @@ const NetworkPolicyPodsPreview: FC<NetworkPolicyPodsPreviewProps> = ({
       const ns = pod?.metadata?.namespace;
       podsByNs[ns] ??= [];
       podsByNs[ns].push({
-        icon: <ResourceIcon groupVersionKind={modelToGroupVersionKind(PodModel)} />,
+        icon: <ResourceIcon groupVersionKind={getGroupVersionKindForModel(PodModel)} />,
         name: pod?.metadata?.name,
       });
     });

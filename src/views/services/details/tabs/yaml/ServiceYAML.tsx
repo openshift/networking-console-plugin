@@ -1,11 +1,11 @@
 import React, { FC, Suspense } from 'react';
 
-import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { ResourceYAMLEditor } from '@openshift-console/dynamic-plugin-sdk';
 import Loading from '@utils/components/Loading/Loading';
+import { Service } from '@utils/types/k8sTypes';
 
 type ServiceYAMLPageProps = {
-  obj?: IoK8sApiCoreV1Service;
+  obj?: Service;
 };
 
 const ServiceYAMLPage: FC<ServiceYAMLPageProps> = ({ obj: service }) => {

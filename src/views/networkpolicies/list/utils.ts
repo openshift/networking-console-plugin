@@ -1,5 +1,5 @@
-import { modelToRef, NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
 import { ALL_NAMESPACES } from '@utils/constants';
+import { getReferenceForModel, NetworkPolicyModel } from '@utils/models';
 import { MultiNetworkPolicyModel } from '@utils/models';
 
 import { TAB_INDEXES } from './constants';
@@ -16,8 +16,8 @@ export const getNetworkPolicyURLTab = (tabIndex: number | string, namespace: str
   const namespacePath = namespace === ALL_NAMESPACES ? namespace : `ns/${namespace}`;
 
   if (tabIndex === TAB_INDEXES.ENABLE_MULTI) {
-    return `/k8s/${namespacePath}/${modelToRef(NetworkPolicyModel)}/enable-multi`;
+    return `/k8s/${namespacePath}/${getReferenceForModel(NetworkPolicyModel)}/enable-multi`;
   }
 
-  return `/k8s/${namespacePath}/${tabIndex === TAB_INDEXES.NETWORK ? modelToRef(NetworkPolicyModel) : modelToRef(MultiNetworkPolicyModel)}`;
+  return `/k8s/${namespacePath}/${tabIndex === TAB_INDEXES.NETWORK ? getReferenceForModel(NetworkPolicyModel) : getReferenceForModel(MultiNetworkPolicyModel)}`;
 };

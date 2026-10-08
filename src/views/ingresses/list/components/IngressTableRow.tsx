@@ -1,8 +1,6 @@
 import React, { FC } from 'react';
 import classNames from 'classnames';
 
-import { IngressModel, NamespaceModel } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiNetworkingV1Ingress } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
   getGroupVersionKindForModel,
   ResourceLink,
@@ -13,11 +11,13 @@ import { LabelList } from '@utils/components/DetailsItem/LabelList';
 import HostDetails from '@utils/components/HostData/HostDetails';
 import MutedText from '@utils/components/MutedText/MutedText';
 import { t } from '@utils/hooks/useNetworkingTranslation';
+import { IngressModel, NamespaceModel } from '@utils/models';
+import { Ingress } from '@utils/types/k8sTypes';
 import IngressActions from '@views/ingresses/actions/IngressActions';
 import { getHostsStr } from '@views/ingresses/list/utils/utils';
 import { tableColumnClasses } from '@views/services/list/hooks/useServiceColumn';
 
-type IngressTableRowProps = RowProps<IoK8sApiNetworkingV1Ingress>;
+type IngressTableRowProps = RowProps<Ingress>;
 
 const IngressTableRow: FC<IngressTableRowProps> = ({ activeColumnIDs, obj: ingress }) => {
   const hostsStr = getHostsStr(ingress);

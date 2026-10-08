@@ -1,8 +1,6 @@
 import { useMemo } from 'react';
 import classNames from 'classnames';
 
-import { modelToRef, PodModel } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiCoreV1Pod } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
   PrometheusResponse,
   TableColumn,
@@ -10,6 +8,8 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import { sortable } from '@patternfly/react-table';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { getReferenceForModel, PodModel } from '@utils/models';
+import { Pod } from '@utils/types/k8sTypes';
 
 import { PROMETHEUS_BASE_PATH, PROMETHEUS_TENANCY_BASE_PATH } from '../constants';
 import {
@@ -98,7 +98,7 @@ const usePodColumns = (
 ): { id: string; title: string }[] => {
   const { t } = useNetworkingTranslation();
 
-  const columns: TableColumn<IoK8sApiCoreV1Pod>[] = useMemo(
+  const columns: TableColumn<Pod>[] = useMemo(
     () => [
       {
         id: podColumnInfo.name.id,
@@ -117,8 +117,7 @@ const usePodColumns = (
       {
         id: podColumnInfo.status.id,
         props: { className: podColumnInfo.status.classes },
-        sort: (data, direction) =>
-          data.sort(sortResourceByValue<IoK8sApiCoreV1Pod>(direction, podPhase)),
+        sort: (data, direction) => data.sort(sortResourceByValue<Pod>(direction, podPhase)),
         title: t(podColumnInfo.status.title),
         transforms: [sortable],
       },
@@ -126,20 +125,14 @@ const usePodColumns = (
         id: podColumnInfo.ready.id,
         props: { className: podColumnInfo.ready.classes },
         sort: (data, direction) =>
-          data.sort(
-            sortResourceByValue<IoK8sApiCoreV1Pod>(
-              direction,
-              (obj) => podReadiness(obj).readyCount,
-            ),
-          ),
+          data.sort(sortResourceByValue<Pod>(direction, (obj) => podReadiness(obj).readyCount)),
         title: t(podColumnInfo.ready.title),
         transforms: [sortable],
       },
       {
         id: podColumnInfo.restarts.id,
         props: { className: podColumnInfo.restarts.classes },
-        sort: (data, direction) =>
-          data.sort(sortResourceByValue<IoK8sApiCoreV1Pod>(direction, podRestarts)),
+        sort: (data, direction) => data.sort(sortResourceByValue<Pod>(direction, podRestarts)),
         title: t(podColumnInfo.restarts.title),
         transforms: [sortable],
       },
@@ -155,9 +148,7 @@ const usePodColumns = (
         props: { className: podColumnInfo.memory.classes },
         sort: (data, direction) =>
           data.sort(
-            sortResourceByValue<IoK8sApiCoreV1Pod>(direction, (obj) =>
-              getPodMemoryUsage(memoryUsageData, obj),
-            ),
+            sortResourceByValue<Pod>(direction, (obj) => getPodMemoryUsage(memoryUsageData, obj)),
           ),
         title: t(podColumnInfo.memory.title),
         transforms: [sortable],
@@ -167,9 +158,7 @@ const usePodColumns = (
         props: { className: podColumnInfo.cpu.classes },
         sort: (data, direction) =>
           data.sort(
-            sortResourceByValue<IoK8sApiCoreV1Pod>(direction, (obj) =>
-              getPodCPUUsage(cpuUsageData, obj),
-            ),
+            sortResourceByValue<Pod>(direction, (obj) => getPodCPUUsage(cpuUsageData, obj)),
           ),
         title: t(podColumnInfo.cpu.title),
         transforms: [sortable],
@@ -219,8 +208,8 @@ const usePodColumns = (
     [cpuUsageData, memoryUsageData, t],
   );
 
-  const [activeColumns] = useActiveColumns<IoK8sApiCoreV1Pod>({
-    columnManagementID: modelToRef(PodModel) + 'service-tab',
+  const [activeColumns] = useActiveColumns<Pod>({
+    columnManagementID: getReferenceForModel(PodModel) + 'service-tab',
     columns,
     showNamespaceOverride: false,
   });

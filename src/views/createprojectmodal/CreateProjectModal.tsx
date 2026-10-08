@@ -2,7 +2,6 @@ import React, { FC, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
-import { ProjectModel, ProjectRequestModel } from '@kubevirt-ui/kubevirt-api/console';
 import { k8sCreate, k8sDelete, K8sResourceCommon } from '@openshift-console/dynamic-plugin-sdk';
 import {
   Button,
@@ -16,6 +15,7 @@ import {
 import ExternalLink from '@utils/components/ExternalLink/ExternalLink';
 import { documentationURLs, getDocumentationURL, isManaged } from '@utils/constants/documentation';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { ProjectModel, ProjectRequestModel } from '@utils/models';
 import { UserDefinedNetworkModel } from '@utils/models';
 import { getName, getResourceURL } from '@utils/resources/shared';
 

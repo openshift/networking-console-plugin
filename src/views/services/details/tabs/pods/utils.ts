@@ -2,18 +2,15 @@
 
 import * as _ from 'lodash';
 
-import {
-  IoK8sApiCoreV1ContainerStatus,
-  IoK8sApiCoreV1Pod,
-} from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { K8sResourceCommon, PrometheusResponse } from '@openshift-console/dynamic-plugin-sdk';
 import { SortByDirection } from '@patternfly/react-table';
 import { getName, getNamespace } from '@utils/resources/shared';
+import { ContainerStatus, Pod } from '@utils/types/k8sTypes';
 
 export type PodPhase = string;
 
 // (See https://github.com/kubernetes/kubernetes/blob/release-1.17/pkg/printers/internalversion/printers.go)
-export const podPhase = (pod: IoK8sApiCoreV1Pod): PodPhase => {
+export const podPhase = (pod: Pod): PodPhase => {
   if (!pod || !pod.status) {
     return '';
   }
@@ -33,29 +30,26 @@ export const podPhase = (pod: IoK8sApiCoreV1Pod): PodPhase => {
   let initializing = false;
   let phase = pod.status.phase || pod.status.reason;
 
-  _.each(
-    pod.status.initContainerStatuses,
-    (container: IoK8sApiCoreV1ContainerStatus, i: number) => {
-      const { terminated, waiting } = container.state;
-      if (terminated && terminated.exitCode === 0) {
-        return true;
-      }
+  _.each(pod.status.initContainerStatuses, (container: ContainerStatus, i: number) => {
+    const { terminated, waiting } = container.state;
+    if (terminated && terminated.exitCode === 0) {
+      return true;
+    }
 
-      initializing = true;
-      if (terminated && terminated.reason) {
-        phase = `Init:${terminated.reason}`;
-      } else if (terminated && !terminated.reason) {
-        phase = terminated.signal
-          ? `Init:Signal:${terminated.signal}`
-          : `Init:ExitCode:${terminated.exitCode}`;
-      } else if (waiting && waiting.reason && waiting.reason !== 'PodInitializing') {
-        phase = `Init:${waiting.reason}`;
-      } else {
-        phase = `Init:${i}/${pod.status.initContainerStatuses.length}`;
-      }
-      return false;
-    },
-  );
+    initializing = true;
+    if (terminated && terminated.reason) {
+      phase = `Init:${terminated.reason}`;
+    } else if (terminated && !terminated.reason) {
+      phase = terminated.signal
+        ? `Init:Signal:${terminated.signal}`
+        : `Init:ExitCode:${terminated.exitCode}`;
+    } else if (waiting && waiting.reason && waiting.reason !== 'PodInitializing') {
+      phase = `Init:${waiting.reason}`;
+    } else {
+      phase = `Init:${i}/${pod.status.initContainerStatuses.length}`;
+    }
+    return false;
+  });
 
   if (!initializing) {
     let hasRunning = false;
@@ -88,7 +82,7 @@ export const podPhase = (pod: IoK8sApiCoreV1Pod): PodPhase => {
   return phase;
 };
 
-export const podPhaseFilterReducer = (pod: IoK8sApiCoreV1Pod): PodPhase => {
+export const podPhaseFilterReducer = (pod: Pod): PodPhase => {
   const status = podPhase(pod);
   if (status === 'Terminating') {
     return status;
@@ -123,13 +117,11 @@ export const sortResourceByValue =
     return aName.localeCompare(bName, lang, compareOpts);
   };
 
-export const podReadiness = (
-  pod: IoK8sApiCoreV1Pod,
-): { readyCount: number; totalContainers: number } => {
+export const podReadiness = (pod: Pod): { readyCount: number; totalContainers: number } => {
   // Don't include init containers in readiness count. This is consistent with the CLI.
   const containerStatuses = pod?.status?.containerStatuses || [];
   return containerStatuses.reduce(
-    (acc, { ready }: IoK8sApiCoreV1ContainerStatus) => {
+    (acc, { ready }: ContainerStatus) => {
       if (ready) {
         acc.readyCount = acc.readyCount + 1;
       }
@@ -139,7 +131,7 @@ export const podReadiness = (
   );
 };
 
-export const podRestarts = (pod: IoK8sApiCoreV1Pod): number => {
+export const podRestarts = (pod: Pod): number => {
   if (!pod || !pod.status) {
     return 0;
   }
@@ -149,21 +141,18 @@ export const podRestarts = (pod: IoK8sApiCoreV1Pod): number => {
   });
   const toCheck = isInitializing ? initContainerStatuses : containerStatuses;
   return toCheck.reduce(
-    (restartCount, status: IoK8sApiCoreV1ContainerStatus) => restartCount + status.restartCount,
+    (restartCount, status: ContainerStatus) => restartCount + status.restartCount,
     0,
   );
 };
 
-export const isContainerCrashLoopBackOff = (
-  pod: IoK8sApiCoreV1Pod,
-  containerName: string,
-): boolean => {
+export const isContainerCrashLoopBackOff = (pod: Pod, containerName: string): boolean => {
   const containerStatus = pod?.status?.containerStatuses?.find((c) => c.name === containerName);
   const waitingReason = containerStatus?.state?.waiting?.reason;
   return waitingReason === 'CrashLoopBackOff';
 };
 
-export const isWindowsPod = (pod: IoK8sApiCoreV1Pod): boolean => {
+export const isWindowsPod = (pod: Pod): boolean => {
   return pod?.spec?.tolerations?.some((t) => t.key === 'os' && t.value === 'Windows');
 };
 
@@ -172,7 +161,7 @@ export const getMemoryUsageQuery = (namespace: string) =>
 export const getCPUUsageQuery = (namespace: string) =>
   `pod:container_cpu_usage:sum{namespace='${namespace}'}`;
 
-export const getPodCPUUsage = (cpuUsage: PrometheusResponse, pod: IoK8sApiCoreV1Pod) => {
+export const getPodCPUUsage = (cpuUsage: PrometheusResponse, pod: Pod) => {
   const podUsage = cpuUsage?.data?.result?.find(
     (result) =>
       result?.metric?.pod === getName(pod) && result?.metric?.namespace === getNamespace(pod),
@@ -181,7 +170,7 @@ export const getPodCPUUsage = (cpuUsage: PrometheusResponse, pod: IoK8sApiCoreV1
   return podUsage?.value?.[1];
 };
 
-export const getPodMemoryUsage = (memoryUsage: PrometheusResponse, pod: IoK8sApiCoreV1Pod) => {
+export const getPodMemoryUsage = (memoryUsage: PrometheusResponse, pod: Pod) => {
   const podUsage = memoryUsage?.data?.result?.find(
     (result) =>
       result?.metric?.pod === getName(pod) && result?.metric?.namespace === getNamespace(pod),

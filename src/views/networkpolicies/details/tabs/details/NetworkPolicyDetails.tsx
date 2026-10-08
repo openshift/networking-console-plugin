@@ -1,17 +1,17 @@
 import React, { FC } from 'react';
 
-import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { Grid, GridItem, PageSection } from '@patternfly/react-core';
 import DetailsSectionTitle from '@utils/components/DetailsSectionTitle/DetailsSectionTitle';
 import Loading from '@utils/components/Loading/Loading';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { NetworkPolicy } from '@utils/types/k8sTypes';
 
 import NetworkPolicyDetailsEgress from './components/NetworkPolicyDetailsEgress';
 import NetworkPolicyDetailsIngress from './components/NetworkPolicyDetailsIngress';
 import NetworkPolicyDetailsMetadata from './components/NetworkPolicyDetailsMetadata';
 
 type NetworkPolicyDetailsProps = {
-  obj: IoK8sApiNetworkingV1NetworkPolicy;
+  obj: NetworkPolicy;
 };
 
 const NetworkPolicyDetails: FC<NetworkPolicyDetailsProps> = ({ obj: networkPolicy }) => {

@@ -1,12 +1,12 @@
-import { modelToGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console';
 import { K8sResourceCommon, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
+import { getGroupVersionKindForModel } from '@utils/models';
 import { NetworkConfigModel } from '@views/nads/form/utils/constants';
 
 const useIsMultiEnabled = (): [enabled: boolean, loaded: boolean, error: any] => {
   const [networkClusterConfig, loaded, error] = useK8sWatchResource<
     { spec: any } & K8sResourceCommon
   >({
-    groupVersionKind: modelToGroupVersionKind(NetworkConfigModel),
+    groupVersionKind: getGroupVersionKindForModel(NetworkConfigModel),
     name: 'cluster',
   });
 

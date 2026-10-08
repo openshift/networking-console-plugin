@@ -2,7 +2,6 @@ import React, { FC, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
-import NetworkAttachmentDefinitionModel from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
 import { useActiveNamespace } from '@openshift-console/dynamic-plugin-sdk';
 import {
   ActionGroup,
@@ -19,6 +18,7 @@ import {
 import PopoverHelpIcon from '@utils/components/PopoverHelpIcon/PopoverHelpIcon';
 import { ALL_NAMESPACES_KEY, DEFAULT_NAMESPACE } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { NetworkAttachmentDefinitionModel } from '@utils/models';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
 import { resourcePathFromModel } from '@utils/resources/shared';
 import { isEmpty } from '@utils/utils';
