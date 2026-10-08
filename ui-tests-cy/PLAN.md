@@ -1,13 +1,13 @@
 # Migrate Networking E2E Tests to networking-console-plugin
 
-**Jira Epic:** [CNV-87983](https://redhat.atlassian.net/browse/CNV-87983) — "Move network & nmstate E2E tests from kubevirt-ui to upstream plugin repos"
+**Jira Epic:** [OCPNETUI-56](https://redhat.atlassian.net/browse/OCPNETUI-56)
 
 ## Source Analysis
 
 Two branches of kubevirt-ui are relevant:
 
-- **`release-4.21`** — contains the Cypress tests (`cypress/tests/tier2/networking/`). These are the **primary source to copy** since they are already Cypress and did not differ much from `main`.
-- **`main`** — Cypress tests removed; only Playwright versions remain (`playwright/tests/tier2/networking/`). Use as **reference for any newer test logic** added after the Cypress versions were dropped.
+- **`release-4.21`** — contains the Cypress tests (`cypress/tests/tier2/networking/`). These are the **primary source to copy**.
+- **`main`** — Cypress tests removed; only Playwright versions remain. Use as **reference for newer test logic**.
 
 | Cypress file (release-4.21) | Lines | Plugin owner |
 |---|---|---|
@@ -20,47 +20,34 @@ Two branches of kubevirt-ui are relevant:
 | `net-policies.cy.ts` | 98 | networking-console-plugin |
 | `udn.cy.ts` | 192 | networking + kubevirt (VM parts) |
 
-| Playwright file (main) | Lines | Plugin owner |
-|---|---|---|
-| `net-nad.spec.ts` | 727 | networking + kubevirt |
-| `s-r-i.spec.ts` | 62 | networking-console-plugin |
-| `nnc-p.spec.ts` | 432 | nmstate-console-plugin |
-| `hotplug.spec.ts` | 31 | kubevirt-plugin |
+## Tests Migrated (networking-console-plugin owned)
 
-## Tests to Migrate (networking-console-plugin owned)
+**NAD tests:**
+- create Linux bridge NAD with MAC Spoof checked
+- create secondary localnet NAD + delete
+- create L2 overlay NAD
 
-**From `net-nad.spec.ts` — UDN section:**
-- create UDN-enabled namespace (via shell/oc, not UI)
-- ID(CNV-11867) create UDN
-- ID(CNV-11871) create CUDN
-- ID(CNV-11874) delete CUDN
+**UDN tests:**
+- create UDN
+- create ClusterUDN
+- delete ClusterUDN
 
-**From `net-nad.spec.ts` — NAD section:**
-- ID(CNV-3256) create Linux bridge NAD with MAC Spoof checked
-- ID(CNV-3256) create secondary localnet NAD
-- ID(CNV-4288) delete secondary localnet NAD
-- ID(CNV-3256) create L2 overlay NAD
-
-**From `net-nad.spec.ts` — NetworkPolicy section:**
+**Network policy tests:**
 - visit NetworkPolicies page
 - create NetworkPolicy with form
-- create MultiNetworkPolicy with form (currently `test.skip`)
 
-**From `s-r-i.spec.ts`:**
-- Create Service (YAML)
-- Create Route (form)
-- Create Ingress (YAML)
+**Service/Route/Ingress tests:**
+- create Service (YAML)
+- create Route (form)
+- create Ingress (YAML)
 
-**Stays in kubevirt-ui** (VM-dependent — needs API-based setup after migration):
-- VM creation tests (CNV-11869, CNV-11868, CNV-11873, CNV-11872) — create VM with UDN/CUDN
-- VM + NAD tests (create VMs with bridge/localnet/OVN NAD, verify IP)
-- NAD hotplug swap (CNV-15953)
-- `hotplug.spec.ts` (all stubs)
-
-These tests currently rely on preceding tests in the same file to create UDN/CUDN/NAD resources. After migration, those resources must be created via API (oc/kubectl) as test setup in kubevirt-ui.
+**Stays in kubevirt-ui** (VM-dependent):
+- VM creation tests — create VM with UDN/CUDN/NAD
+- VM + NAD IP verification tests
+- NAD hotplug swap
 
 **Goes to nmstate-console-plugin:**
-- `nnc-p.spec.ts` entirely (NNCP, NNS, Physical networks, VM networks)
+- `nnc-p.spec.ts` entirely (NNCP, NNS, Physical networks)
 
 ## Architecture
 
@@ -68,175 +55,149 @@ These tests currently rely on preceding tests in the same file to create UDN/CUD
 graph TD
     subgraph ciSystems [CI Systems]
         ghActions["GitHub Actions (hot cluster, ~5 min)"]
-        prow["Prow (ephemeral cluster, ~30+ min)"]
+        prow["Prow (ephemeral AWS cluster, ~30+ min)"]
     end
 
     subgraph repo [networking-console-plugin]
-        subgraph integrationTests [cypress/]
+        subgraph uiTestsCy [ui-tests-cy/]
             cypressConfig[cypress.config.js]
             subgraph support [support/]
-                login[login.ts - existing]
-                commands[commands.ts - NEW]
-                nav[nav.ts - NEW]
-                selectors[selectors.ts - NEW]
+                login[login.ts]
+                commands[commands.ts]
+                nav[nav.ts]
+                selectors[selectors.ts]
             end
             subgraph views [views/]
-                nadView[nad.ts - NEW]
-                udnView[udn.ts - NEW]
-                netPolView[net-policies.ts - NEW]
-                actionsView[actions.ts - NEW]
-                selectorCommon[selector-common.ts - NEW]
+                nadView[nad.ts]
+                udnView[udn.ts]
+                actionsView[actions.ts]
+                selectorCommon[selector-common.ts]
             end
             subgraph tests [tests/]
-                nadSpec[nad.cy.ts - NEW]
-                udnSpec[udn.cy.ts - NEW]
-                netPolSpec[net-policies.cy.ts - NEW]
-                sriSpec[services-routes-ingresses.cy.ts - NEW]
+                setupTests[setup/ - login, visit-pages]
+                networkingTests[networking/ - NADs, UDNs, policies, routes, services, ingresses]
             end
         end
-        prowScript["test-prow-e2e.sh (existing)"]
-        ghWorkflow[".github/workflows/e2e.yml (NEW)"]
+        subgraph ciScripts [ci-scripts/]
+            healthCheck[check-cluster-health.sh]
+            helmCharts[helm/ - ci-test-stack, ci-env-controller]
+        end
+        subgraph ghWorkflows [.github/]
+            e2eYml[workflows/e2e.yml]
+            hotCluster[workflows/hot-cluster-e2e*.yml]
+            actions[actions/ci-env-request, ci-env-release]
+        end
     end
 
-    ghActions --> ghWorkflow
-    prow --> prowScript
-    ghWorkflow --> cypressConfig
-    prowScript --> cypressConfig
+    ghActions --> hotCluster
+    prow --> uiTestsCy
+    hotCluster --> actions --> helmCharts
 ```
 
-## Migration Strategy
+## CI Approaches
 
-The `release-4.21` Cypress tests are the primary source — copy them and adapt (fix imports, strip VM tests). Cross-reference with `main` Playwright specs only to check for newer test logic that may have been added after the Cypress versions were dropped.
+### 1. Prow (existing — ephemeral cluster)
 
-### What to copy from kubevirt-ui `release-4.21`
+[`test-prow-e2e.sh`](../test-prow-e2e.sh) runs `npm run test-cypress-headless` on a fresh AWS cluster provisioned per run. ~30+ min total (cluster provisioning dominates).
 
-| Source | Copy to networking-console-plugin |
-|---|---|
-| `cypress/views/nad.ts` | `cypress/views/nad.ts` |
-| `cypress/views/udn.ts` | `cypress/views/udn.ts` |
-| `cypress/views/actions.ts` (partial) | `cypress/views/actions.ts` |
-| `cypress/views/selector-common.ts` (partial) | `cypress/views/selector-common.ts` |
-| `cypress/views/selector-template.ts` (partial) | `cypress/views/selector-common.ts` |
-| `cypress/support/nav.ts` (networking parts) | `cypress/support/nav.ts` |
-| `cypress/support/selectors.ts` | `cypress/support/selectors.ts` |
-| `cypress/support/commands.ts` (partial) | `cypress/support/commands.ts` |
-| `cypress/utils/const/nad.ts` | `cypress/utils/const/nad.ts` |
-| `cypress/utils/const/index.ts` (partial) | `cypress/utils/const/index.ts` |
-| `cypress/utils/types/nad.ts` | `cypress/utils/types/nad.ts` |
+### 2. GitHub Actions — simple (e2e.yml)
 
-### What needs adaptation
+Runs on `ubuntu-latest` with secrets for an existing cluster URL. Fastest to set up but requires a pre-configured cluster with the plugin deployed.
 
-- **Remove VM-dependent code**: all `vm.*` calls, `cy.deleteVM()`, `VirtualMachineData` imports, VM status assertions
-- **Remove kubevirt-specific imports**: `TEMPLATE`, `vm-flow`, `tab`, `vm` view modules
-- **Remove kubevirt-perspective switching**: `cy.beforeSpec()` switches to Virtualization perspective — networking tests should stay in Administrator perspective
-- **Fix relative import paths**: `../../../views/` -> `../views/` (flatter structure)
-- **Keep only networking custom commands**: `cy.visitNAD()`, `cy.visitUDN()`, `cy.switchProject()`, `cy.deleteResource()`
+### 3. GitHub Actions — hot cluster (hot-cluster-e2e*.yml)
 
-## Implementation Steps
+Uses a persistent OpenShift cluster with ARC (Actions Runner Controller) for self-hosted ephemeral runners. The ci-env-controller provisions per-run test stacks via Helm. ~5 min feedback loop.
 
-### 1. Cypress support infrastructure (`cypress/support/`)
+Cluster credentials are injected via GitHub Actions secrets (`CLUSTER_API`, `CLUSTER_TOKEN`). See `ui-tests-cy/CLUSTER.md` for setup steps.
 
-- **`support/selectors.ts`** — `cy.byTestID()`, `cy.byButtonText()`, `cy.checkTitle()`, `cy.checkSubTitle()`, `cy.switchProject()`, `cy.clickNavLink()`, `cy.clickBtn()`
-- **`support/commands.ts`** — `cy.deleteResource(kind, name, ns)`, `cy.beforeSpec()`
-- **`support/nav.ts`** — `cy.visitNAD()`, `cy.visitUDN()`, `cy.visitService()`
+### 4. Local development
 
-### 2. Views and constants
+```bash
+# Terminal 1: start plugin dev server
+npm run dev
 
-- **`views/nad.ts`** — `createNAD(nad: NadData)`, `deleteNAD(name: string)` + selectors
-- **`views/udn.ts`** — `createUDN(project, subnet)`, `createClusterUDN(name, subnet, nsSelector)`, `deleteClusterUDN(name)`
-- **`views/net-policies.ts`** — `denyTraffic()`, form radio/name fill helpers
-- **`views/actions.ts`** — `checkActionMenu(kind)`, `getRow(name, within)`
-- **`views/selector-common.ts`** — `row`, `brCrumbItem`, `itemFilter`, `createBtn`, `confirmBtn`
-- **`utils/const/index.ts`** — `TEST_NS`, `UDN_NS`, `adminOnlyDescribe`, test names
-- **`utils/const/nad.ts`** — `NAD_BRIDGE`, `NAD_OVN`, `NAD_LOCALNET` data objects
-- **`utils/types/nad.ts`** — `NadData` interface
+# Terminal 2: start console
+npm run start-console
 
-### 3. Copy and adapt spec files
+# Terminal 3: run tests
+./test-cypress.sh           # headless
+./test-cypress.sh -g true   # GUI mode
+```
 
-| New file | Copies from (release-4.21) | Adaptations |
-|---|---|---|
-| `tests/udn.cy.ts` | `cypress/tests/tier2/networking/udn.cy.ts` | Remove VM creation tests + Passt section; keep create UDN, create CUDN, delete CUDN. UDN-enabled namespace created via shell (`oc`/`kubectl`) in `before()` hook, not via UI |
-| `tests/nad-bridge.cy.ts` | `cypress/tests/tier2/networking/nad-bridge.cy.ts` | Remove VM creation/IP verification tests; keep `createNAD(NAD_BRIDGE)` |
-| `tests/nad-localnet.cy.ts` | `cypress/tests/tier2/networking/nad-localnet.cy.ts` | Remove VM test; keep create + delete NAD |
-| `tests/nad-ovn.cy.ts` | `cypress/tests/tier2/networking/nad-ovn.cy.ts` | Remove VM tests; keep `createNAD(NAD_OVN)` |
-| `tests/net-policies.cy.ts` | `cypress/tests/tier2/networking/net-policies.cy.ts` | Keep as-is (MultiNetworkPolicy already xit) |
-| `tests/services.cy.ts` | `cypress/tests/tier2/networking/services.cy.ts` | Adapt imports only |
-| `tests/routes.cy.ts` | `cypress/tests/tier2/networking/routes.cy.ts` | Adapt imports only |
-| `tests/ingresses.cy.ts` | `cypress/tests/tier2/networking/ingresses.cy.ts` | Adapt imports only |
-
-**Total: ~14 test cases** across 8 files
-
-### 4. GitHub Actions hot-cluster CI
-
-Create `.github/workflows/e2e.yml` following kubevirt-plugin PR #3713:
-- Self-hosted runner on persistent OpenShift cluster
-- Secrets: `CONSOLE_URL`, `KUBEADMIN_PASSWORD`
-- Runs `npm run test-cypress-headless`
-- Uploads JUnit + screenshots as artifacts
-- ~5 min feedback loop
-
-### 5. Prow CI (existing)
-
-[`test-prow-e2e.sh`](../test-prow-e2e.sh) already runs `npm run test-cypress-headless`. Once specs are in place, it will run them with no script changes. A Prow job definition may need to be added/updated in `openshift/release`.
-
-### 6. Update kubevirt-ui (post-migration)
-
-The VM-dependent tests remaining in kubevirt-ui will break because they relied on UDN/CUDN/NAD creation from preceding tests in the same file. These need API-based setup:
-- `oc apply -f` or `cy.exec('oc create ...')` to create UDN/CUDN/NAD resources before VM tests run
-- This is tracked as part of the kubevirt-ui side of CNV-87983
-
-### 7. Update Jira CNV-87983
-
-- Update epic description with PR links
-- Progress subtask CNV-87989 ("automated tests")
-- Document which tests were migrated, which stay (with API setup), and which go to nmstate-console-plugin
-
-## File Structure (final)
+## File Structure
 
 ```
-cypress/
+ui-tests-cy/
   cypress.config.js
   tsconfig.json
+  .eslintrc
+  reporter-config.json
+  PLAN.md
+  MIGRATION.md
+  CLUSTER.md
   plugins/
-    index.ts
+    index.ts                  (webpack preprocessor, cy.task registration, env config)
   support/
     index.ts
     login.ts
-    commands.ts
-    nav.ts
-    selectors.ts
+    commands.ts               (cy.deleteResource via cy.task, cy.switchProject)
+    nav.ts                    (cy.visitNAD, cy.visitUDN, cy.visitService)
+    selectors.ts              (cy.byTestID, cy.byButtonText, cy.clickNavLink, etc.)
   views/
-    nad.ts
-    udn.ts
-    actions.ts
-    selector-common.ts
+    nad.ts                    (createNAD, deleteNAD)
+    udn.ts                    (createUDN, createClusterUDN, deleteClusterUDN)
+    actions.ts                (checkActionMenu, getRow)
+    selector-common.ts        (shared selectors)
   utils/
     types/
-      nad.ts
+      nad.ts                  (NadData type)
     const/
-      index.ts
-      nad.ts
-      scale.ts
+      base.ts                 (TEST_NS, UDN_NS, MINUTE, SECOND)
+      nad.ts                  (NAD_BRIDGE, NAD_OVN, NAD_LOCALNET data)
   tests/
-    nad-bridge.cy.ts
-    nad-localnet.cy.ts
-    nad-ovn.cy.ts
-    udn.cy.ts
-    net-policies.cy.ts
-    services.cy.ts
-    routes.cy.ts
-    ingresses.cy.ts
+    all.cy.ts                 (imports all specs in order)
+    setup/
+      login.cy.ts
+      visit-pages.cy.ts
+    networking/
+      nad-bridge.cy.ts
+      nad-localnet.cy.ts
+      nad-ovn.cy.ts
+      udn.cy.ts
+      net-policies.cy.ts
+      services.cy.ts
+      routes.cy.ts
+      ingresses.cy.ts
+ci-scripts/
+  check-cluster-health.sh
+  test-cleanup.sh
+  start-console.sh
+  start-plugin-container.sh
+  resolve-console-image.sh
+  _cluster-helpers.sh
+  nginx-9080.conf / nginx-9443.conf
+  helm/
+    ci-test-stack/            (console + plugin Helm chart)
+    ci-env-controller/        (lifecycle controller Helm chart)
 .github/
+  actions/
+    ci-env-request/           (composite action: provision test env)
+    ci-env-release/           (composite action: tear down test env)
   workflows/
-    e2e.yml                   (hot-cluster CI)
-test-prow-e2e.sh              (updated screenshots path)
+    e2e.yml                   (simple CI on ubuntu-latest)
+    hot-cluster-e2e.yml       (entry point: PR gate + health check)
+    hot-cluster-e2e-run.yml   (build image, provision, test, cleanup)
+Dockerfile.ci                 (UBI9-based build for GitHub Actions)
+.dockerignore
+setup.sh / cleanup.sh / test-cypress.sh / research-flakiness.sh
 ```
 
 ## Key Design Decisions
 
-- **Copy from Cypress (release-4.21)** — the primary source; tests did not differ much between release-4.21 and main
-- **Cross-reference Playwright (main)** — check for any newer logic added after Cypress was dropped
-- **Strip VM-dependent tests, don't delete them** — they stay in kubevirt-ui and will need API-based setup (create UDN/CUDN/NAD via `oc apply`) as a precondition instead of relying on prior UI tests
-- **adminOnlyDescribe** — NAD/UDN tests require admin privileges; guard with `Cypress.expose('NON_PRIV')` check
-- **beforeSpec without Virtualization perspective** — kubevirt-ui's `cy.beforeSpec()` switches to Virtualization perspective; our version should remain in Administrator perspective since networking resources are accessed from there
-- **UDN namespace via shell** — UDN-enabled namespace creation uses `cy.exec('oc ...')` (shell/API), matching the kubevirt-ui approach where it's done in global setup via `setupTestNamespace(namespace, { 'k8s.ovn.org/primary-user-defined-network': '' })`. In Cypress this translates to `cy.exec('oc create namespace ...')` + label application
+- **Copy from Cypress (release-4.21)** — the primary source
+- **Strip VM-dependent tests** — they stay in kubevirt-ui with API-based setup
+- **`ui-tests-cy/` directory** — separate from `integration-tests/` (legacy Prow suite)
+- **`cy.task` over `cy.exec`** — `cy.exec` is deprecated; `cy.task('execOc')` delegates to Node process
+- **No video recording** — screenshots on failure are sufficient for CI debugging
+- **FIPS workarounds** — `GOLANG_FIPS=0` and `OPENSSL_FORCE_FIPS_MODE=0` for RHOS clusters
+- **UDN namespace via shell** — created with OVN label at creation time (admission policy)

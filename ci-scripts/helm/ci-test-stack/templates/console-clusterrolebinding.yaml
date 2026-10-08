@@ -7,7 +7,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ .Release.Name }}-console
+  name: cluster-admin
 subjects:
   - kind: ServiceAccount
     name: {{ include "ci-test-stack.consoleSAName" . }}
