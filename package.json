@@ -44,15 +44,16 @@
     "@patternfly/react-tokens": "6.6.1",
     "classnames": "^2.5.1",
     "js-yaml": "^4.3.2",
+    "linkify-it": "6.1.0",
     "lodash": "^4.18.1",
     "react": "18.3.1",
     "react-copy-to-clipboard": "^5.1.1",
     "react-dom": "18.3.1",
     "react-hook-form": "^7.89.0",
     "react-i18next": "16.5.8",
-    "react-linkify": "^1.0.0-alpha",
     "react-router": "7.18.1",
     "react-tagsinput": "^3.20.3",
+    "tlds": "1.261.0",
     "unique-names-generator": "^4.7.1",
     "victory-area": "^37.3.3",
     "victory-axis": "^37.3.2",
@@ -80,7 +81,6 @@
     "@types/uuid": "^9.0.8",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
-    "copy-webpack-plugin": "^12.0.2",
     "css-loader": "^6.7.1",
     "cypress": "^15.21.1",
     "cypress-multi-reporters": "^2.0.0",
@@ -112,10 +112,5 @@
     "webpack": "^5.111.1",
     "webpack-cli": "5.1.4",
     "webpack-dev-server": "^5.2.3"
-  },
-  "overrides": {
-    "serialize-javascript": "7.0.5",
-    "diff": "9.0.0",
-    "linkify-it": "^5.0.1"
   }
 }
