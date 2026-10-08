@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 
-import { IoK8sApiNetworkingV1IngressSpec } from '@kubevirt-ui/kubevirt-api/kubernetes/models/IoK8sApiNetworkingV1IngressSpec';
 import { Tbody } from '@patternfly/react-table';
 import EmptyBox from '@utils/components/EmptyBox/EmptyBox';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { IngressSpec } from '@utils/types/k8sTypes';
 import { isEmpty } from '@utils/utils';
 import RulesRow from '@views/ingresses/details/tabs/details/components/IngressRulesSection/RulesRow';
 import { IngressPathRule } from '@views/ingresses/details/tabs/details/utils/types';
@@ -11,7 +11,7 @@ import { getPort } from '@views/ingresses/details/tabs/details/utils/utils';
 
 type RulesRowsProps = {
   namespace: string;
-  spec: IoK8sApiNetworkingV1IngressSpec;
+  spec: IngressSpec;
 };
 
 const RulesRows: FC<RulesRowsProps> = ({ namespace, spec }) => {

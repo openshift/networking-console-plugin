@@ -1,16 +1,16 @@
 import React, { FC } from 'react';
 
-import { IngressModel, modelToRef } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiNetworkingV1Ingress } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { Title } from '@patternfly/react-core';
 import DetailsPageTitle from '@utils/components/DetailsPageTitle/DetailsPageTitle';
 import { useLastNamespacePath } from '@utils/hooks/useLastNamespacePath';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { getReferenceForModel, IngressModel } from '@utils/models';
 import { getName } from '@utils/resources/shared';
+import { Ingress } from '@utils/types/k8sTypes';
 import IngressActions from '@views/ingresses/actions/IngressActions';
 
 type IngressDetailsPageTitleProps = {
-  ingress: IoK8sApiNetworkingV1Ingress;
+  ingress: Ingress;
 };
 
 const IngressDetailsPageTitle: FC<IngressDetailsPageTitleProps> = ({ ingress }) => {
@@ -20,7 +20,7 @@ const IngressDetailsPageTitle: FC<IngressDetailsPageTitleProps> = ({ ingress }) 
   return (
     <DetailsPageTitle
       breadcrumbs={[
-        { name: t('Ingresses'), to: `/k8s/${namespacePath}/${modelToRef(IngressModel)}` },
+        { name: t('Ingresses'), to: `/k8s/${namespacePath}/${getReferenceForModel(IngressModel)}` },
         { name: t('Ingress details') },
       ]}
     >

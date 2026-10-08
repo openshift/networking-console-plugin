@@ -1,5 +1,5 @@
-import NetworkAttachmentDefinitionModel from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
 import { K8sModel } from '@openshift-console/dynamic-plugin-sdk';
+import { NetworkAttachmentDefinitionModel } from '@utils/models';
 import { generateName } from '@utils/utils';
 
 export const CLUSTER_NETWORK_CONFIG_NAME = 'cluster';

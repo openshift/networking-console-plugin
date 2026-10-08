@@ -1,31 +1,26 @@
-import {
-  IoK8sApiNetworkingV1Ingress,
-  IoK8sApiNetworkingV1IngressRule,
-} from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+import { Ingress, IngressRule } from '@utils/types/k8sTypes';
 import { get, isString } from '@utils/utils';
 
-export const ingressValidHosts = (ingress: IoK8sApiNetworkingV1Ingress) =>
+export const ingressValidHosts = (ingress: Ingress) =>
   get(ingress, 'spec.rules', [])
-    .map((rule: IoK8sApiNetworkingV1IngressRule) => rule?.host)
+    .map((rule: IngressRule) => rule?.host)
     .filter(isString);
 
-export const getHostsStr = (ingress: IoK8sApiNetworkingV1Ingress) => {
+export const getHostsStr = (ingress: Ingress) => {
   const hosts = ingressValidHosts(ingress);
   const hostsStr = hosts.join(', ');
 
   return hosts?.length ? hostsStr : null;
 };
 
-export const sortIngressesByHosts =
-  (direction: string) => (a: IoK8sApiNetworkingV1Ingress, b: IoK8sApiNetworkingV1Ingress) => {
-    const { first, second } =
-      direction === 'asc' ? { first: a, second: b } : { first: b, second: a };
+export const sortIngressesByHosts = (direction: string) => (a: Ingress, b: Ingress) => {
+  const { first, second } = direction === 'asc' ? { first: a, second: b } : { first: b, second: a };
 
-    const firstHosts = getHostsStr(first);
-    const secondHosts = getHostsStr(second);
+  const firstHosts = getHostsStr(first);
+  const secondHosts = getHostsStr(second);
 
-    return firstHosts?.localeCompare(secondHosts, undefined, {
-      numeric: true,
-      sensitivity: 'base',
-    });
-  };
+  return firstHosts?.localeCompare(secondHosts, undefined, {
+    numeric: true,
+    sensitivity: 'base',
+  });
+};

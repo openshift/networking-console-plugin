@@ -1,16 +1,16 @@
 import React, { FC } from 'react';
 
-import { IoK8sApiNetworkingV1Ingress } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { Grid, GridItem, PageSection } from '@patternfly/react-core';
 import DetailsSectionTitle from '@utils/components/DetailsSectionTitle/DetailsSectionTitle';
 import Loading from '@utils/components/Loading/Loading';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { Ingress } from '@utils/types/k8sTypes';
 import IngressDetailsSection from '@views/ingresses/details/tabs/details/components/IngressDetailsSection/IngressDetailsSection';
 
 import IngressRulesSection from './components/IngressRulesSection/IngressRulesSection';
 
 type IngressDetailsTabProps = {
-  obj: IoK8sApiNetworkingV1Ingress;
+  obj: Ingress;
 };
 
 const IngressDetailsTab: FC<IngressDetailsTabProps> = ({ obj: ingress }) => {

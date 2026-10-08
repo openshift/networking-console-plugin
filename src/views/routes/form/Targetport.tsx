@@ -1,15 +1,15 @@
 import React, { FC } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { DropdownItem, FormGroup, ValidatedOptions } from '@patternfly/react-core';
 import FormGroupHelperText from '@utils/components/FormGroupHelperText/FormGroupHelperText';
 import Select from '@utils/components/Select/Select';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { RouteKind } from '@utils/types';
+import { Service } from '@utils/types/k8sTypes';
 
 type TargetPortProps = {
-  service: IoK8sApiCoreV1Service;
+  service: Service;
 };
 
 const TargetPort: FC<TargetPortProps> = ({ service }) => {

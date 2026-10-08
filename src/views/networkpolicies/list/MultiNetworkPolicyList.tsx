@@ -1,7 +1,5 @@
 import React, { FC } from 'react';
 
-import { modelToGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
   ListPageBody,
   ListPageFilter,
@@ -15,7 +13,9 @@ import { documentationURLs, getDocumentationURL } from '@utils/constants/documen
 import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/constants/ui';
 import usePagination from '@utils/hooks/usePagination/usePagination';
 import { paginationDefaultValues } from '@utils/hooks/usePagination/utils/constants';
+import { getGroupVersionKindForModel } from '@utils/models';
 import { MultiNetworkPolicyModel } from '@utils/models';
+import { NetworkPolicy } from '@utils/types/k8sTypes';
 import { isEmpty } from '@utils/utils';
 
 import NetworkPolicyEmptyState from './components/NetworkPolicyEmptyState';
@@ -29,10 +29,8 @@ type MultiNetworkPolicyListProps = {
 };
 
 const MultiNetworkPolicyList: FC<MultiNetworkPolicyListProps> = ({ namespace }) => {
-  const [multinetworkPolicies, loaded, loadError] = useK8sWatchResource<
-    IoK8sApiNetworkingV1NetworkPolicy[]
-  >({
-    groupVersionKind: modelToGroupVersionKind(MultiNetworkPolicyModel),
+  const [multinetworkPolicies, loaded, loadError] = useK8sWatchResource<NetworkPolicy[]>({
+    groupVersionKind: getGroupVersionKindForModel(MultiNetworkPolicyModel),
     isList: true,
     namespace,
   });
@@ -43,7 +41,7 @@ const MultiNetworkPolicyList: FC<MultiNetworkPolicyListProps> = ({ namespace }) 
 
   const paginatedData = filteredData?.slice(pagination.startIndex, pagination.endIndex);
   return (
-    <ListEmptyState<IoK8sApiNetworkingV1NetworkPolicy>
+    <ListEmptyState<NetworkPolicy>
       createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}
       data={data}
       error={loadError}
@@ -93,7 +91,7 @@ const MultiNetworkPolicyList: FC<MultiNetworkPolicyListProps> = ({ namespace }) 
             />
           )}
         </div>
-        <VirtualizedTable<IoK8sApiNetworkingV1NetworkPolicy>
+        <VirtualizedTable<NetworkPolicy>
           columns={activeColumns}
           data={paginatedData}
           loaded={loaded}

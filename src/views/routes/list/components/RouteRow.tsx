@@ -1,13 +1,13 @@
 import React, { FC } from 'react';
 import classNames from 'classnames';
 
-import { NamespaceModel, RouteModel, ServiceModel } from '@kubevirt-ui/kubevirt-api/console';
 import {
   getGroupVersionKindForModel,
   ResourceLink,
   RowProps,
   TableData,
 } from '@openshift-console/dynamic-plugin-sdk';
+import { NamespaceModel, RouteModel, ServiceModel } from '@utils/models';
 import { getName, getNamespace } from '@utils/resources/shared';
 import { RouteKind } from '@utils/types';
 import RouteActions from '@views/routes/actions/RouteActions';

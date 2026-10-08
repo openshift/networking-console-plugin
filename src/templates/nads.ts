@@ -1,4 +1,4 @@
-import NetworkAttachmentDefinitionModel from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
+import { NetworkAttachmentDefinitionModel } from '@utils/models';
 
 export const NetworkAttachmentDefinitionsYAMLTemplates = `
 apiVersion: ${NetworkAttachmentDefinitionModel.apiGroup}/${NetworkAttachmentDefinitionModel.apiVersion}

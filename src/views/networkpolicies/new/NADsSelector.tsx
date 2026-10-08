@@ -1,12 +1,12 @@
 import React, { FC, useMemo } from 'react';
 
-import { NetworkAttachmentDefinitionModelGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console';
 import { useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { Alert, AlertVariant, FormGroup } from '@patternfly/react-core';
 import Loading from '@utils/components/Loading/Loading';
 import SelectMultiTypeahead from '@utils/components/SelectMultiTypeahead/SelectMultiTypeahead';
 import { DEFAULT_NAMESPACE } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { NetworkAttachmentDefinitionModelGroupVersionKind } from '@utils/models';
 import { NetworkPolicy } from '@utils/models';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
 import { getName, getNamespace } from '@utils/resources/shared';

@@ -1,12 +1,12 @@
 import React, { FC, useState } from 'react';
 import { useParams } from 'react-router-dom-v5-compat';
 
-import { NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
 import { ResourceYAMLEditor } from '@openshift-console/dynamic-plugin-sdk';
 import { Content, PageSection, Title } from '@patternfly/react-core';
 import { EditorType } from '@utils/components/SyncedEditor/EditorToggle';
 import { SyncedEditor } from '@utils/components/SyncedEditor/SyncedEditor';
 import { safeYAMLToJS } from '@utils/components/SyncedEditor/yaml';
+import { NetworkPolicyModel } from '@utils/models';
 import { MultiNetworkPolicyModel, networkPolicyToK8sResource } from '@utils/models';
 
 import useIsMultiNetworkPolicy from './hooks/useIsMultiNetworkPolicy';

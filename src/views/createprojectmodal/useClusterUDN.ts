@@ -1,6 +1,6 @@
-import { modelToGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console';
 import { K8sResourceCommon, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { useIsAdmin } from '@utils/hooks/useIsAdmin';
+import { getGroupVersionKindForModel } from '@utils/models';
 import { ClusterUserDefinedNetworkModel } from '@utils/models';
 
 const useClusterUDN = () => {
@@ -9,7 +9,7 @@ const useClusterUDN = () => {
   return useK8sWatchResource<K8sResourceCommon[]>(
     isAdmin
       ? {
-          groupVersionKind: modelToGroupVersionKind(ClusterUserDefinedNetworkModel),
+          groupVersionKind: getGroupVersionKindForModel(ClusterUserDefinedNetworkModel),
           isList: true,
         }
       : null,

@@ -2,8 +2,6 @@ import React, { FC } from 'react';
 import { Link } from 'react-router-dom-v5-compat';
 import * as _ from 'lodash';
 
-import { ServiceModel } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
   getGroupVersionKindForModel,
   ResourceLink,
@@ -12,14 +10,16 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import { LabelList } from '@utils/components/DetailsItem/LabelList';
 import { Selector } from '@utils/components/Selector/Selector';
+import { ServiceModel } from '@utils/models';
 import { getName, getNamespace } from '@utils/resources/shared';
+import { Service } from '@utils/types/k8sTypes';
 import ServiceActions from '@views/services/actions/ServiceActions';
 
 import { tableColumnClasses } from '../hooks/useServiceColumn';
 
 import ServiceLocation from './ServiceLocation';
 
-type ServiceRowType = RowProps<IoK8sApiCoreV1Service>;
+type ServiceRowType = RowProps<Service>;
 
 const ServiceGroupVersionKind = getGroupVersionKindForModel(ServiceModel);
 

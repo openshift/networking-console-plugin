@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { ResourceIcon, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import {
   Alert,
@@ -17,6 +16,7 @@ import Select from '@utils/components/Select/Select';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { getName } from '@utils/resources/shared';
 import { RouteKind } from '@utils/types';
+import { Service } from '@utils/types/k8sTypes';
 
 import AlternateService from './AlternateServicesSection';
 import {
@@ -44,7 +44,7 @@ const ServiceSelector: FC<ServiceSelectorProps> = ({ namespace }) => {
 
   const { t } = useNetworkingTranslation();
 
-  const [services, loaded, error] = useK8sWatchResource<IoK8sApiCoreV1Service[]>({
+  const [services, loaded, error] = useK8sWatchResource<Service[]>({
     groupVersionKind: ServiceGroupVersionKind,
     isList: true,
     namespace,

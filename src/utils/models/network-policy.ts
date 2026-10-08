@@ -1,17 +1,13 @@
 import * as _ from 'lodash';
 
-import { NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
-import {
-  IoK8sApiNetworkingV1NetworkPolicy,
-  IoK8sApiNetworkingV1NetworkPolicyIngressRule,
-  IoK8sApiNetworkingV1NetworkPolicyPort,
-} from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { Selector } from '@openshift-console/dynamic-plugin-sdk';
 import { t } from '@utils/hooks/useNetworkingTranslation';
+import { NetworkPolicyModel } from '@utils/models';
 import {
   NetworkPolicyPeer as K8SPeer,
   NetworkPolicyPort as K8SPort,
 } from '@utils/resources/networkpolicies/types';
+import { NetworkPolicy, NetworkPolicyIngressRule, NetworkPolicyPort } from '@utils/types/k8sTypes';
 import { NetworkPolicyEgressIngress } from '@views/networkpolicies/new/utils/types';
 
 import { MultiNetworkPolicyModel } from '.';
@@ -122,8 +118,8 @@ type Rule = { from?: K8SPeer[]; ports?: K8SPort[]; to?: K8SPeer[] };
 const ruleToK8s = (
   rule: NetworkPolicyRule,
   direction: NetworkPolicyEgressIngress,
-): IoK8sApiNetworkingV1NetworkPolicyIngressRule => {
-  const res: IoK8sApiNetworkingV1NetworkPolicyIngressRule = {};
+): NetworkPolicyIngressRule => {
+  const res: NetworkPolicyIngressRule = {};
   if (rule.peers.length > 0) {
     const peers = rule.peers.map((p) => {
       const peer: K8SPeer = {};
@@ -154,7 +150,7 @@ const ruleToK8s = (
         ({
           port: p.port,
           protocol: p.protocol,
-        }) as IoK8sApiNetworkingV1NetworkPolicyPort,
+        }) as NetworkPolicyPort,
     );
   }
   return res;
@@ -163,13 +159,13 @@ const ruleToK8s = (
 export const networkPolicyToK8sResource = (
   from: NetworkPolicy,
   isMultiNetworkPolicy: boolean,
-): IoK8sApiNetworkingV1NetworkPolicy => {
+): NetworkPolicy => {
   const podSelector = selectorToK8s(from.podSelector);
   const policyTypes: string[] = [];
 
   const model = isMultiNetworkPolicy ? MultiNetworkPolicyModel : NetworkPolicyModel;
 
-  const res: IoK8sApiNetworkingV1NetworkPolicy = {
+  const res: NetworkPolicy = {
     apiVersion: `${model.apiGroup}/${model.apiVersion}`,
     kind: model.kind,
     metadata: {
@@ -242,8 +238,8 @@ export const checkNetworkPolicyValidity = (from: NetworkPolicy): ConversionError
   return undefined;
 };
 
-// const NetworkPolicySchema = object<IoK8sApiNetworkingV1NetworkPolicy>({
-//   spec: object<IoK8sApiNetworkingV1NetworkPolicySpec>({
+// const NetworkPolicySchema = object<NetworkPolicy>({
+//   spec: object<NetworkPolicySpec>({
 //     egress: array().default([]).optional(),
 //     ingress: array().default([]),
 //     podSelector: object({}).default({}),
@@ -257,9 +253,7 @@ export const checkNetworkPolicyValidity = (from: NetworkPolicy): ConversionError
 //   }).optional(),
 // });
 
-export const networkPolicyNormalizeK8sResource = (
-  from: IoK8sApiNetworkingV1NetworkPolicy,
-): IoK8sApiNetworkingV1NetworkPolicy => {
+export const networkPolicyNormalizeK8sResource = (from: NetworkPolicy): NetworkPolicy => {
   // This normalization is performed in order to make sure that converting from and to k8s back and forth remains consistent
   const clone = _.cloneDeep(from);
   if (clone.spec) {
@@ -440,7 +434,7 @@ const rulesFromK8s = (
 };
 
 export const networkPolicyFromK8sResource = (
-  from: IoK8sApiNetworkingV1NetworkPolicy,
+  from: NetworkPolicy,
 ): ConversionError | NetworkPolicy => {
   if (!from.metadata) {
     return errors.isMissing('metadata');

@@ -1,5 +1,5 @@
-import NetworkAttachmentDefinitionModel from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
 import { k8sCreate } from '@openshift-console/dynamic-plugin-sdk';
+import { NetworkAttachmentDefinitionModel } from '@utils/models';
 import {
   IPAMConfig,
   NetworkAttachmentDefinitionAnnotations,

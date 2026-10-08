@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 
-import { RouteModel } from '@kubevirt-ui/kubevirt-api/console';
 import { TableColumn, useActiveColumns } from '@openshift-console/dynamic-plugin-sdk';
 import { sortable } from '@patternfly/react-table';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { RouteModel } from '@utils/models';
 import { RouteKind } from '@utils/types';
 
 import { sortRoutesByLocation, sortRoutesByStatus } from '../utils/utils';

@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 
-import { modelToGroupVersionKind, NamespaceModel } from '@kubevirt-ui/kubevirt-api/console';
 import {
   getGroupVersionKindForModel,
   ResourceLink,
@@ -9,6 +8,7 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import MutedText from '@utils/components/MutedText/MutedText';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { getGroupVersionKindForModel, NamespaceModel } from '@utils/models';
 import { UserDefinedNetworkModel } from '@utils/models';
 import { getName, getNamespace } from '@utils/resources/shared';
 import { getModel, getMTU, getTopology } from '@utils/resources/udns/selectors';
@@ -39,7 +39,7 @@ const UserDefinedNetworkRow: FC<UserDefinedNetworkRowType> = ({ activeColumnIDs,
       <TableData activeColumnIDs={activeColumnIDs} id="namespace">
         {model === UserDefinedNetworkModel ? (
           <ResourceLink
-            groupVersionKind={modelToGroupVersionKind(NamespaceModel)}
+            groupVersionKind={getGroupVersionKindForModel(NamespaceModel)}
             name={namespace}
           />
         ) : (

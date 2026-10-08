@@ -2,8 +2,6 @@ import React, { FC } from 'react';
 import classNames from 'classnames';
 import * as _ from 'lodash';
 
-import { modelToGroupVersionKind, PodModel } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiCoreV1Pod } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
   PrometheusResponse,
   ResourceLink,
@@ -15,6 +13,8 @@ import { LazyActionMenu } from '@openshift-console/dynamic-plugin-sdk-internal';
 import { LabelList } from '@utils/components/DetailsItem/LabelList';
 import { OwnerReferences } from '@utils/components/OwnerReference/owner-references';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { getGroupVersionKindForModel, PodModel } from '@utils/models';
+import { Pod } from '@utils/types/k8sTypes';
 
 import { podColumnInfo } from '../hooks/usePodColumns';
 import { formatBytesAsMiB, formatCores } from '../units';
@@ -24,7 +24,7 @@ import { PodStatus } from './PodStatus';
 import { PodTraffic } from './PodTraffic';
 
 type PodRowType = RowProps<
-  IoK8sApiCoreV1Pod,
+  Pod,
   { cpuUsageData: PrometheusResponse; memoryUsageData: PrometheusResponse }
 >;
 
@@ -52,7 +52,7 @@ const PodRow: FC<PodRowType> = ({
         id={podColumnInfo.name.id}
       >
         <ResourceLink
-          groupVersionKind={modelToGroupVersionKind(PodModel)}
+          groupVersionKind={getGroupVersionKindForModel(PodModel)}
           name={name}
           namespace={namespace}
         />
@@ -125,7 +125,7 @@ const PodRow: FC<PodRowType> = ({
         className={podColumnInfo.labels.classes}
         id={podColumnInfo.labels.id}
       >
-        <LabelList groupVersionKind={modelToGroupVersionKind(PodModel)} labels={labels} />
+        <LabelList groupVersionKind={getGroupVersionKindForModel(PodModel)} labels={labels} />
       </TableData>
       <TableData
         activeColumnIDs={activeColumnIDs}

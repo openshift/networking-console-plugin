@@ -1,13 +1,13 @@
 import { useMemo } from 'react';
 
-import { PodModel, ProjectModel } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiCoreV1Pod } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
   K8sResourceCommon,
   Selector,
   useActiveNamespace,
   useK8sWatchResource,
 } from '@openshift-console/dynamic-plugin-sdk';
+import { PodModel, ProjectModel } from '@utils/models';
+import { Pod } from '@utils/types/k8sTypes';
 
 import { safeSelector, selectorError } from '../../utils/utils';
 
@@ -20,7 +20,7 @@ type UseNetworkPolicyPodPreviewDataReturnValues = {
   error: string;
   loaded: boolean;
   namespaces: K8sResourceCommon[];
-  pods: IoK8sApiCoreV1Pod[];
+  pods: Pod[];
   safeNsSelector: Selector;
   safePodSelector: Selector;
 };
@@ -45,7 +45,7 @@ const useNetworkPolicyPodPreviewData: UseNetworkPolicyPodPreviewData = ({
     [podSelector],
   );
 
-  const [pods, loadedPods, podsError] = useK8sWatchResource<IoK8sApiCoreV1Pod[]>({
+  const [pods, loadedPods, podsError] = useK8sWatchResource<Pod[]>({
     isList: true,
     kind: PodModel.kind,
     namespace,

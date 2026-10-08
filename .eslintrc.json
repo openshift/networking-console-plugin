@@ -64,7 +64,7 @@
     ],
     "react/display-name": "off",
     "react/prop-types": "off",
-    "simple-import-sort/exports": "error",
+    "simple-import-sort/exports": "off",
     "simple-import-sort/imports": [
       "warn",
       {

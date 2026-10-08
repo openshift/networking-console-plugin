@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom-v5-compat';
 
-import { NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
 import { Button, EmptyState, EmptyStateActions, EmptyStateFooter } from '@patternfly/react-core';
 import { DEFAULT_NAMESPACE } from '@utils/constants';
 import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/constants/ui';
 import { useLastNamespacePath } from '@utils/hooks/useLastNamespacePath';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { NetworkPolicyModel } from '@utils/models';
 import { MultiNetworkPolicyModel } from '@utils/models';
 import { resourcePathFromModel } from '@utils/resources/shared';
 import { isEmpty } from '@utils/utils';

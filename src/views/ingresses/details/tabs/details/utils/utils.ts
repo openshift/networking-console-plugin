@@ -1,4 +1,4 @@
-import { IoK8sApiNetworkingV1IngressServiceBackend } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+import { IngressServiceBackend } from '@utils/types/k8sTypes';
 
-export const getPort = (service: IoK8sApiNetworkingV1IngressServiceBackend): number | string =>
+export const getPort = (service: IngressServiceBackend): number | string =>
   service?.port?.number || service?.port?.name;

@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 
-import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import MutedText from '@utils/components/MutedText/MutedText';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { Service } from '@utils/types/k8sTypes';
 
-const ServiceAddress: FC<{ service: IoK8sApiCoreV1Service }> = ({ service }) => {
+const ServiceAddress: FC<{ service: Service }> = ({ service }) => {
   const { t } = useNetworkingTranslation();
 
   const ServiceType = (type) => {

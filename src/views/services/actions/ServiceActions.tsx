@@ -1,13 +1,13 @@
 import React, { FC } from 'react';
 
-import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import ActionsDropdown from '@utils/components/ActionsDropdown/ActionsDropdown';
+import { Service } from '@utils/types/k8sTypes';
 
 import useServiceActions from './hooks/useServiceActions';
 
 type ServiceActionsProps = {
   isKebabToggle?: boolean;
-  obj: IoK8sApiCoreV1Service;
+  obj: Service;
 };
 
 const ServiceActions: FC<ServiceActionsProps> = ({ isKebabToggle, obj }) => {

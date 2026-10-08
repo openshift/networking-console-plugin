@@ -2,9 +2,6 @@ import React, { FC } from 'react';
 import { Link } from 'react-router-dom-v5-compat';
 import { isEmpty } from 'lodash';
 
-import { NamespaceModel } from '@kubevirt-ui/kubevirt-api/console';
-import { modelToGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console/modelUtils';
-import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
   getGroupVersionKindForModel,
   ResourceLink,
@@ -13,11 +10,14 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import { Selector } from '@utils/components/Selector/Selector';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { NamespaceModel } from '@utils/models';
+import { getGroupVersionKindForModel } from '@utils/models';
 import { getPolicyModel } from '@utils/resources/networkpolicies/utils';
 import { getName, getNamespace } from '@utils/resources/shared';
+import { NetworkPolicy } from '@utils/types/k8sTypes';
 import NetworkPolicyActions from '@views/networkpolicies/actions/NetworkPolicyActions';
 
-type NetworkPolicyRowType = RowProps<IoK8sApiNetworkingV1NetworkPolicy>;
+type NetworkPolicyRowType = RowProps<NetworkPolicy>;
 
 const NetworkPolicyRow: FC<NetworkPolicyRowType> = ({ activeColumnIDs, obj }) => {
   const { t } = useNetworkingTranslation();
@@ -37,7 +37,10 @@ const NetworkPolicyRow: FC<NetworkPolicyRowType> = ({ activeColumnIDs, obj }) =>
         />
       </TableData>
       <TableData activeColumnIDs={activeColumnIDs} id="namespace">
-        <ResourceLink groupVersionKind={modelToGroupVersionKind(NamespaceModel)} name={namespace} />
+        <ResourceLink
+          groupVersionKind={getGroupVersionKindForModel(NamespaceModel)}
+          name={namespace}
+        />
       </TableData>
       <TableData
         activeColumnIDs={activeColumnIDs}

@@ -1,7 +1,6 @@
 import React, { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
-import { modelToGroupVersionKind, modelToRef } from '@kubevirt-ui/kubevirt-api/console';
 import {
   k8sPatch,
   K8sResourceCommon,
@@ -20,6 +19,7 @@ import {
   Tooltip,
 } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { getGroupVersionKindForModel, getReferenceForModel } from '@utils/models';
 import { MultiNetworkPolicyModel } from '@utils/models';
 import { createNamespacePath } from '@utils/utils/helpers';
 import { NetworkConfigModel } from '@views/nads/form/utils/constants';
@@ -34,7 +34,7 @@ const EnableMultiPage: FC<EnableMultiPageProps> = ({ namespace }) => {
   const [error, setError] = useState<Error | null>();
 
   const [networkClusterConfig, loaded] = useK8sWatchResource<{ spec: any } & K8sResourceCommon>({
-    groupVersionKind: modelToGroupVersionKind(NetworkConfigModel),
+    groupVersionKind: getGroupVersionKindForModel(NetworkConfigModel),
     name: 'cluster',
   });
 
@@ -63,7 +63,9 @@ const EnableMultiPage: FC<EnableMultiPageProps> = ({ namespace }) => {
         model: NetworkConfigModel,
         resource: networkClusterConfig,
       });
-      navigate(`/k8s/${createNamespacePath(namespace)}/${modelToRef(MultiNetworkPolicyModel)}`);
+      navigate(
+        `/k8s/${createNamespacePath(namespace)}/${getReferenceForModel(MultiNetworkPolicyModel)}`,
+      );
     } catch (apiError) {
       setError(apiError);
     }

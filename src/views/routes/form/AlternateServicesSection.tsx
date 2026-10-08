@@ -1,18 +1,18 @@
 import React, { FC } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
-import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { Button, ButtonVariant } from '@patternfly/react-core';
 import { PlusCircleIcon } from '@patternfly/react-icons';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { getName } from '@utils/resources/shared';
 import { RouteKind } from '@utils/types';
+import { Service } from '@utils/types/k8sTypes';
 import { isEmpty } from '@utils/utils';
 
 import AlternateService from './AlternateService';
 
 type AlternateServicesSectionProps = {
-  services: IoK8sApiCoreV1Service[];
+  services: Service[];
 };
 
 const AlternateServicesSection: FC<AlternateServicesSectionProps> = ({ services }) => {

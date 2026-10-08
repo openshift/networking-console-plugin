@@ -1,4 +1,4 @@
-import { IngressModel } from '@kubevirt-ui/kubevirt-api/console';
+import { IngressModel } from '@utils/models';
 
 export const IngressYAMLTemplates = `
 apiVersion: ${IngressModel.apiGroup}/${IngressModel.apiVersion}

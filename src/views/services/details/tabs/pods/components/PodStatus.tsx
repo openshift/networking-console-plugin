@@ -1,15 +1,12 @@
 import React, { FC, ReactNode } from 'react';
 import { Link } from 'react-router-dom-v5-compat';
 
-import { PodModel } from '@kubevirt-ui/kubevirt-api/console';
-import {
-  IoK8sApiCoreV1Container,
-  IoK8sApiCoreV1Pod,
-} from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import Status from '@openshift-console/dynamic-plugin-sdk/lib/app/components/status/Status';
 import { Button, ButtonVariant, Content, Divider, Popover } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { PodModel } from '@utils/models';
 import { resourcePathFromModel } from '@utils/resources/shared';
+import { Container, Pod } from '@utils/types/k8sTypes';
 
 import { isContainerCrashLoopBackOff, isWindowsPod, podPhase } from '../utils';
 
@@ -21,7 +18,7 @@ type PodStatusPopoverProps = {
 };
 
 export type PodStatusProps = {
-  pod: IoK8sApiCoreV1Pod;
+  pod: Pod;
 };
 
 const PodStatusPopover: FC<PodStatusPopoverProps> = ({
@@ -66,7 +63,7 @@ export const PodStatus: FC<PodStatusProps> = ({ pod }) => {
     let headerTitle = '';
     if (status === 'CrashLoopBackOff') {
       headerTitle = t('Pod crash loop back-off');
-      const containers: IoK8sApiCoreV1Container[] = pod.spec.containers;
+      const containers: Container[] = pod.spec.containers;
       footerLinks = (
         <Content>
           <p>

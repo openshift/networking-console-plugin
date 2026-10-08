@@ -1,7 +1,5 @@
 import React, { FC } from 'react';
 
-import { modelToGroupVersionKind, NamespaceModel } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
   ResourceLink,
   Timestamp,
@@ -14,10 +12,12 @@ import { DetailsItem } from '@utils/components/DetailsItem/DetailsItem';
 import { LabelList } from '@utils/components/DetailsItem/LabelList';
 import { OwnerReferences } from '@utils/components/OwnerReference/owner-references';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { getGroupVersionKindForModel, NamespaceModel } from '@utils/models';
 import { getPolicyModel } from '@utils/resources/networkpolicies/utils';
+import { NetworkPolicy } from '@utils/types/k8sTypes';
 
 type NetworkPolicyDetailsMetadataProps = {
-  networkPolicy: IoK8sApiNetworkingV1NetworkPolicy;
+  networkPolicy: NetworkPolicy;
 };
 
 const NetworkPolicyDetailsMetadata: FC<NetworkPolicyDetailsMetadataProps> = ({ networkPolicy }) => {
@@ -42,7 +42,7 @@ const NetworkPolicyDetailsMetadata: FC<NetworkPolicyDetailsMetadataProps> = ({ n
       <DetailsItem label={t('Name')} obj={networkPolicy} path={'metadata.name'} />
       <DetailsItem label={t('Namespace')} obj={networkPolicy} path="metadata.namespace">
         <ResourceLink
-          groupVersionKind={modelToGroupVersionKind(NamespaceModel)}
+          groupVersionKind={getGroupVersionKindForModel(NamespaceModel)}
           name={metadata.namespace}
         />
       </DetailsItem>
@@ -56,7 +56,7 @@ const NetworkPolicyDetailsMetadata: FC<NetworkPolicyDetailsMetadataProps> = ({ n
         valueClassName="co-editable-label-group"
       >
         <LabelList
-          groupVersionKind={modelToGroupVersionKind(policyModel)}
+          groupVersionKind={getGroupVersionKindForModel(policyModel)}
           labels={metadata?.labels}
         />
       </DetailsItem>

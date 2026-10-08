@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import { Controller, FieldArrayWithId, useFormContext } from 'react-hook-form';
 
-import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { ResourceIcon } from '@openshift-console/dynamic-plugin-sdk';
 import {
   Button,
@@ -17,6 +16,7 @@ import Select from '@utils/components/Select/Select';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { getName } from '@utils/resources/shared';
 import { RouteKind } from '@utils/types';
+import { Service } from '@utils/types/k8sTypes';
 
 import {
   AS_PREFIX_FIELD_ID,
@@ -26,7 +26,7 @@ import {
 
 type AlternateServiceProps = {
   field: FieldArrayWithId<RouteKind, 'spec.alternateBackends', 'id'>;
-  filteredServices: IoK8sApiCoreV1Service[];
+  filteredServices: Service[];
   index: number;
   remove: (index: number) => void;
 };

@@ -1,5 +1,5 @@
-import { modelToGroupVersionKind, ServiceModel } from '@kubevirt-ui/kubevirt-api/console';
 import { t } from '@utils/hooks/useNetworkingTranslation';
+import { getGroupVersionKindForModel, ServiceModel } from '@utils/models';
 
 export const PASSTHROUGH = 'passthrough';
 export const RE_ENCRYPT = 'reencrypt';
@@ -22,7 +22,7 @@ export const passthroughInsecureTrafficTypes = {
   Redirect: t('Redirect'),
 };
 
-export const ServiceGroupVersionKind = modelToGroupVersionKind(ServiceModel);
+export const ServiceGroupVersionKind = getGroupVersionKindForModel(ServiceModel);
 
 export const NAME_FIELD_ID = 'name';
 export const HOST_FIELD_ID = 'host';

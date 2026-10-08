@@ -1,7 +1,5 @@
 import { useHistory } from 'react-router';
 
-import { modelToRef, ServiceModel } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
   Action,
   useAnnotationsModal,
@@ -13,9 +11,11 @@ import PodSelectorModal, {
   PodSelectorModalProps,
 } from '@utils/components/PodSelectorModal/PodSelectorModal';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { getReferenceForModel, ServiceModel } from '@utils/models';
 import { asAccessReview, getName, getNamespace } from '@utils/resources/shared';
+import { Service } from '@utils/types/k8sTypes';
 
-type ServiceActionProps = (obj: IoK8sApiCoreV1Service) => [actions: Action[]];
+type ServiceActionProps = (obj: Service) => [actions: Action[]];
 
 const useServiceActions: ServiceActionProps = (obj) => {
   const { t } = useNetworkingTranslation();
@@ -55,7 +55,9 @@ const useServiceActions: ServiceActionProps = (obj) => {
     {
       accessReview: asAccessReview(ServiceModel, obj, 'update'),
       cta: () =>
-        history.push(`/k8s/ns/${objNamespace}/${modelToRef(ServiceModel)}/${objName}/yaml`),
+        history.push(
+          `/k8s/ns/${objNamespace}/${getReferenceForModel(ServiceModel)}/${objName}/yaml`,
+        ),
       id: 'edit-services',
       label: t('Edit Service'),
     },

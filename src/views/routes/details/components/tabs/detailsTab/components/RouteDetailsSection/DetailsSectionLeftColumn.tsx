@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import * as _ from 'lodash';
 
-import { NamespaceModel, RouteModel } from '@kubevirt-ui/kubevirt-api/console';
 import {
   getGroupVersionKindForModel,
   ResourceLink,
@@ -16,6 +15,7 @@ import { DetailsItem } from '@utils/components/DetailsItem/DetailsItem';
 import { LabelList } from '@utils/components/DetailsItem/LabelList';
 import { OwnerReferences } from '@utils/components/OwnerReference/owner-references';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { NamespaceModel, RouteModel } from '@utils/models';
 import {
   getAnnotations,
   getCreationTimestamp,

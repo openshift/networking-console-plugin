@@ -1,13 +1,13 @@
 import React, { FC } from 'react';
 
-import { modelToGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
   HorizontalNav,
   K8sModel,
   useK8sWatchResource,
 } from '@openshift-console/dynamic-plugin-sdk';
 import StatusBox from '@utils/components/StatusBox/StatusBox';
+import { getGroupVersionKindForModel } from '@utils/models';
+import { NetworkPolicy } from '@utils/types/k8sTypes';
 
 import NetworkPolicyPageTitle from './components/NetworkPolicyDetailsPageTitle';
 import { useNetworkPolicyTabs } from './hooks/useNetworkPolicyTabs';
@@ -19,8 +19,8 @@ export type NetworkPolicyPageNavProps = {
 };
 
 const NetworkPolicyDetailsPage: FC<NetworkPolicyPageNavProps> = ({ kindObj, name, namespace }) => {
-  const [networkPolicy, loaded, error] = useK8sWatchResource<IoK8sApiNetworkingV1NetworkPolicy>({
-    groupVersionKind: modelToGroupVersionKind(kindObj),
+  const [networkPolicy, loaded, error] = useK8sWatchResource<NetworkPolicy>({
+    groupVersionKind: getGroupVersionKindForModel(kindObj),
     name,
     namespace,
   });

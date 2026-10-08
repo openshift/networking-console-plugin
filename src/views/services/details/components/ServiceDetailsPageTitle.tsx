@@ -1,15 +1,15 @@
 import React, { FC } from 'react';
 
-import { modelToRef, ServiceModel } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { Title } from '@patternfly/react-core';
 import DetailsPageTitle from '@utils/components/DetailsPageTitle/DetailsPageTitle';
 import { useLastNamespacePath } from '@utils/hooks/useLastNamespacePath';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { getReferenceForModel, ServiceModel } from '@utils/models';
+import { Service } from '@utils/types/k8sTypes';
 import ServiceActions from '@views/services/actions/ServiceActions';
 
 type ServicePageTitleProps = {
-  service: IoK8sApiCoreV1Service;
+  service: Service;
 };
 
 const ServicePageTitle: FC<ServicePageTitleProps> = ({ service }) => {
@@ -19,7 +19,7 @@ const ServicePageTitle: FC<ServicePageTitleProps> = ({ service }) => {
   return (
     <DetailsPageTitle
       breadcrumbs={[
-        { name: t('Services'), to: `/k8s/${namespacePath}/${modelToRef(ServiceModel)}` },
+        { name: t('Services'), to: `/k8s/${namespacePath}/${getReferenceForModel(ServiceModel)}` },
         { name: t('Service details') },
       ]}
     >

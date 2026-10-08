@@ -1,7 +1,5 @@
 import React, { FC } from 'react';
 
-import { modelToGroupVersionKind, NamespaceModel } from '@kubevirt-ui/kubevirt-api/console';
-import NetworkAttachmentDefinitionModel from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
 import {
   getGroupVersionKindForModel,
   ResourceLink,
@@ -11,6 +9,8 @@ import {
 import { Badge } from '@patternfly/react-core';
 import MutedText from '@utils/components/MutedText/MutedText';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { getGroupVersionKindForModel, NamespaceModel } from '@utils/models';
+import { NetworkAttachmentDefinitionModel } from '@utils/models';
 import { isUserDefinedNetworkNAD } from '@utils/resources/nads/helpers';
 import { getConfigAsJSON, getType } from '@utils/resources/nads/selectors';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
@@ -40,7 +40,10 @@ const NADsRow: FC<NADsRowType> = ({ activeColumnIDs, obj }) => {
         {isUDNManaged && <Badge>{t('UserDefinedNetwork')}</Badge>}
       </TableData>
       <TableData activeColumnIDs={activeColumnIDs} id="namespace">
-        <ResourceLink groupVersionKind={modelToGroupVersionKind(NamespaceModel)} name={namespace} />
+        <ResourceLink
+          groupVersionKind={getGroupVersionKindForModel(NamespaceModel)}
+          name={namespace}
+        />
       </TableData>
       <TableData activeColumnIDs={activeColumnIDs} id="type">
         {type || <MutedText content={t('Not available')} />}
