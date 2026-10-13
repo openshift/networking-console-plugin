@@ -312,7 +312,7 @@ jobs:
           npx cypress install
 
       - name: Run E2E tests
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@v7
         env:
           BRIDGE_BASE_ADDRESS: ${{ steps.ci-env.outputs.bridge-base-address }}
         with:
