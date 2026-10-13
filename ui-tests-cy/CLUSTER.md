@@ -13,6 +13,7 @@ This guide walks through setting up a RHOS (Red Hat OpenShift Service) cluster f
 ## Architecture Overview
 
 The hot-cluster CI testing uses:
+
 1. **Actions Runner Controller (ARC)** — self-hosted GitHub Actions runners on Kubernetes
 2. **ci-env-controller** — custom controller that provisions test environments via Helm
 3. **ci-test-stack** — Helm chart deploying the OpenShift console and plugin
@@ -265,6 +266,7 @@ With in-pod ServiceAccount token mounting, GitHub secrets are optional. However,
 - `CLUSTER_TOKEN`: A long-lived token for the runner's service account — only used if manual authentication is needed
 
 **How It Works**: The hot-cluster workflows automatically:
+
 1. Detect the mounted ServiceAccount token at `/var/run/secrets/kubernetes.io/serviceaccount/token`
 2. Detect the CA certificate at `/var/run/secrets/kubernetes.io/serviceaccount/ca.crt`
 3. Generate a kubeconfig file at `${KUBECONFIG}` that references these files

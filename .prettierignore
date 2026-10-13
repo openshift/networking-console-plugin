@@ -1,4 +1,19 @@
-# Ignore artifacts:
-dist/
+# .gitignore:
 node_modules/
+dist/
+integration-tests/videos
+integration-tests/screenshots
+integration-tests/.DS_Store
+yarn-error.log
+.DS_Store
+ui-tests-cy/gui-test-screenshots/
+ui-tests-cy/ci-hot-cluster-e2e/
+.env
+
+#legacy
 i18n-scripts/
+#generated
+package-lock.json
+locales/
+# Helm charts contain Go templates that prettier cannot parse
+ci-scripts/helm/

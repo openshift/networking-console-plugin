@@ -51,16 +51,16 @@ jobs:
         run: |
           SA_TOKEN="/var/run/secrets/kubernetes.io/serviceaccount/token"
           SA_CA="/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
-          
+
           if [[ ! -f "${SA_TOKEN}" ]]; then
             echo "::warning::ServiceAccount token not mounted at ${SA_TOKEN}"
             echo "Skipping cluster connectivity check. This is expected if using GitHub-hosted runners."
             exit 0
           fi
-          
+
           # Determine cluster API from the environment or default
           CLUSTER_API="${CLUSTER_API:-https://kubernetes.default.svc}"
-          
+
           # Create kubeconfig
           mkdir -p "$(dirname "${KUBECONFIG}")"
           cat > "${KUBECONFIG}" <<EOF
@@ -83,7 +83,7 @@ jobs:
               user:
                 tokenFile: ${SA_TOKEN}
           EOF
-          
+
           chmod 600 "${KUBECONFIG}"
           echo "✓ kubeconfig created at ${KUBECONFIG}"
 
@@ -227,16 +227,16 @@ jobs:
           SA_TOKEN="/var/run/secrets/kubernetes.io/serviceaccount/token"
           SA_CA="/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
           SA_NAMESPACE="/var/run/secrets/kubernetes.io/serviceaccount/namespace"
-          
+
           if [[ ! -f "${SA_TOKEN}" ]]; then
             echo "::error::ServiceAccount token not mounted at ${SA_TOKEN}"
             echo "This job requires a self-hosted runner with in-pod ServiceAccount mounting enabled."
             exit 1
           fi
-          
+
           # Determine cluster API from the environment or default
           CLUSTER_API="${CLUSTER_API:-https://kubernetes.default.svc}"
-          
+
           # Create kubeconfig
           mkdir -p "$(dirname "${KUBECONFIG}")"
           cat > "${KUBECONFIG}" <<EOF
@@ -259,10 +259,10 @@ jobs:
               user:
                 tokenFile: ${SA_TOKEN}
           EOF
-          
+
           chmod 600 "${KUBECONFIG}"
           echo "✓ kubeconfig created at ${KUBECONFIG}"
-          
+
           # Verify connectivity
           oc cluster-info
 

@@ -29,7 +29,7 @@ module.exports = (on, config) => {
       try {
         const result = execSync(`oc ${args.join(' ')}`, { encoding: 'utf-8', timeout: 300000 });
         return result;
-      } catch (e) {
+      } catch {
         return null;
       }
     },

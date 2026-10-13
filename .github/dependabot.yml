@@ -51,9 +51,9 @@ updates:
       - dependency-name: react-router-dom-v5-compat
       - dependency-name: redux
       - dependency-name: redux-thunk
-       # not shared but effectively pinned to Console version
+        # not shared but effectively pinned to Console version
       - dependency-name: '@openshift-console/dynamic-plugin-sdk-webpack'
-       # legacy lib seen on older branches
+        # legacy lib seen on older branches
       - dependency-name: '@openshift/dynamic-plugin-sdk-webpack'
     groups:
       npm:
@@ -106,7 +106,7 @@ updates:
       npm:
         patterns:
           - '*'
-  
+
   - package-ecosystem: npm
     target-branch: release-4.22
     directory: /
@@ -142,8 +142,8 @@ updates:
     groups:
       npm:
         patterns:
-          - '*'  
-  
+          - '*'
+
   - package-ecosystem: npm
     target-branch: release-4.21
     directory: /
@@ -180,7 +180,7 @@ updates:
       npm:
         patterns:
           - '*'
-  
+
   - package-ecosystem: npm
     target-branch: release-4.20
     directory: /
@@ -217,7 +217,7 @@ updates:
       npm:
         patterns:
           - '*'
-  
+
   - package-ecosystem: npm
     target-branch: release-4.19
     directory: /
@@ -254,4 +254,3 @@ updates:
       npm:
         patterns:
           - '*'
-

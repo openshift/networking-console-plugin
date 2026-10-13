@@ -1,6 +1,6 @@
 import {
-  EncodedExtension,
   ConsolePluginBuildMetadata,
+  EncodedExtension,
 } from '@openshift-console/dynamic-plugin-sdk-webpack';
 
 import { FlagsExposedModules, FlagsExtensions } from './src/utils/flags/manifest';

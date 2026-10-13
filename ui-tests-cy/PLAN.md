@@ -9,49 +9,54 @@ Two branches of kubevirt-ui are relevant:
 - **`release-4.21`** — contains the Cypress tests (`cypress/tests/tier2/networking/`). These are the **primary source to copy** since they are already Cypress and did not differ much from `main`.
 - **`main`** — Cypress tests removed; only Playwright versions remain (`playwright/tests/tier2/networking/`). Use as **reference for any newer test logic** added after the Cypress versions were dropped.
 
-| Cypress file (release-4.21) | Lines | Plugin owner |
-|---|---|---|
-| `services.cy.ts` | 32 | networking-console-plugin |
-| `routes.cy.ts` | 40 | networking-console-plugin |
-| `ingresses.cy.ts` | 32 | networking-console-plugin |
-| `nad-bridge.cy.ts` | 139 | networking + kubevirt (VM parts) |
-| `nad-localnet.cy.ts` | 63 | networking + kubevirt (VM parts) |
-| `nad-ovn.cy.ts` | 67 | networking + kubevirt (VM parts) |
-| `net-policies.cy.ts` | 98 | networking-console-plugin |
-| `udn.cy.ts` | 192 | networking + kubevirt (VM parts) |
+| Cypress file (release-4.21) | Lines | Plugin owner                     |
+| --------------------------- | ----- | -------------------------------- |
+| `services.cy.ts`            | 32    | networking-console-plugin        |
+| `routes.cy.ts`              | 40    | networking-console-plugin        |
+| `ingresses.cy.ts`           | 32    | networking-console-plugin        |
+| `nad-bridge.cy.ts`          | 139   | networking + kubevirt (VM parts) |
+| `nad-localnet.cy.ts`        | 63    | networking + kubevirt (VM parts) |
+| `nad-ovn.cy.ts`             | 67    | networking + kubevirt (VM parts) |
+| `net-policies.cy.ts`        | 98    | networking-console-plugin        |
+| `udn.cy.ts`                 | 192   | networking + kubevirt (VM parts) |
 
-| Playwright file (main) | Lines | Plugin owner |
-|---|---|---|
-| `net-nad.spec.ts` | 727 | networking + kubevirt |
-| `s-r-i.spec.ts` | 62 | networking-console-plugin |
-| `nnc-p.spec.ts` | 432 | nmstate-console-plugin |
-| `hotplug.spec.ts` | 31 | kubevirt-plugin |
+| Playwright file (main) | Lines | Plugin owner              |
+| ---------------------- | ----- | ------------------------- |
+| `net-nad.spec.ts`      | 727   | networking + kubevirt     |
+| `s-r-i.spec.ts`        | 62    | networking-console-plugin |
+| `nnc-p.spec.ts`        | 432   | nmstate-console-plugin    |
+| `hotplug.spec.ts`      | 31    | kubevirt-plugin           |
 
 ## Tests to Migrate (networking-console-plugin owned)
 
 **From `net-nad.spec.ts` — UDN section:**
+
 - create UDN-enabled namespace (via shell/oc, not UI)
 - ID(CNV-11867) create UDN
 - ID(CNV-11871) create CUDN
 - ID(CNV-11874) delete CUDN
 
 **From `net-nad.spec.ts` — NAD section:**
+
 - ID(CNV-3256) create Linux bridge NAD with MAC Spoof checked
 - ID(CNV-3256) create secondary localnet NAD
 - ID(CNV-4288) delete secondary localnet NAD
 - ID(CNV-3256) create L2 overlay NAD
 
 **From `net-nad.spec.ts` — NetworkPolicy section:**
+
 - visit NetworkPolicies page
 - create NetworkPolicy with form
 - create MultiNetworkPolicy with form (currently `test.skip`)
 
 **From `s-r-i.spec.ts`:**
+
 - Create Service (YAML)
 - Create Route (form)
 - Create Ingress (YAML)
 
 **Stays in kubevirt-ui** (VM-dependent — needs API-based setup after migration):
+
 - VM creation tests (CNV-11869, CNV-11868, CNV-11873, CNV-11872) — create VM with UDN/CUDN
 - VM + NAD tests (create VMs with bridge/localnet/OVN NAD, verify IP)
 - NAD hotplug swap (CNV-15953)
@@ -60,6 +65,7 @@ Two branches of kubevirt-ui are relevant:
 These tests currently rely on preceding tests in the same file to create UDN/CUDN/NAD resources. After migration, those resources must be created via API (oc/kubectl) as test setup in kubevirt-ui.
 
 **Goes to nmstate-console-plugin:**
+
 - `nnc-p.spec.ts` entirely (NNCP, NNS, Physical networks, VM networks)
 
 ## Architecture
@@ -110,19 +116,19 @@ The `release-4.21` Cypress tests are the primary source — copy them and adapt 
 
 ### What to copy from kubevirt-ui `release-4.21`
 
-| Source | Copy to networking-console-plugin |
-|---|---|
-| `cypress/views/nad.ts` | `cypress/views/nad.ts` |
-| `cypress/views/udn.ts` | `cypress/views/udn.ts` |
-| `cypress/views/actions.ts` (partial) | `cypress/views/actions.ts` |
-| `cypress/views/selector-common.ts` (partial) | `cypress/views/selector-common.ts` |
+| Source                                         | Copy to networking-console-plugin  |
+| ---------------------------------------------- | ---------------------------------- |
+| `cypress/views/nad.ts`                         | `cypress/views/nad.ts`             |
+| `cypress/views/udn.ts`                         | `cypress/views/udn.ts`             |
+| `cypress/views/actions.ts` (partial)           | `cypress/views/actions.ts`         |
+| `cypress/views/selector-common.ts` (partial)   | `cypress/views/selector-common.ts` |
 | `cypress/views/selector-template.ts` (partial) | `cypress/views/selector-common.ts` |
-| `cypress/support/nav.ts` (networking parts) | `cypress/support/nav.ts` |
-| `cypress/support/selectors.ts` | `cypress/support/selectors.ts` |
-| `cypress/support/commands.ts` (partial) | `cypress/support/commands.ts` |
-| `cypress/utils/const/nad.ts` | `cypress/utils/const/nad.ts` |
-| `cypress/utils/const/index.ts` (partial) | `cypress/utils/const/index.ts` |
-| `cypress/utils/types/nad.ts` | `cypress/utils/types/nad.ts` |
+| `cypress/support/nav.ts` (networking parts)    | `cypress/support/nav.ts`           |
+| `cypress/support/selectors.ts`                 | `cypress/support/selectors.ts`     |
+| `cypress/support/commands.ts` (partial)        | `cypress/support/commands.ts`      |
+| `cypress/utils/const/nad.ts`                   | `cypress/utils/const/nad.ts`       |
+| `cypress/utils/const/index.ts` (partial)       | `cypress/utils/const/index.ts`     |
+| `cypress/utils/types/nad.ts`                   | `cypress/utils/types/nad.ts`       |
 
 ### What needs adaptation
 
@@ -153,22 +159,23 @@ The `release-4.21` Cypress tests are the primary source — copy them and adapt 
 
 ### 3. Copy and adapt spec files
 
-| New file | Copies from (release-4.21) | Adaptations |
-|---|---|---|
-| `tests/udn.cy.ts` | `cypress/tests/tier2/networking/udn.cy.ts` | Remove VM creation tests + Passt section; keep create UDN, create CUDN, delete CUDN. UDN-enabled namespace created via shell (`oc`/`kubectl`) in `before()` hook, not via UI |
-| `tests/nad-bridge.cy.ts` | `cypress/tests/tier2/networking/nad-bridge.cy.ts` | Remove VM creation/IP verification tests; keep `createNAD(NAD_BRIDGE)` |
-| `tests/nad-localnet.cy.ts` | `cypress/tests/tier2/networking/nad-localnet.cy.ts` | Remove VM test; keep create + delete NAD |
-| `tests/nad-ovn.cy.ts` | `cypress/tests/tier2/networking/nad-ovn.cy.ts` | Remove VM tests; keep `createNAD(NAD_OVN)` |
-| `tests/net-policies.cy.ts` | `cypress/tests/tier2/networking/net-policies.cy.ts` | Keep as-is (MultiNetworkPolicy already xit) |
-| `tests/services.cy.ts` | `cypress/tests/tier2/networking/services.cy.ts` | Adapt imports only |
-| `tests/routes.cy.ts` | `cypress/tests/tier2/networking/routes.cy.ts` | Adapt imports only |
-| `tests/ingresses.cy.ts` | `cypress/tests/tier2/networking/ingresses.cy.ts` | Adapt imports only |
+| New file                   | Copies from (release-4.21)                          | Adaptations                                                                                                                                                                  |
+| -------------------------- | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tests/udn.cy.ts`          | `cypress/tests/tier2/networking/udn.cy.ts`          | Remove VM creation tests + Passt section; keep create UDN, create CUDN, delete CUDN. UDN-enabled namespace created via shell (`oc`/`kubectl`) in `before()` hook, not via UI |
+| `tests/nad-bridge.cy.ts`   | `cypress/tests/tier2/networking/nad-bridge.cy.ts`   | Remove VM creation/IP verification tests; keep `createNAD(NAD_BRIDGE)`                                                                                                       |
+| `tests/nad-localnet.cy.ts` | `cypress/tests/tier2/networking/nad-localnet.cy.ts` | Remove VM test; keep create + delete NAD                                                                                                                                     |
+| `tests/nad-ovn.cy.ts`      | `cypress/tests/tier2/networking/nad-ovn.cy.ts`      | Remove VM tests; keep `createNAD(NAD_OVN)`                                                                                                                                   |
+| `tests/net-policies.cy.ts` | `cypress/tests/tier2/networking/net-policies.cy.ts` | Keep as-is (MultiNetworkPolicy already xit)                                                                                                                                  |
+| `tests/services.cy.ts`     | `cypress/tests/tier2/networking/services.cy.ts`     | Adapt imports only                                                                                                                                                           |
+| `tests/routes.cy.ts`       | `cypress/tests/tier2/networking/routes.cy.ts`       | Adapt imports only                                                                                                                                                           |
+| `tests/ingresses.cy.ts`    | `cypress/tests/tier2/networking/ingresses.cy.ts`    | Adapt imports only                                                                                                                                                           |
 
 **Total: ~14 test cases** across 8 files
 
 ### 4. GitHub Actions hot-cluster CI
 
 Create `.github/workflows/e2e.yml` following kubevirt-plugin PR #3713:
+
 - Self-hosted runner on persistent OpenShift cluster
 - Secrets: `CONSOLE_URL`, `KUBEADMIN_PASSWORD`
 - Runs `npm run test-cypress-headless`
@@ -182,6 +189,7 @@ Create `.github/workflows/e2e.yml` following kubevirt-plugin PR #3713:
 ### 6. Update kubevirt-ui (post-migration)
 
 The VM-dependent tests remaining in kubevirt-ui will break because they relied on UDN/CUDN/NAD creation from preceding tests in the same file. These need API-based setup:
+
 - `oc apply -f` or `cy.exec('oc create ...')` to create UDN/CUDN/NAD resources before VM tests run
 - This is tracked as part of the kubevirt-ui side of CNV-87983
 

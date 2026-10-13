@@ -57,7 +57,7 @@ systemctl reboot
 ### Scripts
 
 | Command                         | Description                                                       |
-|---------------------------------|-------------------------------------------------------------------|
+| ------------------------------- | ----------------------------------------------------------------- |
 | `npm run start`                 | Start webpack dev server on port 9001                             |
 | `npm run start-console`         | Launch OpenShift console in a container connected to your cluster |
 | `npm run build`                 | Production build to `dist/`                                       |
@@ -74,7 +74,7 @@ systemctl reboot
 The project uses TypeScript path aliases configured in `tsconfig.json`:
 
 | Alias       | Target         |
-|-------------|----------------|
+| ----------- | -------------- |
 | `@utils/*`  | `src/utils/*`  |
 | `@views/*`  | `src/views/*`  |
 | `@styles/*` | `src/styles/*` |
@@ -99,10 +99,10 @@ Prettier config: single quotes, trailing commas, 100-char print width, 2-space t
 The i18n namespace is `plugin__networking-console-plugin`. Use the `useNetworkingTranslation` hook:
 
 ```tsx
-import {useNetworkingTranslation} from '@utils/hooks/useNetworkingTranslation';
+import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 const MyComponent: FC = () => {
-  const {t} = useNetworkingTranslation();
+  const { t } = useNetworkingTranslation();
   return <h1>{t('Hello, World!')}</h1>;
 };
 ```
@@ -160,7 +160,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for coding standards, PR process, and com
 ## Learn More
 
 | Reference                                                                       | Description                                                 |
-|---------------------------------------------------------------------------------|-------------------------------------------------------------|
+| ------------------------------------------------------------------------------- | ----------------------------------------------------------- |
 | [OpenShift web console](https://github.com/openshift/console)                   | Web-based user interface for OpenShift                      |
 | [OpenShift Dynamic Plugin SDK](https://github.com/openshift/dynamic-plugin-sdk) | Dynamic plugin SDK for OpenShift user interfaces            |
 | [PatternFly](https://www.patternfly.org/)                                       | Open-source design system used for OpenShift UI development |
