@@ -1,0 +1,81 @@
+# Example RunnerScaleSet using custom ARC runner image
+# This replaces the standard ghcr.io/actions/actions-runner:latest with a custom image
+# that has oc, helm, Node.js, and Cypress pre-installed.
+#
+# Apply with:
+#   oc apply -f ci-scripts/runnerscaleset-custom-image.yaml
+#
+# To switch back to standard image:
+#   oc set image statefulset/arc-runner runner=ghcr.io/actions/actions-runner:latest -n arc-runners
+
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: RunnerScaleSet
+metadata:
+  name: networking-console-plugin-ci
+  namespace: arc-runners
+spec:
+  # Use custom image with pre-installed tools (faster job startup)
+  # For testing: ttl.sh/custom-arc-runner:24h (1-2 day TTL)
+  # For production: your-registry/custom-arc-runner:latest
+  runnerImage: ttl.sh/custom-arc-runner:24h
+
+  runnerScaleSetName: networking-console-plugin-ci
+  maxRunners: 2
+  minRunners: 0
+  runnerGroup: default
+  githubConfigUrl: https://github.com/openshift/networking-console-plugin
+  githubConfigSecret:
+    name: github-token
+    key: github_token
+
+  containerMode:
+    type: kubernetes
+
+  template:
+    spec:
+      serviceAccountName: arc-runner-sa
+      securityContext:
+        fsGroup: 1001
+        runAsUser: 1001
+
+      containers:
+        - name: runner
+          # Custom image with pre-installed tools
+          image: ttl.sh/custom-arc-runner:24h
+          imagePullPolicy: IfNotPresent
+
+          env:
+            # Disable FIPS for compatibility (can be enabled if FIPS-enforced)
+            - name: OPENSSL_FORCE_FIPS_MODE
+              value: '0'
+            - name: GOLANG_FIPS
+              value: '0'
+
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1Gi
+            limits:
+              cpu: 2000m
+              memory: 4Gi
+
+          volumeMounts:
+            - name: kubeconfig
+              mountPath: /tmp/kubeconfig
+              readOnly: true
+
+      volumes:
+        # Projected volume with ServiceAccount token and CA certificate
+        # Used by workflows for in-pod Kubernetes authentication
+        - name: kubeconfig
+          projected:
+            sources:
+              - serviceAccountToken:
+                  path: token
+                  audience: https://kubernetes.default.svc
+              - configMap:
+                  name: kube-root-ca.crt
+                  items:
+                    - key: ca.crt
+                      path: ca.crt
+            defaultMode: 0600
