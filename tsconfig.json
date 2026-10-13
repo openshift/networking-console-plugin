@@ -1,19 +1,19 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "baseUrl": ".",
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "jsx": "react",
     "lib": ["es2016", "es2019", "es2020.promise", "dom", "dom.iterable", "ES2021.String"],
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "noUnusedLocals": true,
     "outDir": "dist",
+    "rootDir": "src",
     "paths": {
-      "@utils/*": ["src/utils/*"],
-      "@views/*": ["src/views/*"],
-      "@styles/*": ["src/styles/*"]
+      "@utils/*": ["./src/utils/*"],
+      "@views/*": ["./src/views/*"],
+      "@styles/*": ["./src/styles/*"]
     },
     "skipLibCheck": true,
     "sourceMap": true,
@@ -25,7 +25,8 @@
     "files": true,
     "transpileOnly": true,
     "compilerOptions": {
-      "module": "commonjs"
+      "module": "commonjs",
+      "moduleResolution": "node"
     }
   }
 }

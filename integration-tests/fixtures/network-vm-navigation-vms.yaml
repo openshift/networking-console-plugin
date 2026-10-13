@@ -10,29 +10,29 @@ spec:
       domain:
         devices:
           disks:
-          - disk:
-              bus: virtio
-            name: rootdisk
+            - disk:
+                bus: virtio
+              name: rootdisk
           interfaces:
-          - bridge: {}
-            name: default
-          - bridge: {}
-            name: net-iface
+            - bridge: {}
+              name: default
+            - bridge: {}
+              name: net-iface
         machine:
           type: q35
         resources:
           requests:
             memory: 512Mi
       networks:
-      - name: default
-        pod: {}
-      - multus:
-          networkName: ocpnetui-14-nad/nad-with-vms
-        name: net-iface
+        - name: default
+          pod: {}
+        - multus:
+            networkName: ocpnetui-14-nad/nad-with-vms
+          name: net-iface
       volumes:
-      - containerDisk:
-          image: quay.io/kubevirt/cirros-container-disk-demo
-        name: rootdisk
+        - containerDisk:
+            image: quay.io/kubevirt/cirros-container-disk-demo
+          name: rootdisk
 ---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
@@ -46,29 +46,29 @@ spec:
       domain:
         devices:
           disks:
-          - disk:
-              bus: virtio
-            name: rootdisk
+            - disk:
+                bus: virtio
+              name: rootdisk
           interfaces:
-          - bridge: {}
-            name: default
-          - bridge: {}
-            name: net-iface
+            - bridge: {}
+              name: default
+            - bridge: {}
+              name: net-iface
         machine:
           type: q35
         resources:
           requests:
             memory: 512Mi
       networks:
-      - name: default
-        pod: {}
-      - multus:
-          networkName: ocpnetui-14-nad/nad-multi
-        name: net-iface
+        - name: default
+          pod: {}
+        - multus:
+            networkName: ocpnetui-14-nad/nad-multi
+          name: net-iface
       volumes:
-      - containerDisk:
-          image: quay.io/kubevirt/cirros-container-disk-demo
-        name: rootdisk
+        - containerDisk:
+            image: quay.io/kubevirt/cirros-container-disk-demo
+          name: rootdisk
 ---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
@@ -82,29 +82,29 @@ spec:
       domain:
         devices:
           disks:
-          - disk:
-              bus: virtio
-            name: rootdisk
+            - disk:
+                bus: virtio
+              name: rootdisk
           interfaces:
-          - bridge: {}
-            name: default
-          - bridge: {}
-            name: net-iface
+            - bridge: {}
+              name: default
+            - bridge: {}
+              name: net-iface
         machine:
           type: q35
         resources:
           requests:
             memory: 512Mi
       networks:
-      - name: default
-        pod: {}
-      - multus:
-          networkName: ocpnetui-14-nad/nad-multi
-        name: net-iface
+        - name: default
+          pod: {}
+        - multus:
+            networkName: ocpnetui-14-nad/nad-multi
+          name: net-iface
       volumes:
-      - containerDisk:
-          image: quay.io/kubevirt/cirros-container-disk-demo
-        name: rootdisk
+        - containerDisk:
+            image: quay.io/kubevirt/cirros-container-disk-demo
+          name: rootdisk
 ---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
@@ -118,29 +118,29 @@ spec:
       domain:
         devices:
           disks:
-          - disk:
-              bus: virtio
-            name: rootdisk
+            - disk:
+                bus: virtio
+              name: rootdisk
           interfaces:
-          - bridge: {}
-            name: default
-          - bridge: {}
-            name: net-iface
+            - bridge: {}
+              name: default
+            - bridge: {}
+              name: net-iface
         machine:
           type: q35
         resources:
           requests:
             memory: 512Mi
       networks:
-      - name: default
-        pod: {}
-      - multus:
-          networkName: ocpnetui-14-nad/nad-multi
-        name: net-iface
+        - name: default
+          pod: {}
+        - multus:
+            networkName: ocpnetui-14-nad/nad-multi
+          name: net-iface
       volumes:
-      - containerDisk:
-          image: quay.io/kubevirt/cirros-container-disk-demo
-        name: rootdisk
+        - containerDisk:
+            image: quay.io/kubevirt/cirros-container-disk-demo
+          name: rootdisk
 ---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
@@ -154,29 +154,29 @@ spec:
       domain:
         devices:
           disks:
-          - disk:
-              bus: virtio
-            name: rootdisk
+            - disk:
+                bus: virtio
+              name: rootdisk
           interfaces:
-          - bridge: {}
-            name: default
-          - bridge: {}
-            name: net-iface
+            - bridge: {}
+              name: default
+            - bridge: {}
+              name: net-iface
         machine:
           type: q35
         resources:
           requests:
             memory: 512Mi
       networks:
-      - name: default
-        pod: {}
-      - multus:
-          networkName: test-udn
-        name: net-iface
+        - name: default
+          pod: {}
+        - multus:
+            networkName: test-udn
+          name: net-iface
       volumes:
-      - containerDisk:
-          image: quay.io/kubevirt/cirros-container-disk-demo
-        name: rootdisk
+        - containerDisk:
+            image: quay.io/kubevirt/cirros-container-disk-demo
+          name: rootdisk
 ---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
@@ -190,29 +190,29 @@ spec:
       domain:
         devices:
           disks:
-          - disk:
-              bus: virtio
-            name: rootdisk
+            - disk:
+                bus: virtio
+              name: rootdisk
           interfaces:
-          - bridge: {}
-            name: default
-          - bridge: {}
-            name: net-iface
+            - bridge: {}
+              name: default
+            - bridge: {}
+              name: net-iface
         machine:
           type: q35
         resources:
           requests:
             memory: 512Mi
       networks:
-      - name: default
-        pod: {}
-      - multus:
-          networkName: test-cudn
-        name: net-iface
+        - name: default
+          pod: {}
+        - multus:
+            networkName: test-cudn
+          name: net-iface
       volumes:
-      - containerDisk:
-          image: quay.io/kubevirt/cirros-container-disk-demo
-        name: rootdisk
+        - containerDisk:
+            image: quay.io/kubevirt/cirros-container-disk-demo
+          name: rootdisk
 ---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
@@ -226,29 +226,29 @@ spec:
       domain:
         devices:
           disks:
-          - disk:
-              bus: virtio
-            name: rootdisk
+            - disk:
+                bus: virtio
+              name: rootdisk
           interfaces:
-          - bridge: {}
-            name: default
-          - bridge: {}
-            name: net-iface
+            - bridge: {}
+              name: default
+            - bridge: {}
+              name: net-iface
         machine:
           type: q35
         resources:
           requests:
             memory: 512Mi
       networks:
-      - name: default
-        pod: {}
-      - multus:
-          networkName: test-cudn
-        name: net-iface
+        - name: default
+          pod: {}
+        - multus:
+            networkName: test-cudn
+          name: net-iface
       volumes:
-      - containerDisk:
-          image: quay.io/kubevirt/cirros-container-disk-demo
-        name: rootdisk
+        - containerDisk:
+            image: quay.io/kubevirt/cirros-container-disk-demo
+          name: rootdisk
 ---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
@@ -262,29 +262,29 @@ spec:
       domain:
         devices:
           disks:
-          - disk:
-              bus: virtio
-            name: rootdisk
+            - disk:
+                bus: virtio
+              name: rootdisk
           interfaces:
-          - bridge: {}
-            name: default
-          - bridge: {}
-            name: net-iface
+            - bridge: {}
+              name: default
+            - bridge: {}
+              name: net-iface
         machine:
           type: q35
         resources:
           requests:
             memory: 512Mi
       networks:
-      - name: default
-        pod: {}
-      - multus:
-          networkName: ocpnetui-14-nad/nad-paged
-        name: net-iface
+        - name: default
+          pod: {}
+        - multus:
+            networkName: ocpnetui-14-nad/nad-paged
+          name: net-iface
       volumes:
-      - containerDisk:
-          image: quay.io/kubevirt/cirros-container-disk-demo
-        name: rootdisk
+        - containerDisk:
+            image: quay.io/kubevirt/cirros-container-disk-demo
+          name: rootdisk
 ---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
@@ -298,29 +298,29 @@ spec:
       domain:
         devices:
           disks:
-          - disk:
-              bus: virtio
-            name: rootdisk
+            - disk:
+                bus: virtio
+              name: rootdisk
           interfaces:
-          - bridge: {}
-            name: default
-          - bridge: {}
-            name: net-iface
+            - bridge: {}
+              name: default
+            - bridge: {}
+              name: net-iface
         machine:
           type: q35
         resources:
           requests:
             memory: 512Mi
       networks:
-      - name: default
-        pod: {}
-      - multus:
-          networkName: ocpnetui-14-nad/nad-paged
-        name: net-iface
+        - name: default
+          pod: {}
+        - multus:
+            networkName: ocpnetui-14-nad/nad-paged
+          name: net-iface
       volumes:
-      - containerDisk:
-          image: quay.io/kubevirt/cirros-container-disk-demo
-        name: rootdisk
+        - containerDisk:
+            image: quay.io/kubevirt/cirros-container-disk-demo
+          name: rootdisk
 ---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
@@ -334,29 +334,29 @@ spec:
       domain:
         devices:
           disks:
-          - disk:
-              bus: virtio
-            name: rootdisk
+            - disk:
+                bus: virtio
+              name: rootdisk
           interfaces:
-          - bridge: {}
-            name: default
-          - bridge: {}
-            name: net-iface
+            - bridge: {}
+              name: default
+            - bridge: {}
+              name: net-iface
         machine:
           type: q35
         resources:
           requests:
             memory: 512Mi
       networks:
-      - name: default
-        pod: {}
-      - multus:
-          networkName: ocpnetui-14-nad/nad-paged
-        name: net-iface
+        - name: default
+          pod: {}
+        - multus:
+            networkName: ocpnetui-14-nad/nad-paged
+          name: net-iface
       volumes:
-      - containerDisk:
-          image: quay.io/kubevirt/cirros-container-disk-demo
-        name: rootdisk
+        - containerDisk:
+            image: quay.io/kubevirt/cirros-container-disk-demo
+          name: rootdisk
 ---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
@@ -370,29 +370,29 @@ spec:
       domain:
         devices:
           disks:
-          - disk:
-              bus: virtio
-            name: rootdisk
+            - disk:
+                bus: virtio
+              name: rootdisk
           interfaces:
-          - bridge: {}
-            name: default
-          - bridge: {}
-            name: net-iface
+            - bridge: {}
+              name: default
+            - bridge: {}
+              name: net-iface
         machine:
           type: q35
         resources:
           requests:
             memory: 512Mi
       networks:
-      - name: default
-        pod: {}
-      - multus:
-          networkName: ocpnetui-14-nad/nad-paged
-        name: net-iface
+        - name: default
+          pod: {}
+        - multus:
+            networkName: ocpnetui-14-nad/nad-paged
+          name: net-iface
       volumes:
-      - containerDisk:
-          image: quay.io/kubevirt/cirros-container-disk-demo
-        name: rootdisk
+        - containerDisk:
+            image: quay.io/kubevirt/cirros-container-disk-demo
+          name: rootdisk
 ---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
@@ -406,29 +406,29 @@ spec:
       domain:
         devices:
           disks:
-          - disk:
-              bus: virtio
-            name: rootdisk
+            - disk:
+                bus: virtio
+              name: rootdisk
           interfaces:
-          - bridge: {}
-            name: default
-          - bridge: {}
-            name: net-iface
+            - bridge: {}
+              name: default
+            - bridge: {}
+              name: net-iface
         machine:
           type: q35
         resources:
           requests:
             memory: 512Mi
       networks:
-      - name: default
-        pod: {}
-      - multus:
-          networkName: ocpnetui-14-nad/nad-paged
-        name: net-iface
+        - name: default
+          pod: {}
+        - multus:
+            networkName: ocpnetui-14-nad/nad-paged
+          name: net-iface
       volumes:
-      - containerDisk:
-          image: quay.io/kubevirt/cirros-container-disk-demo
-        name: rootdisk
+        - containerDisk:
+            image: quay.io/kubevirt/cirros-container-disk-demo
+          name: rootdisk
 ---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
@@ -442,29 +442,29 @@ spec:
       domain:
         devices:
           disks:
-          - disk:
-              bus: virtio
-            name: rootdisk
+            - disk:
+                bus: virtio
+              name: rootdisk
           interfaces:
-          - bridge: {}
-            name: default
-          - bridge: {}
-            name: net-iface
+            - bridge: {}
+              name: default
+            - bridge: {}
+              name: net-iface
         machine:
           type: q35
         resources:
           requests:
             memory: 512Mi
       networks:
-      - name: default
-        pod: {}
-      - multus:
-          networkName: ocpnetui-14-nad/nad-paged
-        name: net-iface
+        - name: default
+          pod: {}
+        - multus:
+            networkName: ocpnetui-14-nad/nad-paged
+          name: net-iface
       volumes:
-      - containerDisk:
-          image: quay.io/kubevirt/cirros-container-disk-demo
-        name: rootdisk
+        - containerDisk:
+            image: quay.io/kubevirt/cirros-container-disk-demo
+          name: rootdisk
 ---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
@@ -478,29 +478,29 @@ spec:
       domain:
         devices:
           disks:
-          - disk:
-              bus: virtio
-            name: rootdisk
+            - disk:
+                bus: virtio
+              name: rootdisk
           interfaces:
-          - bridge: {}
-            name: default
-          - bridge: {}
-            name: net-iface
+            - bridge: {}
+              name: default
+            - bridge: {}
+              name: net-iface
         machine:
           type: q35
         resources:
           requests:
             memory: 512Mi
       networks:
-      - name: default
-        pod: {}
-      - multus:
-          networkName: ocpnetui-14-nad/nad-paged
-        name: net-iface
+        - name: default
+          pod: {}
+        - multus:
+            networkName: ocpnetui-14-nad/nad-paged
+          name: net-iface
       volumes:
-      - containerDisk:
-          image: quay.io/kubevirt/cirros-container-disk-demo
-        name: rootdisk
+        - containerDisk:
+            image: quay.io/kubevirt/cirros-container-disk-demo
+          name: rootdisk
 ---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
@@ -514,29 +514,29 @@ spec:
       domain:
         devices:
           disks:
-          - disk:
-              bus: virtio
-            name: rootdisk
+            - disk:
+                bus: virtio
+              name: rootdisk
           interfaces:
-          - bridge: {}
-            name: default
-          - bridge: {}
-            name: net-iface
+            - bridge: {}
+              name: default
+            - bridge: {}
+              name: net-iface
         machine:
           type: q35
         resources:
           requests:
             memory: 512Mi
       networks:
-      - name: default
-        pod: {}
-      - multus:
-          networkName: ocpnetui-14-nad/nad-paged
-        name: net-iface
+        - name: default
+          pod: {}
+        - multus:
+            networkName: ocpnetui-14-nad/nad-paged
+          name: net-iface
       volumes:
-      - containerDisk:
-          image: quay.io/kubevirt/cirros-container-disk-demo
-        name: rootdisk
+        - containerDisk:
+            image: quay.io/kubevirt/cirros-container-disk-demo
+          name: rootdisk
 ---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
@@ -550,29 +550,29 @@ spec:
       domain:
         devices:
           disks:
-          - disk:
-              bus: virtio
-            name: rootdisk
+            - disk:
+                bus: virtio
+              name: rootdisk
           interfaces:
-          - bridge: {}
-            name: default
-          - bridge: {}
-            name: net-iface
+            - bridge: {}
+              name: default
+            - bridge: {}
+              name: net-iface
         machine:
           type: q35
         resources:
           requests:
             memory: 512Mi
       networks:
-      - name: default
-        pod: {}
-      - multus:
-          networkName: ocpnetui-14-nad/nad-paged
-        name: net-iface
+        - name: default
+          pod: {}
+        - multus:
+            networkName: ocpnetui-14-nad/nad-paged
+          name: net-iface
       volumes:
-      - containerDisk:
-          image: quay.io/kubevirt/cirros-container-disk-demo
-        name: rootdisk
+        - containerDisk:
+            image: quay.io/kubevirt/cirros-container-disk-demo
+          name: rootdisk
 ---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
@@ -586,29 +586,29 @@ spec:
       domain:
         devices:
           disks:
-          - disk:
-              bus: virtio
-            name: rootdisk
+            - disk:
+                bus: virtio
+              name: rootdisk
           interfaces:
-          - bridge: {}
-            name: default
-          - bridge: {}
-            name: net-iface
+            - bridge: {}
+              name: default
+            - bridge: {}
+              name: net-iface
         machine:
           type: q35
         resources:
           requests:
             memory: 512Mi
       networks:
-      - name: default
-        pod: {}
-      - multus:
-          networkName: ocpnetui-14-nad/nad-paged
-        name: net-iface
+        - name: default
+          pod: {}
+        - multus:
+            networkName: ocpnetui-14-nad/nad-paged
+          name: net-iface
       volumes:
-      - containerDisk:
-          image: quay.io/kubevirt/cirros-container-disk-demo
-        name: rootdisk
+        - containerDisk:
+            image: quay.io/kubevirt/cirros-container-disk-demo
+          name: rootdisk
 ---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
@@ -622,29 +622,29 @@ spec:
       domain:
         devices:
           disks:
-          - disk:
-              bus: virtio
-            name: rootdisk
+            - disk:
+                bus: virtio
+              name: rootdisk
           interfaces:
-          - bridge: {}
-            name: default
-          - bridge: {}
-            name: net-iface
+            - bridge: {}
+              name: default
+            - bridge: {}
+              name: net-iface
         machine:
           type: q35
         resources:
           requests:
             memory: 512Mi
       networks:
-      - name: default
-        pod: {}
-      - multus:
-          networkName: ocpnetui-14-nad/nad-paged
-        name: net-iface
+        - name: default
+          pod: {}
+        - multus:
+            networkName: ocpnetui-14-nad/nad-paged
+          name: net-iface
       volumes:
-      - containerDisk:
-          image: quay.io/kubevirt/cirros-container-disk-demo
-        name: rootdisk
+        - containerDisk:
+            image: quay.io/kubevirt/cirros-container-disk-demo
+          name: rootdisk
 ---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
@@ -658,29 +658,29 @@ spec:
       domain:
         devices:
           disks:
-          - disk:
-              bus: virtio
-            name: rootdisk
+            - disk:
+                bus: virtio
+              name: rootdisk
           interfaces:
-          - bridge: {}
-            name: default
-          - bridge: {}
-            name: net-iface
+            - bridge: {}
+              name: default
+            - bridge: {}
+              name: net-iface
         machine:
           type: q35
         resources:
           requests:
             memory: 512Mi
       networks:
-      - name: default
-        pod: {}
-      - multus:
-          networkName: ocpnetui-14-nad/nad-paged
-        name: net-iface
+        - name: default
+          pod: {}
+        - multus:
+            networkName: ocpnetui-14-nad/nad-paged
+          name: net-iface
       volumes:
-      - containerDisk:
-          image: quay.io/kubevirt/cirros-container-disk-demo
-        name: rootdisk
+        - containerDisk:
+            image: quay.io/kubevirt/cirros-container-disk-demo
+          name: rootdisk
 ---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
@@ -694,29 +694,29 @@ spec:
       domain:
         devices:
           disks:
-          - disk:
-              bus: virtio
-            name: rootdisk
+            - disk:
+                bus: virtio
+              name: rootdisk
           interfaces:
-          - bridge: {}
-            name: default
-          - bridge: {}
-            name: net-iface
+            - bridge: {}
+              name: default
+            - bridge: {}
+              name: net-iface
         machine:
           type: q35
         resources:
           requests:
             memory: 512Mi
       networks:
-      - name: default
-        pod: {}
-      - multus:
-          networkName: ocpnetui-14-nad/nad-paged
-        name: net-iface
+        - name: default
+          pod: {}
+        - multus:
+            networkName: ocpnetui-14-nad/nad-paged
+          name: net-iface
       volumes:
-      - containerDisk:
-          image: quay.io/kubevirt/cirros-container-disk-demo
-        name: rootdisk
+        - containerDisk:
+            image: quay.io/kubevirt/cirros-container-disk-demo
+          name: rootdisk
 ---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
@@ -730,29 +730,29 @@ spec:
       domain:
         devices:
           disks:
-          - disk:
-              bus: virtio
-            name: rootdisk
+            - disk:
+                bus: virtio
+              name: rootdisk
           interfaces:
-          - bridge: {}
-            name: default
-          - bridge: {}
-            name: net-iface
+            - bridge: {}
+              name: default
+            - bridge: {}
+              name: net-iface
         machine:
           type: q35
         resources:
           requests:
             memory: 512Mi
       networks:
-      - name: default
-        pod: {}
-      - multus:
-          networkName: ocpnetui-14-nad/nad-paged
-        name: net-iface
+        - name: default
+          pod: {}
+        - multus:
+            networkName: ocpnetui-14-nad/nad-paged
+          name: net-iface
       volumes:
-      - containerDisk:
-          image: quay.io/kubevirt/cirros-container-disk-demo
-        name: rootdisk
+        - containerDisk:
+            image: quay.io/kubevirt/cirros-container-disk-demo
+          name: rootdisk
 ---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
@@ -766,29 +766,29 @@ spec:
       domain:
         devices:
           disks:
-          - disk:
-              bus: virtio
-            name: rootdisk
+            - disk:
+                bus: virtio
+              name: rootdisk
           interfaces:
-          - bridge: {}
-            name: default
-          - bridge: {}
-            name: net-iface
+            - bridge: {}
+              name: default
+            - bridge: {}
+              name: net-iface
         machine:
           type: q35
         resources:
           requests:
             memory: 512Mi
       networks:
-      - name: default
-        pod: {}
-      - multus:
-          networkName: ocpnetui-14-nad/nad-paged
-        name: net-iface
+        - name: default
+          pod: {}
+        - multus:
+            networkName: ocpnetui-14-nad/nad-paged
+          name: net-iface
       volumes:
-      - containerDisk:
-          image: quay.io/kubevirt/cirros-container-disk-demo
-        name: rootdisk
+        - containerDisk:
+            image: quay.io/kubevirt/cirros-container-disk-demo
+          name: rootdisk
 ---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
@@ -802,29 +802,29 @@ spec:
       domain:
         devices:
           disks:
-          - disk:
-              bus: virtio
-            name: rootdisk
+            - disk:
+                bus: virtio
+              name: rootdisk
           interfaces:
-          - bridge: {}
-            name: default
-          - bridge: {}
-            name: net-iface
+            - bridge: {}
+              name: default
+            - bridge: {}
+              name: net-iface
         machine:
           type: q35
         resources:
           requests:
             memory: 512Mi
       networks:
-      - name: default
-        pod: {}
-      - multus:
-          networkName: ocpnetui-14-nad/nad-paged
-        name: net-iface
+        - name: default
+          pod: {}
+        - multus:
+            networkName: ocpnetui-14-nad/nad-paged
+          name: net-iface
       volumes:
-      - containerDisk:
-          image: quay.io/kubevirt/cirros-container-disk-demo
-        name: rootdisk
+        - containerDisk:
+            image: quay.io/kubevirt/cirros-container-disk-demo
+          name: rootdisk
 ---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
@@ -838,29 +838,29 @@ spec:
       domain:
         devices:
           disks:
-          - disk:
-              bus: virtio
-            name: rootdisk
+            - disk:
+                bus: virtio
+              name: rootdisk
           interfaces:
-          - bridge: {}
-            name: default
-          - bridge: {}
-            name: net-iface
+            - bridge: {}
+              name: default
+            - bridge: {}
+              name: net-iface
         machine:
           type: q35
         resources:
           requests:
             memory: 512Mi
       networks:
-      - name: default
-        pod: {}
-      - multus:
-          networkName: ocpnetui-14-nad/nad-paged
-        name: net-iface
+        - name: default
+          pod: {}
+        - multus:
+            networkName: ocpnetui-14-nad/nad-paged
+          name: net-iface
       volumes:
-      - containerDisk:
-          image: quay.io/kubevirt/cirros-container-disk-demo
-        name: rootdisk
+        - containerDisk:
+            image: quay.io/kubevirt/cirros-container-disk-demo
+          name: rootdisk
 ---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
@@ -874,29 +874,29 @@ spec:
       domain:
         devices:
           disks:
-          - disk:
-              bus: virtio
-            name: rootdisk
+            - disk:
+                bus: virtio
+              name: rootdisk
           interfaces:
-          - bridge: {}
-            name: default
-          - bridge: {}
-            name: net-iface
+            - bridge: {}
+              name: default
+            - bridge: {}
+              name: net-iface
         machine:
           type: q35
         resources:
           requests:
             memory: 512Mi
       networks:
-      - name: default
-        pod: {}
-      - multus:
-          networkName: ocpnetui-14-nad/nad-paged
-        name: net-iface
+        - name: default
+          pod: {}
+        - multus:
+            networkName: ocpnetui-14-nad/nad-paged
+          name: net-iface
       volumes:
-      - containerDisk:
-          image: quay.io/kubevirt/cirros-container-disk-demo
-        name: rootdisk
+        - containerDisk:
+            image: quay.io/kubevirt/cirros-container-disk-demo
+          name: rootdisk
 ---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
@@ -910,29 +910,29 @@ spec:
       domain:
         devices:
           disks:
-          - disk:
-              bus: virtio
-            name: rootdisk
+            - disk:
+                bus: virtio
+              name: rootdisk
           interfaces:
-          - bridge: {}
-            name: default
-          - bridge: {}
-            name: net-iface
+            - bridge: {}
+              name: default
+            - bridge: {}
+              name: net-iface
         machine:
           type: q35
         resources:
           requests:
             memory: 512Mi
       networks:
-      - name: default
-        pod: {}
-      - multus:
-          networkName: ocpnetui-14-nad/nad-paged
-        name: net-iface
+        - name: default
+          pod: {}
+        - multus:
+            networkName: ocpnetui-14-nad/nad-paged
+          name: net-iface
       volumes:
-      - containerDisk:
-          image: quay.io/kubevirt/cirros-container-disk-demo
-        name: rootdisk
+        - containerDisk:
+            image: quay.io/kubevirt/cirros-container-disk-demo
+          name: rootdisk
 ---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
@@ -946,29 +946,29 @@ spec:
       domain:
         devices:
           disks:
-          - disk:
-              bus: virtio
-            name: rootdisk
+            - disk:
+                bus: virtio
+              name: rootdisk
           interfaces:
-          - bridge: {}
-            name: default
-          - bridge: {}
-            name: net-iface
+            - bridge: {}
+              name: default
+            - bridge: {}
+              name: net-iface
         machine:
           type: q35
         resources:
           requests:
             memory: 512Mi
       networks:
-      - name: default
-        pod: {}
-      - multus:
-          networkName: ocpnetui-14-nad/nad-paged
-        name: net-iface
+        - name: default
+          pod: {}
+        - multus:
+            networkName: ocpnetui-14-nad/nad-paged
+          name: net-iface
       volumes:
-      - containerDisk:
-          image: quay.io/kubevirt/cirros-container-disk-demo
-        name: rootdisk
+        - containerDisk:
+            image: quay.io/kubevirt/cirros-container-disk-demo
+          name: rootdisk
 ---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
@@ -982,26 +982,26 @@ spec:
       domain:
         devices:
           disks:
-          - disk:
-              bus: virtio
-            name: rootdisk
+            - disk:
+                bus: virtio
+              name: rootdisk
           interfaces:
-          - bridge: {}
-            name: default
-          - bridge: {}
-            name: net-iface
+            - bridge: {}
+              name: default
+            - bridge: {}
+              name: net-iface
         machine:
           type: q35
         resources:
           requests:
             memory: 512Mi
       networks:
-      - name: default
-        pod: {}
-      - multus:
-          networkName: ocpnetui-14-nad/nad-paged
-        name: net-iface
+        - name: default
+          pod: {}
+        - multus:
+            networkName: ocpnetui-14-nad/nad-paged
+          name: net-iface
       volumes:
-      - containerDisk:
-          image: quay.io/kubevirt/cirros-container-disk-demo
-        name: rootdisk
+        - containerDisk:
+            image: quay.io/kubevirt/cirros-container-disk-demo
+          name: rootdisk
