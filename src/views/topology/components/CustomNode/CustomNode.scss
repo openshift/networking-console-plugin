@@ -1,0 +1,19 @@
+.custom-node {
+  position: relative;
+
+  &__inner-border {
+    pointer-events: none;
+  }
+
+  .pf-topology__node__background {
+    stroke-width: 4px;
+  }
+
+  .pf-topology__node__label__background {
+    stroke-width: 2px;
+  }
+}
+
+.custom-node.pf-topology__node.pf-m-selected .pf-topology__node__background {
+  stroke-width: 4px;
+}
