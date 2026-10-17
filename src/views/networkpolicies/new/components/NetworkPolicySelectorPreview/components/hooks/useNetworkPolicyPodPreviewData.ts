@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
-import { PodModel, ProjectModel } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiCoreV1Pod } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+import { PodModel, ProjectModel } from '@kubevirt-ui-ext/kubevirt-api/console';
+import { IoK8sApiCoreV1Pod } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import {
   K8sResourceCommon,
   Selector,

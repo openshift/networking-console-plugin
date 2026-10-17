@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
 
-import { IngressModel, NamespaceModel } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiNetworkingV1Ingress } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+import { NamespaceModel } from '@kubevirt-ui-ext/kubevirt-api/console';
+import { IngressModel } from '@utils/models';
+import { IoK8sApiNetworkingV1Ingress } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import {
   getGroupVersionKindForModel,
   ResourceLink,

@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Controller, FieldArrayWithId, useFormContext } from 'react-hook-form';
 
-import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+import { IoK8sApiCoreV1Service } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import { ResourceIcon } from '@openshift-console/dynamic-plugin-sdk';
 import {
   Button,

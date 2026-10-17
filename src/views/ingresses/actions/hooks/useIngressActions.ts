@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom-v5-compat';
 
-import { IngressModel } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiNetworkingV1Ingress } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+import { IngressModel } from '@utils/models';
+import { IoK8sApiNetworkingV1Ingress } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import {
   Action,
   useActiveNamespace,

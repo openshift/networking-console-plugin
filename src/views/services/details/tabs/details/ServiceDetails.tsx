@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import * as _ from 'lodash';
 
-import { modelToGroupVersionKind, ServiceModel } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+import { modelToGroupVersionKind, ServiceModel } from '@kubevirt-ui-ext/kubevirt-api/console';
+import { IoK8sApiCoreV1Service } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import {
   ResourceLink,
   Timestamp,

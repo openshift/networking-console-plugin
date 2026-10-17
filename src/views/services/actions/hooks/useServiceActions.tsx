@@ -1,7 +1,7 @@
 import { useHistory } from 'react-router';
 
-import { modelToRef, ServiceModel } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+import { modelToRef, ServiceModel } from '@kubevirt-ui-ext/kubevirt-api/console';
+import { IoK8sApiCoreV1Service } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import {
   Action,
   useAnnotationsModal,

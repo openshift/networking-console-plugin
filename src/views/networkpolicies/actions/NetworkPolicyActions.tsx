@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import ActionsDropdown from '@utils/components/ActionsDropdown/ActionsDropdown';
 
 import useNetworkPolicyActions from './hooks/useNetworkPolicyActions';
