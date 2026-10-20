@@ -53,8 +53,8 @@ const ServiceTypeSelect: FC = () => {
                   onClick={() => {
                     onChange(type);
                     if (type === 'ExternalName') {
-                      setValue('spec.selector', undefined, { shouldDirty: true });
-                      setValue('spec.ports', undefined, { shouldDirty: true });
+                      setValue('spec.selector', {}, { shouldDirty: true });
+                      setValue('spec.ports', [], { shouldDirty: true });
                     } else {
                       setValue('spec.externalName', undefined, {
                         shouldDirty: true,
