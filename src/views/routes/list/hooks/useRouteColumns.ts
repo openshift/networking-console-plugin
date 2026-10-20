@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { RouteModel } from '@kubevirt-ui/kubevirt-api/console';
+import { RouteModel } from '@kubevirt-ui-ext/kubevirt-api/console';
 import { TableColumn, useActiveColumns } from '@openshift-console/dynamic-plugin-sdk';
 import { sortable } from '@patternfly/react-table';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
