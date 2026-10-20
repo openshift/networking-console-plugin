@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import classNames from 'classnames';
 
-import { IngressModel, NamespaceModel } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiNetworkingV1Ingress } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+import { NamespaceModel } from '@kubevirt-ui-ext/kubevirt-api/console';
+import type { IoK8sApiNetworkingV1Ingress } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import {
   getGroupVersionKindForModel,
   ResourceLink,
@@ -13,6 +13,7 @@ import { LabelList } from '@utils/components/DetailsItem/LabelList';
 import HostDetails from '@utils/components/HostData/HostDetails';
 import MutedText from '@utils/components/MutedText/MutedText';
 import { t } from '@utils/hooks/useNetworkingTranslation';
+import { IngressModel } from '@utils/models';
 import IngressActions from '@views/ingresses/actions/IngressActions';
 import { getHostsStr } from '@views/ingresses/list/utils/utils';
 import { tableColumnClasses } from '@views/services/list/hooks/useServiceColumn';

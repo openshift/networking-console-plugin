@@ -1,7 +1,7 @@
 import {
   V1beta1NodeNetworkState,
   V1NodeNetworkConfigurationPolicySpec,
-} from '@kubevirt-ui/kubevirt-api/nmstate';
+} from '@kubevirt-ui-ext/kubevirt-api/nmstate';
 import { useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { NodeNetworkStateModelGroupVersionKind } from '@utils/models';
 
