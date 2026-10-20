@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router';
 
-import { IngressModel, modelToGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiNetworkingV1Ingress } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+import { modelToGroupVersionKind } from '@kubevirt-ui-ext/kubevirt-api/console';
+import { IngressModel } from '@utils/models';
+import type { IoK8sApiNetworkingV1Ingress } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import {
   ListPageBody,
   ListPageCreateButton,

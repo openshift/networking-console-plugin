@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router';
 
-import { modelToRef, RouteModel } from '@kubevirt-ui/kubevirt-api/console';
+import { modelToRef, RouteModel } from '@kubevirt-ui-ext/kubevirt-api/console';
 import {
   Action,
   useAnnotationsModal,
