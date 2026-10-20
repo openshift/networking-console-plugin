@@ -1,7 +1,10 @@
 import React, { FC } from 'react';
 
-import { modelToGroupVersionKind, NamespaceModel } from '@kubevirt-ui/kubevirt-api/console';
-import NetworkAttachmentDefinitionModel from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
+import {
+  modelToGroupVersionKind,
+  NamespaceModel,
+  NetworkAttachmentDefinitionModel,
+} from '@kubevirt-ui-ext/kubevirt-api/console';
 import {
   getGroupVersionKindForModel,
   ResourceLink,
