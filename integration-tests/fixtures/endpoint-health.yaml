@@ -1,0 +1,183 @@
+# Deterministic health fixtures for Services / Routes list E2E.
+#
+# Healthy: real Deployment + Service (selector-based EndpointSlices created by the control plane)
+# Degraded / Down: selector-less Services + handcrafted EndpointSlices (scale-down is flaky for Degraded)
+# ExternalName: no endpoints → Unknown
+# Route: points at the Healthy service for Backend health assertions
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: eph-healthy-ingress
+  labels:
+    app: eph-healthy
+spec:
+  podSelector:
+    matchLabels:
+      app: eph-healthy
+  policyTypes:
+    - Ingress
+  ingress:
+    - ports:
+        - protocol: TCP
+          port: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eph-healthy
+  labels:
+    app: eph-healthy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eph-healthy
+  template:
+    metadata:
+      labels:
+        app: eph-healthy
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: hello
+          image: quay.io/openshifttest/hello-openshift:1.2.0
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 1
+            periodSeconds: 5
+          resources:
+            limits:
+              cpu: 50m
+              memory: 64Mi
+            requests:
+              cpu: 10m
+              memory: 32Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eph-healthy
+  labels:
+    app: eph-healthy
+spec:
+  selector:
+    app: eph-healthy
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: eph-healthy
+  labels:
+    app: eph-healthy
+spec:
+  to:
+    kind: Service
+    name: eph-healthy
+  port:
+    targetPort: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eph-degraded
+  labels:
+    app: eph-degraded
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+---
+apiVersion: discovery.k8s.io/v1
+kind: EndpointSlice
+metadata:
+  name: eph-degraded-slice
+  labels:
+    kubernetes.io/service-name: eph-degraded
+    app: eph-degraded
+addressType: IPv4
+ports:
+  - name: http
+    protocol: TCP
+    port: 8080
+endpoints:
+  - addresses:
+      - 192.0.2.1
+    conditions:
+      ready: true
+  - addresses:
+      - 192.0.2.2
+    conditions:
+      ready: false
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eph-down
+  labels:
+    app: eph-down
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+---
+apiVersion: discovery.k8s.io/v1
+kind: EndpointSlice
+metadata:
+  name: eph-down-slice
+  labels:
+    kubernetes.io/service-name: eph-down
+    app: eph-down
+addressType: IPv4
+ports:
+  - name: http
+    protocol: TCP
+    port: 8080
+endpoints:
+  - addresses:
+      - 192.0.2.10
+    conditions:
+      ready: false
+  - addresses:
+      - 192.0.2.11
+    conditions:
+      ready: false
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eph-external
+  labels:
+    app: eph-external
+spec:
+  type: ExternalName
+  externalName: example.com
