@@ -82,7 +82,11 @@ export const DetailsItem: FC<DetailsItemProps> = ({
 
   const hide = hideEmpty && _.isEmpty(_.get(obj, path));
   const popoverContent: string = description ?? getPropertyDescription(model, path);
-  const value: ReactNode = children || _.get(obj, path, defaultValue);
+  // Fall back to the raw resource field only when no children were provided at all.
+  // An empty or falsy child (for example a missing translation resolving to an empty
+  // string) must not fall through, otherwise a plain object such as
+  // metadata.annotations is handed to React as a child and the page crashes.
+  const value: ReactNode = children ?? _.get(obj, path, defaultValue);
   const editable = onEdit && canEdit;
 
   return hide ? null : (
