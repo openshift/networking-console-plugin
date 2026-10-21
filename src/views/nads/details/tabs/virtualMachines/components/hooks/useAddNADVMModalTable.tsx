@@ -1,9 +1,11 @@
 import React, { useCallback, useMemo } from 'react';
 import { TFunction } from 'i18next';
 
-import { modelToGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console';
-import VirtualMachineModel from '@kubevirt-ui/kubevirt-api/console/models/VirtualMachineModel';
-import { V1VirtualMachine } from '@kubevirt-ui/kubevirt-api/kubevirt';
+import {
+  modelToGroupVersionKind,
+  VirtualMachineModel,
+} from '@kubevirt-ui-ext/kubevirt-api/console';
+import { V1VirtualMachine } from '@kubevirt-ui-ext/kubevirt-api/kubevirt';
 import { ResourceLink } from '@openshift-console/dynamic-plugin-sdk';
 import { Bullseye, EmptyState, Label, Spinner } from '@patternfly/react-core';
 import { DataViewTh } from '@patternfly/react-data-view';

@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useMemo } from 'react';
 
-import { RouteModel } from '@kubevirt-ui/kubevirt-api/console';
+import { RouteModel } from '@kubevirt-ui-ext/kubevirt-api/console';
 import { ResourceYAMLEditor, useActiveNamespace } from '@openshift-console/dynamic-plugin-sdk';
 import { Content, ContentVariants, PageSection, Title } from '@patternfly/react-core';
 import { EditorType } from '@utils/components/SyncedEditor/EditorToggle';

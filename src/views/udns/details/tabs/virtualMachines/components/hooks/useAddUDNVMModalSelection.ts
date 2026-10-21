@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 
-import { V1VirtualMachine } from '@kubevirt-ui/kubevirt-api/kubevirt';
+import { V1VirtualMachine } from '@kubevirt-ui-ext/kubevirt-api/kubevirt';
 import { DataViewTr, isDataViewTrObject, useDataViewSelection } from '@patternfly/react-data-view';
 import { getName, getNamespace } from '@utils/resources/shared';
 

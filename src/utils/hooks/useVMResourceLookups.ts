@@ -1,14 +1,16 @@
 import { useMemo } from 'react';
 
-import { modelToGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console';
-import VirtualMachineClusterInstancetypeModel from '@kubevirt-ui/kubevirt-api/console/models/VirtualMachineClusterInstancetypeModel';
-import VirtualMachineInstanceModel from '@kubevirt-ui/kubevirt-api/console/models/VirtualMachineInstanceModel';
-import VirtualMachineInstancetypeModel from '@kubevirt-ui/kubevirt-api/console/models/VirtualMachineInstancetypeModel';
+import {
+  modelToGroupVersionKind,
+  VirtualMachineClusterInstancetypeModel,
+  VirtualMachineInstanceModel,
+  VirtualMachineInstancetypeModel,
+} from '@kubevirt-ui-ext/kubevirt-api/console';
 import {
   V1beta1VirtualMachineClusterInstancetype,
   V1beta1VirtualMachineInstancetype,
   V1VirtualMachineInstance,
-} from '@kubevirt-ui/kubevirt-api/kubevirt';
+} from '@kubevirt-ui-ext/kubevirt-api/kubevirt';
 import { useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { buildVMResourceLookups, VMResourceLookups } from '@utils/resources/vm/vmResourceLookups';
 

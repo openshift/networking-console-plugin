@@ -1,7 +1,9 @@
 import React, { FC } from 'react';
 
-import { modelToRef } from '@kubevirt-ui/kubevirt-api/console';
-import NetworkAttachmentDefinitionModel from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
+import {
+  modelToRef,
+  NetworkAttachmentDefinitionModel,
+} from '@kubevirt-ui-ext/kubevirt-api/console';
 import { Title } from '@patternfly/react-core';
 import DetailsPageTitle from '@utils/components/DetailsPageTitle/DetailsPageTitle';
 import { useLastNamespacePath } from '@utils/hooks/useLastNamespacePath';
