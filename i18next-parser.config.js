@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { CustomJSONLexer } = require('./i18n-scripts/lexers');
 
 module.exports = {

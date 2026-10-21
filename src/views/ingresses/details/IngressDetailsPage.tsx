@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 
 import { modelToGroupVersionKind } from '@kubevirt-ui-ext/kubevirt-api/console';
-import { IngressModel } from '@utils/models';
 import type { IoK8sApiNetworkingV1Ingress } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import { HorizontalNav, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import StatusBox from '@utils/components/StatusBox/StatusBox';
+import { IngressModel } from '@utils/models';
 import IngressDetailsPageTitle from '@views/ingresses/details/components/IngressDetailsPageTitle';
 import useIngressTabs from '@views/ingresses/details/hooks/useIngressTabs';
 

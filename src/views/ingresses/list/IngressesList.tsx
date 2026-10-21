@@ -2,7 +2,6 @@ import React, { FC } from 'react';
 import { useNavigate } from 'react-router';
 
 import { modelToGroupVersionKind } from '@kubevirt-ui-ext/kubevirt-api/console';
-import { IngressModel } from '@utils/models';
 import type { IoK8sApiNetworkingV1Ingress } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import {
   ListPageBody,
@@ -18,6 +17,7 @@ import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
 import { DOC_URL_NETWORK_INGRESS } from '@utils/constants/documentation';
 import { SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML } from '@utils/constants/ui';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { IngressModel } from '@utils/models';
 import { getResourceURL } from '@utils/resources/shared';
 import { getValidNamespace } from '@utils/utils';
 import useIngressColumns from '@views/ingresses/list/hooks/useIngressColumns';

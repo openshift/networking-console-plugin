@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router';
 
-import { IngressModel } from '@utils/models';
 import type { IoK8sApiNetworkingV1Ingress } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import {
   Action,
@@ -10,6 +9,7 @@ import {
   useLabelsModal,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { IngressModel } from '@utils/models';
 import { asAccessReview, getResourceURL } from '@utils/resources/shared';
 
 type UseIngressActions = (ingress: IoK8sApiNetworkingV1Ingress) => [actions: Action[]];
