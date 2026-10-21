@@ -8,7 +8,7 @@ module.exports = (on, config) => {
           {
             exclude: /node_modules/,
             loader: 'esbuild-loader',
-            test: /\.(jsx?|tsx?)$/,
+            test: /\.ts$/,
           },
         ],
       },
@@ -18,6 +18,12 @@ module.exports = (on, config) => {
     },
   };
   on('file:preprocessor', wp(options));
+  on('before:browser:launch', (browser = {}, launchOptions) => {
+    if (browser.family === 'chromium' || browser.name === 'electron') {
+      launchOptions.args.push('--ignore-certificate-errors');
+    }
+    return launchOptions;
+  });
   // `config` is the resolved Cypress config
   config.baseUrl = `${process.env.BRIDGE_BASE_ADDRESS || 'http://localhost:9000/'}`;
   config.env.BRIDGE_KUBEADMIN_PASSWORD = process.env.BRIDGE_KUBEADMIN_PASSWORD;
