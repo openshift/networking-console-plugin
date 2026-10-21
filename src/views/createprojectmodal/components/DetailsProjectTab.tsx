@@ -8,7 +8,7 @@ import { CreateProjectModalFormState } from '../types';
 
 import ProjectNamePopover from './ProjectNamePopover';
 
-const DetailsProjectTab: FC = ({}) => {
+const DetailsProjectTab: FC = () => {
   const { t } = useNetworkingTranslation();
   const { register, setValue } = useFormContext<CreateProjectModalFormState>();
 
