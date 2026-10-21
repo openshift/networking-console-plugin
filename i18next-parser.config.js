@@ -1,7 +1,5 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires, no-undef
 const { CustomJSONLexer } = require('./i18n-scripts/lexers');
 
-// eslint-disable-next-line no-undef
 module.exports = {
   createOldCatalogs: false,
   defaultNamespace: 'plugin__networking-console-plugin',

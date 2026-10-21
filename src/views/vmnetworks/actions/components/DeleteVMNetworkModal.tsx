@@ -38,7 +38,7 @@ const DeleteVMNetworkModal: FC<DeleteVMNetworkModalProps> = ({ closeModal, obj }
       });
       closeModal();
       navigate(VM_NETWORKS_PATH);
-    } catch (error) {
+    } catch {
       setIsSubmitting(false);
     }
   };

@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-env node */
-
 import * as path from 'path';
 
 import { Configuration as WebpackConfiguration } from 'webpack';
@@ -49,11 +46,11 @@ const config: Configuration = {
   module: {
     rules: [
       {
-        test: /\.m?js/,
         include: /node_modules\/@patternfly\/.*/,
         resolve: {
           fullySpecified: false,
         },
+        test: /\.m?js/,
       },
       {
         exclude: /node_modules\/.*/,
@@ -108,8 +105,8 @@ const config: Configuration = {
     minimize: false,
   },
   output: {
-    copy: [{ from: '../locales', to: 'locales' }],
     chunkFilename: '[name]-chunk.js',
+    copy: [{ from: '../locales', to: 'locales' }],
     filename: '[name]-bundle.js',
     path: path.resolve(__dirname, 'dist'),
   },
