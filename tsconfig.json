@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "baseUrl": ".",
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "jsx": "react",
@@ -11,13 +10,14 @@
     "noUnusedLocals": true,
     "outDir": "dist",
     "paths": {
-      "@utils/*": ["src/utils/*"],
-      "@views/*": ["src/views/*"],
-      "@styles/*": ["src/styles/*"]
+      "@utils/*": ["./src/utils/*"],
+      "@views/*": ["./src/views/*"],
+      "@styles/*": ["./src/styles/*"]
     },
     "skipLibCheck": true,
     "sourceMap": true,
-    "target": "es2016"
+    "target": "es2016",
+    "rootDir": "src"
   },
   "exclude": ["**/node_modules", "**/dist"],
   "include": ["src", "images"],
@@ -26,7 +26,7 @@
     "transpileOnly": true,
     "compilerOptions": {
       "module": "commonjs",
-        "moduleResolution": "node"
+      "moduleResolution": "node"
     }
   }
 }
