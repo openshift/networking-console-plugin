@@ -1,5 +1,5 @@
-import React, { FC, FormEvent, FormEventHandler, useRef } from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
+import React, { FC, FormEvent, FormEventHandler, Ref, useEffect, useRef, useState } from 'react';
+import { Controller, FieldError, useFormContext } from 'react-hook-form';
 import { Trans } from 'react-i18next';
 import { Link } from 'react-router';
 
@@ -7,20 +7,40 @@ import {
   Alert,
   AlertVariant,
   Content,
+  Dropdown,
+  DropdownItem,
+  DropdownList,
   Flex,
+  FlexItem,
   Form,
   FormGroup,
+  MenuToggle,
+  MenuToggleElement,
   Radio,
   TextInput,
+  ValidatedOptions,
 } from '@patternfly/react-core';
+import FormGroupHelperText from '@utils/components/FormGroupHelperText/FormGroupHelperText';
+import PopoverHelpIcon from '@utils/components/PopoverHelpIcon/PopoverHelpIcon';
 import SubnetCIDRHelperText from '@utils/components/SubnetCIDRHelperText/SubnetCIDRHelperText';
 import { documentationURLs, getDocumentationURL } from '@utils/constants/documentation';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { FIXED_PRIMARY_UDN_NAME } from '@utils/resources/udns/constants';
-import { UserDefinedNetworkRole } from '@utils/resources/udns/types';
+import {
+  ClusterUserDefinedNetworkSpec,
+  MACSecurityMode,
+  UserDefinedNetworkRole,
+  UserDefinedNetworkSpec,
+} from '@utils/resources/udns/types';
 import { generateName } from '@utils/utils';
 
-import { PROJECT_NAME } from '../constants';
+import {
+  CUDN_MAC_SECURITY_FIELD_PATH,
+  CUDN_SUBNETS_FIELD_PATH,
+  PROJECT_NAME,
+  UDN_MAC_SECURITY_FIELD_PATH,
+  UDN_SUBNETS_FIELD_PATH,
+} from '../constants';
 
 import ClusterUDNNamespaceSelector from './ClusterUDNNamespaceSelector';
 import { UDNForm } from './constants';
@@ -40,13 +60,39 @@ const UserDefinedNetworkCreateForm: FC<UserDefinedNetworkCreateFormProps> = ({
 }) => {
   const { t } = useNetworkingTranslation();
 
-  const { control, register, setValue, watch } = useFormContext<UDNForm>();
+  const {
+    control,
+    formState: { errors },
+    getValues,
+    register,
+    setValue,
+    trigger,
+    watch,
+  } = useFormContext<UDNForm>();
 
   const roleField = udnRoleField(isClusterUDN);
   const role = watch(roleField);
   const isSecondary = role === UserDefinedNetworkRole.Secondary;
-  const subnetField = isClusterUDN ? 'spec.network.layer2.subnets' : 'spec.layer2.subnets';
+  const subnetField = isClusterUDN ? CUDN_SUBNETS_FIELD_PATH : UDN_SUBNETS_FIELD_PATH;
+  const macSecurityField = isClusterUDN
+    ? CUDN_MAC_SECURITY_FIELD_PATH
+    : UDN_MAC_SECURITY_FIELD_PATH;
+  const macSecurityMode = watch(macSecurityField as any);
+
+  // Get nested error based on field path
+  const subnetError = isClusterUDN
+    ? ((errors.spec as ClusterUserDefinedNetworkSpec)?.network?.layer2
+        ?.subnets as unknown as FieldError)
+    : ((errors.spec as unknown as UserDefinedNetworkSpec)?.layer2
+        ?.subnets as unknown as FieldError);
+
   const lastSecondaryName = useRef('');
+  const [isMacSecurityDropdownOpen, setIsMacSecurityDropdownOpen] = useState<boolean>(false);
+
+  // Trigger validation when MAC Security mode changes
+  useEffect(() => {
+    if (isSecondary) trigger(subnetField);
+  }, [macSecurityMode, isSecondary, subnetField, trigger]);
 
   const onRoleSelect = (event: FormEvent<HTMLInputElement>, checked: boolean) => {
     if (!checked) {
@@ -56,9 +102,7 @@ const UserDefinedNetworkCreateForm: FC<UserDefinedNetworkCreateFormProps> = ({
     const newRole = event.currentTarget.value as UserDefinedNetworkRole;
     setValue(roleField, newRole);
 
-    if (isClusterUDN) {
-      return;
-    }
+    if (isClusterUDN) return;
 
     const currentName = watch('metadata.name');
 
@@ -126,7 +170,11 @@ const UserDefinedNetworkCreateForm: FC<UserDefinedNetworkCreateFormProps> = ({
         </FormGroup>
       )}
 
-      <FormGroup fieldId="input-udn-subnet" isRequired label={t('Subnet CIDR')}>
+      <FormGroup
+        fieldId="input-udn-subnet"
+        isRequired={!(isSecondary && macSecurityMode === MACSecurityMode.Disabled)}
+        label={t('Subnet CIDR')}
+      >
         <Controller
           control={control}
           name={subnetField}
@@ -135,7 +183,6 @@ const UserDefinedNetworkCreateForm: FC<UserDefinedNetworkCreateFormProps> = ({
               autoFocus={!isClusterUDN && !isSecondary}
               data-test="input-udn-subnet"
               id="input-udn-subnet"
-              isRequired
               name="input-udn-subnet"
               onChange={(_, newValue) => {
                 const subnets = newValue
@@ -147,14 +194,127 @@ const UserDefinedNetworkCreateForm: FC<UserDefinedNetworkCreateFormProps> = ({
                 });
               }}
               type="text"
+              validated={subnetError ? ValidatedOptions.error : ValidatedOptions.default}
               value={value?.join(',')}
             />
           )}
-          rules={{ required: true }}
-        />
+          rules={{
+            validate: {
+              macSecurityValidation: (value) => {
+                // Get current MAC Security mode from form values
+                const formValues = getValues();
+                const currentMacSecurityMode = isClusterUDN
+                  ? formValues.spec?.network?.layer2?.macSecurity?.mode
+                  : formValues.spec?.layer2?.macSecurity?.mode;
 
-        <SubnetCIDRHelperText />
+                if (
+                  isSecondary &&
+                  currentMacSecurityMode === MACSecurityMode.Disabled &&
+                  value &&
+                  value.length > 0 &&
+                  value.some((s) => s.trim())
+                ) {
+                  return t(
+                    'Subnets must be empty when MAC Security is disabled (IPAM must be disabled)',
+                  );
+                }
+                return true;
+              },
+              required: (value) => {
+                // Get current MAC Security mode from form values
+                const formValues = getValues();
+                const currentMacSecurityMode = isClusterUDN
+                  ? formValues.spec?.network?.layer2?.macSecurity?.mode
+                  : formValues.spec?.layer2?.macSecurity?.mode;
+
+                // Field is NOT required when secondary network has MAC Security disabled
+                const isRequiredField = !(
+                  isSecondary && currentMacSecurityMode === MACSecurityMode.Disabled
+                );
+
+                if (isRequiredField && (!value || value.length === 0)) {
+                  return t('Required');
+                }
+                return true;
+              },
+            },
+          }}
+        />
+        <FormGroupHelperText
+          validated={subnetError ? ValidatedOptions.error : ValidatedOptions.default}
+        >
+          {subnetError?.message || <SubnetCIDRHelperText />}
+        </FormGroupHelperText>
       </FormGroup>
+
+      {isSecondary && (
+        <FormGroup
+          fieldId="mac-security"
+          label={t('MAC Security')}
+          labelHelp={
+            <PopoverHelpIcon
+              bodyContent={
+                <Flex direction={{ default: 'column' }}>
+                  <FlexItem>
+                    {t(
+                      'MAC Security controls whether OVN enforces that only the assigned MAC address can send traffic through a port (MAC spoof filtering).',
+                    )}
+                  </FlexItem>
+                  <FlexItem>
+                    {t(
+                      'Disabling MAC Security is required for nested VMs, HA firewall appliances, and NFV workloads that need to send traffic with multiple MAC addresses.',
+                    )}
+                  </FlexItem>
+                  <FlexItem>
+                    {t(
+                      'WARNING: Disabling MAC Security removes an important security protection. Only disable when your workload specifically requires it.',
+                    )}
+                  </FlexItem>
+                  <FlexItem>
+                    {t(
+                      'MAC Security can only be disabled when IPAM is disabled (no subnets configured).',
+                    )}
+                  </FlexItem>
+                </Flex>
+              }
+            />
+          }
+        >
+          <Controller
+            control={control}
+            defaultValue={MACSecurityMode.Enabled as never}
+            name={macSecurityField as any}
+            render={({ field: { onChange, value } }) => (
+              <Dropdown
+                id="mac-security-dropdown"
+                isOpen={isMacSecurityDropdownOpen}
+                onSelect={() => setIsMacSecurityDropdownOpen(false)}
+                selected={value || MACSecurityMode.Enabled}
+                toggle={(toggleRef: Ref<MenuToggleElement>) => (
+                  <MenuToggle
+                    id="mac-security-toggle"
+                    isExpanded={isMacSecurityDropdownOpen}
+                    isFullWidth
+                    onClick={() => setIsMacSecurityDropdownOpen(!isMacSecurityDropdownOpen)}
+                    ref={toggleRef}
+                  >
+                    {value || MACSecurityMode.Enabled}
+                  </MenuToggle>
+                )}
+              >
+                <DropdownList>
+                  {Object.values(MACSecurityMode).map((mode) => (
+                    <DropdownItem key={mode} onClick={() => onChange(mode)} value={mode}>
+                      {mode}
+                    </DropdownItem>
+                  ))}
+                </DropdownList>
+              </Dropdown>
+            )}
+            rules={{ required: false }}
+          />
+        </FormGroup>
+      )}
 
       {isClusterUDN && <ClusterUDNNamespaceSelector />}
 

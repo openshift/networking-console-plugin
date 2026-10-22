@@ -2,6 +2,13 @@ import { K8sResourceKind, Selector } from '@openshift-console/dynamic-plugin-sdk
 
 export const IPAM_MODE_DISABLED = 'Disabled';
 export const VLAN_MODE_ACCESS = 'Access';
+export const MAC_SECURITY_MODE_ENABLED = 'Enabled';
+export const MAC_SECURITY_MODE_DISABLED = 'Disabled';
+
+export enum MACSecurityMode {
+  Disabled = 'Disabled',
+  Enabled = 'Enabled',
+}
 
 export type UserDefinedNetworkAnnotations = {
   description?: string;
@@ -18,6 +25,9 @@ export type UserDefinedNetworkLayer2 = {
     mode?: typeof IPAM_MODE_DISABLED;
   };
   joinSubnets?: string[];
+  macSecurity?: {
+    mode?: MACSecurityMode;
+  };
   mtu?: number;
   role: UserDefinedNetworkRole;
   subnets?: string[];
