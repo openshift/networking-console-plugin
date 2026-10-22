@@ -19,7 +19,7 @@ oc delete --ignore-not-found=true -n "${TEST_NS}" multi-networkpolicy auto-test-
 echo "Cleaning up UDN resources..."
 oc delete --ignore-not-found=true ClusterUserDefinedNetwork cluster-udn --wait=false
 oc delete --ignore-not-found=true -n "${UDN_NS}" UserDefinedNetwork primary-udn --wait=false
-oc delete nncp --all --ignore-not-found --wait=false
+oc delete --ignore-not-found=true nncp -l app.kubernetes.io/managed-by=networking-console-plugin-test --wait=false
 
 echo "Deleting test namespaces..."
 oc delete namespace "${TEST_NS}" --ignore-not-found --wait=false

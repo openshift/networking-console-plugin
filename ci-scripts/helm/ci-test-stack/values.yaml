@@ -10,6 +10,8 @@ bearerToken: ""
 i18nNamespaces: "plugin__networking-console-plugin"
 
 runnerServiceAccount: ""
+runnerServiceAccountNamespace: "arc-runners"
+testRunnerClusterRole: "ci-env-controller-test-runner"
 
 thanosURL: ""
 alertmanagerURL: ""

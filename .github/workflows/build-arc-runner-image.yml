@@ -1,0 +1,125 @@
+name: Build Custom ARC Runner Image
+
+on:
+  workflow_dispatch:
+    inputs:
+      registry:
+        description: Target registry (ttl.sh, docker.io, quay.io)
+        required: true
+        default: ttl.sh
+        type: choice
+        options:
+          - ttl.sh
+          - docker.io
+          - quay.io
+      image_name:
+        description: Image name (without registry; e.g., custom-arc-runner)
+        required: true
+        default: custom-arc-runner
+      tag:
+        description: Image tag (e.g., 1h, latest, v1.0)
+        required: true
+        default: 1h
+  push:
+    paths:
+      - 'ci-scripts/Dockerfile.arc-runner'
+      - 'ci-scripts/ARC-RUNNER-IMAGE.md'
+      - '.github/workflows/build-arc-runner-image.yml'
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+env:
+  REGISTRY: ${{ github.event.inputs.registry || 'ttl.sh' }}
+  IMAGE_NAME: ${{ github.event.inputs.image_name || 'custom-arc-runner' }}
+  TAG: ${{ github.event.inputs.tag || '1h' }}
+
+jobs:
+  build-and-push:
+    name: Build and Push Image
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Determine image reference
+        id: image
+        run: |
+          IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.TAG }}"
+          echo "reference=${IMAGE}" >> $GITHUB_OUTPUT
+          echo "Building image: ${IMAGE}"
+
+      - name: Build image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./ci-scripts/Dockerfile.arc-runner
+          push: false
+          load: true
+          tags: ${{ steps.image.outputs.reference }}
+
+      - name: Verify image
+        run: |
+          IMAGE="${{ steps.image.outputs.reference }}"
+          echo "=== Image Verification ==="
+          docker run --rm "${IMAGE}" sh -c "
+            echo '✓ oc:' \$(oc version --client 2>&1 | head -1)
+            echo '✓ kubectl:' \$(kubectl version --client 2>&1 | grep -o 'v[0-9.]*')
+            echo '✓ helm:' \$(helm version --short)
+            echo '✓ node:' \$(node --version)
+            echo '✓ npm:' \$(npm --version)
+            echo '✓ cypress:' \$(cypress --version)
+            echo '✓ git:' \$(git --version | head -1)
+            echo '✓ jq:' \$(jq --version)
+          "
+
+      - name: Push to registry (GitHub-triggered)
+        if: github.event_name == 'push'
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./ci-scripts/Dockerfile.arc-runner
+          push: true
+          tags: ${{ steps.image.outputs.reference }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Push to registry (workflow_dispatch)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          docker push ${{ steps.image.outputs.reference }}
+
+      - name: Log image reference
+        run: |
+          {
+            echo "<details><summary>Custom ARC Runner Image</summary>"
+            echo ""
+            echo "**Image**: \`${{ steps.image.outputs.reference }}\`"
+            echo ""
+            echo "**Usage in RunnerScaleSet**:"
+            echo ""
+            echo "\`\`\`yaml"
+            echo "spec:"
+            echo "  runnerImage: ${{ steps.image.outputs.reference }}"
+            echo "  template:"
+            echo "    spec:"
+            echo "      containers:"
+            echo "        - name: runner"
+            echo "          image: ${{ steps.image.outputs.reference }}"
+            echo "\`\`\`"
+            echo ""
+            echo "**To apply**:"
+            echo ""
+            echo "\`\`\`bash"
+            echo "oc patch runnerscaleset/networking-console-plugin-ci -n arc-runners --type merge -p '{\"spec\":{\"runnerImage\":\"${{ steps.image.outputs.reference }}\"}'"
+            echo "oc rollout restart statefulset/arc-runner -n arc-runners"
+            echo "\`\`\`"
+            echo ""
+            echo "</details>"
+          } >> $GITHUB_STEP_SUMMARY
