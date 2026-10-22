@@ -1,4 +1,5 @@
 import { ClusterUserDefinedNetworkModel, UserDefinedNetworkModel } from '@utils/models';
+import { getName, getNamespace } from '@utils/resources/shared';
 import { FIXED_PRIMARY_UDN_NAME, LAYER2_TOPOLOGY } from '@utils/resources/udns/constants';
 import {
   ClusterUserDefinedNetworkKind,
@@ -63,5 +64,5 @@ export const isUDNValid = (udn: UDNForm): boolean => {
 
   const isSecondary = udn?.spec?.layer2?.role === UserDefinedNetworkRole.Secondary;
 
-  return !isEmpty(udn?.metadata?.namespace) && (!isSecondary || !isEmpty(udn?.metadata?.name));
+  return !isEmpty(getNamespace(udn)) && (!isSecondary || !isEmpty(getName(udn)));
 };
