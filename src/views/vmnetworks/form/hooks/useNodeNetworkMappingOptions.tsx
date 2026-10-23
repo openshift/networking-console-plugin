@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import {
   V1NodeNetworkConfigurationPolicy,
   V1NodeNetworkConfigurationPolicySpec,
-} from '@kubevirt-ui/kubevirt-api/nmstate';
+} from '@kubevirt-ui-ext/kubevirt-api/nmstate';
 import { useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { SelectOptionProps } from '@patternfly/react-core';
 import { NodeNetworkConfigurationPolicyModelGroupVersionKind } from '@utils/models';

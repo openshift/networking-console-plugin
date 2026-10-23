@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { modelToRef, RouteModel } from '@kubevirt-ui/kubevirt-api/console';
+import { modelToRef, RouteModel } from '@kubevirt-ui-ext/kubevirt-api/console';
 import { Title } from '@patternfly/react-core';
 import DetailsPageTitle from '@utils/components/DetailsPageTitle/DetailsPageTitle';
 import { useLastNamespacePath } from '@utils/hooks/useLastNamespacePath';

@@ -1,9 +1,0 @@
-# Ignore artifacts:
-dist/
-node_modules/
-i18n-scripts/
-yarn.lock
-/coverage
-/gui-test-screenshots
-cypress/gui-test-screenshots
-cypress/cypress-a11y-report.json

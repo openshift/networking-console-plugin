@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom-v5-compat';
 
-import { modelToGroupVersionKind, NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
+import { modelToGroupVersionKind, NetworkPolicyModel } from '@kubevirt-ui-ext/kubevirt-api/console';
 import {
   ListPageCreateButton,
   ListPageHeader,
