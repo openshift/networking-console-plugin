@@ -35,13 +35,13 @@ const ChartLegendTooltip: FC<
     getLabel,
     height,
     isCursorTooltip = true,
-    mainDataName, // eslint-disable-next-line perfectionist/sort-objects
+    mainDataName,
     labelComponent = <ChartLegendTooltipContent mainDataName={mainDataName} />,
     legendData,
     stack,
     text,
-    themeColor, // eslint-disable-next-line perfectionist/sort-objects
-    width, // eslint-disable-next-line perfectionist/sort-objects
+    themeColor,
+    width,
     // destructure last
     theme = getTheme(themeColor), // eslint-disable-line perfectionist/sort-objects
     ...rest

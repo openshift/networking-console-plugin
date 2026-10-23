@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import * as _ from 'lodash';
 
-import { NamespaceModel, RouteModel } from '@kubevirt-ui/kubevirt-api/console';
+import { NamespaceModel, RouteModel } from '@kubevirt-ui-ext/kubevirt-api/console';
 import {
   getGroupVersionKindForModel,
   ResourceLink,

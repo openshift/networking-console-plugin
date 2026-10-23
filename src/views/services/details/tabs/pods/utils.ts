@@ -2,10 +2,10 @@
 
 import * as _ from 'lodash';
 
-import {
+import type {
   IoK8sApiCoreV1ContainerStatus,
   IoK8sApiCoreV1Pod,
-} from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+} from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import { K8sResourceCommon, PrometheusResponse } from '@openshift-console/dynamic-plugin-sdk';
 import { SortByDirection } from '@patternfly/react-table';
 import { getName, getNamespace } from '@utils/resources/shared';
