@@ -1,7 +1,7 @@
 import React, { FC, Ref, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+import type { IoK8sApiCoreV1Service } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import {
   Dropdown,
   DropdownItem,

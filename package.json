@@ -31,12 +31,13 @@
     "shared-modules:sync": "./scripts/align-shared-modules.sh"
   },
   "dependencies": {
-    "@kubevirt-ui/kubevirt-api": "^1.4.2",
-    "@openshift-console/dynamic-plugin-sdk": "4.23.0-prerelease.5",
-    "@openshift-console/dynamic-plugin-sdk-internal": "4.23.0-prerelease.5",
+    "@kubevirt-ui-ext/kubevirt-api": "2.1.5",
+    "@openshift-console/dynamic-plugin-sdk": "5.1.0-prerelease.1",
+    "@openshift-console/dynamic-plugin-sdk-internal": "5.1.0-prerelease.1",
+    "@openshift/dynamic-plugin-sdk": "9.1.0",
     "@patternfly/quickstarts": "6.6.0",
     "@patternfly/react-charts": "8.6.1",
-    "@patternfly/react-component-groups": "6.7.0",
+    "@patternfly/react-component-groups": "6.8.0-prerelease.2",
     "@patternfly/react-core": "6.6.2",
     "@patternfly/react-data-view": "6.5.0",
     "@patternfly/react-drag-drop": "6.6.2",
@@ -76,7 +77,8 @@
   "devDependencies": {
     "@cypress/webpack-preprocessor": "^7.1.2",
     "@eslint/js": "^9.39.5",
-    "@openshift-console/dynamic-plugin-sdk-webpack": "4.23.0-prerelease.5",
+    "@openshift-console/dynamic-plugin-sdk-webpack": "5.1.0-prerelease.1",
+    "@openshift/dynamic-plugin-sdk-webpack": "5.3.0",
     "@types/js-yaml": "^4.0.9",
     "@types/lodash": "^4.17.26",
     "@types/node": "^18.0.0",
@@ -91,6 +93,7 @@
     "eslint": "^9.39.5",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-cypress": "^6.4.4",
+    "eslint-plugin-import": "2.32.0",
     "eslint-plugin-perfectionist": "^5.12.1",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.1.1",
@@ -116,5 +119,8 @@
     "webpack": "^5.111.1",
     "webpack-cli": "5.1.4",
     "webpack-dev-server": "^5.2.3"
+  },
+  "overrides": {
+    "@patternfly/react-component-groups": "$@patternfly/react-component-groups"
   }
 }

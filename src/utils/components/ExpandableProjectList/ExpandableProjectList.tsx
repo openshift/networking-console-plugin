@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 
-import { modelToGroupVersionKind, NamespaceModel } from '@kubevirt-ui/kubevirt-api/console';
+import { modelToGroupVersionKind, NamespaceModel } from '@kubevirt-ui-ext/kubevirt-api/console';
 import { ResourceLink } from '@openshift-console/dynamic-plugin-sdk';
 import { Button, ButtonVariant, Skeleton } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';

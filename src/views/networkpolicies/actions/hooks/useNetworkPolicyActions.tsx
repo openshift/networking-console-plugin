@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router';
 
-import { modelToRef } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+import { modelToRef } from '@kubevirt-ui-ext/kubevirt-api/console';
+import type { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import {
   Action,
   useAnnotationsModal,
