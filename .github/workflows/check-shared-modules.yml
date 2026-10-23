@@ -5,6 +5,9 @@ on:
     paths:
       - package-lock.json
 
+permissions:
+  contents: read
+
 jobs:
   check-shared-modules:
     runs-on: ubuntu-latest

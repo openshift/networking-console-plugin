@@ -7,8 +7,9 @@ set -euo pipefail
 # which would cause runtime conflicts.
 #
 # Checks:
-#   1. @patternfly packages — one resolution per package
+#   1. @patternfly packages — one resolution per package, declared in package.json
 #   2. Shared modules (and similar) listed in dependabot.yml — one resolution per package
+#   3. All packages present in the lockfile are declared in package.json
 
 errors=0
 
@@ -36,6 +37,15 @@ if [ "$unique_count" -ne "$pkg_count" ]; then
 else
   echo "✅ All PatternFly packages have a single resolution."
 fi
+
+# Verify PatternFly packages present in the lockfile are declared in package.json
+lockfile_pf_packages=$(echo "$unique_resolved" | grep -oP '@patternfly/[\w-]+' | sort -u)
+for pkg in $lockfile_pf_packages; do
+  if ! grep -q "\"${pkg}\"" package.json; then
+    echo "❌ $pkg — resolved in lockfile but missing from package.json"
+    errors=$((errors + 1))
+  fi
+done
 
 # --- 2. Shared modules (Console >=4.19) ---
 
@@ -68,6 +78,13 @@ for pkg in $shared_modules; do
 
   if [ -z "$resolved_urls" ]; then
     # skip silently - not in lockfile
+    continue
+  fi
+
+  # Verify shared modules present in the lockfile are declared in package.json
+  if ! grep -q "\"${pkg}\"" package.json; then
+    echo "❌ $pkg — resolved in lockfile but missing from package.json"
+    errors=$((errors + 1))
     continue
   fi
 
