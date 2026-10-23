@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import classNames from 'classnames';
-import * as _ from 'lodash';
 
 import { modelToGroupVersionKind, PodModel } from '@kubevirt-ui/kubevirt-api/console';
 import { IoK8sApiCoreV1Pod } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
@@ -18,7 +17,13 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 
 import { podColumnInfo } from '../hooks/usePodColumns';
 import { formatBytesAsMiB, formatCores } from '../units';
-import { getPodCPUUsage, getPodMemoryUsage, podPhase, podReadiness, podRestarts } from '../utils';
+import {
+  getPodCPUUsage,
+  getPodMemoryUsage,
+  getPodPhase,
+  podReadiness,
+  podRestarts,
+} from '../utils';
 
 import { PodStatus } from './PodStatus';
 import { PodTraffic } from './PodTraffic';
@@ -37,7 +42,7 @@ const PodRow: FC<PodRowType> = ({
   const { creationTimestamp, labels, name, namespace } = pod.metadata;
 
   const { readyCount, totalContainers } = podReadiness(pod);
-  const phase = podPhase(pod);
+  const phase = getPodPhase(pod);
   const restarts = podRestarts(pod);
   const context = { [`core~${PodModel.apiVersion}~${PodModel.kind}`]: pod };
 

@@ -1,0 +1,16 @@
+.topology-drawer {
+  &__body {
+    padding: var(--pf-v5-global--spacer--md);
+  }
+
+  &__content {
+    pre {
+      background-color: var(--pf-v5-global--BackgroundColor--200);
+      border: 1px solid var(--pf-v5-global--BorderColor--100);
+      border-radius: var(--pf-v5-global--BorderRadius--sm);
+      padding: var(--pf-v5-global--spacer--md);
+      overflow-x: auto;
+      font-size: var(--pf-v5-global--FontSize--sm);
+    }
+  }
+}
