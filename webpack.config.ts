@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-env node */
-
 import * as path from 'path';
 
 import { Configuration as WebpackConfiguration } from 'webpack';
@@ -49,7 +46,7 @@ const config: Configuration = {
   module: {
     rules: [
       {
-        exclude: /node_modules\/(?!(@kubevirt-ui)\/kubevirt-api).*/,
+        exclude: /node_modules\/.*/,
         test: /\.(jsx?|tsx?)$/,
         use: [
           {
@@ -101,8 +98,8 @@ const config: Configuration = {
     minimize: false,
   },
   output: {
-    copy: [{ from: '../locales', to: 'locales' }],
     chunkFilename: '[name]-chunk.js',
+    copy: [{ from: '../locales', to: 'locales' }],
     filename: '[name]-bundle.js',
     path: path.resolve(__dirname, 'dist'),
   },

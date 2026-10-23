@@ -1,4 +1,4 @@
-import { V1Network, V1VirtualMachine } from '@kubevirt-ui/kubevirt-api/kubevirt';
+import { V1Network, V1VirtualMachine } from '@kubevirt-ui-ext/kubevirt-api/kubevirt';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
 import { UDNResource } from '@utils/resources/udns/helper';
 import { INTERFACE_STATE_ABSENT } from '@utils/resources/vm/constants';

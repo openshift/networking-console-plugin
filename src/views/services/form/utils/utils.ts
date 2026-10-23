@@ -1,8 +1,8 @@
-import { ServiceModel } from '@kubevirt-ui/kubevirt-api/console';
+import { ServiceModel } from '@kubevirt-ui-ext/kubevirt-api/console';
 import {
   IoK8sApiCoreV1Service,
   IoK8sApiCoreV1ServicePort,
-} from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+} from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 
 import {
   EXTERNAL_NAME_HOSTNAME_MAX_LENGTH,

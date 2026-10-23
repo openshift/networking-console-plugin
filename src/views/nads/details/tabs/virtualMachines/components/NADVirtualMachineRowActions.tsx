@@ -1,9 +1,11 @@
 import React, { FC, useCallback, useMemo } from 'react';
 import { Trans } from 'react-i18next';
 
-import { modelToGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console';
-import VirtualMachineModel from '@kubevirt-ui/kubevirt-api/console/models/VirtualMachineModel';
-import { V1VirtualMachine } from '@kubevirt-ui/kubevirt-api/kubevirt';
+import {
+  modelToGroupVersionKind,
+  VirtualMachineModel,
+} from '@kubevirt-ui-ext/kubevirt-api/console';
+import { V1VirtualMachine } from '@kubevirt-ui-ext/kubevirt-api/kubevirt';
 import { Action, ResourceLink, useModal } from '@openshift-console/dynamic-plugin-sdk';
 import { ButtonVariant } from '@patternfly/react-core';
 import ActionsDropdown from '@utils/components/ActionsDropdown/ActionsDropdown';

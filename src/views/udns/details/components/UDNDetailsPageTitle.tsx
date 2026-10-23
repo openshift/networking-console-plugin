@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { modelToRef } from '@kubevirt-ui/kubevirt-api/console';
+import { modelToRef } from '@kubevirt-ui-ext/kubevirt-api/console';
 import { Title } from '@patternfly/react-core';
 import DetailsPageTitle from '@utils/components/DetailsPageTitle/DetailsPageTitle';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';

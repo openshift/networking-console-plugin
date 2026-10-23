@@ -1,4 +1,4 @@
-import { modelToGroupVersionKind, ServiceModel } from '@kubevirt-ui/kubevirt-api/console';
+import { modelToGroupVersionKind, ServiceModel } from '@kubevirt-ui-ext/kubevirt-api/console';
 import { t } from '@utils/hooks/useNetworkingTranslation';
 
 export const PASSTHROUGH = 'passthrough';

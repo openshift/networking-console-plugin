@@ -5,7 +5,7 @@ import {
   V1DomainSpec,
   V1VirtualMachine,
   V1VirtualMachineInstance,
-} from '@kubevirt-ui/kubevirt-api/kubevirt';
+} from '@kubevirt-ui-ext/kubevirt-api/kubevirt';
 
 import { getName, getNamespace } from '../shared';
 

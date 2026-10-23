@@ -17,11 +17,11 @@ which can drop most custom scripts including PO conversion and
 
 In Cursor, attach or invoke the **i18n-memsource** skill, then ask for one of:
 
-| You say… | Skill runs… |
-|----------|-------------|
-| "upload translations" / "memsource upload" | Extract keys → build POs (keeping existing translations) → upload to Phrase |
-| "download translations" / "memsource download" | Pull finished translations → convert to locale JSON → commit → optional PR |
-| "translation status" / "memsource status" | Show Phrase job status per language |
+| You say…                                       | Skill runs…                                                                 |
+| ---------------------------------------------- | --------------------------------------------------------------------------- |
+| "upload translations" / "memsource upload"     | Extract keys → build POs (keeping existing translations) → upload to Phrase |
+| "download translations" / "memsource download" | Pull finished translations → convert to locale JSON → commit → optional PR  |
+| "translation status" / "memsource status"      | Show Phrase job status per language                                         |
 
 State (last sprint, version, project ID) is stored in
 [`.cursor/skills/i18n-memsource/state.json`](./state.json).
@@ -193,11 +193,11 @@ PO export does **not** upload English into every language blindly. For each lang
 4. Leave new keys with empty `msgstr` for translators
 5. **Post-export clear:** if `msgstr` still equals `msgid` (English placeholder left by `i18next-parser`), clear it to empty so Phrase marks it as needing translation
 
-| Locale JSON value | msgstr uploaded to Phrase |
-|-------------------|---------------------------|
-| Real translation (e.g. Japanese) | Kept |
-| Empty | Empty (needs translation) |
-| English placeholder | Cleared to empty (needs translation) |
+| Locale JSON value                | msgstr uploaded to Phrase            |
+| -------------------------------- | ------------------------------------ |
+| Real translation (e.g. Japanese) | Kept                                 |
+| Empty                            | Empty (needs translation)            |
+| English placeholder              | Cleared to empty (needs translation) |
 
 That is why you must run `npm run export-pos` (never hand-edit English-only POs).
 
@@ -260,16 +260,16 @@ done
 
 ## Common pitfalls
 
-| Pitfall | What happens | Fix |
-|---------|--------------|-----|
-| Skip `zh-cn` symlink on upload | Chinese translations wiped in the Phrase project | Always `ln -sfn zh locales/zh-cn` before export/upload |
-| Hand-build POs from English only | Existing ja/ko/fr/es/zh translations lost | Always use `npm run export-pos` |
-| Leave English in msgstr | Phrase may treat those strings as already translated | Use current `export-pos` (includes `clear-english-msgstr.js`) |
-| Trust download script's git clean check | Uncommitted `locales/` changes get overwritten | Run `git status -- locales/` yourself |
-| Download before jobs complete | Incomplete locale overwrite | Check job status first |
-| Give Memsource password/token to the agent | Credential exposure | Authenticate only in your shell |
-| Forget to update `state.json` | Next download/status uses stale project ID | Update state after every upload |
-| Upload without reviewing `npm run i18n` | Unexpected key churn in locale files | Always review `git diff -- locales/` first |
+| Pitfall                                    | What happens                                         | Fix                                                           |
+| ------------------------------------------ | ---------------------------------------------------- | ------------------------------------------------------------- |
+| Skip `zh-cn` symlink on upload             | Chinese translations wiped in the Phrase project     | Always `ln -sfn zh locales/zh-cn` before export/upload        |
+| Hand-build POs from English only           | Existing ja/ko/fr/es/zh translations lost            | Always use `npm run export-pos`                               |
+| Leave English in msgstr                    | Phrase may treat those strings as already translated | Use current `export-pos` (includes `clear-english-msgstr.js`) |
+| Trust download script's git clean check    | Uncommitted `locales/` changes get overwritten       | Run `git status -- locales/` yourself                         |
+| Download before jobs complete              | Incomplete locale overwrite                          | Check job status first                                        |
+| Give Memsource password/token to the agent | Credential exposure                                  | Authenticate only in your shell                               |
+| Forget to update `state.json`              | Next download/status uses stale project ID           | Update state after every upload                               |
+| Upload without reviewing `npm run i18n`    | Unexpected key churn in locale files                 | Always review `git diff -- locales/` first                    |
 
 ---
 

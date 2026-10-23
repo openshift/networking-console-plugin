@@ -1,4 +1,4 @@
-import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+import type { IoK8sApiCoreV1Service } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import { K8sResourceCommon, K8sResourceCondition } from '@openshift-console/dynamic-plugin-sdk';
 
 type EndpointSliceEndpoint = {
