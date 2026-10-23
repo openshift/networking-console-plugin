@@ -1,6 +1,7 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 
 import {
+  SelectionEventListener,
   TopologyView,
   Visualization,
   VisualizationProvider,
@@ -8,6 +9,7 @@ import {
 } from '@patternfly/react-topology';
 import { isEmpty } from '@utils/utils';
 import ControlBar from '@views/topology/components/TopologyControlBar';
+import TopologyDrawer from '@views/topology/components/TopologyDrawer/TopologyDrawer';
 import { useTopologyContext } from '@views/topology/context/TopologyContext';
 import { GRAPH_POSITIONING_EVENT, NODE_POSITIONING_EVENT } from '@views/topology/utils/constants';
 import { generateDataModel } from '@views/topology/utils/dataTransformation/dataTransformation';
@@ -16,7 +18,26 @@ import { restoreNodePositions, saveNodePositions } from '@views/topology/utils/n
 
 const Topology: FC = () => {
   const [controller, setController] = useState<Visualization>();
-  const { resources } = useTopologyContext();
+  const { onSelectNode, resources } = useTopologyContext();
+
+  const handleSelection: SelectionEventListener = useCallback(
+    (selectedIds: string[]) => {
+      if (!controller) return;
+
+      if (selectedIds.length === 0) {
+        onSelectNode(null);
+        return;
+      }
+
+      const selectedId = selectedIds[0];
+      const node = controller.getElementById(selectedId);
+
+      if (node && node.getType() === 'node') {
+        onSelectNode(node);
+      }
+    },
+    [controller, onSelectNode],
+  );
 
   useEffect(() => {
     if (!resources || isEmpty(resources)) return;
@@ -46,6 +67,16 @@ const Topology: FC = () => {
     controller.fromModel(topologyModel);
   }, [controller, resources]);
 
+  useEffect(() => {
+    if (!controller) return;
+
+    controller.addEventListener<SelectionEventListener>('selection', handleSelection);
+
+    return () => {
+      controller.removeEventListener('selection', handleSelection);
+    };
+  }, [controller, handleSelection]);
+
   // Re-run fit after mount to ensure correct scale when container size stabilizes (e.g. navigation from create flow)
   useEffect(() => {
     if (!controller) return;
@@ -59,9 +90,11 @@ const Topology: FC = () => {
 
   return (
     <VisualizationProvider controller={controller}>
-      <TopologyView controlBar={<ControlBar controller={controller} />}>
-        <VisualizationSurface />
-      </TopologyView>
+      <TopologyDrawer>
+        <TopologyView controlBar={<ControlBar controller={controller} />}>
+          <VisualizationSurface />
+        </TopologyView>
+      </TopologyDrawer>
     </VisualizationProvider>
   );
 };
