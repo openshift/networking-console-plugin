@@ -1,6 +1,6 @@
 export * from './network-policy';
-import { modelToGroupVersionKind, modelToRef } from '@kubevirt-ui/kubevirt-api/console';
-import { K8sModel } from '@openshift-console/dynamic-plugin-sdk';
+import { modelToGroupVersionKind, modelToRef } from '@kubevirt-ui-ext/kubevirt-api/console';
+import type { K8sModel } from '@openshift-console/dynamic-plugin-sdk';
 
 export const QuickStartModel: K8sModel = {
   abbr: 'CQS',
@@ -9,7 +9,11 @@ export const QuickStartModel: K8sModel = {
   crd: true,
   kind: 'ConsoleQuickStart',
   label: 'ConsoleQuickStart',
+  // t('ConsoleQuickStart')
+  labelKey: 'ConsoleQuickStart',
   labelPlural: 'ConsoleQuickStarts',
+  // t('ConsoleQuickStarts')
+  labelPluralKey: 'ConsoleQuickStarts',
   namespaced: false,
   plural: 'consolequickstarts',
   propagationPolicy: 'Background',
@@ -21,7 +25,11 @@ export const EndPointSliceModel: K8sModel = {
   apiVersion: 'v1',
   kind: 'EndpointSlice',
   label: 'EndpointSlice',
+  // t('EndpointSlice')
+  labelKey: 'EndpointSlice',
   labelPlural: 'EndpointSlices',
+  // t('EndpointSlices')
+  labelPluralKey: 'EndpointSlices',
   namespaced: true,
   plural: 'endpointslices',
 };
@@ -133,3 +141,19 @@ const NodeNetworkStateModel: K8sModel = {
 };
 
 export const NodeNetworkStateModelGroupVersionKind = modelToGroupVersionKind(NodeNetworkStateModel);
+
+export const IngressModel: K8sModel = {
+  abbr: 'I',
+  apiGroup: 'networking.k8s.io',
+  apiVersion: 'v1',
+  id: 'ingress',
+  kind: 'Ingress',
+  label: 'Ingress',
+  // t('Ingress')
+  labelKey: 'Ingress',
+  labelPlural: 'Ingresses',
+  // t('Ingresses')
+  labelPluralKey: 'Ingresses',
+  namespaced: true,
+  plural: 'ingresses',
+};

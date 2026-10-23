@@ -176,14 +176,14 @@ the message for the current language from the `plugin__networking-console-plugin
 namespace. For example:
 
 ```json
-  {
-    "type": "console.navigation/section",
-    "properties": {
-      "id": "admin-demo-section",
-      "perspective": "admin",
-      "name": "%plugin__networking-console-plugin~Plugin Template%"
-    }
+{
+  "type": "console.navigation/section",
+  "properties": {
+    "id": "admin-demo-section",
+    "perspective": "admin",
+    "name": "%plugin__networking-console-plugin~Plugin Template%"
   }
+}
 ```
 
 Running `npm run i18n` updates the JSON files in the `locales` folder of the
@@ -212,7 +212,7 @@ Steps to generate reports
 
 1. In command prompt, navigate to root folder and execute the command `npm run cypress-merge`
 2. Then execute command `npm run cypress-generate`
-The cypress-report.html file is generated and should be in (/integration-tests/screenshots) directory
+   The cypress-report.html file is generated and should be in (/integration-tests/screenshots) directory
 
 ## References
 
