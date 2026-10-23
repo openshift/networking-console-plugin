@@ -11,7 +11,7 @@ import { Button, ButtonVariant, Content, Divider, Popover } from '@patternfly/re
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { resourcePathFromModel } from '@utils/resources/shared';
 
-import { isContainerCrashLoopBackOff, isWindowsPod, podPhase } from '../utils';
+import { getPodPhase, isContainerCrashLoopBackOff, isWindowsPod } from '../utils';
 
 type PodStatusPopoverProps = {
   bodyContent: string;
@@ -40,7 +40,7 @@ const PodStatusPopover: FC<PodStatusPopoverProps> = ({
 };
 
 export const PodStatus: FC<PodStatusProps> = ({ pod }) => {
-  const status = podPhase(pod);
+  const status = getPodPhase(pod);
   const unschedulableCondition = pod.status?.conditions?.find(
     (condition) => condition.reason === 'Unschedulable' && condition.status === 'False',
   );

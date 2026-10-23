@@ -13,7 +13,7 @@ import { getName, getNamespace } from '@utils/resources/shared';
 export type PodPhase = string;
 
 // (See https://github.com/kubernetes/kubernetes/blob/release-1.17/pkg/printers/internalversion/printers.go)
-export const podPhase = (pod: IoK8sApiCoreV1Pod): PodPhase => {
+export const getPodPhase = (pod: IoK8sApiCoreV1Pod): PodPhase => {
   if (!pod || !pod.status) {
     return '';
   }
@@ -89,7 +89,7 @@ export const podPhase = (pod: IoK8sApiCoreV1Pod): PodPhase => {
 };
 
 export const podPhaseFilterReducer = (pod: IoK8sApiCoreV1Pod): PodPhase => {
-  const status = podPhase(pod);
+  const status = getPodPhase(pod);
   if (status === 'Terminating') {
     return status;
   }
