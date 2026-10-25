@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
-import { IngressModel, NamespaceModel } from '@kubevirt-ui/kubevirt-api/console';
-import { IoK8sApiNetworkingV1Ingress } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+import { NamespaceModel } from '@kubevirt-ui-ext/kubevirt-api/console';
+import type { IoK8sApiNetworkingV1Ingress } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import {
   getGroupVersionKindForModel,
   ResourceLink,
@@ -15,6 +15,7 @@ import { DetailsItem } from '@utils/components/DetailsItem/DetailsItem';
 import { LabelList } from '@utils/components/DetailsItem/LabelList';
 import { OwnerReferences } from '@utils/components/OwnerReference/owner-references';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { IngressModel } from '@utils/models';
 import {
   getCreationTimestamp,
   getLabels,

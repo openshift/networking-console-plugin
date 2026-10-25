@@ -19,7 +19,6 @@ const useVMNetworkActions = (obj: ClusterUserDefinedNetworkKind) => {
   const actions = useMemo(
     (): Action[] => [
       {
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
         cta: () => {},
         description: t(
           "To change a network definition, create a new one and reassign VirtualMachines to it. Existing definitions can't be edited directly",
