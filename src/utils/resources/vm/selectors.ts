@@ -1,4 +1,4 @@
-import { V1Interface, V1Network, V1VirtualMachine } from '@kubevirt-ui/kubevirt-api/kubevirt';
+import { V1Interface, V1Network, V1VirtualMachine } from '@kubevirt-ui-ext/kubevirt-api/kubevirt';
 
 export const getNetworks = (vm: V1VirtualMachine): V1Network[] =>
   vm?.spec?.template?.spec?.networks || [];
