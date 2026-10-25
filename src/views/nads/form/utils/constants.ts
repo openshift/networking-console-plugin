@@ -1,4 +1,4 @@
-import NetworkAttachmentDefinitionModel from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
+import { NetworkAttachmentDefinitionModel } from '@kubevirt-ui-ext/kubevirt-api/console';
 import { K8sModel } from '@openshift-console/dynamic-plugin-sdk';
 import { generateName } from '@utils/utils';
 

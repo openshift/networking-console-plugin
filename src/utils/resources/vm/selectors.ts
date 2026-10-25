@@ -4,7 +4,7 @@ import {
   V1Network,
   V1VirtualMachine,
   V1VirtualMachineCondition,
-} from '@kubevirt-ui/kubevirt-api/kubevirt';
+} from '@kubevirt-ui-ext/kubevirt-api/kubevirt';
 
 import {
   getVMCPUCountWithLookups,

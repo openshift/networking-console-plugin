@@ -1,6 +1,6 @@
 import React, { FC, useMemo } from 'react';
 
-import { modelToGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console';
+import { modelToGroupVersionKind } from '@kubevirt-ui-ext/kubevirt-api/console';
 import { K8sModel, ResourceIcon } from '@openshift-console/dynamic-plugin-sdk';
 import { Alert, AlertVariant, Label, List, ListItem } from '@patternfly/react-core';
 import Loading from '@utils/components/Loading/Loading';

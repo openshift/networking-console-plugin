@@ -1,8 +1,10 @@
 import React, { FC } from 'react';
 import { size } from 'lodash';
 
-import { modelToGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console';
-import NetworkAttachmentDefinitionModel from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
+import {
+  modelToGroupVersionKind,
+  NetworkAttachmentDefinitionModel,
+} from '@kubevirt-ui-ext/kubevirt-api/console';
 import {
   ResourceLink,
   Timestamp,

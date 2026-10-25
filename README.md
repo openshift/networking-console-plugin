@@ -52,30 +52,12 @@ rpm-ostree install qemu-user-static
 systemctl reboot
 ```
 
-### VS Code Dev Container
-
-An alternative setup uses Docker Compose with
-the [Remote Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
-extension:
-
-1. Create `.devcontainer/dev.env`:
-
-```bash
-OC_PLUGIN_NAME=networking-console-plugin
-OC_URL=https://api.example.com:6443
-OC_USER=kubeadmin
-OC_PASS=<password>
-```
-
-2. Open the folder in a dev container: `Ctrl+Shift+P` > `Remote Containers: Open Folder in Container...`
-3. Run `npm run start`
-
 ## Development
 
 ### Scripts
 
 | Command                         | Description                                                       |
-|---------------------------------|-------------------------------------------------------------------|
+| ------------------------------- | ----------------------------------------------------------------- |
 | `npm run start`                 | Start webpack dev server on port 9001                             |
 | `npm run start-console`         | Launch OpenShift console in a container connected to your cluster |
 | `npm run build`                 | Production build to `dist/`                                       |
@@ -92,7 +74,7 @@ OC_PASS=<password>
 The project uses TypeScript path aliases configured in `tsconfig.json`:
 
 | Alias       | Target         |
-|-------------|----------------|
+| ----------- | -------------- |
 | `@utils/*`  | `src/utils/*`  |
 | `@views/*`  | `src/views/*`  |
 | `@styles/*` | `src/styles/*` |
@@ -117,10 +99,10 @@ Prettier config: single quotes, trailing commas, 100-char print width, 2-space t
 The i18n namespace is `plugin__networking-console-plugin`. Use the `useNetworkingTranslation` hook:
 
 ```tsx
-import {useNetworkingTranslation} from '@utils/hooks/useNetworkingTranslation';
+import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 const MyComponent: FC = () => {
-  const {t} = useNetworkingTranslation();
+  const { t } = useNetworkingTranslation();
   return <h1>{t('Hello, World!')}</h1>;
 };
 ```
@@ -151,18 +133,6 @@ docker push quay.io/my-repository/networking-console-plugin:latest
 
 On Apple silicon, add `--platform=linux/amd64`.
 
-## Deployment
-
-A [Helm chart](charts/openshift-console-plugin/) deploys the plugin to OpenShift:
-
-```bash
-helm upgrade -i networking-console-plugin charts/openshift-console-plugin \
-  -n plugin__networking-console-plugin --create-namespace \
-  --set plugin.image=<image-location>
-```
-
-See `charts/openshift-console-plugin/values.yaml` for all parameters.
-
 ## Testing
 
 ### Frontend Validation
@@ -190,7 +160,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for coding standards, PR process, and com
 ## Learn More
 
 | Reference                                                                       | Description                                                 |
-|---------------------------------------------------------------------------------|-------------------------------------------------------------|
+| ------------------------------------------------------------------------------- | ----------------------------------------------------------- |
 | [OpenShift web console](https://github.com/openshift/console)                   | Web-based user interface for OpenShift                      |
 | [OpenShift Dynamic Plugin SDK](https://github.com/openshift/dynamic-plugin-sdk) | Dynamic plugin SDK for OpenShift user interfaces            |
 | [PatternFly](https://www.patternfly.org/)                                       | Open-source design system used for OpenShift UI development |

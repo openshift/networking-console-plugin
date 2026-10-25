@@ -1,7 +1,9 @@
 import React, { FC } from 'react';
 
-import { modelToGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console';
-import NetworkAttachmentDefinitionModel from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
+import {
+  modelToGroupVersionKind,
+  NetworkAttachmentDefinitionModel,
+} from '@kubevirt-ui-ext/kubevirt-api/console';
 import { HorizontalNav, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import StatusBox from '@utils/components/StatusBox/StatusBox';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';

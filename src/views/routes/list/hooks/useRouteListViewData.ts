@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { modelToGroupVersionKind, RouteModel } from '@kubevirt-ui/kubevirt-api/console';
+import { modelToGroupVersionKind, RouteModel } from '@kubevirt-ui-ext/kubevirt-api/console';
 import { useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { useEndpointHealth } from '@utils/hooks/useEndpointHealth';
 import { getNamespace } from '@utils/resources/shared';

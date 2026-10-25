@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+import type { IoK8sApiCoreV1Service } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import { FormGroup, TextInput, ValidatedOptions } from '@patternfly/react-core';
 import FormGroupHelperText from '@utils/components/FormGroupHelperText/FormGroupHelperText';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';

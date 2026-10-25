@@ -1,4 +1,14 @@
-# Ignore artifacts:
-dist/
+# .gitignore:
 node_modules/
+dist/
+integration-tests/videos
+integration-tests/screenshots
+integration-tests/.DS_Store
+.DS_Store
+.env
+
+#legacy
 i18n-scripts/
+#generated
+package-lock.json
+locales/

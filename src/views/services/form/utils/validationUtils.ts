@@ -12,7 +12,7 @@ const invalidResult = (errorMessage: string): ValidationResult => ({
   isValid: false,
 });
 
-const SERVICE_PROTOCOLS = new Set(['TCP', 'UDP', 'SCTP']);
+const SERVICE_PROTOCOLS = new Set(['SCTP', 'TCP', 'UDP']);
 
 export const validatePort = (t: TFunction, value: unknown): ValidationResult => {
   if (value === '' || value === null || value === undefined) {

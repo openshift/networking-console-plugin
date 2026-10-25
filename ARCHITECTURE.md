@@ -53,7 +53,7 @@ Each manifest declares:
 The plugin manages these Kubernetes resource kinds:
 
 | Resource                    | API Group                 | View Path                    |
-|-----------------------------|---------------------------|------------------------------|
+| --------------------------- | ------------------------- | ---------------------------- |
 | Service                     | `v1` (core)               | `src/views/services/`        |
 | Route                       | `route.openshift.io/v1`   | `src/views/routes/`          |
 | Ingress                     | `networking.k8s.io/v1`    | `src/views/ingresses/`       |
@@ -104,12 +104,6 @@ Kubernetes API server. The plugin does not make direct API calls.
 - `Dockerfile` builds using the `rhel-9-base-nodejs-openshift-4.22` builder image, then serves static files via nginx.
 - `Dockerfile.art` is the ART (Automated Release Tooling) variant used by Red Hat build systems.
 
-### Cluster Deployment
-
-- A Helm chart in `charts/openshift-console-plugin/` deploys the plugin as an nginx pod with a `ConsolePlugin` CR.
-- The chart supports security context, pod security, resource limits, and a patcher job that registers the plugin with
-  the console operator.
-
 ## CI/CD
 
 The project uses Prow and CI Operator (`.ci-operator.yaml`):
@@ -121,7 +115,7 @@ The project uses Prow and CI Operator (`.ci-operator.yaml`):
 ## Key Dependencies
 
 | Package                                                | Purpose                                          |
-|--------------------------------------------------------|--------------------------------------------------|
+| ------------------------------------------------------ | ------------------------------------------------ |
 | `@openshift-console/dynamic-plugin-sdk`                | Console integration (hooks, CRUD, UI primitives) |
 | `@openshift-console/dynamic-plugin-sdk-webpack`        | Webpack plugin for module federation             |
 | `@kubevirt-ui/kubevirt-api`                            | KubeVirt type definitions and model utilities    |
