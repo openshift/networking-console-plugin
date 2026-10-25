@@ -7,7 +7,7 @@ import {
   V1beta1NodeNetworkState,
   V1NodeNetworkConfigurationPolicy,
   V1NodeNetworkConfigurationPolicySpec,
-} from '@kubevirt-ui/kubevirt-api/nmstate';
+} from '@kubevirt-ui-ext/kubevirt-api/nmstate';
 import { ValidatedOptions } from '@patternfly/react-core';
 import { MAX_MTU } from '@utils/constants/mtu';
 import { isEmpty } from '@utils/utils';

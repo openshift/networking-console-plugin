@@ -3,12 +3,13 @@ import React, { FC } from 'react';
 import {
   Button,
   ButtonVariant,
+  Modal,
   ModalBody,
   ModalFooter,
   ModalHeader,
   ModalHeaderProps,
+  ModalVariant,
 } from '@patternfly/react-core';
-import { Modal, ModalVariant } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 export type BaseModalProps = {
