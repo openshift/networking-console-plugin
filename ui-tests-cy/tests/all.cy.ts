@@ -1,5 +1,6 @@
 import './setup/login.cy.ts';
 import './setup/visit-pages.cy.ts';
+import './networking/topology.cy.ts';
 import './networking/udn.cy.ts';
 import './networking/nad-bridge.cy.ts';
 import './networking/nad-localnet.cy.ts';
