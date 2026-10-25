@@ -1,8 +1,10 @@
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router';
 
-import { NetworkAttachmentDefinitionModelRef } from '@kubevirt-ui/kubevirt-api/console';
-import NetworkAttachmentDefinitionModel from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
+import {
+  NetworkAttachmentDefinitionModel,
+  NetworkAttachmentDefinitionModelRef,
+} from '@kubevirt-ui-ext/kubevirt-api/console';
 import {
   Action,
   useAnnotationsModal,

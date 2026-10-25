@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { modelToGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console';
+import { modelToGroupVersionKind } from '@kubevirt-ui-ext/kubevirt-api/console';
 import { useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { EndPointSliceModel } from '@utils/models';
 import { EndpointSliceKind, ServiceEndpointHealth } from '@utils/types';

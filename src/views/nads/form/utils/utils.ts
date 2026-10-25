@@ -1,6 +1,6 @@
 import { TFunction } from 'i18next';
 
-import NetworkAttachmentDefinitionModel from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
+import { NetworkAttachmentDefinitionModel } from '@kubevirt-ui-ext/kubevirt-api/console';
 import { k8sCreate } from '@openshift-console/dynamic-plugin-sdk';
 import { safeYAMLToJS } from '@utils/components/SyncedEditor/yaml';
 import { getType } from '@utils/resources/nads/selectors';

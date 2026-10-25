@@ -1,8 +1,7 @@
 import { ALL_PROJ_NS } from '../utils/const/base';
 
 import { checkActionMenu } from './actions';
-import { row } from './selector-common';
-import { brCrumbItem } from './selector-common';
+import { brCrumbItem, row } from './selector-common';
 
 export const UDN_PRIM_UDN_NS = 'primary-udn';
 

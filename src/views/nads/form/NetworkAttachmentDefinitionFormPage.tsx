@@ -1,7 +1,7 @@
 import React, { FC, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 
-import NetworkAttachmentDefinitionModel from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
+import { NetworkAttachmentDefinitionModel } from '@kubevirt-ui-ext/kubevirt-api/console';
 import {
   k8sCreate,
   ResourceYAMLEditor,
