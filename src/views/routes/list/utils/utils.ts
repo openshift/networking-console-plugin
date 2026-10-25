@@ -4,7 +4,7 @@ import { RoutesStatusesType } from '@utils/constants/routes';
 import { t } from '@utils/hooks/useNetworkingTranslation';
 import { RouteIngress, RouteKind } from '@utils/types';
 
-export const routeStatus = (route: RouteKind): RoutesStatusesType => {
+export const getRouteStatus = (route: RouteKind): RoutesStatusesType => {
   let atLeastOneAdmitted = false;
 
   if (!route.status || !route.status.ingress) {
@@ -92,8 +92,8 @@ export const sortRoutesByLocation = (direction: string) => (a: RouteKind, b: Rou
 export const sortRoutesByStatus = (direction: string) => (a: RouteKind, b: RouteKind) => {
   const { first, second } = direction === 'asc' ? { first: a, second: b } : { first: b, second: a };
 
-  const firstValue = routeStatus(first);
-  const secondValue = routeStatus(second);
+  const firstValue = getRouteStatus(first);
+  const secondValue = getRouteStatus(second);
 
   return firstValue?.localeCompare(secondValue);
 };

@@ -7,3 +7,6 @@ export const LAYER2_TOPOLOGY = 'Layer2';
 export const LAYER3_TOPOLOGY = 'Layer3';
 
 export const CLUSTER_UDN_NAD_NAME_PREFIX = 'cluster.udn.';
+
+export const NETWORK_CREATED = 'NetworkCreated';
+export const NETWORK_ALLOCATION_SUCCEEDED = 'NetworkAllocationSucceeded';
