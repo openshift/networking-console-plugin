@@ -34,6 +34,21 @@ resolve_api_server() {
   oc whoami --show-server 2>/dev/null || echo "https://kubernetes.default.svc"
 }
 
+copy_pull_secret() {
+  local test_ns="$1"
+  local secret_name="${PLUGIN_PULL_SECRET:-}"
+  if [[ -z "${secret_name}" ]]; then
+    return 0
+  fi
+  if ! oc get secret "${secret_name}" -n "${CI_ENV_NAMESPACE}" >/dev/null 2>&1; then
+    echo "[provision] Pull secret ${CI_ENV_NAMESPACE}/${secret_name} not found"
+    return 0
+  fi
+  oc get secret "${secret_name}" -n "${CI_ENV_NAMESPACE}" -o yaml \
+    | grep -vE '^[[:space:]]*(resourceVersion|uid|creationTimestamp|namespace):' \
+    | oc apply -n "${test_ns}" -f -
+}
+
 patch_cm() {
   local cm_name="$1"
   shift
@@ -54,11 +69,18 @@ provision_env() {
   helm_release="${cm_name}"
 
   oc get namespace "${test_ns}" 2>/dev/null || oc create namespace "${test_ns}"
+  copy_pull_secret "${test_ns}"
+
+  local pull_secret="${PLUGIN_PULL_SECRET:-}"
+  if [[ -n "${pull_secret}" ]] && ! oc get secret "${pull_secret}" -n "${test_ns}" >/dev/null 2>&1; then
+    pull_secret=""
+  fi
 
   if helm status "${helm_release}" -n "${test_ns}" &>/dev/null; then
     echo "[provision] Upgrading existing release ${helm_release}"
     helm upgrade "${helm_release}" /charts/ci-test-stack -n "${test_ns}" \
       --set pluginImage="${plugin_image}" \
+      --set pluginImagePullSecret="${pull_secret}" \
       --set consoleImage="${console_image}" \
       --set apiServerURL="${api_server}" \
       --set runnerServiceAccount="${RUNNER_SERVICE_ACCOUNT:-}" \
@@ -67,6 +89,7 @@ provision_env() {
     echo "[provision] Installing new release ${helm_release}"
     helm install "${helm_release}" /charts/ci-test-stack -n "${test_ns}" \
       --set pluginImage="${plugin_image}" \
+      --set pluginImagePullSecret="${pull_secret}" \
       --set consoleImage="${console_image}" \
       --set apiServerURL="${api_server}" \
       --set runnerServiceAccount="${RUNNER_SERVICE_ACCOUNT:-}" \

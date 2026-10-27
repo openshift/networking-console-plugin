@@ -1,15 +1,19 @@
 # CI Dockerfile — mirrors production Dockerfile but uses public registries
 # (GitHub Actions runners cannot pull from registry.ci.openshift.org)
 
-# Builder container
-FROM registry.access.redhat.com/ubi9/nodejs-18:1-118 AS build
+# Builder container. Node 22 matches the OpenShift 5.0 console builder.
+# Node 18 cannot load webpack.config.ts (ERR_UNKNOWN_FILE_EXTENSION).
+FROM registry.access.redhat.com/ubi9/nodejs-22:1-1792868909 AS build
 
 COPY . /opt/app-root/src/app
 WORKDIR /opt/app-root/src/app
 
 USER 0
 ENV CYPRESS_INSTALL_BINARY=0
-RUN npm clean-install --ignore-scripts --no-audit && npm run build
+RUN npm clean-install --ignore-scripts --no-audit && \
+    TS_NODE_COMPILER_OPTIONS='{"module":"commonjs"}' \
+    NODE_OPTIONS='--require ts-node/register' \
+    npm run build
 
 # Web server container
 FROM registry.access.redhat.com/ubi9/ubi-minimal:9.4

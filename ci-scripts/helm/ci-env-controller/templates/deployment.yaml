@@ -34,6 +34,8 @@ spec:
             - name: RUNNER_SERVICE_ACCOUNT
               value: {{ .Values.runnerServiceAccount | quote }}
             {{- end }}
+            - name: PLUGIN_PULL_SECRET
+              value: {{ .Values.pluginPullSecret | quote }}
           volumeMounts:
             - name: script
               mountPath: /scripts
@@ -41,10 +43,10 @@ spec:
           resources:
             requests:
               cpu: 50m
-              memory: 64Mi
-            limits:
-              cpu: 200m
               memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
       volumes:
         - name: script
           configMap:

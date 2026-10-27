@@ -1,4 +1,5 @@
 const wp = require('@cypress/webpack-preprocessor');
+const fs = require('fs');
 const path = require('path');
 const dotenv = require('dotenv');
 const { execSync } = require('child_process');
@@ -27,12 +28,25 @@ module.exports = (on, config) => {
   on('task', {
     execOc({ args }) {
       try {
-        const result = execSync(`oc ${args.join(' ')}`, { encoding: 'utf-8', timeout: 300000 });
-        return result;
+        return execSync(`oc ${args.join(' ')}`, { encoding: 'utf-8', timeout: 300000 });
       } catch {
         return null;
       }
     },
+  });
+
+  let screenshotIndex = 0;
+  on('after:screenshot', (details) => {
+    const prefix = String(screenshotIndex).padStart(3, '0');
+    screenshotIndex += 1;
+    const renamed = path.join(
+      path.dirname(details.path),
+      `${prefix}.${path.basename(details.path)}`,
+    );
+
+    return new Promise((resolve, reject) => {
+      fs.rename(details.path, renamed, (err) => (err ? reject(err) : resolve({ path: renamed })));
+    });
   });
 
   config.baseUrl = `${process.env.BRIDGE_BASE_ADDRESS || 'http://localhost:9000/'}`;
