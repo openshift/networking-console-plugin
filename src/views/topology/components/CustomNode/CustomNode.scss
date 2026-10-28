@@ -17,3 +17,8 @@
 .custom-node.pf-topology__node.pf-m-selected .pf-topology__node__background {
   stroke-width: 4px;
 }
+
+.networking-topology--filter-active .custom-node.is-filtered .pf-topology__node__background {
+  stroke: var(--pf-t--global--background--color--highlight--default);
+  stroke-width: 2px;
+}

@@ -40,7 +40,7 @@ export const PodTraffic: FC<PodTrafficProp> = ({ namespace, podName, tooltipFlag
       !loadError && (
         <div data-test="pod-traffic-status">
           <Tooltip
-            content={receivingTraffic ? t('Receiving Traffic') : t('Not Receiving Traffic')}
+            content={receivingTraffic ? t('Receiving Traffic') : t('Not receiving traffic')}
             position="top"
           >
             {receivingTraffic ? <ConnectedIcon /> : <DisconnectedIcon />}
