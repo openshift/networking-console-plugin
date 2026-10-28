@@ -21,14 +21,6 @@ const networkUsesUDN = (network: V1Network, udn: UDNResource, vm: V1VirtualMachi
   return Boolean(iface && iface.state !== INTERFACE_STATE_ABSENT);
 };
 
-export const vmUsesUDN = (vm: V1VirtualMachine, udn: UDNResource | undefined): boolean => {
-  if (!udn) {
-    return false;
-  }
-
-  return getNetworks(vm).some((network) => networkUsesUDN(network, udn, vm));
-};
-
 export const getUDNVirtualMachines = (
   vms: undefined | V1VirtualMachine[],
   udn: UDNResource | undefined,

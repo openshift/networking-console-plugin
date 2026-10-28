@@ -9,9 +9,9 @@ import { V1VirtualMachine } from '@kubevirt-ui-ext/kubevirt-api/kubevirt';
 import { useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
 import { UDNResource } from '@utils/resources/udns/helper';
-import { findNADForUDN } from '@utils/resources/vm/utils';
+import { findNADForUDN, vmUsesUDN } from '@utils/resources/vm/utils';
 
-import { getUDNVirtualMachines, UDNVirtualMachine, vmUsesUDN } from './utils/utils';
+import { getUDNVirtualMachines, UDNVirtualMachine } from './utils/utils';
 
 export type { UDNVirtualMachine };
 
