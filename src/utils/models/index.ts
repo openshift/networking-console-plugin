@@ -110,6 +110,70 @@ export const ClusterUserDefinedNetworkModelGroupVersionKind = modelToGroupVersio
 );
 export const ClusterUserDefinedNetworkModelRef = modelToRef(ClusterUserDefinedNetworkModel);
 
+export const BGPCloudConfigurationModel: K8sModel = {
+  abbr: 'BGPCC',
+  apiGroup: 'networking.openshift.io',
+  apiVersion: 'v1beta1',
+  crd: true,
+  id: 'bgpcloudconfiguration',
+  kind: 'BGPCloudConfiguration',
+  label: 'BGPCloudConfiguration',
+  labelKey: 'BGPCloudConfiguration',
+  labelPlural: 'BGPCloudConfigurations',
+  labelPluralKey: 'BGPCloudConfigurations',
+  namespaced: false,
+  plural: 'bgpcloudconfigurations',
+};
+export const BGPCloudConfigurationModelGroupVersionKind = modelToGroupVersionKind(
+  BGPCloudConfigurationModel,
+);
+
+export const BGPRoutingModel: K8sModel = {
+  abbr: 'BGPR',
+  apiGroup: 'networking.openshift.io',
+  apiVersion: 'v1beta1',
+  crd: true,
+  id: 'bgprouting',
+  kind: 'BGPRouting',
+  label: 'BGPRouting',
+  labelKey: 'BGPRouting',
+  labelPlural: 'BGPRoutings',
+  labelPluralKey: 'BGPRoutings',
+  namespaced: false,
+  plural: 'bgproutings',
+};
+export const BGPRoutingModelGroupVersionKind = modelToGroupVersionKind(BGPRoutingModel);
+
+export const FRRConfigurationModel: K8sModel = {
+  abbr: 'FRRC',
+  apiGroup: 'frrk8s.metallb.io',
+  apiVersion: 'v1beta1',
+  crd: true,
+  id: 'frrconfiguration',
+  kind: 'FRRConfiguration',
+  label: 'FRRConfiguration',
+  labelKey: 'FRRConfiguration',
+  labelPlural: 'FRRConfigurations',
+  labelPluralKey: 'FRRConfigurations',
+  namespaced: true,
+  plural: 'frrconfigurations',
+};
+
+export const RouteAdvertisementsModel: K8sModel = {
+  abbr: 'RA',
+  apiGroup: 'k8s.ovn.org',
+  apiVersion: 'v1',
+  crd: true,
+  id: 'routeadvertisements',
+  kind: 'RouteAdvertisements',
+  label: 'RouteAdvertisements',
+  labelKey: 'RouteAdvertisements',
+  labelPlural: 'RouteAdvertisements',
+  labelPluralKey: 'RouteAdvertisements',
+  namespaced: false,
+  plural: 'routeadvertisements',
+};
+
 const NodeNetworkConfigurationPolicyModel: K8sModel = {
   abbr: 'NNCP',
   apiGroup: 'nmstate.io',
