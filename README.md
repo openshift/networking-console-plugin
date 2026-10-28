@@ -4,6 +4,9 @@ An OpenShift Console dynamic plugin that provides the Networking section UI for 
 views for Services, Routes, Ingresses, NetworkPolicies, NetworkAttachmentDefinitions (NADs), and UserDefinedNetworks (
 UDNs).
 
+When the BGP Cloud Connector CRDs are installed, the plugin also provides dedicated views for
+`BGPCloudConfiguration` and `BGPRouting`.
+
 The plugin integrates with the [OpenShift Console](https://github.com/openshift/console)
 via [webpack module federation](https://webpack.js.org/concepts/module-federation/) and
 the [Console Plugin SDK](https://github.com/openshift/console/tree/master/frontend/packages/console-dynamic-plugin-sdk).
@@ -15,6 +18,18 @@ config.
 - [Node.js](https://nodejs.org/en/) and [npm](https://www.npmjs.com/)
 - [oc](https://console.redhat.com/openshift/downloads) CLI, logged into an OpenShift cluster
 - [Docker](https://www.docker.com) or [podman 3.2.0+](https://podman.io) (for running the console locally)
+
+### BGP views
+
+The BGP views are enabled automatically by the `FLAG_BGP_ENABLED` runtime flag when both cluster-scoped CRDs exist:
+
+- `bgpcloudconfigurations.networking.openshift.io`
+- `bgproutings.networking.openshift.io`
+
+The BGP Cloud Connector operator installs these CRDs as part of its OLM installation or its standard Kubernetes
+installation manifests. There is no separate Console setting and users should not set the flag manually. To enable the
+views, install or upgrade the operator and wait for both CRDs to become `Established`; to disable them, remove the
+operator/CRDs. The UI may take a short time to reflect the CRD change because the Console model cache is asynchronous.
 
 ## Quick Start
 
