@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { FieldValues, Path, useForm, UseFormRegister } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
 import { modelToGroupVersionKind, NamespaceModel } from '@kubevirt-ui-ext/kubevirt-api/console';
@@ -33,21 +33,23 @@ import {
 import FormGroupHelperText from '@utils/components/FormGroupHelperText/FormGroupHelperText';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { BGPCloudConfigurationModel, BGPRoutingModel } from '@utils/models';
-import { BGPCloudConfiguration, BGPRouting, isCIDR, parseSelector } from '@utils/resources/bgp';
+import { BGPCloudConfiguration, BGPRouting, isCIDR } from '@utils/resources/bgp';
 import { getName, resourcePathFromModel } from '@utils/resources/shared';
 
+import { cloudPayload, CloudValues, routingPayload, RoutingValues } from './BGPFormUtils';
+
 export type BGPFormProps<T extends K8sResourceKind> = { formData: T; onChange: (data: T) => void };
-type FieldProps = {
+type FieldProps<T extends FieldValues> = {
   error?: string;
   help?: string;
-  id: string;
+  id: Path<T>;
   label: string;
   placeholder?: string;
-  register: any;
+  register: UseFormRegister<T>;
   required?: boolean;
   validate?: (value: number | string) => boolean | string;
 };
-const Field: FC<FieldProps> = ({
+const Field = <T extends FieldValues>({
   error,
   help,
   id,
@@ -56,7 +58,7 @@ const Field: FC<FieldProps> = ({
   register,
   required,
   validate,
-}) => (
+}: FieldProps<T>) => (
   <FormGroup fieldId={id} isRequired={required} label={label}>
     <TextInput id={id} placeholder={placeholder} {...register(id, { required, validate })} />
     <FormGroupHelperText>{error || help}</FormGroupHelperText>
@@ -105,97 +107,8 @@ const BGPSelect: FC<{
   );
 };
 
-type CloudValues = {
-  livenessDetection: 'bfd' | 'bgp-keepalive';
-  localASN: number | string;
-  platform: 'AWS' | 'Azure' | 'GCP' | 'Manual';
-  routerSelectorKey: string;
-  routerSelectorValue: string;
-} & Record<string, any>;
 const firstSelector = (selector?: Record<string, string>) =>
   Object.entries(selector || {})[0] || ['', ''];
-const replaceFirstSelector = (
-  selector: Record<string, string> | undefined,
-  key: string,
-  value: string,
-) => {
-  const guidedEntry = Object.entries(parseSelector(`${key}=${value}`))[0];
-  return Object.fromEntries([
-    ...(guidedEntry ? [guidedEntry] : []),
-    ...Object.entries(selector || {}).slice(1),
-  ]);
-};
-const cloudPayload = (
-  data: CloudValues,
-  original?: BGPCloudConfiguration,
-): BGPCloudConfiguration => {
-  const spec: BGPCloudConfiguration['spec'] = {
-    ...original?.spec,
-    bgp: {
-      ...original?.spec?.bgp,
-      livenessDetection: data.livenessDetection,
-      localASN: Number(data.localASN),
-    },
-    platform: data.platform,
-    routerNodeSelector: replaceFirstSelector(
-      original?.spec?.routerNodeSelector,
-      data.routerSelectorKey,
-      data.routerSelectorValue,
-    ),
-  };
-  if (data.platform === 'AWS')
-    spec.aws = {
-      ...original?.spec?.aws,
-      region: data.awsRegion,
-      routeServerIDs: data.awsRouteServerIDs
-        .split(',')
-        .map((id: string) => id.trim())
-        .filter(Boolean),
-    };
-  if (data.platform === 'Azure')
-    spec.azure = {
-      ...original?.spec?.azure,
-      resourceGroup: data.azureResourceGroup,
-      routeServerName: data.azureRouteServerName,
-      subscriptionID: data.azureSubscriptionID,
-    };
-  if (data.platform === 'GCP')
-    spec.gcp = {
-      ...original?.spec?.gcp,
-      cloudRouterName: data.cloudRouterName,
-      enableNestedVirtualization: data.enableNestedVirtualization,
-      ncc: { hubName: data.gcpNCCHubName, spokePrefix: data.gcpNCCSpokePrefix },
-      project: data.gcpProject,
-      region: data.gcpRegion,
-    };
-  if (data.platform === 'Manual') {
-    const peerGroups = [...(original?.spec?.bgp?.peerGroups || [])];
-    const firstPeerGroup = peerGroups[0] || { neighbors: [] };
-    const neighbors = [...(firstPeerGroup.neighbors || [])];
-    neighbors[0] = {
-      ...(neighbors[0] || {}),
-      address: data.neighborAddress,
-      ebgpMultiHop: data.ebgpMultiHop,
-      remoteASN: Number(data.remoteASN),
-    };
-    peerGroups[0] = {
-      ...firstPeerGroup,
-      neighbors,
-      nodeSelector: replaceFirstSelector(
-        firstPeerGroup.nodeSelector,
-        data.peerSelectorKey,
-        data.peerSelectorValue,
-      ),
-    };
-    spec.bgp.peerGroups = peerGroups;
-  }
-  return {
-    apiVersion: 'networking.openshift.io/v1beta1',
-    kind: 'BGPCloudConfiguration',
-    metadata: original?.metadata || { name: 'cluster' },
-    spec,
-  };
-};
 
 export const BGPCloudConfigurationForm: FC<BGPFormProps<BGPCloudConfiguration>> = ({
   formData,
@@ -491,7 +404,7 @@ export const BGPRoutingForm: FC<BGPFormProps<BGPRouting>> = ({ formData, onChang
   const navigate = useNavigate();
   const [error, setError] = useState<Error>();
   const originalResource = useRef(formData).current;
-  const methods = useForm({
+  const methods = useForm<RoutingValues>({
     defaultValues: {
       name: getName(formData) || '',
       network: formData.spec?.network?.name || '',
@@ -527,32 +440,13 @@ export const BGPRoutingForm: FC<BGPFormProps<BGPRouting>> = ({ formData, onChang
   else if (values.subnet2 && !isCIDR(values.subnet2))
     subnetError = t('Enter a valid IPv4 or IPv6 CIDR.');
   useEffect(
-    () =>
-      onChange({
-        apiVersion: 'networking.openshift.io/v1beta1',
-        kind: 'BGPRouting',
-        metadata: { ...originalResource.metadata, name: values.name },
-        spec: {
-          network: {
-            name: values.network,
-            subnets: [values.subnet1, values.subnet2].filter(Boolean),
-          },
-        },
-      }),
+    () => onChange(routingPayload(values, originalResource)),
     [onChange, originalResource, values],
   );
-  const submit = async (data: any) => {
+  const submit = async (data: RoutingValues) => {
     if (subnetError) return;
     try {
-      const payload: BGPRouting = {
-        apiVersion: 'networking.openshift.io/v1beta1',
-        kind: 'BGPRouting',
-        metadata: { ...originalResource.metadata, name: data.name },
-        spec: {
-          ...originalResource.spec,
-          network: { name: data.network, subnets: [data.subnet1, data.subnet2].filter(Boolean) },
-        },
-      };
+      const payload = routingPayload(data, originalResource);
       await (originalResource.metadata?.resourceVersion
         ? k8sUpdate({
             data: payload,
