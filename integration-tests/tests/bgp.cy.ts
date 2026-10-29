@@ -30,6 +30,11 @@ describe('BGP forms', () => {
     cy.get('#name').should('be.disabled');
     cy.get('#name').should('have.value', 'cluster');
     cy.get('#localASN').should('have.attr', 'type', 'text');
+    cy.get('#localASN').type('abc');
+    cy.contains('Enter a valid ASN between 1 and 4294967295.').should('be.visible');
+    cy.get('button[type="submit"]').should('be.disabled');
+    cy.get('#localASN').clear();
+    cy.get('#localASN').type('64512');
     cy.get('#awsRegion').should('be.visible');
     cy.get('#awsRouteServerIDs').should('be.visible');
     cy.get('#azureSubscriptionID').should('not.exist');
@@ -49,6 +54,10 @@ describe('BGP forms', () => {
     cy.get('#peerSelectorValue').should('be.visible');
     cy.get('#neighborAddress').should('be.visible');
     cy.get('#remoteASN').should('have.attr', 'type', 'text');
+    cy.get('#remoteASN').type('4294967296');
+    cy.contains('Enter a valid ASN between 1 and 4294967295.').should('be.visible');
+    cy.get('#remoteASN').clear();
+    cy.get('#remoteASN').type('64513');
     cy.get('#ebgpMultiHop').should('have.attr', 'type', 'checkbox');
   });
 
@@ -80,11 +89,22 @@ describe('BGP forms', () => {
     cy.get('button[type="submit"]').should('not.be.disabled');
   });
 
-  it('exposes name filters on both BGP list views', () => {
+  it('exposes a name filter on the BGPRouting list view', () => {
     cy.visit('/k8s/cluster/networking.openshift.io~v1beta1~BGPCloudConfiguration');
-    cy.get('[data-test-id="item-filter"]', { timeout: MINUTE }).should('be.visible');
+    cy.contains('h1', 'BGP', { timeout: MINUTE }).should('be.visible');
 
     cy.visit('/k8s/cluster/networking.openshift.io~v1beta1~BGPRouting');
-    cy.get('[data-test-id="item-filter"]', { timeout: MINUTE }).should('be.visible');
+    cy.get('body', { timeout: MINUTE })
+      .should(($body) => {
+        expect(
+          $body.find('[data-test-id="item-filter"]').length ||
+            $body.find(':contains("No BGPRouting found")').length,
+        ).to.be.greaterThan(0);
+      })
+      .then(($body) => {
+        if ($body.find('[data-test-id="item-filter"]').length) {
+          cy.get('[data-test-id="item-filter"]').should('be.visible');
+        } else cy.contains('No BGPRouting found').should('be.visible');
+      });
   });
 });

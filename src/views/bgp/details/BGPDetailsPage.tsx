@@ -150,7 +150,9 @@ const BGPCloudConfigurationDetailsTab: FC<{ obj?: BGPCloudConfiguration }> = ({ 
               <BGPStatus condition={available} phase={obj.status?.phase} />
             </DetailsItem>
             <DetailsItem label={t('Availability')} obj={obj}>
-              <BGPStatus condition={available} phase={available?.status} />
+              <Label color={available?.status === 'True' ? 'green' : 'red'}>
+                {available?.status || t('Unknown')}
+              </Label>
             </DetailsItem>
             <DetailsItem
               label={t('Observed generation')}
@@ -318,7 +320,9 @@ const BGPRoutingDetailsTab: FC<{ obj?: BGPRouting }> = ({ obj }) => {
               <BGPStatus condition={available} phase={obj.status?.phase} />
             </DetailsItem>
             <DetailsItem label={t('Availability')} obj={obj}>
-              <BGPStatus condition={available} phase={available?.status} />
+              <Label color={available?.status === 'True' ? 'green' : 'red'}>
+                {available?.status || t('Unknown')}
+              </Label>
             </DetailsItem>
             <DetailsItem
               label={t('Observed generation')}

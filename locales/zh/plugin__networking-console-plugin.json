@@ -215,6 +215,7 @@
   "Endpoint": "Endpoint",
   "EndpointSlice": "EndpointSlice",
   "EndpointSlices": "EndpointSlices",
+  "Enter a valid ASN between 1 and 4294967295.": "Enter a valid ASN between 1 and 4294967295.",
   "Enter a valid IPv4 or IPv6 CIDR.": "输入有效的 IPv4 或 IPv6 CIDR。",
   "equals": "equals",
   "Error": "错误",

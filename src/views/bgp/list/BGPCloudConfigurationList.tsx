@@ -94,7 +94,6 @@ const BGPCloudConfigurationList: FC = () => {
       learnMoreLink="https://docs.openshift.com/container-platform/latest/networking/"
       loaded={loaded}
       onCreate={() => navigate(createPath)}
-      title={t('BGP cloud configurations')}
     >
       <>
         <PageSection>
