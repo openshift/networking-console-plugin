@@ -1,0 +1,60 @@
+name: Set up kubeconfig from ServiceAccount token
+description: >
+  Write a kubeconfig that uses the in-pod ServiceAccount token and CA
+  mounted by Kubernetes. No CLUSTER_API / CLUSTER_TOKEN secrets.
+
+inputs:
+  fail-if-missing:
+    description: Fail if the ServiceAccount token is not mounted
+    required: false
+    default: 'true'
+
+runs:
+  using: composite
+  steps:
+    - name: Write kubeconfig
+      shell: bash
+      env:
+        FAIL_IF_MISSING: ${{ inputs.fail-if-missing }}
+      run: |
+        SA_TOKEN="/var/run/secrets/kubernetes.io/serviceaccount/token"
+        SA_CA="/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+        KUBECONFIG="${KUBECONFIG:-/tmp/kubeconfig}"
+
+        if [[ ! -f "${SA_TOKEN}" ]]; then
+          if [[ "${FAIL_IF_MISSING}" == "true" ]]; then
+            echo "::error::ServiceAccount token not mounted at ${SA_TOKEN}"
+            echo "This job requires a self-hosted runner with in-pod ServiceAccount mounting enabled."
+            exit 1
+          fi
+          echo "::warning::ServiceAccount token not mounted at ${SA_TOKEN}"
+          echo "Skipping kubeconfig setup. This is expected if using GitHub-hosted runners."
+          exit 0
+        fi
+
+        CLUSTER_API="${CLUSTER_API:-https://kubernetes.default.svc}"
+
+        mkdir -p "$(dirname "${KUBECONFIG}")"
+        cat > "${KUBECONFIG}" <<EOF
+        apiVersion: v1
+        kind: Config
+        clusters:
+          - name: cluster
+            cluster:
+              server: ${CLUSTER_API}
+              certificate-authority: ${SA_CA}
+        contexts:
+          - name: default
+            context:
+              cluster: cluster
+              user: arc-runner
+              namespace: default
+        current-context: default
+        users:
+          - name: arc-runner
+            user:
+              tokenFile: ${SA_TOKEN}
+        EOF
+
+        chmod 600 "${KUBECONFIG}"
+        echo "kubeconfig created at ${KUBECONFIG}"

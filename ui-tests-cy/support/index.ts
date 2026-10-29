@@ -2,6 +2,7 @@ import './login';
 import './selectors';
 import './commands';
 import './nav';
+import './console-error-details';
 
 Cypress.on('uncaught:exception', (err) => {
   if (err.message.includes('ResizeObserver') || err.message.includes('Script error')) {
