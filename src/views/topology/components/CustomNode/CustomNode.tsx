@@ -1,4 +1,6 @@
 import React, { FC } from 'react';
+import { useSearchParams } from 'react-router';
+import classNames from 'classnames';
 
 import {
   DefaultNode,
@@ -7,7 +9,8 @@ import {
   WithDragNodeProps,
   WithSelectionProps,
 } from '@patternfly/react-topology';
-import { ICON_SIZE } from '@views/topology/utils/constants';
+import { ICON_SIZE, TOPOLOGY_SEARCH_QUERY_PARAM } from '@views/topology/utils/constants';
+import { isSubsequenceMatch } from '@views/topology/utils/filterModel';
 
 import './CustomNode.scss';
 
@@ -18,6 +21,19 @@ type CustomNodeProps = {
   WithSelectionProps;
 
 const CustomNode: FC<CustomNodeProps> = ({ element, ...rest }) => {
+  const [searchParams] = useSearchParams();
+  const searchQuery = (searchParams.get(TOPOLOGY_SEARCH_QUERY_PARAM) ?? '').trim();
+
+  // fromModel unparents a filtered-out node before this observer unmounts.
+  if (!element.hasParent()) return null;
+
+  const controllerState = element.getController().getState<{
+    viewOptions?: { compactView?: boolean; showLabels?: boolean };
+  }>();
+  const showLabels = controllerState?.viewOptions?.showLabels ?? true;
+  // TODO: Read compactView from controllerState.viewOptions.compactView and adjust NODE_DIAMETER when implemented.
+  // const _compactView = controllerState?.viewOptions?.compactView ?? true;
+
   const data = element.getData();
   const Icon = data.icon;
   const { height, width } = element.getBounds();
@@ -26,11 +42,13 @@ const CustomNode: FC<CustomNodeProps> = ({ element, ...rest }) => {
   const yCenter = (height - ICON_SIZE) / 2;
 
   const isDerivedFromPolicy = data.isDerivedFromPolicy;
+  const isFiltered = isSubsequenceMatch(searchQuery, element.getLabel() ?? '');
   return (
     <DefaultNode
       badge={data?.badge}
-      className="custom-node"
+      className={classNames('custom-node', { 'is-filtered': isFiltered })}
       element={element}
+      showLabel={showLabels}
       showStatusDecorator
       truncateLength={8}
       {...rest}

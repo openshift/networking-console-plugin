@@ -92,12 +92,12 @@ const useNetworkTopologyResources = (): UseNetworkTopologyResourcesResult => {
   );
 
   const filteredPods = useMemo(() => {
-    const pods = (watchedResources.pods.data || []) as IoK8sApiCoreV1Pod[];
+    const pods = (watchedResources.pods.data ?? []) as IoK8sApiCoreV1Pod[];
     return pods.filter(podHasSecondaryNetworks).filter((pod) => !isVirtLauncherPod(pod));
   }, [watchedResources.pods.data]);
 
   const filteredVMs = useMemo(() => {
-    const vms = (watchedResources.virtualMachines.data || []) as V1VirtualMachine[];
+    const vms = (watchedResources.virtualMachines.data ?? []) as V1VirtualMachine[];
     return vms.filter(vmHasSecondaryNetworks);
   }, [watchedResources.virtualMachines.data]);
 

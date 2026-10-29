@@ -72,7 +72,7 @@ const Layer2Parameters: FC = () => {
         label={
           <Popover
             bodyContent={t(
-              'MTU is optional, if not provided, the globally configured value in OVN-Kubernetes (defaults to 1400) is used for the network.',
+              'MTU is optional. If not provided, the globally configured value in OVN-Kubernetes (defaults to 1400) is used for the network.',
             )}
           >
             <label className="pf-v6-c-form__label">{t('MTU')}</label>

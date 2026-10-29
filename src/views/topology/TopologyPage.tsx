@@ -6,6 +6,7 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 import Topology from '@views/topology/components/Topology';
 import { TopologyContextProvider } from '@views/topology/context/TopologyContext';
 import useNetworkTopologyResources from '@views/topology/hooks/useNetworkTopologyResources';
+import useNodeNetworkStates from '@views/topology/hooks/useNodeNetworkStates';
 
 import './TopologyPage.scss';
 
@@ -13,6 +14,7 @@ const TopologyPage: FC = () => {
   const { t } = useNetworkingTranslation();
   const [activeNamespace] = useActiveNamespace();
   const { loaded, resources } = useNetworkTopologyResources();
+  const { loaded: nnsLoaded, nodeNetworkStates } = useNodeNetworkStates();
 
   return (
     <>
@@ -35,6 +37,8 @@ const TopologyPage: FC = () => {
         >
           <TopologyContextProvider
             activeNamespace={activeNamespace}
+            nodeNetworkStates={nodeNetworkStates}
+            nodeNetworkStatesLoaded={nnsLoaded}
             resources={resources}
             resourcesLoaded={loaded}
           >
