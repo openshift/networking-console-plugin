@@ -325,7 +325,6 @@ export const BGPCloudConfigurationForm: FC<BGPFormProps<BGPCloudConfiguration>> 
                   label={t('Peer-group selector value')}
                   placeholder="router"
                   register={register}
-                  required
                 />
                 <Field
                   id="neighborAddress"
@@ -366,7 +365,6 @@ export const BGPCloudConfigurationForm: FC<BGPFormProps<BGPCloudConfiguration>> 
                 label={t('Value')}
                 placeholder="router"
                 register={register}
-                required
               />
             </GridItem>
           </Grid>
