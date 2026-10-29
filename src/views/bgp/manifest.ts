@@ -36,7 +36,7 @@ export const BGPCloudConfigurationExtensions: EncodedExtension[] = [
     properties: {
       id: 'bgp-cloud-configurations',
       model: BGPCloudConfigurationExtensionModel,
-      name: '%plugin__networking-console-plugin~BGP%',
+      name: '%plugin__networking-console-plugin~BGP Cloud Connector%',
       section: 'networking',
     },
     type: 'console.navigation/resource-cluster',
