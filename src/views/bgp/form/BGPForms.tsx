@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
@@ -114,14 +114,23 @@ type CloudValues = {
 } & Record<string, any>;
 const firstSelector = (selector?: Record<string, string>) =>
   Object.entries(selector || {})[0] || ['', ''];
-const cloudPayload = (data: CloudValues): BGPCloudConfiguration => {
+const cloudPayload = (
+  data: CloudValues,
+  original?: BGPCloudConfiguration,
+): BGPCloudConfiguration => {
   const spec: BGPCloudConfiguration['spec'] = {
-    bgp: { livenessDetection: data.livenessDetection, localASN: Number(data.localASN) },
+    ...original?.spec,
+    bgp: {
+      ...original?.spec?.bgp,
+      livenessDetection: data.livenessDetection,
+      localASN: Number(data.localASN),
+    },
     platform: data.platform,
     routerNodeSelector: parseSelector(`${data.routerSelectorKey}=${data.routerSelectorValue}`),
   };
   if (data.platform === 'AWS')
     spec.aws = {
+      ...original?.spec?.aws,
       region: data.awsRegion,
       routeServerIDs: data.awsRouteServerIDs
         .split(',')
@@ -130,12 +139,14 @@ const cloudPayload = (data: CloudValues): BGPCloudConfiguration => {
     };
   if (data.platform === 'Azure')
     spec.azure = {
+      ...original?.spec?.azure,
       resourceGroup: data.azureResourceGroup,
       routeServerName: data.azureRouteServerName,
       subscriptionID: data.azureSubscriptionID,
     };
   if (data.platform === 'GCP')
     spec.gcp = {
+      ...original?.spec?.gcp,
       cloudRouterName: data.cloudRouterName,
       enableNestedVirtualization: data.enableNestedVirtualization,
       ncc: { hubName: data.gcpNCCHubName, spokePrefix: data.gcpNCCSpokePrefix },
@@ -158,7 +169,7 @@ const cloudPayload = (data: CloudValues): BGPCloudConfiguration => {
   return {
     apiVersion: 'networking.openshift.io/v1beta1',
     kind: 'BGPCloudConfiguration',
-    metadata: { name: 'cluster' },
+    metadata: original?.metadata || { name: 'cluster' },
     spec,
   };
 };
@@ -170,6 +181,7 @@ export const BGPCloudConfigurationForm: FC<BGPFormProps<BGPCloudConfiguration>> 
   const { t } = useNetworkingTranslation();
   const navigate = useNavigate();
   const [error, setError] = useState<Error>();
+  const originalResource = useRef(formData).current;
   const [routerKey, routerValue] = firstSelector(formData.spec?.routerNodeSelector);
   const [peerKey, peerValue] = firstSelector(formData.spec?.bgp?.peerGroups?.[0]?.nodeSelector);
   const neighbor = formData.spec?.bgp?.peerGroups?.[0]?.neighbors?.[0];
@@ -207,12 +219,19 @@ export const BGPCloudConfigurationForm: FC<BGPFormProps<BGPCloudConfiguration>> 
   } = methods;
   const values = watch();
   const platform = values.platform;
-  useEffect(() => onChange(cloudPayload(values)), [onChange, values]);
+  useEffect(
+    () => onChange(cloudPayload(values, originalResource)),
+    [onChange, originalResource, values],
+  );
   const submit = async (data: CloudValues) => {
     try {
-      const payload = cloudPayload(data);
-      await (formData.metadata?.resourceVersion
-        ? k8sUpdate({ data: payload, model: BGPCloudConfigurationModel, name: 'cluster' })
+      const payload = cloudPayload(data, originalResource);
+      await (originalResource.metadata?.resourceVersion
+        ? k8sUpdate({
+            data: payload,
+            model: BGPCloudConfigurationModel,
+            name: getName(originalResource),
+          })
         : k8sCreate({ data: payload, model: BGPCloudConfigurationModel }));
       navigate(resourcePathFromModel(BGPCloudConfigurationModel, 'cluster'));
     } catch (err) {
@@ -448,6 +467,7 @@ export const BGPRoutingForm: FC<BGPFormProps<BGPRouting>> = ({ formData, onChang
   const { t } = useNetworkingTranslation();
   const navigate = useNavigate();
   const [error, setError] = useState<Error>();
+  const originalResource = useRef(formData).current;
   const methods = useForm({
     defaultValues: {
       name: getName(formData) || '',
@@ -488,7 +508,7 @@ export const BGPRoutingForm: FC<BGPFormProps<BGPRouting>> = ({ formData, onChang
       onChange({
         apiVersion: 'networking.openshift.io/v1beta1',
         kind: 'BGPRouting',
-        metadata: { name: values.name },
+        metadata: { ...originalResource.metadata, name: values.name },
         spec: {
           network: {
             name: values.network,
@@ -496,21 +516,26 @@ export const BGPRoutingForm: FC<BGPFormProps<BGPRouting>> = ({ formData, onChang
           },
         },
       }),
-    [onChange, values],
+    [onChange, originalResource, values],
   );
   const submit = async (data: any) => {
     if (subnetError) return;
     try {
-      const payload = {
+      const payload: BGPRouting = {
         apiVersion: 'networking.openshift.io/v1beta1',
         kind: 'BGPRouting',
-        metadata: { name: data.name },
+        metadata: { ...originalResource.metadata, name: data.name },
         spec: {
+          ...originalResource.spec,
           network: { name: data.network, subnets: [data.subnet1, data.subnet2].filter(Boolean) },
         },
       };
-      await (formData.metadata?.resourceVersion
-        ? k8sUpdate({ data: payload, model: BGPRoutingModel, name: data.name })
+      await (originalResource.metadata?.resourceVersion
+        ? k8sUpdate({
+            data: payload,
+            model: BGPRoutingModel,
+            name: getName(originalResource),
+          })
         : k8sCreate({ data: payload, model: BGPRoutingModel }));
       navigate(resourcePathFromModel(BGPRoutingModel, data.name));
     } catch (err) {
