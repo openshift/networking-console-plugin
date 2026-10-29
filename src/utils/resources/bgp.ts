@@ -73,13 +73,48 @@ export const parseSelector = (value: string): Record<string, string> =>
         const [key, ...rest] = part.split('=');
         return [key.trim(), rest.join('=').trim()];
       })
-      .filter(([key, val]) => key && val),
+      .filter(([key]) => key),
   );
 
+const isValidIPv4 = (address: string) => {
+  const octets = address.split('.');
+  return (
+    octets.length === 4 && octets.every((octet) => /^\d+$/.test(octet) && Number(octet) <= 255)
+  );
+};
+
+const isValidIPv6 = (address: string) => {
+  let normalized = address.toLowerCase();
+  if (normalized.includes('.')) {
+    const lastColon = normalized.lastIndexOf(':');
+    const ipv4 = normalized.slice(lastColon + 1);
+    if (lastColon < 0 || !isValidIPv4(ipv4)) return false;
+    const octets = ipv4.split('.').map(Number);
+    const mappedIPv4 = [
+      ((octets[0] << 8) | octets[1]).toString(16),
+      ((octets[2] << 8) | octets[3]).toString(16),
+    ].join(':');
+    normalized = `${normalized.slice(0, lastColon + 1)}${mappedIPv4}`;
+  }
+  if (!/^[0-9a-f:]+$/.test(normalized)) return false;
+  if (normalized.includes(':::')) return false;
+  const doubleColonCount = (normalized.match(/::/g) || []).length;
+  if (doubleColonCount > 1) return false;
+  if (doubleColonCount === 0 && (normalized.startsWith(':') || normalized.endsWith(':')))
+    return false;
+  const groups = normalized.split(':');
+  if (groups.some((group) => group.length > 4)) return false;
+  const groupCount = groups.filter(Boolean).length;
+  return doubleColonCount === 1 ? groupCount < 8 : groupCount === 8;
+};
+
 export const isCIDR = (value: string) => {
-  const [address, prefix] = value.trim().split('/');
+  const parts = value.trim().split('/');
+  if (parts.length !== 2) return false;
+  const [address, prefix] = parts;
+  if (!address || !/^\d+$/.test(prefix)) return false;
   const prefixNumber = Number(prefix);
-  const isV4 = address?.includes('.') && prefixNumber >= 0 && prefixNumber <= 32;
-  const isV6 = address?.includes(':') && prefixNumber >= 0 && prefixNumber <= 128;
-  return Boolean((isV4 || isV6) && address);
+  return (
+    (isValidIPv4(address) && prefixNumber <= 32) || (isValidIPv6(address) && prefixNumber <= 128)
+  );
 };

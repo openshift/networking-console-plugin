@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { BGPRouting, isCIDR } from '../../src/utils/resources/bgp';
+import { BGPRouting, isCIDR, parseSelector } from '../../src/utils/resources/bgp';
 import {
   cloudPayload,
   CloudValues,
@@ -42,6 +42,26 @@ test('replaceFirstSelector replaces only the guided selector entry', () => {
       'router',
     ),
     { 'node-role.kubernetes.io/bgp': 'router', region: 'east', role: 'old' },
+  );
+});
+
+test('selector parsing preserves empty values', () => {
+  assert.deepEqual(parseSelector('k8s.ovn.org/primary-user-defined-network='), {
+    'k8s.ovn.org/primary-user-defined-network': '',
+  });
+  assert.deepEqual(
+    replaceFirstSelector(
+      Object.fromEntries([
+        ['role', 'old'],
+        ['region', 'east'],
+      ]),
+      'role',
+      '',
+    ),
+    {
+      region: 'east',
+      role: '',
+    },
   );
 });
 
@@ -131,5 +151,8 @@ test('isCIDR accepts IPv4 and IPv6 prefixes and rejects invalid values', () => {
   assert.equal(isCIDR('10.20.0.0/16'), true);
   assert.equal(isCIDR('2001:db8:20::/64'), true);
   assert.equal(isCIDR('10.20.0.0/33'), false);
+  assert.equal(isCIDR('abc.def/24'), false);
+  assert.equal(isCIDR('2001:db8:1:2:3:4:5:6:/64'), false);
+  assert.equal(isCIDR('2001:db8:::1/64'), false);
   assert.equal(isCIDR('not-a-cidr'), false);
 });
