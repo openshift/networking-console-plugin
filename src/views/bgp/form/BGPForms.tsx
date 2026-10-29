@@ -155,6 +155,12 @@ export const BGPCloudConfigurationForm: FC<BGPFormProps<BGPCloudConfiguration>> 
   } = methods;
   const values = watch();
   const platform = values.platform;
+  const validateASN = (value: number | string) => {
+    const asn = Number(value);
+    return /^\d+$/.test(String(value)) && asn >= 1 && asn <= 4294967295
+      ? true
+      : t('Enter a valid ASN between 1 and 4294967295.');
+  };
   useEffect(
     () => onChange(cloudPayload(values, originalResource)),
     [onChange, originalResource, values],
@@ -190,6 +196,7 @@ export const BGPCloudConfigurationForm: FC<BGPFormProps<BGPCloudConfiguration>> 
           placeholder="64512"
           register={register}
           required
+          validate={validateASN}
         />
         <BGPSelect
           help={t('BFD detects failures quickly; BGP keepalive uses standard BGP timers.')}
@@ -306,7 +313,11 @@ export const BGPCloudConfigurationForm: FC<BGPFormProps<BGPCloudConfiguration>> 
                   required
                 />
                 <label>
-                  <input type="checkbox" {...register('enableNestedVirtualization')} />{' '}
+                  <input
+                    id="enableNestedVirtualization"
+                    type="checkbox"
+                    {...register('enableNestedVirtualization')}
+                  />{' '}
                   {t('Enable nested virtualization; this may restart GCP instances.')}
                 </label>
               </FormSection>
@@ -339,9 +350,10 @@ export const BGPCloudConfigurationForm: FC<BGPFormProps<BGPCloudConfiguration>> 
                   placeholder="64513"
                   register={register}
                   required
+                  validate={validateASN}
                 />
                 <label>
-                  <input type="checkbox" {...register('ebgpMultiHop')} />{' '}
+                  <input id="ebgpMultiHop" type="checkbox" {...register('ebgpMultiHop')} />{' '}
                   {t('Enable eBGP multihop')}
                 </label>
               </FormSection>

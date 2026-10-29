@@ -215,6 +215,7 @@
   "Endpoint": "Endpoint",
   "EndpointSlice": "EndpointSlice",
   "EndpointSlices": "EndpointSlices",
+  "Enter a valid ASN between 1 and 4294967295.": "Enter a valid ASN between 1 and 4294967295.",
   "Enter a valid IPv4 or IPv6 CIDR.": "有効な IPv4 または IPv6 CIDR を入力してください。",
   "equals": "equals",
   "Error": "エラー",

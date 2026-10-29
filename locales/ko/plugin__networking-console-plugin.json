@@ -215,6 +215,7 @@
   "Endpoint": "Endpoint",
   "EndpointSlice": "EndpointSlice",
   "EndpointSlices": "EndpointSlices",
+  "Enter a valid ASN between 1 and 4294967295.": "Enter a valid ASN between 1 and 4294967295.",
   "Enter a valid IPv4 or IPv6 CIDR.": "유효한 IPv4 또는 IPv6 CIDR을 입력합니다.",
   "equals": "equals",
   "Error": "오류",

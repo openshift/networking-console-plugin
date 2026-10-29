@@ -33,12 +33,12 @@ const LIST_PAGES = [
     url: '/k8s/ns/default/k8s.ovn.org~v1~UserDefinedNetwork',
   },
   {
-    h1: 'BGP cloud configurations',
+    h1: 'BGP',
     name: 'BGPCloudConfigurations',
     url: '/k8s/cluster/networking.openshift.io~v1beta1~BGPCloudConfiguration',
   },
   {
-    h1: 'BGP routings',
+    h1: 'BGP',
     name: 'BGPRoutings',
     url: '/k8s/cluster/networking.openshift.io~v1beta1~BGPRouting',
   },
