@@ -114,6 +114,17 @@ type CloudValues = {
 } & Record<string, any>;
 const firstSelector = (selector?: Record<string, string>) =>
   Object.entries(selector || {})[0] || ['', ''];
+const replaceFirstSelector = (
+  selector: Record<string, string> | undefined,
+  key: string,
+  value: string,
+) => {
+  const guidedEntry = Object.entries(parseSelector(`${key}=${value}`))[0];
+  return Object.fromEntries([
+    ...(guidedEntry ? [guidedEntry] : []),
+    ...Object.entries(selector || {}).slice(1),
+  ]);
+};
 const cloudPayload = (
   data: CloudValues,
   original?: BGPCloudConfiguration,
@@ -126,7 +137,11 @@ const cloudPayload = (
       localASN: Number(data.localASN),
     },
     platform: data.platform,
-    routerNodeSelector: parseSelector(`${data.routerSelectorKey}=${data.routerSelectorValue}`),
+    routerNodeSelector: replaceFirstSelector(
+      original?.spec?.routerNodeSelector,
+      data.routerSelectorKey,
+      data.routerSelectorValue,
+    ),
   };
   if (data.platform === 'AWS')
     spec.aws = {
@@ -153,19 +168,27 @@ const cloudPayload = (
       project: data.gcpProject,
       region: data.gcpRegion,
     };
-  if (data.platform === 'Manual')
-    spec.bgp.peerGroups = [
-      {
-        neighbors: [
-          {
-            address: data.neighborAddress,
-            ebgpMultiHop: data.ebgpMultiHop,
-            remoteASN: Number(data.remoteASN),
-          },
-        ],
-        nodeSelector: parseSelector(`${data.peerSelectorKey}=${data.peerSelectorValue}`),
-      },
-    ];
+  if (data.platform === 'Manual') {
+    const peerGroups = [...(original?.spec?.bgp?.peerGroups || [])];
+    const firstPeerGroup = peerGroups[0] || { neighbors: [] };
+    const neighbors = [...(firstPeerGroup.neighbors || [])];
+    neighbors[0] = {
+      ...(neighbors[0] || {}),
+      address: data.neighborAddress,
+      ebgpMultiHop: data.ebgpMultiHop,
+      remoteASN: Number(data.remoteASN),
+    };
+    peerGroups[0] = {
+      ...firstPeerGroup,
+      neighbors,
+      nodeSelector: replaceFirstSelector(
+        firstPeerGroup.nodeSelector,
+        data.peerSelectorKey,
+        data.peerSelectorValue,
+      ),
+    };
+    spec.bgp.peerGroups = peerGroups;
+  }
   return {
     apiVersion: 'networking.openshift.io/v1beta1',
     kind: 'BGPCloudConfiguration',
