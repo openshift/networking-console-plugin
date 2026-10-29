@@ -1,17 +1,35 @@
 import React, { FC, useCallback, useMemo } from 'react';
+import { useParams } from 'react-router';
 
-import { ResourceYAMLEditor } from '@openshift-console/dynamic-plugin-sdk';
+import {
+  modelToGroupVersionKind,
+  ResourceYAMLEditor,
+  useK8sWatchResource,
+} from '@openshift-console/dynamic-plugin-sdk';
 import { PageSection, Title } from '@patternfly/react-core';
+import StatusBox from '@utils/components/StatusBox/StatusBox';
 import { EditorType } from '@utils/components/SyncedEditor/EditorToggle';
 import { SyncedEditor } from '@utils/components/SyncedEditor/SyncedEditor';
 import { safeYAMLToJS } from '@utils/components/SyncedEditor/yaml';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { BGPRoutingModel } from '@utils/models';
 import { BGPRouting } from '@utils/resources/bgp';
 
 import { BGPRoutingForm } from './BGPForms';
 
-const BGPRoutingFormPage: FC<{ initialResource?: BGPRouting }> = ({ initialResource }) => {
+const BGPRoutingFormPage: FC = () => {
+  const { name } = useParams();
   const { t } = useNetworkingTranslation();
+  const [resource, loaded, error] = useK8sWatchResource<BGPRouting>(
+    name
+      ? {
+          groupVersionKind: modelToGroupVersionKind(BGPRoutingModel),
+          isList: false,
+          name,
+        }
+      : null,
+  );
+  const initialResource = resource;
   const data = useMemo<BGPRouting>(
     () =>
       initialResource || {
@@ -34,7 +52,7 @@ const BGPRoutingFormPage: FC<{ initialResource?: BGPRouting }> = ({ initialResou
     [initialResource],
   );
   return (
-    <>
+    <StatusBox error={error} loaded={loaded}>
       <PageSection>
         <Title headingLevel="h1">
           {initialResource ? t('Edit BGPRouting') : t('Create BGPRouting')}
@@ -48,7 +66,7 @@ const BGPRoutingFormPage: FC<{ initialResource?: BGPRouting }> = ({ initialResou
         lastViewUserSettingKey="console.bgpRouting.editor.lastView"
         YAMLEditor={YAMLEditor}
       />
-    </>
+    </StatusBox>
   );
 };
 export default BGPRoutingFormPage;
