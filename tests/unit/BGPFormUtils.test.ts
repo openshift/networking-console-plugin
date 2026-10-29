@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { BGPRouting } from '../../src/utils/resources/bgp';
+import { BGPRouting, isCIDR } from '../../src/utils/resources/bgp';
 import {
   cloudPayload,
   CloudValues,
@@ -125,4 +125,11 @@ test('routingPayload preserves metadata and unedited spec fields', () => {
       otherField: 'preserve',
     },
   });
+});
+
+test('isCIDR accepts IPv4 and IPv6 prefixes and rejects invalid values', () => {
+  assert.equal(isCIDR('10.20.0.0/16'), true);
+  assert.equal(isCIDR('2001:db8:20::/64'), true);
+  assert.equal(isCIDR('10.20.0.0/33'), false);
+  assert.equal(isCIDR('not-a-cidr'), false);
 });

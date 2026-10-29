@@ -79,4 +79,12 @@ describe('BGP forms', () => {
     cy.get('#subnet3').should('not.exist');
     cy.get('button[type="submit"]').should('not.be.disabled');
   });
+
+  it('exposes name filters on both BGP list views', () => {
+    cy.visit('/k8s/cluster/networking.openshift.io~v1beta1~BGPCloudConfiguration');
+    cy.get('[data-test-id="item-filter"]', { timeout: MINUTE }).should('be.visible');
+
+    cy.visit('/k8s/cluster/networking.openshift.io~v1beta1~BGPRouting');
+    cy.get('[data-test-id="item-filter"]', { timeout: MINUTE }).should('be.visible');
+  });
 });
