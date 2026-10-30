@@ -52,10 +52,9 @@ const ServiceTypeSelect: FC = () => {
                   key={type}
                   onClick={() => {
                     onChange(type);
-                    if (type === 'ExternalName') {
-                      setValue('spec.selector', {}, { shouldDirty: true });
-                      setValue('spec.ports', [], { shouldDirty: true });
-                    } else {
+                    // spec.selector and spec.ports are omitted from the submit payload
+                    // for ExternalName in buildServiceSubmitPayload, so no need to clear them here.
+                    if (type !== 'ExternalName') {
                       setValue('spec.externalName', undefined, {
                         shouldDirty: true,
                         shouldValidate: true,
