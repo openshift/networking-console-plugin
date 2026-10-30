@@ -32,6 +32,16 @@ const LIST_PAGES = [
     name: 'UserDefinedNetworks',
     url: '/k8s/ns/default/k8s.ovn.org~v1~UserDefinedNetwork',
   },
+  {
+    h1: 'BGP',
+    name: 'BGPCloudConfigurations',
+    url: '/k8s/cluster/networking.openshift.io~v1beta1~BGPCloudConfiguration',
+  },
+  {
+    h1: 'BGP',
+    name: 'BGPRoutings',
+    url: '/k8s/cluster/networking.openshift.io~v1beta1~BGPRouting',
+  },
 ];
 
 describe('List page smoke tests', { testIsolation: false }, () => {

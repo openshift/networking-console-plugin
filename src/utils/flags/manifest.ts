@@ -16,6 +16,12 @@ export const FlagsExtensions: EncodedExtension[] = [
   } as EncodedExtension<FeatureFlagHookProvider>,
   {
     properties: {
+      handler: { $codeRef: 'networkingFlags.useBGPEnabledFlag' },
+    },
+    type: 'console.flag/hookProvider',
+  } as EncodedExtension<FeatureFlagHookProvider>,
+  {
+    properties: {
       flag: 'NMSTATE_PLUGIN_ENABLED',
       model: {
         group: 'nmstate.io',
