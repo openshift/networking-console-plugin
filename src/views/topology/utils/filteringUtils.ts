@@ -1,6 +1,6 @@
 import { IoK8sApiCoreV1Pod } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import { V1VirtualMachine } from '@kubevirt-ui-ext/kubevirt-api/kubevirt';
-import { getPodNADReferences,getPodNetworkAttachments } from '@utils/resources/nads/selectors';
+import { getPodNADReferences, getPodNetworkAttachments } from '@utils/resources/nads/selectors';
 import {
   VIRT_LAUNCHER_POD_LABEL_KEY,
   VIRT_LAUNCHER_POD_LABEL_VALUE,
