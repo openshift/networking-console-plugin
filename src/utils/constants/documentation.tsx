@@ -43,7 +43,7 @@ export const documentationURLs: documentationURLsType = {
   },
   nmstateOperator: {
     downstream: 'html/networking_operators/k8s-nmstate-about-the-k8s-nmstate-operator',
-    upstream: 'networking/k8s_nmstate/k8s-nmstate-about-the-k8s-nmstate-operator.html',
+    upstream: 'networking/networking_operators/k8s-nmstate-about-the-k8s-nmstate-operator.html',
   },
   primaryUDN: {
     downstream: 'html/virtualization/networking#virt-connecting-vm-to-primary-udn',
