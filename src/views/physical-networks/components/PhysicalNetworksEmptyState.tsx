@@ -15,10 +15,14 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 import { NODE_NETWORK_CONFIGURATION_WIZARD_PATH } from '../utils/constants';
 
 type PhysicalNetworksEmptyStateProps = {
+  nadsUnreadable: boolean;
   showCreateButton: boolean;
 };
 
-const PhysicalNetworksEmptyState: FC<PhysicalNetworksEmptyStateProps> = ({ showCreateButton }) => {
+const PhysicalNetworksEmptyState: FC<PhysicalNetworksEmptyStateProps> = ({
+  nadsUnreadable,
+  showCreateButton,
+}) => {
   const { t } = useNetworkingTranslation();
   const navigate = useNavigate();
 
@@ -30,9 +34,13 @@ const PhysicalNetworksEmptyState: FC<PhysicalNetworksEmptyStateProps> = ({ showC
       variant={EmptyStateVariant.lg}
     >
       <EmptyStateBody>
-        {t(
-          'No network attachment definition in this scope references a physical network. Physical networks configured only on cluster nodes by other tools are not listed here.',
-        )}
+        {nadsUnreadable
+          ? t(
+              'Network attachment definitions could not be loaded, so networks they reference are not listed here.',
+            )
+          : t(
+              'No network attachment definition in this scope references a physical network. Physical networks configured only on cluster nodes by other tools are not listed here.',
+            )}
       </EmptyStateBody>
       {showCreateButton && (
         <EmptyStateFooter>
