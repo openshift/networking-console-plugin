@@ -16,7 +16,9 @@ const SourceStateAlerts: FC<SourceStateAlertsProps> = ({ sources }) => {
   const messages: Array<{ key: keyof PhysicalNetworksSources; message: string }> = [
     {
       key: 'nads',
-      message: t('Physical network definitions could not be loaded. Other sources are still shown.'),
+      message: t(
+        'Physical network definitions could not be loaded. Other sources are still shown.',
+      ),
     },
     { key: 'nncps', message: t('NMState policy information is unavailable.') },
     { key: 'nnces', message: t('NMState enactment information is unavailable.') },

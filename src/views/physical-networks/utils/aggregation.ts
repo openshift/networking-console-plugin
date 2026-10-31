@@ -5,7 +5,10 @@ import {
   PodModel,
   VirtualMachineModel,
 } from '@kubevirt-ui-ext/kubevirt-api/console';
-import type { IoK8sApiCoreV1Node, IoK8sApiCoreV1Pod } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
+import type {
+  IoK8sApiCoreV1Node,
+  IoK8sApiCoreV1Pod,
+} from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import type { V1VirtualMachine } from '@kubevirt-ui-ext/kubevirt-api/kubevirt';
 import {
   V1beta1NodeNetworkConfigurationEnactment,
@@ -43,12 +46,14 @@ import {
   PhysicalNetworkConsumer,
 } from './types';
 
+// A policy without a node selector applies to every node it could run on, not to none.
 const allLabelsMatchSelector = (
   selector: Record<string, string>,
   labels: Record<string, string>,
 ): boolean => {
-  if (!selector || !labels) return false;
-  return Object.entries(selector).every(([key, value]) => key in labels && labels[key] === value);
+  if (!selector || Object.keys(selector).length === 0) return true;
+  if (!labels) return false;
+  return Object.entries(selector).every(([key, value]) => labels[key] === value);
 };
 
 const filterNodes = (
@@ -202,10 +207,13 @@ export const attachConsumers = (
 ): PhysicalNetwork[] =>
   networks.map((network) => ({
     ...network,
-    consumersByNAD: network.nads.reduce((acc, { name, namespace }) => {
-      const key = `${namespace}/${name}`;
-      return consumersByNAD[key] ? { ...acc, [key]: consumersByNAD[key] } : acc;
-    }, {} as Record<string, PhysicalNetworkConsumer[]>),
+    consumersByNAD: network.nads.reduce(
+      (acc, { name, namespace }) => {
+        const key = `${namespace}/${name}`;
+        return consumersByNAD[key] ? { ...acc, [key]: consumersByNAD[key] } : acc;
+      },
+      {} as Record<string, PhysicalNetworkConsumer[]>,
+    ),
   }));
 
 export const getPolicyPhysicalNetworks = (
@@ -248,15 +256,18 @@ export const getObservedMappings = (
   nodeNetworkStates: NodeNetworkStateKind[],
   nodes: IoK8sApiCoreV1Node[],
 ): Record<string, ObservedMapping[]> =>
-  getObservedBridgeMappings(nodeNetworkStates).reduce((acc, { bridge, localnet, nodeName }) => {
-    const mapping: ObservedMapping = {
-      bridge,
-      node: nodes?.find((node) => getName(node) === nodeName),
-      nodeName,
-    };
+  getObservedBridgeMappings(nodeNetworkStates).reduce(
+    (acc, { bridge, localnet, nodeName }) => {
+      const mapping: ObservedMapping = {
+        bridge,
+        node: nodes?.find((node) => getName(node) === nodeName),
+        nodeName,
+      };
 
-    return { ...acc, [localnet]: [...(acc[localnet] || []), mapping] };
-  }, {} as Record<string, ObservedMapping[]>);
+      return { ...acc, [localnet]: [...(acc[localnet] || []), mapping] };
+    },
+    {} as Record<string, ObservedMapping[]>,
+  );
 
 export const mergePhysicalNetworks = (...parts: PhysicalNetwork[][]): PhysicalNetwork[] => {
   const merged = new Map<string, PhysicalNetwork>();

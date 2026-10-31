@@ -69,11 +69,7 @@ const NetworkDefinitionsTable: FC<NetworkDefinitionsTableProps> = ({
   ]);
 
   return (
-    <DataViewTable
-      aria-label={t('Network definitions table')}
-      columns={getColumns()}
-      rows={rows}
-    />
+    <DataViewTable aria-label={t('Network definitions table')} columns={getColumns()} rows={rows} />
   );
 };
 

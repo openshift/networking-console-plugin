@@ -24,7 +24,9 @@ export const filterPhysicalNetworks = (
           network.selectedNodes.some((node) =>
             matchesSearchInput(node?.metadata?.name, searchInput),
           ) ||
-          network.observedMappings.some(({ nodeName }) => matchesSearchInput(nodeName, searchInput)),
+          network.observedMappings.some(({ nodeName }) =>
+            matchesSearchInput(nodeName, searchInput),
+          ),
       );
     case NetworksSearchType.Configurations:
       return networks.filter((network) =>

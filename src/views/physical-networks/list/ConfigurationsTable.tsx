@@ -60,9 +60,7 @@ const ConfigurationsTable: FC<ConfigurationsTableProps> = ({
     ];
   });
 
-  return (
-    <DataViewTable aria-label={t('Configurations table')} columns={columns} rows={rows} />
-  );
+  return <DataViewTable aria-label={t('Configurations table')} columns={columns} rows={rows} />;
 };
 
 export default ConfigurationsTable;

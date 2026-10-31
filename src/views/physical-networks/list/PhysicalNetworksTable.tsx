@@ -6,7 +6,9 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 import usePagination from '@utils/hooks/usePagination/usePagination';
 import { paginationDefaultValues } from '@utils/hooks/usePagination/utils/constants';
 
-import usePhysicalNetworkColumns, { PhysicalNetworkColumnIDs } from '../hooks/usePhysicalNetworkColumns';
+import usePhysicalNetworkColumns, {
+  PhysicalNetworkColumnIDs,
+} from '../hooks/usePhysicalNetworkColumns';
 import { NetworksSearchType } from '../utils/constants';
 import {
   ConfigurationDetails,
@@ -92,7 +94,11 @@ const PhysicalNetworksTable: FC<PhysicalNetworksTableProps> = ({
           <Tr>
             <Th screenReaderText={t('Row expansion')} />
             {columns.map(({ id, title }) => (
-              <Th key={id} sort={id === PhysicalNetworkColumnIDs.Name ? getSortType(1) : undefined}>
+              <Th
+                key={id}
+                screenReaderText={title ? undefined : t('Actions')}
+                sort={id === PhysicalNetworkColumnIDs.Name ? getSortType(1) : undefined}
+              >
                 {title}
               </Th>
             ))}
