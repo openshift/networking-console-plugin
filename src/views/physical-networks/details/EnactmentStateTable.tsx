@@ -21,7 +21,11 @@ const EnactmentStateTable: FC<EnactmentStateTableProps> = ({ nodeEnactmentStateD
   const { t } = useNetworkingTranslation();
 
   const columns: DataViewTh[] = [
-    { cell: t('Nodes'), key: 'node.metadata.name', props: { sort: { columnIndex: 0, sortBy: {} } } },
+    {
+      cell: t('Nodes'),
+      key: 'node.metadata.name',
+      props: { sort: { columnIndex: 0, sortBy: {} } },
+    },
     { cell: t('State'), key: 'status', props: { sort: { columnIndex: 1, sortBy: {} } } },
   ];
 
@@ -41,13 +45,7 @@ const EnactmentStateTable: FC<EnactmentStateTableProps> = ({ nodeEnactmentStateD
     { cell: status ? <EnactmentStateIcon status={status} /> : NO_DATA_DASH },
   ]);
 
-  return (
-    <DataViewTable
-      aria-label={t('Enactment state table')}
-      columns={columns}
-      rows={rows}
-    />
-  );
+  return <DataViewTable aria-label={t('Enactment state table')} columns={columns} rows={rows} />;
 };
 
 export default EnactmentStateTable;

@@ -113,12 +113,7 @@ const PhysicalNetworkRow: FC<PhysicalNetworkRowProps> = ({
         />
         <Td dataLabel={t('Network name')}>{network.name ?? NO_DATA_DASH}</Td>
         <Td dataLabel={t('Referenced by')}>
-          {getSourceBackedValue(
-            sources.nads.availability,
-            network.nads.length,
-            t,
-            NO_DATA_DASH,
-          )}
+          {getSourceBackedValue(sources.nads.availability, network.nads.length, t, NO_DATA_DASH)}
         </Td>
         <Td dataLabel={t('Desired configuration')}>
           {getSourceBackedValue(
@@ -137,11 +132,7 @@ const PhysicalNetworkRow: FC<PhysicalNetworkRowProps> = ({
           )}
         </Td>
         <Td dataLabel={t('Actions')} isActionCell>
-          {rowActions.length > 0 ? (
-            <ActionsColumn items={rowActions} />
-          ) : (
-            NO_DATA_DASH
-          )}
+          {rowActions.length > 0 ? <ActionsColumn items={rowActions} /> : NO_DATA_DASH}
         </Td>
       </Tr>
       {hasDetails && (

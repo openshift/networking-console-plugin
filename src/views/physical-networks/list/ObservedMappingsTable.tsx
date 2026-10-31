@@ -28,9 +28,7 @@ const ObservedMappingsTable: FC<ObservedMappingsTableProps> = ({ observedMapping
       cell: node ? (
         <>
           <ResourceIcon groupVersionKind={NodeModelGroupVersionKind} />
-          <Link to={getResourceURL({ model: NodeModel, resource: node })}>
-            {nodeName}
-          </Link>
+          <Link to={getResourceURL({ model: NodeModel, resource: node })}>{nodeName}</Link>
         </>
       ) : (
         nodeName
@@ -39,13 +37,7 @@ const ObservedMappingsTable: FC<ObservedMappingsTableProps> = ({ observedMapping
     bridge || NO_DATA_DASH,
   ]);
 
-  return (
-    <DataViewTable
-      aria-label={t('Observed mappings table')}
-      columns={columns}
-      rows={rows}
-    />
-  );
+  return <DataViewTable aria-label={t('Observed mappings table')} columns={columns} rows={rows} />;
 };
 
 export default ObservedMappingsTable;

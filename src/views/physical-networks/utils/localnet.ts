@@ -14,9 +14,7 @@ export const isLocalnetNAD = (nad: NetworkAttachmentDefinitionKind): boolean => 
   );
 };
 
-export const getLocalnetNAD = (
-  nad: NetworkAttachmentDefinitionKind,
-): LocalnetNAD | undefined => {
+export const getLocalnetNAD = (nad: NetworkAttachmentDefinitionKind): LocalnetNAD | undefined => {
   if (!isLocalnetNAD(nad)) return undefined;
 
   const config = getConfigAsJSON(nad);

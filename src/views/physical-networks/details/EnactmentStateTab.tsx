@@ -32,8 +32,7 @@ type EnactmentStateTabProps = {
 
 const EnactmentStateTab: FC<EnactmentStateTabProps> = ({ selectedConfiguration }) => {
   const [searchInput, setSearchInput] = useState('');
-  const [enactmentStateFilters, setEnactmentStateFilters] =
-    useState<EnactmentState[]>(ALL_STATES);
+  const [enactmentStateFilters, setEnactmentStateFilters] = useState<EnactmentState[]>(ALL_STATES);
   const { nodeToEnactmentStateMap } = selectedConfiguration;
 
   const filteredEnactmentStates = useMemo(

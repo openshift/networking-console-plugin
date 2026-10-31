@@ -18,9 +18,7 @@ type PhysicalNetworksEmptyStateProps = {
   showCreateButton: boolean;
 };
 
-const PhysicalNetworksEmptyState: FC<PhysicalNetworksEmptyStateProps> = ({
-  showCreateButton,
-}) => {
+const PhysicalNetworksEmptyState: FC<PhysicalNetworksEmptyStateProps> = ({ showCreateButton }) => {
   const { t } = useNetworkingTranslation();
   const navigate = useNavigate();
 

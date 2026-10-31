@@ -1,6 +1,12 @@
 import React, { FC, Ref, useState } from 'react';
 
-import { Dropdown, DropdownItem, DropdownList, MenuToggle, MenuToggleElement } from '@patternfly/react-core';
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownList,
+  MenuToggle,
+  MenuToggleElement,
+} from '@patternfly/react-core';
 import { ALL_NAMESPACES } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import useProjects from '@utils/hooks/useProjects/useProjects';
@@ -40,7 +46,10 @@ const ScopeSelect: FC<ScopeSelectProps> = ({ onChange, scope }) => {
       )}
     >
       <DropdownList>
-        <DropdownItem isSelected={scope === ALL_NAMESPACES} onClick={() => onChange(ALL_NAMESPACES)}>
+        <DropdownItem
+          isSelected={scope === ALL_NAMESPACES}
+          onClick={() => onChange(ALL_NAMESPACES)}
+        >
           {t('All projects')}
         </DropdownItem>
         {projectNames.map((projectName) => (
