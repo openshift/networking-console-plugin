@@ -40,8 +40,7 @@ export const getPolicyInterfaces = (
   policy: V1NodeNetworkConfigurationPolicy,
 ): NodeNetworkConfigurationInterface[] => policy?.spec?.desiredState?.interfaces || [];
 
-export const getOVN = (policy: V1NodeNetworkConfigurationPolicy) =>
-  policy?.spec?.desiredState?.ovn;
+export const getOVN = (policy: V1NodeNetworkConfigurationPolicy) => policy?.spec?.desiredState?.ovn;
 
 export const getPolicyBondingInterfaces = (policy: V1NodeNetworkConfigurationPolicy) =>
   getPolicyInterfaces(policy)?.filter((iface) => iface?.type === InterfaceType.BOND) || [];
@@ -166,9 +165,8 @@ export const getEnactmentStateNode = (
   enactment: V1beta1NodeNetworkConfigurationEnactment,
 ): string => enactment?.metadata?.labels?.[ENACTMENT_LABEL_NODE];
 
-export const getEnactmentStatus = (
-  enactment: V1beta1NodeNetworkConfigurationEnactment,
-): string => enactment?.status?.conditions?.find((condition) => condition.status === 'True')?.type;
+export const getEnactmentStatus = (enactment: V1beta1NodeNetworkConfigurationEnactment): string =>
+  enactment?.status?.conditions?.find((condition) => condition.status === 'True')?.type;
 
 /* Observed bridge mappings */
 

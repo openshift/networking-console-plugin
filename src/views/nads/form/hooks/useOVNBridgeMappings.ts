@@ -17,7 +17,9 @@ const useOVNBridgeMappings = (): string[] => {
       return [];
     }
 
-    return [...new Set(getObservedBridgeMappings(nodeNetworkStates).map(({ localnet }) => localnet))];
+    return [
+      ...new Set(getObservedBridgeMappings(nodeNetworkStates).map(({ localnet }) => localnet)),
+    ];
   }, [loadError, loaded, nodeNetworkStates]);
 };
 
