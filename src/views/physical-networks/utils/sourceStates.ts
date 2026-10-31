@@ -15,9 +15,16 @@ export const getErrorCode = (error: unknown): number | undefined => {
   return getNumberField((error as Record<string, unknown>).response, 'status');
 };
 
-// The SDK reports an uninstalled CRD as `NoModelError` ('Model does not exist'); that is absence, not failure.
-const isMissingModelError = (error: unknown): boolean =>
-  !!error && typeof error === 'object' && 'name' in error && error.name === 'NoModelError';
+// The SDK reports an uninstalled CRD as its NoModelError. Plugin bundles minify the class name, so
+// the message it always carries is the reliable signal.
+const NO_MODEL_MESSAGE = 'Model does not exist';
+
+const isMissingModelError = (error: unknown): boolean => {
+  if (!error || typeof error !== 'object') return false;
+
+  const { message, name } = error as { message?: unknown; name?: unknown };
+  return name === 'NoModelError' || message === NO_MODEL_MESSAGE;
+};
 
 export const getSourceState = <T>(result: {
   data?: T[];
