@@ -4,6 +4,7 @@ import './networking/topology.cy.ts';
 import './networking/udn.cy.ts';
 import './networking/nad-bridge.cy.ts';
 import './networking/nad-localnet.cy.ts';
+import './networking/physical-networks.cy.ts';
 import './networking/nad-ovn.cy.ts';
 import './networking/services.cy.ts';
 import './networking/routes.cy.ts';
