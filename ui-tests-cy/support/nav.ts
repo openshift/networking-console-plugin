@@ -4,6 +4,7 @@ declare global {
   namespace Cypress {
     interface Chainable {
       visitNAD(): void;
+      visitPhysicalNetworks(): void;
       visitService(): void;
       visitUDN(): void;
     }
@@ -14,6 +15,11 @@ Cypress.Commands.add('visitNAD', () => {
   const ns = Cypress.env('TEST_NS') || 'cy-test-ns';
   cy.visit(`/k8s/ns/${ns}/k8s.cni.cncf.io~v1~NetworkAttachmentDefinition`);
   cy.checkTitle('NetworkAttachmentDefinitions', MINUTE);
+});
+
+Cypress.Commands.add('visitPhysicalNetworks', () => {
+  cy.visit('/physical-networks');
+  cy.checkTitle('Physical networks', MINUTE);
 });
 
 Cypress.Commands.add('visitUDN', () => {

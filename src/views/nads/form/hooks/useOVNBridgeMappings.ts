@@ -1,17 +1,9 @@
 import { useMemo } from 'react';
 
-import { K8sResourceKind, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
+import { useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { NodeNetworkStateModelGroupVersionKind } from '@utils/models';
-
-type NodeNetworkStateKind = {
-  status?: {
-    currentState?: {
-      ovn?: {
-        'bridge-mappings'?: { localnet?: string; state?: string }[];
-      };
-    };
-  };
-} & K8sResourceKind;
+import { getObservedBridgeMappings } from '@utils/resources/nmstate/selectors';
+import { NodeNetworkStateKind } from '@utils/resources/nmstate/types';
 
 const useOVNBridgeMappings = (): string[] => {
   const [nodeNetworkStates, loaded, loadError] = useK8sWatchResource<NodeNetworkStateKind[]>({
@@ -25,16 +17,9 @@ const useOVNBridgeMappings = (): string[] => {
       return [];
     }
 
-    const names = new Set<string>();
-    nodeNetworkStates.forEach((state) => {
-      state?.status?.currentState?.ovn?.['bridge-mappings']?.forEach((mapping) => {
-        if (mapping?.localnet && mapping.state !== 'absent') {
-          names.add(mapping.localnet);
-        }
-      });
-    });
-
-    return [...names];
+    return [
+      ...new Set(getObservedBridgeMappings(nodeNetworkStates).map(({ localnet }) => localnet)),
+    ];
   }, [loadError, loaded, nodeNetworkStates]);
 };
 

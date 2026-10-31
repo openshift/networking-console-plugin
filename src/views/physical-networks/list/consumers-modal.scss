@@ -1,0 +1,7 @@
+.consumers-modal {
+  &__list {
+    max-height: 200px;
+    min-height: 150px;
+    overflow-y: auto;
+  }
+}

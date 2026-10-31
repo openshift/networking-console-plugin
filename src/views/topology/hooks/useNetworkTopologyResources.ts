@@ -21,9 +21,9 @@ import {
   UserDefinedNetworkModelGroupVersionKind,
 } from '@utils/models';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
+import { isVirtLauncherPod } from '@utils/resources/pods/selectors';
 import { ClusterUserDefinedNetworkKind, UserDefinedNetworkKind } from '@utils/resources/udns/types';
 import {
-  isVirtLauncherPod,
   podHasSecondaryNetworks,
   vmHasSecondaryNetworks,
 } from '@views/topology/utils/filteringUtils';
