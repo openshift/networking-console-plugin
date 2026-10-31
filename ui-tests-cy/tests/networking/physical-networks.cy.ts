@@ -129,8 +129,10 @@ adminOnlyDescribe('Physical networks page: NMState missing', () => {
     ).should('be.visible');
     cy.contains('a', 'Install NMState Operator')
       .should('have.attr', 'href')
-      .and('contain', '/operatorhub/all-namespaces?keyword=nmstate');
-    cy.contains('a', 'View documentation').should('exist');
+      .and('contain', '/catalog/all-namespaces?keyword=nmstate');
+    cy.contains('a', 'View documentation')
+      .should('have.attr', 'href')
+      .and('contain', '/networking_operators/k8s-nmstate-about-the-k8s-nmstate-operator');
 
     cy.get('body').then(($body) => {
       if ($body.find('td[data-label="Desired configuration"]').length > 0) {

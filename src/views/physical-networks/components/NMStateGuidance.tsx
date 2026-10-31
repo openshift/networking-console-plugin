@@ -13,7 +13,7 @@ import ExternalLink from '@utils/components/ExternalLink/ExternalLink';
 import { documentationURLs, getDocumentationURL } from '@utils/constants/documentation';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
-import { OPERATOR_HUB_NMSTATE_PATH } from '../utils/constants';
+import { SOFTWARE_CATALOG_NMSTATE_PATH } from '../utils/constants';
 
 type NMStateGuidanceProps = {
   canInstallOperators: boolean;
@@ -34,7 +34,7 @@ const NMStateGuidance: FC<NMStateGuidanceProps> = ({ canInstallOperators }) => {
         <Flex className="pf-v6-u-mt-md" spaceItems={{ default: 'spaceItemsMd' }}>
           {canInstallOperators && (
             <FlexItem>
-              <Button component="a" href={OPERATOR_HUB_NMSTATE_PATH} variant="link">
+              <Button component="a" href={SOFTWARE_CATALOG_NMSTATE_PATH} variant="link">
                 {t('Install NMState Operator')}
               </Button>
             </FlexItem>
