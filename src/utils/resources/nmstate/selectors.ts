@@ -111,7 +111,9 @@ export const getBondName = (policy: V1NodeNetworkConfigurationPolicy) => getBond
 
 export const getPolicyLocalnetNames = (policy: V1NodeNetworkConfigurationPolicy): string[] => {
   const bridgeMappings: OVNBridgeMapping[] = getOVN(policy)?.[OVN_BRIDGE_MAPPINGS] || [];
-  return bridgeMappings.map((mapping) => mapping?.localnet).filter(Boolean);
+  return bridgeMappings
+    .filter((mapping) => mapping?.localnet && mapping.state !== 'absent')
+    .map((mapping) => mapping.localnet);
 };
 
 export const getUplinkConnectionOption = (

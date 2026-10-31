@@ -1,20 +1,13 @@
 import { IoK8sApiCoreV1Pod } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import { V1VirtualMachine } from '@kubevirt-ui-ext/kubevirt-api/kubevirt';
 import { getPodNADReferences, getPodNetworkAttachments } from '@utils/resources/nads/selectors';
-import {
-  VIRT_LAUNCHER_POD_LABEL_KEY,
-  VIRT_LAUNCHER_POD_LABEL_VALUE,
-} from '@utils/resources/pods/constants';
-import { getLabels, getNamespace } from '@utils/resources/shared';
+import { getNamespace } from '@utils/resources/shared';
 import { getUDNNADNameCandidates, isClusterUDN, UDNResource } from '@utils/resources/udns/helper';
 import { getInterfaces, getNetworks } from '@utils/resources/vm/selectors';
 import { L2_BRIDGE_BINDING_NAME } from '@views/topology/utils/constants';
 
 export const podHasSecondaryNetworks = (pod: IoK8sApiCoreV1Pod): boolean =>
   getPodNetworkAttachments(pod).length > 0;
-
-export const isVirtLauncherPod = (pod: IoK8sApiCoreV1Pod): boolean =>
-  getLabels(pod)?.[VIRT_LAUNCHER_POD_LABEL_KEY] === VIRT_LAUNCHER_POD_LABEL_VALUE;
 
 export const vmHasSecondaryNetworks = (vm: V1VirtualMachine): boolean => {
   // TODO Check logic

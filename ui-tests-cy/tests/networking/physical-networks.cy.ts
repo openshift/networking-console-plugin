@@ -26,6 +26,8 @@ let policyCreated = false;
 let readiness: NMStateReadiness = 'unreadable';
 
 before(() => {
+  // Authenticate even when this spec runs on its own rather than through all.cy.ts.
+  cy.login();
   // Sets the csrf-token cookie the write helpers send; the page watch needs no extra auth.
   cy.request('/');
   getNMStateReadiness().then((value) => {
