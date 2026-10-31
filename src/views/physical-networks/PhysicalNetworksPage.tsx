@@ -93,7 +93,10 @@ const PhysicalNetworksPage: FC = () => {
         <ListErrorState error={{ message: t('Physical networks could not be loaded.') }} />
       )}
       {!isLoading && networks.length === 0 && hasReadableSource && (
-        <PhysicalNetworksEmptyState showCreateButton={actionsEnabled.configure} />
+        <PhysicalNetworksEmptyState
+          nadsUnreadable={sources.nads.availability !== SourceAvailability.Available}
+          showCreateButton={actionsEnabled.configure}
+        />
       )}
       {!isLoading && networks.length > 0 && (
         <PhysicalNetworksTable

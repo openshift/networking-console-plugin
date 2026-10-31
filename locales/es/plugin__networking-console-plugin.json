@@ -353,6 +353,7 @@
   "Naming information": "Información de nombres",
   "network": "red",
   "Network": "Red",
+  "Network attachment definitions could not be loaded, so networks they reference are not listed here.": "Network attachment definitions could not be loaded, so networks they reference are not listed here.",
   "Network definitions": "Network definitions",
   "Network definitions table": "Network definitions table",
   "Network details {{count}} interfaces_one": "Network details {{count}} interfaces",

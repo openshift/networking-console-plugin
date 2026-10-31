@@ -98,6 +98,22 @@ const getEnactmentStateMap = (
     return acc;
   }, {} as NNCPToNodeEnactmentStateMap) ?? {};
 
+// Only enactments for the nodes the policy selects describe this configuration: an enactment for a
+// node outside the selector must not change the state shown for the policy.
+const getSelectedEnactmentStates = (
+  nodeToEnactmentStateMap: NodeToEnactmentStateMap,
+  nncpNodes: IoK8sApiCoreV1Node[],
+): NodeToEnactmentStateMap => {
+  if (!nodeToEnactmentStateMap) return undefined;
+
+  const selectedNodeNames = new Set(nncpNodes.map((node) => getName(node)));
+  const selectedStates = Object.entries(nodeToEnactmentStateMap).filter(([nodeName]) =>
+    selectedNodeNames.has(nodeName),
+  );
+
+  return selectedStates.length > 0 ? Object.fromEntries(selectedStates) : undefined;
+};
+
 const getConfigurationDetails = (
   nncp: V1NodeNetworkConfigurationPolicy,
   nodes: IoK8sApiCoreV1Node[],
@@ -105,16 +121,17 @@ const getConfigurationDetails = (
   t: TFunction,
 ): ConfigurationDetails => {
   const nncpNodes = filterNodes(nodes, nncp?.spec?.nodeSelector);
+  const selectedEnactmentStates = getSelectedEnactmentStates(nodeToEnactmentStateMap, nncpNodes);
 
   return {
     aggregationMode: getAggregationMode(nncp),
     configurationName: getName(nncp),
     description: getAnnotations(nncp)?.description,
-    enactmentState: getConfigurationEnactmentState(nodeToEnactmentStateMap),
+    enactmentState: getConfigurationEnactmentState(selectedEnactmentStates),
     mtu: getMTU(nncp),
     nncp,
     nodes: nncpNodes,
-    nodeToEnactmentStateMap,
+    nodeToEnactmentStateMap: selectedEnactmentStates,
     numNodes: nncpNodes?.length || 0,
     physicalNetworkName: '',
     uplink: getUplinkDisplayText(nncp, t),

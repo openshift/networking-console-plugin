@@ -348,6 +348,7 @@
   "Naming information": "이름 지정 정보",
   "network": "네트워크",
   "Network": "네트워크",
+  "Network attachment definitions could not be loaded, so networks they reference are not listed here.": "Network attachment definitions could not be loaded, so networks they reference are not listed here.",
   "Network definitions": "Network definitions",
   "Network definitions table": "Network definitions table",
   "Network details {{count}} interfaces_other": "Network details {{count}} interfaces",
