@@ -117,7 +117,7 @@ export const getPolicyLocalnetNames = (policy: V1NodeNetworkConfigurationPolicy)
 
 export const getUplinkConnectionOption = (
   policy: V1NodeNetworkConfigurationPolicy,
-): UplinkConnection | '' => {
+): '' | UplinkConnection => {
   const bridgePorts = getBridgePortNames(policy);
   const bondPorts = getBondPortNames(policy);
   const bridgeName = getOVNBridgeName(policy);
