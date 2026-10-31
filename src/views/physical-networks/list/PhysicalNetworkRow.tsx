@@ -1,6 +1,7 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
 import { useNavigate } from 'react-router';
 
+import { Title } from '@patternfly/react-core';
 import { ActionsColumn, ExpandableRowContent, Tbody, Td, Tr } from '@patternfly/react-table';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { NO_DATA_DASH } from '@utils/utils/constants';
@@ -141,6 +142,9 @@ const PhysicalNetworkRow: FC<PhysicalNetworkRowProps> = ({
             <ExpandableRowContent>
               {network.nads.length > 0 && (
                 <div className="pf-v6-u-mb-md">
+                  <Title className="pf-v6-u-mb-sm" headingLevel="h4" size="md">
+                    {t('Network definitions')}
+                  </Title>
                   <NetworkDefinitionsTable
                     consumersAvailability={consumersAvailability}
                     consumersByNAD={network.consumersByNAD}
@@ -152,6 +156,9 @@ const PhysicalNetworkRow: FC<PhysicalNetworkRowProps> = ({
               )}
               {network.nncpDetails.length > 0 && (
                 <div className="pf-v6-u-mb-md">
+                  <Title className="pf-v6-u-mb-sm" headingLevel="h4" size="md">
+                    {t('Configurations')}
+                  </Title>
                   <ConfigurationsTable
                     nncpDetails={network.nncpDetails}
                     setSelectedConfiguration={setSelectedConfiguration}
@@ -159,7 +166,12 @@ const PhysicalNetworkRow: FC<PhysicalNetworkRowProps> = ({
                 </div>
               )}
               {network.observedMappings.length > 0 && (
-                <ObservedMappingsTable observedMappings={network.observedMappings} />
+                <div>
+                  <Title className="pf-v6-u-mb-sm" headingLevel="h4" size="md">
+                    {t('Observed mappings')}
+                  </Title>
+                  <ObservedMappingsTable observedMappings={network.observedMappings} />
+                </div>
               )}
             </ExpandableRowContent>
           </Td>
