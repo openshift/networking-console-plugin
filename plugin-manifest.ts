@@ -10,6 +10,10 @@ import {
   NetworkPoliciesExposedModules,
   NetworkPoliciesExtensions,
 } from './src/views/networkpolicies/manifest';
+import {
+  PhysicalNetworksExposedModules,
+  PhysicalNetworksExtensions,
+} from './src/views/physical-networks/manifest';
 import { RoutesExposedModules, RoutesExtensions } from './src/views/routes/manifest';
 import { ServicesExposedModules, ServicesExtensions } from './src/views/services/manifest';
 import { TopologyExposedModules, TopologyExtensions } from './src/views/topology/manifest';
@@ -33,6 +37,7 @@ export const pluginMetadata: ConsolePluginBuildMetadata = {
     ...RoutesExposedModules,
     ...UserDefinedNetworksExposedModules,
     ...TopologyExposedModules,
+    ...PhysicalNetworksExposedModules,
     yamlTemplates: './templates/index.ts',
   },
   name: 'networking-console-plugin',
@@ -48,4 +53,5 @@ export const extensions: EncodedExtension[] = [
   ...FlagsExtensions,
   ...UserDefinedNetworksExtensions,
   ...TopologyExtensions,
+  ...PhysicalNetworksExtensions,
 ];
