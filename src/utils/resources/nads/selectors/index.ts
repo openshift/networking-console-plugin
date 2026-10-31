@@ -31,17 +31,31 @@ export const getType = (config: NetworkAttachmentDefinitionConfig): string => {
 
 export const POD_NETWORKS_ANNOTATION_KEY = 'k8s.v1.cni.cncf.io/networks';
 
+type MultusNetworkReference = { name?: string; namespace?: string };
+
 /**
- * Extract NAD names from Pod's network annotation
- * Handles both simple names and namespace-qualified names
+ * Extract NAD names from a Pod's network annotation.
+ * Multus accepts a comma-separated list, entries carrying an `@interface` suffix,
+ * and a JSON list of `{ name, namespace }` objects; all become `name` or `namespace/name`.
  */
 export const getPodNetworkAttachments = (pod: IoK8sApiCoreV1Pod): string[] => {
-  const annotation = getAnnotations(pod)?.[POD_NETWORKS_ANNOTATION_KEY];
+  const annotation = getAnnotations(pod)?.[POD_NETWORKS_ANNOTATION_KEY]?.trim();
   if (!annotation) return [];
+
+  if (annotation.startsWith('[')) {
+    try {
+      const references = JSON.parse(annotation) as MultusNetworkReference[];
+      return references.flatMap(({ name, namespace }) =>
+        name ? [namespace ? `${namespace}/${name}` : name] : [],
+      );
+    } catch {
+      return [];
+    }
+  }
 
   return annotation
     .split(',')
-    .map((nad) => nad.trim())
+    .map((reference) => reference.trim().split('@')[0].trim())
     .filter(Boolean);
 };
 

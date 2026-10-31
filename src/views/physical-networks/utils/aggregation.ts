@@ -26,6 +26,7 @@ import {
   getUplinkDisplayText,
 } from '@utils/resources/nmstate/selectors';
 import type { NodeNetworkStateKind } from '@utils/resources/nmstate/types';
+import { isVirtLauncherPod } from '@utils/resources/pods/selectors';
 import {
   getAnnotations,
   getLabels,
@@ -178,15 +179,18 @@ export const getConsumersByNAD = (
     });
   };
 
-  (pods || []).forEach((pod) =>
-    add(getPodNADReferences(pod), {
-      groupVersionKind: modelToGroupVersionKind(PodModel),
-      kind: 'Pod',
-      name: getName(pod),
-      namespace: getNamespace(pod),
-      url: getResourceURL({ model: PodModel, resource: pod }),
-    }),
-  );
+  // virt-launcher Pods only mirror their VM; the VM itself is the consumer.
+  (pods || [])
+    .filter((pod) => !isVirtLauncherPod(pod))
+    .forEach((pod) =>
+      add(getPodNADReferences(pod), {
+        groupVersionKind: modelToGroupVersionKind(PodModel),
+        kind: 'Pod',
+        name: getName(pod),
+        namespace: getNamespace(pod),
+        url: getResourceURL({ model: PodModel, resource: pod }),
+      }),
+    );
 
   (virtualMachines || []).forEach((vm) =>
     add(getVMNADReferences(vm), {

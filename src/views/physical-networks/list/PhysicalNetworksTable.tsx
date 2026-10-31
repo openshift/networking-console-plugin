@@ -48,6 +48,14 @@ const PhysicalNetworksTable: FC<PhysicalNetworksTableProps> = ({
 
   const { onPaginationChange, pagination } = usePagination();
 
+  const resetPage = () =>
+    onPaginationChange({
+      endIndex: pagination.perPage,
+      page: 1,
+      perPage: pagination.perPage,
+      startIndex: 0,
+    });
+
   const filteredNetworks = useMemo(
     () => filterPhysicalNetworks(networks, searchType, searchInput),
     [networks, searchInput, searchType],
@@ -65,12 +73,23 @@ const PhysicalNetworksTable: FC<PhysicalNetworksTableProps> = ({
         : [...previousExpanded, network.name],
     );
 
+  const getScreenReaderText = (id: string, title?: string): string | undefined => {
+    if (id === PhysicalNetworkColumnIDs.Expand) return t('Row expansion');
+    return title ? undefined : t('Actions');
+  };
+
   return (
     <div className="physical-networks-table">
       <div className="physical-networks-table__toolbar">
         <SearchBar
-          onSearchInputChange={setSearchInput}
-          onSearchTypeChange={setSearchType}
+          onSearchInputChange={(value) => {
+            setSearchInput(value);
+            resetPage();
+          }}
+          onSearchTypeChange={(type) => {
+            setSearchType(type);
+            resetPage();
+          }}
           searchInput={searchInput}
           searchType={searchType}
         />
@@ -92,11 +111,10 @@ const PhysicalNetworksTable: FC<PhysicalNetworksTableProps> = ({
       <Table aria-label={t('Physical networks table')} isExpandable>
         <Thead>
           <Tr>
-            <Th screenReaderText={t('Row expansion')} />
             {columns.map(({ id, title }) => (
               <Th
                 key={id}
-                screenReaderText={title ? undefined : t('Actions')}
+                screenReaderText={getScreenReaderText(id, title)}
                 sort={id === PhysicalNetworkColumnIDs.Name ? getSortType(1) : undefined}
               >
                 {title}
@@ -121,7 +139,7 @@ const PhysicalNetworksTable: FC<PhysicalNetworksTableProps> = ({
         {sortedData.length === 0 && (
           <Tbody>
             <Tr>
-              <Td colSpan={columns.length + 1}>{t('No physical networks match the search.')}</Td>
+              <Td colSpan={columns.length}>{t('No physical networks match the search.')}</Td>
             </Tr>
           </Tbody>
         )}

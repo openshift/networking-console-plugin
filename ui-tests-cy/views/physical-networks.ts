@@ -47,7 +47,14 @@ export const anyNodeMatchesSeededSelector = (): Cypress.Chainable<boolean> =>
         `${SEEDED_NODE_SELECTOR_KEY}=never`,
       )}`,
     })
-    .then(({ body, status }) => status === 200 && (body?.items?.length ?? 0) > 0);
+    .then(({ body, status }) => {
+      if (status !== 200) {
+        throw new Error(
+          `Cannot verify the seeded node selector: the node list request returned ${status}.`,
+        );
+      }
+      return (body?.items?.length ?? 0) > 0;
+    });
 
 export const createLocalnetNAD = (): Cypress.Chainable<SeedResult> =>
   seed(NAD_COLLECTION, {
