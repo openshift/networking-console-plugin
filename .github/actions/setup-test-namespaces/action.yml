@@ -1,0 +1,35 @@
+name: Set up test namespaces
+description: >
+  Create the Cypress test namespace and the UDN-labeled namespace if they
+  do not already exist.
+
+inputs:
+  test-namespace:
+    description: Namespace for Cypress test resources
+    required: true
+  udn-namespace:
+    description: Namespace labeled for primary user-defined network
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Set up test namespaces
+      shell: bash
+      env:
+        TEST_NS: ${{ inputs.test-namespace }}
+        UDN_NS: ${{ inputs.udn-namespace }}
+        UDN_LABEL: k8s.ovn.org/primary-user-defined-network
+      run: |
+        oc get namespace "${TEST_NS}" 2>/dev/null || oc create namespace "${TEST_NS}"
+
+        if ! oc get namespace "${UDN_NS}" 2>/dev/null; then
+          cat <<EOF | oc create -f -
+        apiVersion: v1
+        kind: Namespace
+        metadata:
+          name: ${UDN_NS}
+          labels:
+            ${UDN_LABEL}: ""
+        EOF
+        fi
