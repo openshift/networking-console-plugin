@@ -84,6 +84,7 @@ module.exports = (on, config) => {
   config.env.UDN_NS = process.env.UDN_NS;
   config.env.HIDE_XHR = process.env.HIDE_XHR;
   config.env.ALLOW_CLUSTER_WRITES = process.env.ALLOW_CLUSTER_WRITES;
+  config.env.SIMULATE_NMSTATE_ABSENT = process.env.SIMULATE_NMSTATE_ABSENT;
   config.env.RUN_ID = process.env.RUN_ID;
   return config;
 };

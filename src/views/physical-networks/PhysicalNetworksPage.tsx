@@ -17,6 +17,7 @@ import usePhysicalNetworks from './hooks/usePhysicalNetworks';
 import ConsumersModal from './list/ConsumersModal';
 import PhysicalNetworksTable from './list/PhysicalNetworksTable';
 import ScopeSelect from './list/ScopeSelect';
+import { isNMStateSimulatedAbsent } from './utils/simulation';
 import { ConfigurationDetails, LocalnetNAD, SourceAvailability } from './utils/types';
 
 type ConsumersSelection = { nad: LocalnetNAD; networkName: string };
@@ -32,8 +33,9 @@ const PhysicalNetworksPage: FC = () => {
   );
 
   const kubevirtEnabled = useFlag(FLAG_KUBEVIRT);
-  const nmstateFrontendAvailable = useFlag(FLAG_NMSTATE);
-  const nmstateCrdsPresent = useFlag(FLAG_NMSTATE_CRDS);
+  const nmstateSimulatedAbsent = isNMStateSimulatedAbsent();
+  const nmstateFrontendAvailable = useFlag(FLAG_NMSTATE) && !nmstateSimulatedAbsent;
+  const nmstateCrdsPresent = useFlag(FLAG_NMSTATE_CRDS) && !nmstateSimulatedAbsent;
 
   const [canConfigure] = useAccessReview({
     group: 'nmstate.io',

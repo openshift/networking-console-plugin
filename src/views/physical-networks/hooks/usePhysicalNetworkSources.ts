@@ -26,11 +26,13 @@ import {
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
 import { NodeNetworkStateKind } from '@utils/resources/nmstate/types';
 
+import { isNMStateSimulatedAbsent } from '../utils/simulation';
 import { getSourceState } from '../utils/sourceStates';
 import { PhysicalNetworksSources, SourceAvailability } from '../utils/types';
 
 const usePhysicalNetworkSources = (scope: string | undefined): PhysicalNetworksSources => {
   const kubevirtEnabled = useFlag(FLAG_KUBEVIRT);
+  const nmstateSimulatedAbsent = isNMStateSimulatedAbsent();
 
   const [nadsData, nadsLoaded, nadsError] = useK8sWatchResource<NetworkAttachmentDefinitionKind[]>({
     groupVersionKind: NetworkAttachmentDefinitionModelGroupVersionKind,
@@ -61,26 +63,38 @@ const usePhysicalNetworkSources = (scope: string | undefined): PhysicalNetworksS
 
   const [nncpsData, nncpsLoaded, nncpsError] = useK8sWatchResource<
     V1NodeNetworkConfigurationPolicy[]
-  >({
-    groupVersionKind: NodeNetworkConfigurationPolicyModelGroupVersionKind,
-    isList: true,
-    optional: true,
-  });
+  >(
+    nmstateSimulatedAbsent
+      ? null
+      : {
+          groupVersionKind: NodeNetworkConfigurationPolicyModelGroupVersionKind,
+          isList: true,
+          optional: true,
+        },
+  );
 
   const [nncesData, nncesLoaded, nncesError] = useK8sWatchResource<
     V1beta1NodeNetworkConfigurationEnactment[]
-  >({
-    groupVersionKind: NodeNetworkConfigurationEnactmentModelGroupVersionKind,
-    isList: true,
-    optional: true,
-  });
+  >(
+    nmstateSimulatedAbsent
+      ? null
+      : {
+          groupVersionKind: NodeNetworkConfigurationEnactmentModelGroupVersionKind,
+          isList: true,
+          optional: true,
+        },
+  );
 
   const [nodeNetworkStatesData, nodeNetworkStatesLoaded, nodeNetworkStatesError] =
-    useK8sWatchResource<NodeNetworkStateKind[]>({
-      groupVersionKind: NodeNetworkStateModelGroupVersionKind,
-      isList: true,
-      optional: true,
-    });
+    useK8sWatchResource<NodeNetworkStateKind[]>(
+      nmstateSimulatedAbsent
+        ? null
+        : {
+            groupVersionKind: NodeNetworkStateModelGroupVersionKind,
+            isList: true,
+            optional: true,
+          },
+    );
 
   const [nodesData, nodesLoaded, nodesError] = useK8sWatchResource<IoK8sApiCoreV1Node[]>({
     groupVersionKind: NodeModelGroupVersionKind,
@@ -95,21 +109,27 @@ const usePhysicalNetworkSources = (scope: string | undefined): PhysicalNetworksS
         loaded: nadsLoaded,
         loadError: nadsError,
       }),
-      nnces: getSourceState<V1beta1NodeNetworkConfigurationEnactment>({
-        data: nncesData,
-        loaded: nncesLoaded,
-        loadError: nncesError,
-      }),
-      nncps: getSourceState<V1NodeNetworkConfigurationPolicy>({
-        data: nncpsData,
-        loaded: nncpsLoaded,
-        loadError: nncpsError,
-      }),
-      nodeNetworkStates: getSourceState<NodeNetworkStateKind>({
-        data: nodeNetworkStatesData,
-        loaded: nodeNetworkStatesLoaded,
-        loadError: nodeNetworkStatesError,
-      }),
+      nnces: nmstateSimulatedAbsent
+        ? { availability: SourceAvailability.Absent, data: [] }
+        : getSourceState<V1beta1NodeNetworkConfigurationEnactment>({
+            data: nncesData,
+            loaded: nncesLoaded,
+            loadError: nncesError,
+          }),
+      nncps: nmstateSimulatedAbsent
+        ? { availability: SourceAvailability.Absent, data: [] }
+        : getSourceState<V1NodeNetworkConfigurationPolicy>({
+            data: nncpsData,
+            loaded: nncpsLoaded,
+            loadError: nncpsError,
+          }),
+      nodeNetworkStates: nmstateSimulatedAbsent
+        ? { availability: SourceAvailability.Absent, data: [] }
+        : getSourceState<NodeNetworkStateKind>({
+            data: nodeNetworkStatesData,
+            loaded: nodeNetworkStatesLoaded,
+            loadError: nodeNetworkStatesError,
+          }),
       nodes: getSourceState<IoK8sApiCoreV1Node>({
         data: nodesData,
         loaded: nodesLoaded,
@@ -130,6 +150,7 @@ const usePhysicalNetworkSources = (scope: string | undefined): PhysicalNetworksS
     }),
     [
       kubevirtEnabled,
+      nmstateSimulatedAbsent,
       nadsData,
       nadsLoaded,
       nadsError,

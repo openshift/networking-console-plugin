@@ -14,6 +14,13 @@ export const PHYSICAL_NETWORK_NAME = `e2e-phys-${RUN_ID}`;
 export const SEEDED_POLICY_NAME = `e2e-physical-networks-${RUN_ID}`;
 export const SEEDED_NODE_SELECTOR_KEY = 'e2e.physical-networks/invalid-node';
 export const CLUSTER_WRITES_ALLOWED = Cypress.env('ALLOW_CLUSTER_WRITES') === 'true';
+// The plugin decides NMState presence from statically declared models, so no API response can make
+// it report "absent"; it reads window.__NMSTATE_SIMULATED_ABSENT__ before its first render instead.
+export const NMSTATE_SIMULATED_ABSENT = Cypress.env('SIMULATE_NMSTATE_ABSENT') === 'true';
+
+export const simulateNMStateAbsent = (win: Window): void => {
+  (win as { __NMSTATE_SIMULATED_ABSENT__?: boolean } & Window).__NMSTATE_SIMULATED_ABSENT__ = true;
+};
 
 // Cluster-scoped seeds carry this label so ci-scripts/test-cleanup.sh can sweep them when a run is
 // interrupted; the value must stay identical to the selector in that script.

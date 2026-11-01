@@ -8,9 +8,11 @@ import {
   deleteSeededPolicy,
   getNMStateReadiness,
   LOCALNET_NAD_NAME,
+  NMSTATE_SIMULATED_ABSENT,
   type NMStateReadiness,
   PHYSICAL_NETWORK_NAME,
   SEEDED_POLICY_NAME,
+  simulateNMStateAbsent,
 } from '../../views/physical-networks';
 
 const SEARCH_INPUT = '.physical-networks-table__search-input input';
@@ -30,12 +32,24 @@ before(() => {
   cy.login();
   // Sets the csrf-token cookie the write helpers send; the page watch needs no extra auth.
   cy.request('/');
-  getNMStateReadiness().then((value) => {
-    readiness = value;
-  });
+  if (NMSTATE_SIMULATED_ABSENT) {
+    // The simulation flips what the page sees, so the real probe would contradict it; keep one
+    // source of truth for which describes may run.
+    readiness = 'absent';
+  } else {
+    getNMStateReadiness().then((value) => {
+      readiness = value;
+    });
+  }
   createLocalnetNAD().then((result) => {
     nadCreated = result === 'created';
   });
+});
+
+// Per test, not per file: Cypress drops cy listeners between tests, and the global must be in place
+// before each visit's app boots.
+beforeEach(() => {
+  if (NMSTATE_SIMULATED_ABSENT) cy.on('window:before:load', simulateNMStateAbsent);
 });
 
 after(() => {
