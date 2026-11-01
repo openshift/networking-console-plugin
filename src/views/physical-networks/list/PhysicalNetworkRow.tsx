@@ -26,6 +26,7 @@ import { getSourceBackedValue } from './utils';
 
 type PhysicalNetworkRowProps = {
   actionsEnabled: { configure: boolean; createVMNetwork: boolean };
+  columnCount: number;
   consumersAvailability: ConsumersAvailability;
   index: number;
   isExpanded: boolean;
@@ -38,6 +39,7 @@ type PhysicalNetworkRowProps = {
 
 const PhysicalNetworkRow: FC<PhysicalNetworkRowProps> = ({
   actionsEnabled,
+  columnCount,
   consumersAvailability,
   index,
   isExpanded,
@@ -138,7 +140,7 @@ const PhysicalNetworkRow: FC<PhysicalNetworkRowProps> = ({
       </Tr>
       {hasDetails && (
         <Tr isExpanded={isExpanded}>
-          <Td colSpan={6}>
+          <Td colSpan={columnCount}>
             <ExpandableRowContent>
               {network.nads.length > 0 && (
                 <div className="pf-v6-u-mb-md">

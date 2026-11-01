@@ -1,7 +1,7 @@
 import { OVNBridgeMapping } from '@kubevirt-ui-ext/kubevirt-api/nmstate';
 import { K8sResourceKind } from '@openshift-console/dynamic-plugin-sdk';
 
-export type NodeNetworkStateKind = {
+export type NodeNetworkStateWithBridgeMappings = {
   status?: { currentState?: { ovn?: { 'bridge-mappings'?: OVNBridgeMapping[] } } };
 } & K8sResourceKind;
 

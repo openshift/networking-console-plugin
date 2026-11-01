@@ -6,7 +6,7 @@ const getNumberField = (value: unknown, key: string): number | undefined => {
   return typeof field === 'number' ? field : undefined;
 };
 
-export const getErrorCode = (error: unknown): number | undefined => {
+const getErrorCode = (error: unknown): number | undefined => {
   if (!error || typeof error !== 'object') return undefined;
 
   const code = getNumberField(error, 'code');

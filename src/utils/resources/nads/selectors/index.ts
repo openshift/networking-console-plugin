@@ -29,7 +29,7 @@ export const getType = (config: NetworkAttachmentDefinitionConfig): string => {
   return null;
 };
 
-export const POD_NETWORKS_ANNOTATION_KEY = 'k8s.v1.cni.cncf.io/networks';
+const POD_NETWORKS_ANNOTATION_KEY = 'k8s.v1.cni.cncf.io/networks';
 
 type MultusNetworkReference = { name?: string; namespace?: string };
 

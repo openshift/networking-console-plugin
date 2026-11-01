@@ -36,13 +36,7 @@ const ConfigurationDrawer: FC<ConfigurationDrawerProps> = ({
   }, []);
 
   return (
-    <Modal
-      aria-label={t('Configuration drawer')}
-      className="ocs-modal co-catalog-page__overlay co-catalog-page__overlay--right"
-      disableFocusTrap
-      isOpen={isOpen}
-      onClose={onClose}
-    >
+    <Modal aria-label={t('Configuration drawer')} isOpen={isOpen} onClose={onClose} variant="large">
       <ModalHeader title={selectedConfiguration?.configurationName} />
       <ModalBody>
         <Tabs activeKey={activeTabKey} onSelect={handleTabKey}>

@@ -3,34 +3,38 @@ import { TEST_NS } from '../utils/const/base';
 const K8S_API = '/api/kubernetes';
 
 export type NMStateReadiness = 'absent' | 'installed' | 'unreadable';
-export type SeedResult = 'created' | 'exists' | 'failed';
+type SeedResult = 'created' | 'exists' | 'failed';
 
 // Unique per run: concurrent runs against one shared cluster must never adopt or delete each
 // other's objects, and must never collide on a physical network name.
 const RUN_ID = Cypress.env('RUN_ID') || String(Date.now());
 
+// `--env X=true` arrives as a boolean while an OS variable arrives as a string, so compare text.
+const isEnabled = (name: string): boolean => String(Cypress.env(name)) === 'true';
+
 export const LOCALNET_NAD_NAME = `network-localnet-e2e-${RUN_ID}`;
 export const PHYSICAL_NETWORK_NAME = `e2e-phys-${RUN_ID}`;
 export const SEEDED_POLICY_NAME = `e2e-physical-networks-${RUN_ID}`;
-export const SEEDED_NODE_SELECTOR_KEY = 'e2e.physical-networks/invalid-node';
-export const CLUSTER_WRITES_ALLOWED = Cypress.env('ALLOW_CLUSTER_WRITES') === 'true';
+const SEEDED_NODE_SELECTOR_KEY = 'e2e.physical-networks/invalid-node';
+// Gates only the cluster-scoped NNCP write; the namespaced NAD seed always runs.
+export const CLUSTER_WRITES_ALLOWED = isEnabled('ALLOW_CLUSTER_WRITES');
 // The plugin decides NMState presence from statically declared models, so no API response can make
 // it report "absent"; it reads window.__NMSTATE_SIMULATED_ABSENT__ before its first render instead.
-export const NMSTATE_SIMULATED_ABSENT = Cypress.env('SIMULATE_NMSTATE_ABSENT') === 'true';
+export const NMSTATE_SIMULATED_ABSENT = isEnabled('SIMULATE_NMSTATE_ABSENT');
 
 export const simulateNMStateAbsent = (win: Window): void => {
   (win as { __NMSTATE_SIMULATED_ABSENT__?: boolean } & Window).__NMSTATE_SIMULATED_ABSENT__ = true;
 };
 
-// Cluster-scoped seeds carry this label so ci-scripts/test-cleanup.sh can sweep them when a run is
-// interrupted; the value must stay identical to the selector in that script.
-export const MANAGED_BY_LABEL_KEY = 'app.kubernetes.io/managed-by';
-export const MANAGED_BY_LABEL_VALUE = 'networking-console-plugin-test';
+// Cluster-scoped seeds carry this label so ci-scripts/test-cleanup.sh:22 and cleanup.sh:20 can sweep
+// them when a run is interrupted; the value must stay identical to the selector in both scripts.
+const MANAGED_BY_LABEL_KEY = 'app.kubernetes.io/managed-by';
+const MANAGED_BY_LABEL_VALUE = 'networking-console-plugin-test';
 
-export const NAD_COLLECTION = `${K8S_API}/apis/k8s.cni.cncf.io/v1/namespaces/${TEST_NS}/network-attachment-definitions`;
-export const NNCP_COLLECTION = `${K8S_API}/apis/nmstate.io/v1/nodenetworkconfigurationpolicies`;
+const NAD_COLLECTION = `${K8S_API}/apis/k8s.cni.cncf.io/v1/namespaces/${TEST_NS}/network-attachment-definitions`;
+const NNCP_COLLECTION = `${K8S_API}/apis/nmstate.io/v1/nodenetworkconfigurationpolicies`;
 
-export const csrfHeaders = (): Cypress.Chainable<Record<string, string>> =>
+const csrfHeaders = (): Cypress.Chainable<Record<string, string>> =>
   cy
     .getCookie('csrf-token')
     .then((cookie) => (cookie ? { 'X-CSRFToken': cookie.value } : ({} as Record<string, string>)));

@@ -5,7 +5,7 @@ import { NetworkTypeKeys, ovnK8sTopologyKeys } from '@views/nads/form/utils/type
 
 import { LocalnetNAD } from './types';
 
-export const isLocalnetNAD = (nad: NetworkAttachmentDefinitionKind): boolean => {
+const isLocalnetNAD = (nad: NetworkAttachmentDefinitionKind): boolean => {
   const config = getConfigAsJSON(nad);
 
   return (
@@ -14,7 +14,7 @@ export const isLocalnetNAD = (nad: NetworkAttachmentDefinitionKind): boolean => 
   );
 };
 
-export const getLocalnetNAD = (nad: NetworkAttachmentDefinitionKind): LocalnetNAD | undefined => {
+const getLocalnetNAD = (nad: NetworkAttachmentDefinitionKind): LocalnetNAD | undefined => {
   if (!isLocalnetNAD(nad)) return undefined;
 
   const config = getConfigAsJSON(nad);

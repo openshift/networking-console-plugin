@@ -94,7 +94,6 @@ const PhysicalNetworksTable: FC<PhysicalNetworksTableProps> = ({
           searchType={searchType}
         />
         <Pagination
-          className="list-managment-group__pagination"
           isCompact
           itemCount={filteredNetworks.length}
           onPerPageSelect={(_event, perPage, page, startIndex, endIndex) =>
@@ -125,6 +124,7 @@ const PhysicalNetworksTable: FC<PhysicalNetworksTableProps> = ({
         {sortedData.map((network, rowIndex) => (
           <PhysicalNetworkRow
             actionsEnabled={actionsEnabled}
+            columnCount={columns.length}
             consumersAvailability={consumersAvailability}
             index={rowIndex}
             isExpanded={expandedNetworkNames.includes(network.name)}

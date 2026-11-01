@@ -9,7 +9,7 @@ import {
 } from '@kubevirt-ui-ext/kubevirt-api/nmstate';
 import type { K8sGroupVersionKind } from '@openshift-console/dynamic-plugin-sdk';
 import type { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
-import type { NodeNetworkStateKind } from '@utils/resources/nmstate/types';
+import type { NodeNetworkStateWithBridgeMappings } from '@utils/resources/nmstate/types';
 
 export enum SourceAvailability {
   Absent = 'absent',
@@ -87,7 +87,7 @@ export type PhysicalNetworksSources = {
   nads: SourceState<NetworkAttachmentDefinitionKind>;
   nnces: SourceState<V1beta1NodeNetworkConfigurationEnactment>;
   nncps: SourceState<V1NodeNetworkConfigurationPolicy>;
-  nodeNetworkStates: SourceState<NodeNetworkStateKind>;
+  nodeNetworkStates: SourceState<NodeNetworkStateWithBridgeMappings>;
   nodes: SourceState<IoK8sApiCoreV1Node>;
   pods: SourceState<IoK8sApiCoreV1Pod>;
   virtualMachines: SourceState<V1VirtualMachine>;

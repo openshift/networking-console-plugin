@@ -58,7 +58,7 @@ const ConsumersModal: FC<ConsumersModalProps> = ({
 
             return (
               <div key={kind}>
-                <div className="pf-v6-u-mb-sm">{kind}</div>
+                <div className="pf-v6-u-mb-sm">{t(kind)}</div>
                 {kindConsumers.map((consumer) => (
                   <div
                     className="pf-v6-u-mb-sm"

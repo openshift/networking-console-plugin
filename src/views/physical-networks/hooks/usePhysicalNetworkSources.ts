@@ -24,7 +24,7 @@ import {
   NodeNetworkStateModelGroupVersionKind,
 } from '@utils/models';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
-import { NodeNetworkStateKind } from '@utils/resources/nmstate/types';
+import { NodeNetworkStateWithBridgeMappings } from '@utils/resources/nmstate/types';
 
 import { isNMStateSimulatedAbsent } from '../utils/simulation';
 import { getSourceState } from '../utils/sourceStates';
@@ -86,7 +86,7 @@ const usePhysicalNetworkSources = (scope: string | undefined): PhysicalNetworksS
   );
 
   const [nodeNetworkStatesData, nodeNetworkStatesLoaded, nodeNetworkStatesError] =
-    useK8sWatchResource<NodeNetworkStateKind[]>(
+    useK8sWatchResource<NodeNetworkStateWithBridgeMappings[]>(
       nmstateSimulatedAbsent
         ? null
         : {
@@ -125,7 +125,7 @@ const usePhysicalNetworkSources = (scope: string | undefined): PhysicalNetworksS
           }),
       nodeNetworkStates: nmstateSimulatedAbsent
         ? { availability: SourceAvailability.Absent, data: [] }
-        : getSourceState<NodeNetworkStateKind>({
+        : getSourceState<NodeNetworkStateWithBridgeMappings>({
             data: nodeNetworkStatesData,
             loaded: nodeNetworkStatesLoaded,
             loadError: nodeNetworkStatesError,

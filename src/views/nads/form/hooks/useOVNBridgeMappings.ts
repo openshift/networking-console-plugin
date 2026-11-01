@@ -3,10 +3,12 @@ import { useMemo } from 'react';
 import { useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { NodeNetworkStateModelGroupVersionKind } from '@utils/models';
 import { getObservedBridgeMappings } from '@utils/resources/nmstate/selectors';
-import { NodeNetworkStateKind } from '@utils/resources/nmstate/types';
+import { NodeNetworkStateWithBridgeMappings } from '@utils/resources/nmstate/types';
 
 const useOVNBridgeMappings = (): string[] => {
-  const [nodeNetworkStates, loaded, loadError] = useK8sWatchResource<NodeNetworkStateKind[]>({
+  const [nodeNetworkStates, loaded, loadError] = useK8sWatchResource<
+    NodeNetworkStateWithBridgeMappings[]
+  >({
     groupVersionKind: NodeNetworkStateModelGroupVersionKind,
     isList: true,
     optional: true,

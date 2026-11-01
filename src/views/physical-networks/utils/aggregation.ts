@@ -25,7 +25,7 @@ import {
   getPolicyLocalnetNames,
   getUplinkDisplayText,
 } from '@utils/resources/nmstate/selectors';
-import type { NodeNetworkStateKind } from '@utils/resources/nmstate/types';
+import type { NodeNetworkStateWithBridgeMappings } from '@utils/resources/nmstate/types';
 import { isVirtLauncherPod } from '@utils/resources/pods/selectors';
 import {
   getAnnotations,
@@ -274,7 +274,7 @@ export const getPolicyPhysicalNetworks = (
 };
 
 export const getObservedMappings = (
-  nodeNetworkStates: NodeNetworkStateKind[],
+  nodeNetworkStates: NodeNetworkStateWithBridgeMappings[],
   nodes: IoK8sApiCoreV1Node[],
 ): Record<string, ObservedMapping[]> =>
   getObservedBridgeMappings(nodeNetworkStates).reduce(

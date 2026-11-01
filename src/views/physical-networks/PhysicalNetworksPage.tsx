@@ -35,7 +35,7 @@ const PhysicalNetworksPage: FC = () => {
   const kubevirtEnabled = useFlag(FLAG_KUBEVIRT);
   const nmstateSimulatedAbsent = isNMStateSimulatedAbsent();
   const nmstateFrontendAvailable = useFlag(FLAG_NMSTATE) && !nmstateSimulatedAbsent;
-  const nmstateCrdsPresent = useFlag(FLAG_NMSTATE_CRDS) && !nmstateSimulatedAbsent;
+  const nmstateCrdsPresent = useFlag(FLAG_NMSTATE_CRDS);
 
   const [canConfigure] = useAccessReview({
     group: 'nmstate.io',

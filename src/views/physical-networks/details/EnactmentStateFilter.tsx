@@ -9,19 +9,12 @@ import {
 } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
+import { ENACTMENT_STATES } from '../utils/constants';
 import { EnactmentState } from '../utils/types';
 
 import EnactmentStateIcon from './EnactmentStateIcon';
 
 import './enactment-state-filter.scss';
-
-const STATES: EnactmentState[] = [
-  EnactmentState.Aborted,
-  EnactmentState.Available,
-  EnactmentState.Failing,
-  EnactmentState.Pending,
-  EnactmentState.Progressing,
-];
 
 type EnactmentStateFilterProps = {
   selectedFilterType: EnactmentState[];
@@ -57,7 +50,7 @@ const EnactmentStateFilter: FC<EnactmentStateFilterProps> = ({
       )}
     >
       <SelectList>
-        {STATES.map((state) => (
+        {ENACTMENT_STATES.map((state) => (
           <SelectOption
             hasCheckbox
             isSelected={selectedFilterType.includes(state)}

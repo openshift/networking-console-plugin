@@ -1,6 +1,8 @@
 import { FeatureFlag, FeatureFlagHookProvider } from '@openshift-console/dynamic-plugin-sdk';
 import { EncodedExtension } from '@openshift-console/dynamic-plugin-sdk-webpack';
 
+import { FLAG_NMSTATE_CRDS } from './consts';
+
 export const FlagsExtensions: EncodedExtension[] = [
   {
     properties: {
@@ -16,7 +18,7 @@ export const FlagsExtensions: EncodedExtension[] = [
   } as EncodedExtension<FeatureFlagHookProvider>,
   {
     properties: {
-      flag: 'NMSTATE_PLUGIN_ENABLED',
+      flag: FLAG_NMSTATE_CRDS,
       model: {
         group: 'nmstate.io',
         kind: 'NodeNetworkState',

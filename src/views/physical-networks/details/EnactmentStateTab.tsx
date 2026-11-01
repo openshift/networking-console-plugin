@@ -1,19 +1,13 @@
-import React, { Dispatch, FC, SetStateAction, useMemo, useState } from 'react';
+import React, { FC, useMemo, useState } from 'react';
 
 import { SearchInput } from '@patternfly/react-core';
+import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
+import { ENACTMENT_STATES } from '../utils/constants';
 import { ConfigurationDetails, EnactmentState, NodeEnactmentStateDetails } from '../utils/types';
 
 import EnactmentStateFilter from './EnactmentStateFilter';
 import EnactmentStateTable from './EnactmentStateTable';
-
-const ALL_STATES: EnactmentState[] = [
-  EnactmentState.Progressing,
-  EnactmentState.Available,
-  EnactmentState.Aborted,
-  EnactmentState.Failing,
-  EnactmentState.Pending,
-];
 
 const filterEnactmentStateDetails = (
   details: NodeEnactmentStateDetails[],
@@ -31,8 +25,10 @@ type EnactmentStateTabProps = {
 };
 
 const EnactmentStateTab: FC<EnactmentStateTabProps> = ({ selectedConfiguration }) => {
+  const { t } = useNetworkingTranslation();
   const [searchInput, setSearchInput] = useState('');
-  const [enactmentStateFilters, setEnactmentStateFilters] = useState<EnactmentState[]>(ALL_STATES);
+  const [enactmentStateFilters, setEnactmentStateFilters] =
+    useState<EnactmentState[]>(ENACTMENT_STATES);
   const { nodeToEnactmentStateMap } = selectedConfiguration;
 
   const filteredEnactmentStates = useMemo(
@@ -50,12 +46,10 @@ const EnactmentStateTab: FC<EnactmentStateTabProps> = ({ selectedConfiguration }
       <div className="pf-v6-u-mb-md pf-v6-u-display-flex pf-v6-u-gap-md">
         <EnactmentStateFilter
           selectedFilterType={enactmentStateFilters}
-          setSelectedFilterType={
-            setEnactmentStateFilters as Dispatch<SetStateAction<EnactmentState[]>>
-          }
+          setSelectedFilterType={setEnactmentStateFilters}
         />
         <SearchInput
-          aria-label="Filter nodes"
+          aria-label={t('Filter nodes')}
           onChange={(_event, value) => setSearchInput(value)}
           type="search"
           value={searchInput}
