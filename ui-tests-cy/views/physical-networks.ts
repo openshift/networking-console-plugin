@@ -15,6 +15,11 @@ export const SEEDED_POLICY_NAME = `e2e-physical-networks-${RUN_ID}`;
 export const SEEDED_NODE_SELECTOR_KEY = 'e2e.physical-networks/invalid-node';
 export const CLUSTER_WRITES_ALLOWED = Cypress.env('ALLOW_CLUSTER_WRITES') === 'true';
 
+// Cluster-scoped seeds carry this label so ci-scripts/test-cleanup.sh can sweep them when a run is
+// interrupted; the value must stay identical to the selector in that script.
+export const MANAGED_BY_LABEL_KEY = 'app.kubernetes.io/managed-by';
+export const MANAGED_BY_LABEL_VALUE = 'networking-console-plugin-test';
+
 export const NAD_COLLECTION = `${K8S_API}/apis/k8s.cni.cncf.io/v1/namespaces/${TEST_NS}/network-attachment-definitions`;
 export const NNCP_COLLECTION = `${K8S_API}/apis/nmstate.io/v1/nodenetworkconfigurationpolicies`;
 
@@ -84,6 +89,7 @@ export const createSeededPolicy = (): Cypress.Chainable<SeedResult> =>
     kind: 'NodeNetworkConfigurationPolicy',
     metadata: {
       annotations: { description: 'e2e physical network policy' },
+      labels: { [MANAGED_BY_LABEL_KEY]: MANAGED_BY_LABEL_VALUE },
       name: SEEDED_POLICY_NAME,
     },
     spec: {
