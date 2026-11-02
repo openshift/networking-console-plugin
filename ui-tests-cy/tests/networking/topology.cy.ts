@@ -22,6 +22,12 @@ const openViewMenu = () => {
   cy.contains('[role="option"]', 'Node underlay').should('be.visible');
 };
 
+const selectTopologyView = (viewName: string) => {
+  openViewMenu();
+  cy.contains('[role="option"] .pf-v6-c-menu__item-text', new RegExp(`^${viewName}$`)).click();
+  cy.get(viewToggle).should('have.attr', 'aria-label', `View: ${viewName}`);
+};
+
 const topologyDrawer = () => cy.get('.ocs-pf-topo-sidebar');
 
 const openTopologyDrawer = (nodeLabel: string) => {
@@ -61,7 +67,7 @@ const expectNoSvgText = (name: string) => {
   });
 };
 
-describe('Network topology toolbar', () => {
+describe('OCPNETUI-137: Network topology toolbar', () => {
   beforeEach(() => {
     visitTopology();
   });
@@ -201,7 +207,7 @@ describe('Network topology toolbar', () => {
   });
 });
 
-describe('Network topology node view', () => {
+describe('OCPNETUI-136: Network topology node view', () => {
   beforeEach(() => {
     visitTopology();
   });
@@ -294,7 +300,7 @@ describe('Network topology node view', () => {
   });
 });
 
-describe('OCPNETUI-138: topology resource details drawer', () => {
+describe('OCPNETUI-138: Network topology resource details drawer', () => {
   beforeEach(() => {
     visitTopology();
     openTopologyDrawer('br-ex');
@@ -378,5 +384,93 @@ describe('OCPNETUI-138: topology resource details drawer', () => {
     topologyDrawer().find('button[aria-label="Close inspector"]').click();
     topologyDrawer().should('not.be.visible');
     cy.get('.pf-m-selected.ocs-pf-topo-node--kind-bridge').should('not.exist');
+  });
+});
+
+describe('OCPNETUI-139: Network topology additional views', () => {
+  beforeEach(() => {
+    visitTopology();
+  });
+
+  it('lists Owner, Namespace, Network, and Resource in the view menu', () => {
+    openViewMenu();
+    ['Owner', 'Namespace', 'Node', 'Network', 'Resource'].forEach((view) => {
+      cy.contains('[role="option"] .pf-v6-c-menu__item-text', new RegExp(`^${view}$`)).should(
+        'be.visible',
+      );
+    });
+  });
+
+  it('shows Owner view grouped by Deployment and VirtualMachine owners', () => {
+    selectTopologyView('Owner');
+    expectSvgText('Logical networks');
+    expectSvgText('Deployment/app-000');
+    expectSvgText('VirtualMachine/vm-000');
+    expectNoSvgText('worker-0');
+    cy.contains('svg text', 'demo-apps').should('be.visible');
+    cy.get('.pf-topology__edge__link').should('have.length.at.least', 1);
+  });
+
+  it('shows Namespace view grouped by Kubernetes namespace', () => {
+    selectTopologyView('Namespace');
+    expectSvgText('Logical networks');
+    ['demo-apps', 'virtualization', 'openshift-monitoring', 'payments'].forEach((namespace) => {
+      expectSvgText(namespace);
+    });
+    expectNoSvgText('worker-0');
+    expectNoSvgText('Deployment/app-000');
+    expectNoSvgText('VirtualMachine/vm-000');
+    cy.get('.pf-topology__edge__link').should('have.length.at.least', 1);
+  });
+
+  it('shows Network view with logical networks and cluster fabric', () => {
+    selectTopologyView('Network');
+    expectSvgText('Logical networks');
+    expectSvgText('worker-0');
+    expectSvgText('br-ex');
+    expectSvgText('ens5');
+    expectSvgText('bond0');
+    expectSvgText('app-000');
+    cy.contains('.pf-topology__group__label', 'worker-0').should('be.visible');
+    cy.get('.pf-topology__node').should('have.length.at.least', 20);
+    cy.get('.pf-topology__edge__link').should('have.length.at.least', 20);
+  });
+
+  it('shows Resource view with individual attachments and underlay resources', () => {
+    selectTopologyView('Resource');
+    expectSvgText('Logical networks');
+    expectSvgText('worker-0');
+    expectSvgText('br-ex');
+    expectSvgText('ovn-k8s-mp0');
+    expectSvgText('gene_100');
+    expectSvgText('app-000');
+    expectSvgText('vm-000');
+    cy.get('.ocs-pf-topo-node--kind-bridge').should('exist');
+    cy.get('.ocs-pf-topo-node--kind-tunnel').should('exist');
+    cy.get('.ocs-pf-topo-node--kind-port').should('exist');
+    cy.get('.pf-topology__node').should('have.length.at.least', 30);
+    cy.get('.pf-topology__edge__link').should('have.length.at.least', 30);
+  });
+
+  it('switches between Owner, Namespace, Network, and Resource views', () => {
+    selectTopologyView('Owner');
+    expectSvgText('Deployment/app-000');
+
+    selectTopologyView('Namespace');
+    expectNoSvgText('Deployment/app-000');
+    expectSvgText('demo-apps');
+
+    selectTopologyView('Network');
+    expectSvgText('bond0');
+    expectSvgText('worker-0');
+
+    selectTopologyView('Resource');
+    expectSvgText('gene_100');
+    expectSvgText('ovn-k8s-mp0');
+
+    selectTopologyView('Node');
+    expectSvgText('worker-0');
+    expectSvgText('br-ex');
+    cy.get('.ocs-pf-topo-node--kind-bridge').should('exist');
   });
 });
