@@ -3,15 +3,54 @@ import { MINUTE } from '../utils/const/base';
 const KUBEADMIN_USERNAME = 'kubeadmin';
 const KUBEADMIN_IDP = 'kube:admin';
 const TOUR_DISMISS = '[data-test="tour-step-footer-secondary"]';
+const TOUR_WAIT_MS = 20_000;
+const TOUR_POLL_MS = 500;
+
+// The welcome tour only mounts on first login; once it has been dismissed or
+// confirmed absent, later calls only need a single check instead of polling.
+let welcomeTourSettled = false;
 
 declare global {
   namespace Cypress {
     interface Chainable {
+      dismissWelcomeTourIfPresent(): void;
       login(providerName?: string, username?: string, password?: string): Chainable<Element>;
       logout(): void;
     }
   }
 }
+
+/**
+ * Fresh CI clusters show "Welcome to the new OpenShift experience!" after login.
+ * The modal can mount after masthead is ready, so poll briefly without failing when absent.
+ */
+const dismissWelcomeTourIfPresent = () => {
+  const deadline = Date.now() + TOUR_WAIT_MS;
+
+  const tryDismiss = () => {
+    cy.get('body').then(($body) => {
+      if ($body.find(TOUR_DISMISS).length > 0) {
+        cy.get(TOUR_DISMISS).click({ force: true });
+        cy.get('.pf-v6-l-bullseye', { timeout: 15_000 }).should('not.exist');
+        welcomeTourSettled = true;
+        return;
+      }
+
+      if (welcomeTourSettled || Date.now() >= deadline) {
+        welcomeTourSettled = true;
+        return;
+      }
+
+      // Welcome modal mounts asynchronously on first login; poll until timeout.
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      cy.wait(TOUR_POLL_MS).then(tryDismiss);
+    });
+  };
+
+  tryDismiss();
+};
+
+Cypress.Commands.add('dismissWelcomeTourIfPresent', dismissWelcomeTourIfPresent);
 
 Cypress.Commands.add('login', (provider: string, username: string, password: string) => {
   cy.visit('');
@@ -53,11 +92,7 @@ Cypress.Commands.add('login', (provider: string, username: string, password: str
 
   // Wait for console to be loaded (works in both auth and no-auth modes)
   cy.get('body', { timeout: 3 * MINUTE }).should('be.visible');
-  cy.get('body').then(($body) => {
-    if ($body.find(TOUR_DISMISS).length) {
-      cy.get(TOUR_DISMISS).click();
-    }
-  });
+  dismissWelcomeTourIfPresent();
 });
 
 Cypress.Commands.add('logout', () => {

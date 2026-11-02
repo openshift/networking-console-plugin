@@ -1,5 +1,22 @@
-import { checkErrors } from '../support';
-import { MINUTE } from '../support/commands';
+import { checkErrors } from '../../support';
+import { adminOnlyDescribe, MINUTE } from '../../utils/const/base';
+import {
+  CUDN_NAD_NAME,
+  CUDN_NAD_NODE_ID,
+  CUDN_NAME,
+  CUDN_NODE_ID,
+  CUDN_NS,
+  NAD_CNV_BRIDGE,
+  NAD_CNV_BRIDGE_NODE_ID,
+  NAD_NS,
+  NAD_OVN_NODE_ID,
+  NAD_SRIOV_NODE_ID,
+  TOPOLOGY_EMPTY_NS,
+  UDN_NAD_NODE_ID,
+  UDN_NAME,
+  UDN_NODE_ID,
+  UDN_NS,
+} from '../../utils/const/topology';
 import {
   assertTopologyEdgeBetween,
   assertTopologyNodeById,
@@ -7,34 +24,19 @@ import {
   assertTopologyNodeSelectedById,
   clearTopologySearch,
   clickTopologyNodeById,
-  CUDN_NAD_NAME,
-  CUDN_NAD_NODE_ID,
-  CUDN_NAME,
-  CUDN_NODE_ID,
-  CUDN_NS,
   filterTopologyByResourceType,
-  NAD_CNV_BRIDGE,
-  NAD_CNV_BRIDGE_NODE_ID,
-  NAD_NS,
-  NAD_OVN_NODE_ID,
-  NAD_SRIOV_NODE_ID,
   searchTopology,
-  TOPOLOGY_EMPTY_NS,
-  UDN_NAD_NODE_ID,
-  UDN_NAME,
-  UDN_NODE_ID,
-  UDN_NS,
   visitAllNamespacesTopology,
   visitNamespacedTopology,
   waitForManagedNad,
   waitForTopologyNodeById,
   waitForTopologyPageReady,
-} from '../support/network-topology';
+} from '../../views/topology';
 
 const FIXTURE = 'fixtures/network-topology-nads.yaml';
 const TEST_NAMESPACES = [TOPOLOGY_EMPTY_NS, NAD_NS, UDN_NS, CUDN_NS];
 
-describe('OCPNETUI-31: topology NAD nodes', { testIsolation: false }, () => {
+adminOnlyDescribe('OCPNETUI-31: Network topology NAD nodes', () => {
   before(() => {
     cy.login();
     cy.applyFixtureFile(FIXTURE);
@@ -55,7 +57,6 @@ describe('OCPNETUI-31: topology NAD nodes', { testIsolation: false }, () => {
       `oc delete namespace ${TEST_NAMESPACES.join(' ')} --ignore-not-found --wait=false --request-timeout=30s`,
       { failOnNonZeroExit: false, timeout: MINUTE },
     );
-    cy.logout();
   });
 
   it('loads topology normally when no NADs exist in the active namespace', () => {

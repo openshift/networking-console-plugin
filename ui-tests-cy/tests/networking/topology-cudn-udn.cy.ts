@@ -1,12 +1,6 @@
-import { checkErrors } from '../support';
-import { MINUTE } from '../support/commands';
+import { checkErrors } from '../../support';
+import { adminOnlyDescribe, MINUTE } from '../../utils/const/base';
 import {
-  assertTopologyEdgeBetween,
-  assertTopologyNodeById,
-  assertTopologyNodeHiddenById,
-  assertTopologyNodeSelectedById,
-  clearTopologySearch,
-  clickTopologyNodeById,
   CUDN_LOCALNET_NAD_NAME,
   CUDN_LOCALNET_NAD_NODE_ID,
   CUDN_LOCALNET_NAME,
@@ -14,24 +8,32 @@ import {
   CUDN_LOCALNET_NS,
   CUDN_NS_A,
   CUDN_NS_B,
-  filterTopologyByResourceType,
   OCPNETUI18_CUDN_NAD_NAME,
   OCPNETUI18_CUDN_NAD_NODE_ID_A,
   OCPNETUI18_CUDN_NAD_NODE_ID_B,
   OCPNETUI18_CUDN_NAME,
   OCPNETUI18_CUDN_NODE_ID,
   OCPNETUI18_EMPTY_NS,
-  searchTopology,
   UDN_LAYER2_NAD_NODE_ID,
   UDN_LAYER2_NAME,
   UDN_LAYER2_NODE_ID,
   UDN_LAYER2_NS,
+} from '../../utils/const/topology';
+import {
+  assertTopologyEdgeBetween,
+  assertTopologyNodeById,
+  assertTopologyNodeHiddenById,
+  assertTopologyNodeSelectedById,
+  clearTopologySearch,
+  clickTopologyNodeById,
+  filterTopologyByResourceType,
+  searchTopology,
   visitAllNamespacesTopology,
   visitNamespacedTopology,
   waitForManagedNad,
   waitForTopologyNodeById,
   waitForTopologyPageReady,
-} from '../support/network-topology';
+} from '../../views/topology';
 
 const FIXTURE = 'fixtures/network-topology-cudn-udn.yaml';
 const TEST_NAMESPACES = [
@@ -43,7 +45,7 @@ const TEST_NAMESPACES = [
 ];
 const TEST_CUDNS = [OCPNETUI18_CUDN_NAME, CUDN_LOCALNET_NAME];
 
-describe('OCPNETUI-18: topology CUDN and UDN nodes', { testIsolation: false }, () => {
+adminOnlyDescribe('OCPNETUI-18: Network topology CUDN and UDN nodes', () => {
   before(() => {
     cy.login();
     cy.applyFixtureFile(FIXTURE);
@@ -68,19 +70,17 @@ describe('OCPNETUI-18: topology CUDN and UDN nodes', { testIsolation: false }, (
       { failOnNonZeroExit: false, timeout: 3 * MINUTE },
     ).as('deleteNamespaces');
 
-    cy.get<{ code?: number; stderr: string }>('@deleteCudns').then((result) => {
-      expect(result.code ?? 0, `CUDN cleanup failed: ${result.stderr}`).to.eq(0);
+    cy.get<{ exitCode: number; stderr: string }>('@deleteCudns').then((result) => {
+      expect(result.exitCode, `CUDN cleanup failed: ${result.stderr}`).to.eq(0);
     });
-    cy.get<{ code?: number; stderr: string }>('@deleteNamespaces').then((result) => {
-      expect(result.code ?? 0, `namespace cleanup failed: ${result.stderr}`).to.eq(0);
+    cy.get<{ exitCode: number; stderr: string }>('@deleteNamespaces').then((result) => {
+      expect(result.exitCode, `namespace cleanup failed: ${result.stderr}`).to.eq(0);
     });
-
-    cy.logout();
   });
 
   it('loads the Network Topology page in all-namespaces view', () => {
     visitAllNamespacesTopology();
-    cy.get('[data-test-id="topology-resource-filter"]').should('be.visible');
+    cy.byLegacyTestID('topology-resource-filter').should('be.visible');
   });
 
   it('renders topology when no CUDN or UDN exist in the active namespace', () => {

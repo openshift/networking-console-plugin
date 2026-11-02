@@ -3,11 +3,22 @@ import { MINUTE, SECOND } from '../utils/const/base';
 declare global {
   namespace Cypress {
     interface Chainable {
+      applyFixtureFile(fixturePath: string): void;
       deleteResource(kind: string, name: string, namespace?: string): void;
       switchProject(projectName: string): void;
     }
   }
 }
+
+Cypress.Commands.add('applyFixtureFile', (fixturePath: string) => {
+  const absolutePath = `${Cypress.config('projectRoot')}/${fixturePath}`;
+  cy.exec(`oc apply -f "${absolutePath}"`, {
+    failOnNonZeroExit: false,
+    timeout: 5 * MINUTE,
+  }).then(({ exitCode, stderr }) => {
+    expect(exitCode, `oc apply failed: ${stderr}`).to.eq(0);
+  });
+});
 
 Cypress.Commands.add('deleteResource', (kind: string, name: string, namespace?: string) => {
   const args = ['oc', 'delete', '--ignore-not-found=true'];

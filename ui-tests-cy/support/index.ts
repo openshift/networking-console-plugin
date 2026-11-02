@@ -4,6 +4,8 @@ import './commands';
 import './nav';
 import './console-error-details';
 
+export { checkErrors } from './check-errors';
+
 Cypress.on('uncaught:exception', (err) => {
   if (err.message.includes('ResizeObserver') || err.message.includes('Script error')) {
     return false;
