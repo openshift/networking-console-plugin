@@ -30,7 +30,7 @@ module.exports = defineConfig({
     supportFile: 'support/index.ts',
     testIsolation: false,
   },
-  fixturesFolder: false,
+  fixturesFolder: 'fixtures',
   pageLoadTimeout: 120000,
   reporter: '../node_modules/cypress-multi-reporters',
   reporterOptions: {
