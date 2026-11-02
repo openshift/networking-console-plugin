@@ -239,11 +239,14 @@ export const attachConsumers = (
 
 export const getPolicyPhysicalNetworks = (
   nncps: V1NodeNetworkConfigurationPolicy[],
-  workerNodes: IoK8sApiCoreV1Node[],
+  nodes: IoK8sApiCoreV1Node[],
   nnces: V1beta1NodeNetworkConfigurationEnactment[],
   t: TFunction,
 ): PhysicalNetwork[] => {
   const networks: PhysicalNetwork[] = [];
+  // The node watch can expose empty slots. A node-less entry survives a selectorless policy, and
+  // counting or naming it would throw, so drop them before the policy is evaluated.
+  const knownNodes = (nodes || []).filter(Boolean);
 
   (nncps || []).forEach((nncp) => {
     getPolicyLocalnetNames(nncp).forEach((name) => {
@@ -252,7 +255,7 @@ export const getPolicyPhysicalNetworks = (
     });
   });
 
-  const nncpDetailsMap = getConfigurationDetailsMap(nncps, workerNodes, nnces, t);
+  const nncpDetailsMap = getConfigurationDetailsMap(nncps, knownNodes, nnces, t);
 
   (nncps || []).forEach((nncp) => {
     const details = nncpDetailsMap[getName(nncp)];

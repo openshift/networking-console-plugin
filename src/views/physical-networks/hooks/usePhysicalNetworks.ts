@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { WORKER_NODE_LABEL } from '@utils/resources/nmstate/constants';
 
 import {
   attachConsumers,
@@ -34,10 +33,6 @@ const usePhysicalNetworks: UsePhysicalNetworks = (scope) => {
   const kubevirtEnabled = sources.virtualMachines.availability !== SourceAvailability.Absent;
 
   const networks = useMemo(() => {
-    const workerNodes = sources.nodes.data.filter(
-      (node) => node?.metadata?.labels?.[WORKER_NODE_LABEL] === '',
-    );
-
     const observedMappings = getObservedMappings(
       sources.nodeNetworkStates.data,
       sources.nodes.data,
@@ -61,7 +56,7 @@ const usePhysicalNetworks: UsePhysicalNetworks = (scope) => {
     return attachConsumers(
       mergePhysicalNetworks(
         getNADPhysicalNetworks(getLocalnetNADs(sources.nads.data)),
-        getPolicyPhysicalNetworks(sources.nncps.data, workerNodes, sources.nnces.data, t),
+        getPolicyPhysicalNetworks(sources.nncps.data, sources.nodes.data, sources.nnces.data, t),
         mappingRows,
       ),
       consumersByNAD,

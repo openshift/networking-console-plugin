@@ -38,9 +38,7 @@ const PhysicalNetworksEmptyState: FC<PhysicalNetworksEmptyStateProps> = ({
           ? t(
               'Network attachment definitions could not be loaded, so networks they reference are not listed here.',
             )
-          : t(
-              'No network attachment definition in this scope references a physical network. Physical networks configured only on cluster nodes by other tools are not listed here.',
-            )}
+          : t('No network attachment definition in this scope references a physical network.')}
       </EmptyStateBody>
       {showCreateButton && (
         <EmptyStateFooter>

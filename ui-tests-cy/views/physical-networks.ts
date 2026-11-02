@@ -50,8 +50,11 @@ const seed = (url: string, body: object): Cypress.Chainable<SeedResult> =>
     cy
       .request({ body, failOnStatusCode: false, headers, method: 'POST', url })
       .then(({ status }) => {
-        if (status === 409) return 'exists';
-        return status >= 200 && status < 300 ? 'created' : 'failed';
+        let result: SeedResult = 'failed';
+        if (status === 409) result = 'exists';
+        else if (status >= 200 && status < 300) result = 'created';
+        // cy.log queues a command, so this callback must yield a chainable, not a bare value.
+        return cy.log(`POST ${url} -> ${status} (${result})`).then(() => result);
       }),
   );
 
