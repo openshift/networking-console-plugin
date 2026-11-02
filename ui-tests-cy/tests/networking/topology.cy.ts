@@ -22,6 +22,26 @@ const openViewMenu = () => {
   cy.contains('[role="option"]', 'Node underlay').should('be.visible');
 };
 
+const topologyDrawer = () => cy.get('.ocs-pf-topo-sidebar');
+
+const openTopologyDrawer = (nodeLabel: string) => {
+  cy.contains('.pf-topology__node__label', nodeLabel).first().click({ force: true });
+  topologyDrawer().should('be.visible').and('contain.text', nodeLabel);
+};
+
+const selectDrawerTab = (tabName: string) => {
+  topologyDrawer().contains('[role="tab"]', tabName).click();
+  topologyDrawer().contains('[role="tab"]', tabName).should('have.attr', 'aria-selected', 'true');
+};
+
+const expectVisibleDrawerText = (...expectedText: string[]) => {
+  const activePanel = () => topologyDrawer().find('[role="tabpanel"]:not([hidden])');
+  activePanel().should('have.length', 1).and('be.visible');
+  expectedText.forEach((text) => {
+    activePanel().contains(text).scrollIntoView().should('be.visible');
+  });
+};
+
 const svgText = ($texts: JQuery<HTMLElement>) =>
   [...$texts].map((el) => el.textContent?.trim() ?? '');
 
@@ -271,5 +291,92 @@ describe('Network topology node view', () => {
       cy.get('.ocs-pf-topo-legend').should('contain.text', resource);
     });
     cy.get('.ocs-pf-topo-legend').should('contain.text', 'Click a node for details');
+  });
+});
+
+describe('OCPNETUI-138: topology resource details drawer', () => {
+  beforeEach(() => {
+    visitTopology();
+    openTopologyDrawer('br-ex');
+  });
+
+  it('opens the drawer with resource header and tab navigation', () => {
+    topologyDrawer().should('be.visible').and('contain.text', 'br-ex');
+    ['Details', 'Network path', 'Resources', 'Observe'].forEach((tab) => {
+      topologyDrawer().contains('[role="tab"]', tab).should('be.visible');
+    });
+    topologyDrawer().find('button[aria-label^="Actions for"]').should('be.visible');
+    topologyDrawer().find('button[aria-label="Close inspector"]').should('be.visible');
+  });
+
+  it('shows Details tab fields for the selected resource', () => {
+    selectDrawerTab('Details');
+    expectVisibleDrawerText(
+      'Kind',
+      'Bridge',
+      'Status',
+      'Worker node',
+      'Description',
+      'Managed by',
+      'Related resources',
+    );
+  });
+
+  it('shows Network path stack and path summary', () => {
+    selectDrawerTab('Network path');
+    expectVisibleDrawerText(
+      'Path summary',
+      'Component stack',
+      'Physical NIC',
+      'External network bridge',
+      'Highlight path on graph',
+    );
+  });
+
+  it('shows Resources tab connections and mappings', () => {
+    selectDrawerTab('Resources');
+    expectVisibleDrawerText(
+      'Connected interfaces',
+      'Worker mapping',
+      'Parent worker',
+      'Peers on this node',
+      'Bridge / NAD mapping',
+    );
+  });
+
+  it('shows Observe tab health and metrics', () => {
+    selectDrawerTab('Observe');
+    expectVisibleDrawerText('Metrics', 'RX rate', 'TX rate', 'Packet drops', 'Last scrape');
+  });
+
+  it('lists resource actions in the Actions menu', () => {
+    topologyDrawer().find('button[aria-label^="Actions for"]').click();
+    [
+      'View YAML',
+      'Configure',
+      'Assess delete impact with AI',
+      'Pause',
+      'Stop',
+      'Restart',
+      'Delete',
+    ].forEach((action) => {
+      cy.contains('.pf-v6-c-menu__item, [role="menuitem"]', action).should('be.visible');
+    });
+  });
+
+  it('shows configuration alerts for a failed resource', () => {
+    openTopologyDrawer('gene_134');
+    topologyDrawer()
+      .should('be.visible')
+      .and('contain.text', 'gene_134')
+      .and('contain.text', 'Configuration failed')
+      .and('contain.text', 'Review configuration policy');
+    topologyDrawer().find('.pf-v6-c-alert').should('be.visible');
+  });
+
+  it('closes the drawer from the inspector close button', () => {
+    topologyDrawer().find('button[aria-label="Close inspector"]').click();
+    topologyDrawer().should('not.be.visible');
+    cy.get('.pf-m-selected.ocs-pf-topo-node--kind-bridge').should('not.exist');
   });
 });
