@@ -1,11 +1,8 @@
 import React, { FC, useCallback, useMemo } from 'react';
 import { useParams } from 'react-router';
 
-import {
-  modelToGroupVersionKind,
-  ResourceYAMLEditor,
-  useK8sWatchResource,
-} from '@openshift-console/dynamic-plugin-sdk';
+import { modelToGroupVersionKind } from '@kubevirt-ui-ext/kubevirt-api/console';
+import { ResourceYAMLEditor, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { PageSection, Title } from '@patternfly/react-core';
 import StatusBox from '@utils/components/StatusBox/StatusBox';
 import { EditorType } from '@utils/components/SyncedEditor/EditorToggle';
@@ -20,7 +17,6 @@ import { BGPRoutingForm } from './BGPForms';
 const BGPRoutingFormPage: FC = () => {
   const { name } = useParams();
   const { t } = useNetworkingTranslation();
-  const isExisting = Boolean(initialResource);
   const [resource, loaded, error] = useK8sWatchResource<BGPRouting>(
     name
       ? {
@@ -31,6 +27,7 @@ const BGPRoutingFormPage: FC = () => {
       : null,
   );
   const initialResource = resource;
+  const isExisting = Boolean(initialResource);
   const data = useMemo<BGPRouting>(
     () =>
       initialResource || {

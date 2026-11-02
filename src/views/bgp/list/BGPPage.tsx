@@ -13,7 +13,7 @@ import { BGPCloudConfigurationModel, BGPRoutingModel } from '@utils/models';
 import { BGPCloudConfiguration } from '@utils/resources/bgp';
 import { resourcePathFromModel } from '@utils/resources/shared';
 
-import { shouldHideBGPResourceTabs } from '../olm';
+import { isBGPNetworkingListPage } from '../olm';
 
 import BGPCloudConfigurationList from './BGPCloudConfigurationList';
 import BGPRoutingList from './BGPRoutingList';
@@ -28,7 +28,7 @@ const BGPPage: FC = () => {
   });
   const isRouting = location.pathname.includes('~BGPRouting');
   const hasConfiguration = Boolean(configurationsLoaded && configurations?.length);
-  const hideResourceTabs = shouldHideBGPResourceTabs(location.pathname);
+  const showResourceTabs = isBGPNetworkingListPage(location.pathname);
   const selectedModel = isRouting ? BGPRoutingModel : BGPCloudConfigurationModel;
   const activeKey = useMemo(() => (isRouting ? 'routing' : 'configuration'), [isRouting]);
   const createPath = `${resourcePathFromModel(selectedModel)}/~new/form`;
@@ -49,7 +49,7 @@ const BGPPage: FC = () => {
           </ListPageCreateButton>
         )}
       </ListPageHeader>
-      {hideResourceTabs ? (
+      {!showResourceTabs ? (
         listContent
       ) : (
         <Tabs
