@@ -51,7 +51,7 @@ import {
   BGPRouting,
   condition,
 } from '@utils/resources/bgp';
-import { asAccessReview } from '@utils/resources/shared';
+import { asAccessReview, resourcePathFromModel } from '@utils/resources/shared';
 
 import { BGPStatus, Conditions } from '../components/BGPStatus';
 import { shouldHideBGPResourceTabs } from '../olm';
@@ -455,7 +455,7 @@ const BGPDetailsActions: FC<{
 }> = ({ model, obj }) => {
   const { t } = useNetworkingTranslation();
   const navigate = useNavigate();
-  const launchDeleteModal = useDeleteModal(obj);
+  const launchDeleteModal = useDeleteModal(obj, resourcePathFromModel(model));
   const resourcePath = `/k8s/cluster/${modelToRef(model)}/${obj.metadata?.name}`;
   const actions = [
     {

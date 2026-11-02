@@ -20,6 +20,7 @@ import { BGPCloudConfigurationForm } from './BGPForms';
 const BGPCloudConfigurationFormPage: FC = () => {
   const { name } = useParams();
   const { t } = useNetworkingTranslation();
+  const isExisting = Boolean(initialResource);
   const [resource, loaded, error] = useK8sWatchResource<BGPCloudConfiguration>(
     name
       ? {
@@ -43,13 +44,13 @@ const BGPCloudConfigurationFormPage: FC = () => {
   const YAMLEditor = useCallback(
     ({ initialYAML = '', onChange }) => (
       <ResourceYAMLEditor
-        create={!initialResource}
+        create={!isExisting}
         hideHeader
         initialResource={safeYAMLToJS(initialYAML)}
         onChange={onChange}
       />
     ),
-    [initialResource],
+    [isExisting],
   );
   return (
     <StatusBox error={error} loaded={loaded}>

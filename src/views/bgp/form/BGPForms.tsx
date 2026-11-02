@@ -79,11 +79,15 @@ const BGPSelect: FC<{
   return (
     <FormGroup fieldId={id} isInline isRequired={required} label={label}>
       <Dropdown
-        id={id}
         isOpen={isOpen}
         onOpenChange={setIsOpen}
         toggle={(toggleRef) => (
-          <MenuToggle isExpanded={isOpen} onClick={() => setIsOpen(!isOpen)} ref={toggleRef}>
+          <MenuToggle
+            id={id}
+            isExpanded={isOpen}
+            onClick={() => setIsOpen(!isOpen)}
+            ref={toggleRef}
+          >
             {selected?.label || value}
           </MenuToggle>
         )}
@@ -148,7 +152,7 @@ export const BGPCloudConfigurationForm: FC<BGPFormProps<BGPCloudConfiguration>> 
     mode: 'onChange',
   });
   const {
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isValid },
     handleSubmit,
     register,
     watch,
@@ -190,6 +194,7 @@ export const BGPCloudConfigurationForm: FC<BGPFormProps<BGPCloudConfiguration>> 
           </FormGroupHelperText>
         </FormGroup>
         <Field
+          error={errors.localASN?.message?.toString()}
           help={t('Example: 64512.')}
           id="localASN"
           label={t('Local ASN')}
@@ -345,6 +350,7 @@ export const BGPCloudConfigurationForm: FC<BGPFormProps<BGPCloudConfiguration>> 
                   required
                 />
                 <Field
+                  error={errors.remoteASN?.message?.toString()}
                   id="remoteASN"
                   label={t('Remote ASN')}
                   placeholder="64513"
@@ -393,7 +399,7 @@ export const BGPCloudConfigurationForm: FC<BGPFormProps<BGPCloudConfiguration>> 
         )}
         <ActionGroup>
           <Button
-            isDisabled={isSubmitting || Boolean(Object.keys(errors).length)}
+            isDisabled={isSubmitting || !isValid}
             isLoading={isSubmitting}
             type="submit"
             variant={ButtonVariant.primary}
@@ -424,7 +430,7 @@ export const BGPRoutingForm: FC<BGPFormProps<BGPRouting>> = ({ formData, onChang
     mode: 'onChange',
   });
   const {
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting, isValid },
     handleSubmit,
     register,
     watch,
@@ -534,7 +540,7 @@ export const BGPRoutingForm: FC<BGPFormProps<BGPRouting>> = ({ formData, onChang
         )}
         <ActionGroup>
           <Button
-            isDisabled={isSubmitting || Boolean(subnetError) || Boolean(Object.keys(errors).length)}
+            isDisabled={isSubmitting || !isValid || Boolean(subnetError)}
             isLoading={isSubmitting}
             type="submit"
             variant={ButtonVariant.primary}
