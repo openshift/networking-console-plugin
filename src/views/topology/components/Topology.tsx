@@ -202,7 +202,7 @@ const Topology: FC = () => {
     setScope(nextScope);
     setGroup((currentGroup) => {
       if (
-        currentGroup === nextScope ||
+        String(currentGroup) === String(nextScope) ||
         ([TopologyViewTypes.namespace, TopologyViewTypes.network].includes(nextScope) &&
           currentGroup === TopologyGroupType.owner) ||
         (nextScope !== TopologyViewTypes.resource &&

@@ -153,6 +153,19 @@ spec:
       containers:
         - name: pause
           image: registry.k8s.io/pause:3.9
+          resources:
+            limits:
+              cpu: 10m
+              memory: 16Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -174,6 +187,19 @@ spec:
       containers:
         - name: pause
           image: registry.k8s.io/pause:3.9
+          resources:
+            limits:
+              cpu: 10m
+              memory: 16Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -196,6 +222,19 @@ spec:
       containers:
         - name: pause
           image: registry.k8s.io/pause:3.9
+          resources:
+            limits:
+              cpu: 10m
+              memory: 16Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -218,6 +257,19 @@ spec:
       containers:
         - name: pause
           image: registry.k8s.io/pause:3.9
+          resources:
+            limits:
+              cpu: 10m
+              memory: 16Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
 ---
 apiVersion: apps/v1
 kind: DaemonSet
@@ -238,6 +290,19 @@ spec:
       containers:
         - name: pause
           image: registry.k8s.io/pause:3.9
+          resources:
+            limits:
+              cpu: 10m
+              memory: 16Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
 ---
 apiVersion: batch/v1
 kind: Job
@@ -258,6 +323,19 @@ spec:
       containers:
         - name: pause
           image: registry.k8s.io/pause:3.9
+          resources:
+            limits:
+              cpu: 10m
+              memory: 16Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
 ---
 apiVersion: v1
 kind: Pod
@@ -270,6 +348,19 @@ spec:
   containers:
     - name: pause
       image: registry.k8s.io/pause:3.9
+      resources:
+        limits:
+          cpu: 10m
+          memory: 16Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
 ---
 apiVersion: v1
 kind: Pod
@@ -283,6 +374,19 @@ spec:
   containers:
     - name: pause
       image: registry.k8s.io/pause:3.9
+      resources:
+        limits:
+          cpu: 10m
+          memory: 16Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
 ---
 apiVersion: v1
 kind: Pod
@@ -296,6 +400,19 @@ spec:
   containers:
     - name: pause
       image: registry.k8s.io/pause:3.9
+      resources:
+        limits:
+          cpu: 10m
+          memory: 16Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
 ---
 apiVersion: v1
 kind: Pod
@@ -308,6 +425,19 @@ spec:
   containers:
     - name: pause
       image: registry.k8s.io/pause:3.9
+      resources:
+        limits:
+          cpu: 10m
+          memory: 16Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
 ---
 apiVersion: v1
 kind: Pod
@@ -320,6 +450,19 @@ spec:
   containers:
     - name: pause
       image: registry.k8s.io/pause:3.9
+      resources:
+        limits:
+          cpu: 10m
+          memory: 16Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
 ---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine

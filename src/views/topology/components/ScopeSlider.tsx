@@ -55,7 +55,11 @@ const ScopeSlider: FC<ScopeSliderProps> = ({ onScopeChange, scope }) => {
   const { t } = useNetworkingTranslation();
 
   return (
-    <div aria-label={t('Topology scope')} className="networking-topology__scope-slider">
+    <div
+      aria-label={t('Topology scope')}
+      className="networking-topology__scope-slider"
+      role="group"
+    >
       <ProgressStepper isCenterAligned isVertical>
         {SCOPE_DEFINITIONS.map((definition) => (
           <ProgressStep

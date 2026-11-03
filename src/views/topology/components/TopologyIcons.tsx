@@ -127,9 +127,11 @@ export const TopologyOwnerIcon: FC<TopologyOwnerIconProps> = ({
           </g>
         );
       default:
-        return <GrMultiple size={size} />;
+        return null;
     }
   })();
+
+  if (!content) return <GrMultiple size={size} />;
 
   return (
     <g
