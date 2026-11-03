@@ -1,4 +1,4 @@
-import { getRandomChars } from '@utils/utils';
+import { getRandomChars } from '@utils/utils/nameGenerators';
 
 import { CREATE_NEW, INVALID } from './constants';
 import { type SelectTypeaheadOptionProps } from './types';

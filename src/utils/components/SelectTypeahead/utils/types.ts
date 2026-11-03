@@ -17,10 +17,12 @@ export type SelectTypeaheadProps = {
   getToggleStatus?: (value: string) => MenuToggleProps['status'];
   isDisabled?: boolean;
   isFullWidth?: boolean;
+  isLoading?: boolean;
   options: SelectTypeaheadOptionProps[];
   placeholder?: string;
   selectedValue?: string;
   setSelectedValue: (value: string) => void;
+  toggleId?: string;
 };
 
 export type UseSelectTypeaheadProps = Pick<

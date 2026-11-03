@@ -1,9 +1,15 @@
 import { IoK8sApiCoreV1Pod } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import { V1VirtualMachine } from '@kubevirt-ui-ext/kubevirt-api/kubevirt';
+import { K8sResourceCommon } from '@openshift-console/dynamic-plugin-sdk';
 import { getAnnotations, getNamespace } from '@utils/resources/shared';
 import { getNetworks } from '@utils/resources/vm/selectors';
 
-import { POD_NETWORKS_ANNOTATION_KEY } from '../constants';
+import {
+  POD_NETWORKS_ANNOTATION_KEY,
+  PROJECT_ALLOW_POD_NETWORK_ANNOTATION,
+  PROJECT_ALLOW_POD_NETWORK_FALSE_VALUE,
+  PROJECT_DEFAULT_NETWORK_ANNOTATION,
+} from '../constants';
 import {
   MultusNetworkReference,
   NetworkAttachmentDefinitionConfig,
@@ -12,15 +18,18 @@ import {
 
 export const getConfigAsJSON = (
   obj: NetworkAttachmentDefinitionKind,
-): NetworkAttachmentDefinitionConfig => {
+): NetworkAttachmentDefinitionConfig | null => {
+  if (!obj?.spec?.config) return null;
   try {
-    return JSON.parse(obj?.spec?.config);
+    return JSON.parse(obj.spec.config) as NetworkAttachmentDefinitionConfig;
   } catch {
+    // eslint-disable-next-line no-console
+    console.error('Unable to parse NetworkAttachmentDefinition configuration');
     return null;
   }
 };
 
-export const getType = (config: NetworkAttachmentDefinitionConfig): string => {
+export const getType = (config: NetworkAttachmentDefinitionConfig): null | string => {
   if (config?.type) {
     return config.type;
   }
@@ -30,6 +39,11 @@ export const getType = (config: NetworkAttachmentDefinitionConfig): string => {
   }
 
   return null;
+};
+
+export const getNADRole = (nad: NetworkAttachmentDefinitionKind): string | undefined => {
+  const config = getConfigAsJSON(nad);
+  return config?.role;
 };
 
 export type PodNetworkAttachment = {
@@ -84,16 +98,34 @@ export const getPodNADReferences = (pod: IoK8sApiCoreV1Pod): string[] => {
  * Get all NAD names that a VM connects to (normalized to namespace/name format)
  */
 export const getVMNADReferences = (vm: V1VirtualMachine): string[] => {
-  const vmNamespace = getNamespace(vm);
+  const vmNamespace = getNamespace(vm as K8sResourceCommon);
   const networks = getNetworks(vm);
 
   return networks
-    .filter((network) => network.multus?.networkName)
-    .map((network) => {
-      const networkName = network.multus.networkName;
+    .map((network) => network.multus?.networkName)
+    .filter((networkName): networkName is string => !!networkName)
+    .map((networkName) => {
       if (networkName.includes('/')) {
         return networkName;
       }
       return `${vmNamespace}/${networkName}`;
     });
 };
+export type ProjectNetworkSettings = {
+  defaultNadName?: string;
+  isPodNetworkAllowed: boolean;
+};
+const getProjectDefaultNadName = (namespace?: K8sResourceCommon): string | undefined =>
+  getAnnotations(namespace)?.[PROJECT_DEFAULT_NETWORK_ANNOTATION];
+
+const isPodNetworkAllowed = (namespace?: K8sResourceCommon): boolean => {
+  const value = getAnnotations(namespace)?.[PROJECT_ALLOW_POD_NETWORK_ANNOTATION];
+  return value !== PROJECT_ALLOW_POD_NETWORK_FALSE_VALUE;
+};
+
+export const getProjectNetworkSettings = (
+  namespace?: K8sResourceCommon,
+): ProjectNetworkSettings => ({
+  defaultNadName: getProjectDefaultNadName(namespace),
+  isPodNetworkAllowed: isPodNetworkAllowed(namespace),
+});

@@ -8,6 +8,7 @@ import {
   Select,
   SelectList,
   SelectOption,
+  Spinner,
   TextInputGroup,
   TextInputGroupMain,
   TextInputGroupUtilities,
@@ -26,10 +27,12 @@ const SelectTypeahead: FC<SelectTypeaheadProps> = ({
   getToggleStatus,
   isDisabled,
   isFullWidth = false,
+  isLoading = false,
   options,
   placeholder,
   selectedValue,
   setSelectedValue,
+  toggleId,
 }) => {
   const {
     activeItemId,
@@ -59,6 +62,7 @@ const SelectTypeahead: FC<SelectTypeaheadProps> = ({
     <MenuToggle
       aria-label="Typeahead menu toggle"
       data-test={dataTestId}
+      id={toggleId}
       isDisabled={isDisabled}
       isExpanded={isOpen}
       isFullWidth={isFullWidth}
@@ -83,7 +87,7 @@ const SelectTypeahead: FC<SelectTypeaheadProps> = ({
           isExpanded={isOpen}
           role="combobox"
         />
-        {!!inputValue && (
+        {!isLoading && !!inputValue && (
           <TextInputGroupUtilities>
             <Button
               aria-label="Clear input value"
@@ -91,6 +95,11 @@ const SelectTypeahead: FC<SelectTypeaheadProps> = ({
               onClick={onClearButtonClick}
               variant={ButtonVariant.plain}
             />
+          </TextInputGroupUtilities>
+        )}
+        {isLoading && (
+          <TextInputGroupUtilities>
+            <Spinner size="sm" />
           </TextInputGroupUtilities>
         )}
       </TextInputGroup>
