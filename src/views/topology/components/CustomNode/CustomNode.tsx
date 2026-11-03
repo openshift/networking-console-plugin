@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { useSearchParams } from 'react-router';
 import classNames from 'classnames';
 
+import { NetworkIcon } from '@patternfly/react-icons';
 import {
   DefaultNode,
   Node,
@@ -34,9 +35,13 @@ const CustomNode: FC<CustomNodeProps> = ({ element, ...rest }) => {
   // TODO: Read compactView from controllerState.viewOptions.compactView and adjust NODE_DIAMETER when implemented.
   // const _compactView = controllerState?.viewOptions?.compactView ?? true;
 
-  const data = element.getData();
-  const Icon = data.icon;
-  const { height, width } = element.getBounds();
+  const data = element.getData() ?? {};
+  const Icon = data.icon ?? NetworkIcon;
+  const bounds = element.getBounds();
+  if (!bounds || typeof bounds.width !== 'number' || typeof bounds.height !== 'number') {
+    return null;
+  }
+  const { height, width } = bounds;
 
   const xCenter = (width - ICON_SIZE) / 2;
   const yCenter = (height - ICON_SIZE) / 2;
@@ -46,11 +51,16 @@ const CustomNode: FC<CustomNodeProps> = ({ element, ...rest }) => {
   return (
     <DefaultNode
       badge={data?.badge}
+      badgeBorderColor={data?.badgeBorderColor}
+      badgeClassName={data?.badgeClassName}
+      badgeColor={data?.badgeColor}
+      badgeTextColor={data?.badgeTextColor}
       className={classNames('custom-node', { 'is-filtered': isFiltered })}
       element={element}
+      onStatusDecoratorClick={(event) => event.stopPropagation()}
       showLabel={showLabels}
       showStatusDecorator
-      truncateLength={8}
+      truncateLength={24}
       {...rest}
     >
       <g transform={`translate(${xCenter}, ${yCenter})`}>
