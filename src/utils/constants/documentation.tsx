@@ -41,6 +41,10 @@ export const documentationURLs: documentationURLsType = {
     kube: `${KUBE_DOCS}/concepts/services-networking/network-policies/`,
     upstream: 'networking/network_security/network_policy/about-network-policy.html',
   },
+  nmstateOperator: {
+    downstream: 'html/networking_operators/k8s-nmstate-about-the-k8s-nmstate-operator',
+    upstream: 'networking/networking_operators/k8s-nmstate-about-the-k8s-nmstate-operator.html',
+  },
   primaryUDN: {
     downstream: 'html/virtualization/networking#virt-connecting-vm-to-primary-udn',
     upstream: 'networking/multiple_networks/primary_networks/about-user-defined-networks.html',

@@ -110,7 +110,7 @@ export const ClusterUserDefinedNetworkModelGroupVersionKind = modelToGroupVersio
 );
 export const ClusterUserDefinedNetworkModelRef = modelToRef(ClusterUserDefinedNetworkModel);
 
-const NodeNetworkConfigurationPolicyModel: K8sModel = {
+export const NodeNetworkConfigurationPolicyModel: K8sModel = {
   abbr: 'NNCP',
   apiGroup: 'nmstate.io',
   apiVersion: 'v1',
@@ -142,6 +142,37 @@ const NodeNetworkStateModel: K8sModel = {
 };
 
 export const NodeNetworkStateModelGroupVersionKind = modelToGroupVersionKind(NodeNetworkStateModel);
+
+const NodeNetworkConfigurationEnactmentModel: K8sModel = {
+  abbr: 'NNCE',
+  apiGroup: 'nmstate.io',
+  apiVersion: 'v1beta1',
+  crd: true,
+  id: 'NodeNetworkConfigurationEnactment',
+  kind: 'NodeNetworkConfigurationEnactment',
+  label: 'NodeNetworkConfigurationEnactment',
+  labelPlural: 'NodeNetworkConfigurationEnactments',
+  namespaced: false,
+  plural: 'nodenetworkconfigurationenactments',
+};
+
+export const NodeNetworkConfigurationEnactmentModelGroupVersionKind = modelToGroupVersionKind(
+  NodeNetworkConfigurationEnactmentModel,
+);
+
+export const NodeModel: K8sModel = {
+  abbr: 'N',
+  apiVersion: 'v1',
+  crd: false,
+  id: 'node',
+  kind: 'Node',
+  label: 'Node',
+  labelPlural: 'Nodes',
+  namespaced: false,
+  plural: 'nodes',
+};
+
+export const NodeModelGroupVersionKind = modelToGroupVersionKind(NodeModel);
 
 export const IngressModel: K8sModel = {
   abbr: 'I',

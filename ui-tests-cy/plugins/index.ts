@@ -79,9 +79,15 @@ module.exports = (on, config) => {
   });
 
   config.baseUrl = `${process.env.BRIDGE_BASE_ADDRESS || 'http://localhost:9000/'}`;
-  config.env.BRIDGE_KUBEADMIN_PASSWORD = process.env.BRIDGE_KUBEADMIN_PASSWORD;
-  config.env.TEST_NS = process.env.TEST_NS;
-  config.env.UDN_NS = process.env.UDN_NS;
-  config.env.HIDE_XHR = process.env.HIDE_XHR;
+  config.env.BRIDGE_KUBEADMIN_PASSWORD =
+    process.env.BRIDGE_KUBEADMIN_PASSWORD ?? config.env.BRIDGE_KUBEADMIN_PASSWORD;
+  config.env.TEST_NS = process.env.TEST_NS ?? config.env.TEST_NS;
+  config.env.UDN_NS = process.env.UDN_NS ?? config.env.UDN_NS;
+  config.env.HIDE_XHR = process.env.HIDE_XHR ?? config.env.HIDE_XHR;
+  config.env.ALLOW_CLUSTER_WRITES =
+    process.env.ALLOW_CLUSTER_WRITES ?? config.env.ALLOW_CLUSTER_WRITES;
+  config.env.SIMULATE_NMSTATE_ABSENT =
+    process.env.SIMULATE_NMSTATE_ABSENT ?? config.env.SIMULATE_NMSTATE_ABSENT;
+  config.env.RUN_ID = process.env.RUN_ID ?? config.env.RUN_ID;
   return config;
 };

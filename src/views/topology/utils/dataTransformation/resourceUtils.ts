@@ -2,6 +2,7 @@ import { IoK8sApiCoreV1Pod } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import { V1VirtualMachine } from '@kubevirt-ui-ext/kubevirt-api/kubevirt';
 import { K8sResourceCommon } from '@openshift-console/dynamic-plugin-sdk';
 import { EdgeModel, NodeModel } from '@patternfly/react-topology';
+import { getPodNADReferences, getVMNADReferences } from '@utils/resources/nads/selectors';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
 import { getName, getNamespace } from '@utils/resources/shared';
 import { CLUSTER_UDN_NAD_NAME_PREFIX } from '@utils/resources/udns/constants';
@@ -14,11 +15,7 @@ import {
   createNode,
   findExistingEdge,
 } from '@views/topology/utils/dataTransformation/dataTransformation';
-import {
-  getPodNADReferences,
-  getVMNADReferences,
-  podUsesUDN,
-} from '@views/topology/utils/filteringUtils';
+import { podUsesUDN } from '@views/topology/utils/filteringUtils';
 
 export const getResourceID = (resource: K8sResourceCommon): string => {
   const namespace = getNamespace(resource) || 'cluster';
