@@ -131,7 +131,7 @@ const DisplayOptionsDropdown: FC<DisplayOptionsDropdownProps> = ({
     if (scope !== TopologyViewTypes.resource && value === TopologyGroupType.namespaceOwner) {
       return false;
     }
-    return value !== scope;
+    return String(value) !== String(scope);
   });
 
   return (

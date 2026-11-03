@@ -6,7 +6,6 @@ import {
   GRAPH_LAYOUT_END_EVENT,
   Model,
   SelectionEventListener,
-  SelectionEventListener,
   TopologyView,
   Visualization,
   VisualizationProvider,
@@ -15,7 +14,6 @@ import {
 import { isEmpty } from '@utils/utils';
 import ScopeSlider from '@views/topology/components/ScopeSlider';
 import ControlBar from '@views/topology/components/TopologyControlBar';
-import TopologyDrawer from '@views/topology/components/TopologyDrawer/TopologyDrawer';
 import TopologyDrawer from '@views/topology/components/TopologyDrawer/TopologyDrawer';
 import TopologyTableView from '@views/topology/components/TopologyTableView/TopologyTableView';
 import TopologyToolbar from '@views/topology/components/TopologyToolbar';
@@ -72,24 +70,6 @@ const Topology: FC = () => {
 
   const isSearchActive = searchQuery.trim().length > 0;
 
-  const handleSelection: SelectionEventListener = useCallback(
-    (selectedIds: string[]) => {
-      if (!controller) return;
-
-      if (selectedIds.length === 0) {
-        onSelectNode(null);
-        return;
-      }
-
-      const selectedId = selectedIds[0];
-      const node = controller.getNodeById(selectedId);
-
-      if (node && node.getType() === 'node') {
-        onSelectNode(node);
-      }
-    },
-    [controller, onSelectNode],
-  );
   const filterOptionsModel = useMemo(
     () =>
       !resources || isEmpty(resources)
@@ -232,16 +212,6 @@ const Topology: FC = () => {
     };
   }, [controller, handleSelection]);
 
-  useEffect(() => {
-    if (!controller) return;
-
-    controller.addEventListener<SelectionEventListener>('selection', handleSelection);
-
-    return () => {
-      controller.removeEventListener('selection', handleSelection);
-    };
-  }, [controller, handleSelection]);
-
   // Re-run fit after mount to ensure correct scale when container size stabilizes (e.g. navigation from create flow)
   useEffect(() => {
     if (!controller) return;
@@ -264,7 +234,7 @@ const Topology: FC = () => {
     setScope(nextScope);
     setGroup((currentGroup) => {
       if (
-        currentGroup === nextScope ||
+        String(currentGroup) === String(nextScope) ||
         ([TopologyViewTypes.namespace, TopologyViewTypes.network].includes(nextScope) &&
           currentGroup === TopologyGroupType.owner) ||
         (nextScope !== TopologyViewTypes.resource &&

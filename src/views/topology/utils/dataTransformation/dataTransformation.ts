@@ -261,6 +261,7 @@ const createScopeNode = (
   sourceNode: NodeModel,
   scope: TopologyViewTypes,
   key: string,
+  id = `topology-scope-${scope}-${key}`,
 ): NodeModel => ({
   data: {
     icon: getIconForScope(scope, key),
@@ -268,9 +269,10 @@ const createScopeNode = (
     resourceType: sourceNode.data?.resourceType,
     scope,
     scopeKey: key,
+    status: sourceNode.status,
   },
   height: NODE_DIAMETER,
-  id: `topology-scope-${scope}-${key}`,
+  id,
   label: scope === TopologyViewTypes.network ? key.split('/').pop() || key : key,
   shape: sourceNode.shape,
   status: sourceNode.status,
@@ -278,11 +280,33 @@ const createScopeNode = (
   width: NODE_DIAMETER,
 });
 
+const statusSeverity: Record<NodeStatus, number> = {
+  [NodeStatus.danger]: 4,
+  [NodeStatus.default]: 0,
+  [NodeStatus.info]: 1,
+  [NodeStatus.success]: 2,
+  [NodeStatus.warning]: 3,
+};
+
+const worseStatus = (left?: NodeStatus, right?: NodeStatus): NodeStatus | undefined => {
+  if (!left) return right;
+  if (!right) return left;
+  return statusSeverity[left] >= statusSeverity[right] ? left : right;
+};
+
 const getResourceOwnerKey = (node: NodeModel): string | undefined => {
   const resource = node.data?.resource as K8sResourceCommon | undefined;
   const kind = resource?.kind ?? node.data?.resourceType;
   const name = resource?.metadata?.name;
-  return kind && name ? `${kind}/${name}` : undefined;
+  if (!kind || !name) return undefined;
+  const owner = `${kind}/${name}`;
+  return node.data?.namespace ? `${node.data.namespace}/${owner}` : owner;
+};
+
+const getOwnerIdentity = (node: NodeModel): string | undefined => {
+  const owner = getOwnerGroup(node);
+  if (!owner) return undefined;
+  return node.data?.namespace ? `${node.data.namespace}/${owner}` : owner;
 };
 
 const createScopedModel = (
@@ -325,8 +349,10 @@ const createScopedModel = (
       }
       return;
     }
+    const scopedIdentity = scope === TopologyViewTypes.owner ? getOwnerIdentity(node) : key;
+    if (!scopedIdentity) return;
     const existingOwnerNode =
-      scope === TopologyViewTypes.owner ? resourceNodesByOwnerKey.get(key) : undefined;
+      scope === TopologyViewTypes.owner ? resourceNodesByOwnerKey.get(scopedIdentity) : undefined;
     if (existingOwnerNode) {
       nodeToScopedNode.set(node.id, existingOwnerNode.id);
       if (!scopedNodes.has(existingOwnerNode.id)) {
@@ -334,10 +360,20 @@ const createScopedModel = (
       }
       return;
     }
-    const scopedId = `topology-scope-${scope}-${key}`;
+    const scopedId = `topology-scope-${scope}-${scopedIdentity}`;
     nodeToScopedNode.set(node.id, scopedId);
     if (!scopedNodes.has(scopedId)) {
-      scopedNodes.set(scopedId, createScopeNode(node, scope, key));
+      scopedNodes.set(scopedId, createScopeNode(node, scope, key, scopedId));
+    } else {
+      const existing = scopedNodes.get(scopedId);
+      const status = worseStatus(existing?.status, node.status);
+      if (existing && status !== existing.status) {
+        scopedNodes.set(scopedId, {
+          ...existing,
+          data: { ...existing.data, status },
+          status,
+        });
+      }
     }
   });
 
@@ -355,7 +391,7 @@ const createScopedModel = (
   return { edges: [...scopedEdges.values()], nodes: [...scopedNodes.values()] };
 };
 
-const getOwnerGroup = (node: NodeModel): string => {
+const getOwnerGroup = (node: NodeModel): string | undefined => {
   if (node.data?.scope === TopologyViewTypes.owner && node.data?.scopeKey) {
     return node.data.scopeKey;
   }
@@ -397,7 +433,8 @@ const addGroups = (nodes: NodeModel[], groupType: TopologyGroupType): NodeModel[
       const owner = getOwnerGroup(node);
 
       if (owner) {
-        const ownerId = `topology-group-${groupType}-owner-${namespace}-${owner}`;
+        const ownerIdentity = getOwnerIdentity(node) ?? owner;
+        const ownerId = `topology-group-${groupType}-owner-${ownerIdentity}`;
         const ownerGroup = ownerGroups.get(ownerId);
         if (ownerGroup) {
           ownerGroup.children?.push(node.id);
@@ -459,7 +496,9 @@ const addGroups = (nodes: NodeModel[], groupType: TopologyGroupType): NodeModel[
   nodes.forEach((node) => {
     const label = groupLabel(node, groupType);
     if (!label) return;
-    const id = `topology-group-${groupType}-${label}`;
+    const identity =
+      groupType === TopologyGroupType.owner ? (getOwnerIdentity(node) ?? label) : label;
+    const id = `topology-group-${groupType}-${identity}`;
     const group = groups.get(id);
     if (group) {
       group.children?.push(node.id);
