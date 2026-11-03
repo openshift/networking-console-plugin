@@ -25,8 +25,13 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 import AdvancedFilterPopover from '@views/topology/components/AdvancedFilterPopover';
 import DisplayOptionsDropdown from '@views/topology/components/DisplayOptionsDropdown';
 import useTopologyFilters from '@views/topology/hooks/useTopologyFilters';
-import { DisplayOptionsState, TopologyDisplayMode } from '@views/topology/types';
-import { FilterMatchType, ResourceType, TopologyLayoutType } from '@views/topology/utils/constants';
+import { DisplayOptionsState, TopologyDisplayMode, TopologyGroupType } from '@views/topology/types';
+import {
+  FilterMatchType,
+  ResourceType,
+  TopologyLayoutType,
+  TopologyViewTypes,
+} from '@views/topology/utils/constants';
 import {
   attributeLabel,
   countNodesByResourceType,
@@ -35,24 +40,34 @@ import {
   resourceTypeLabel,
 } from '@views/topology/utils/filterModel';
 
+import './TopologyToolbar.scss';
+
 type TopologyToolbarProps = {
   displayMode: TopologyDisplayMode;
   displayOptions: DisplayOptionsState;
+  group: TopologyGroupType;
   layout: TopologyLayoutType;
   model: Model | undefined;
   onDisplayModeChange: (mode: TopologyDisplayMode) => void;
   onDisplayOptionsChange: (options: DisplayOptionsState) => void;
+  onGroupChange: (group: TopologyGroupType) => void;
   onLayoutChange: (layout: TopologyLayoutType) => void;
+  onScopeChange: (scope: TopologyViewTypes) => void;
+  scope: TopologyViewTypes;
 };
 
 const TopologyToolbar: FC<TopologyToolbarProps> = ({
   displayMode,
   displayOptions,
+  group,
   layout,
   model,
   onDisplayModeChange,
   onDisplayOptionsChange,
+  onGroupChange,
   onLayoutChange,
+  onScopeChange,
+  scope,
 }) => {
   const { t } = useNetworkingTranslation();
   const {
@@ -139,7 +154,7 @@ const TopologyToolbar: FC<TopologyToolbarProps> = ({
               </MenuToggle>
             )}
           >
-            <SelectList isAriaMultiselectable>
+            <SelectList className="networking-topology__filter-list" isAriaMultiselectable>
               {options.map((option) => (
                 <SelectOption
                   hasCheckbox
@@ -183,9 +198,13 @@ const TopologyToolbar: FC<TopologyToolbarProps> = ({
           <ToolbarItem>
             <DisplayOptionsDropdown
               displayOptions={displayOptions}
+              group={group}
               layout={layout}
               onDisplayOptionsChange={onDisplayOptionsChange}
+              onGroupChange={onGroupChange}
               onLayoutChange={onLayoutChange}
+              onScopeChange={onScopeChange}
+              scope={scope}
             />
           </ToolbarItem>
           <ToolbarItem>

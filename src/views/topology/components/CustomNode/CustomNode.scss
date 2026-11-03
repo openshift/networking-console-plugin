@@ -12,6 +12,10 @@
   .pf-topology__node__label__background {
     stroke-width: 2px;
   }
+
+  .topology-icon > text {
+    fill: white;
+  }
 }
 
 .custom-node.pf-topology__node.pf-m-selected .pf-topology__node__background {
