@@ -85,13 +85,31 @@ export const countNodesByResourceType = (model: Model | undefined): Map<Resource
 };
 
 const modelWithNodes = (model: Model, nodes: Model['nodes']): Model => {
-  const keptIds = new Set(nodes?.map((node) => node.id));
+  const leafNodes = (nodes ?? []).filter((node) => !node.group);
+  const keptIds = new Set(leafNodes.map((node) => node.id));
+  const groups = (model.nodes ?? []).filter((node) => node.group);
+  let changed = true;
+  while (changed) {
+    changed = false;
+    groups.forEach((group) => {
+      if (!keptIds.has(group.id) && (group.children ?? []).some((child) => keptIds.has(child))) {
+        keptIds.add(group.id);
+        changed = true;
+      }
+    });
+  }
+  const groupedNodes = groups
+    .filter((group) => keptIds.has(group.id))
+    .map((group) => ({
+      ...group,
+      children: (group.children ?? []).filter((child) => keptIds.has(child)),
+    }));
   const edges = (model.edges ?? []).filter(
     (edge) =>
       !!edge.source && !!edge.target && keptIds.has(edge.source) && keptIds.has(edge.target),
   );
 
-  return { ...model, edges, nodes };
+  return { ...model, edges, nodes: [...leafNodes, ...groupedNodes] };
 };
 
 export const applyResourceTypeFilter = (model: Model, selectedTypes: ResourceType[]): Model => {

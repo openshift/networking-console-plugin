@@ -1,12 +1,25 @@
-import { DisplayOptionsState } from '@views/topology/types';
+import { DisplayOptionsState, TopologyGroupType } from '@views/topology/types';
 
 export enum TopologyViewTypes {
   namespace = 'namespace',
   network = 'network',
-  node = 'node',
   owner = 'owner',
   resource = 'resource',
 }
+
+export const TOPOLOGY_SCOPE_ORDER: TopologyViewTypes[] = [
+  TopologyViewTypes.network,
+  TopologyViewTypes.namespace,
+  TopologyViewTypes.owner,
+  TopologyViewTypes.resource,
+];
+
+export const TOPOLOGY_GROUP_ORDER: TopologyGroupType[] = [
+  TopologyGroupType.none,
+  TopologyGroupType.namespace,
+  TopologyGroupType.namespaceOwner,
+  TopologyGroupType.owner,
+];
 
 export enum ResourceType {
   ClusterUserDefinedNetwork = 'ClusterUserDefinedNetwork',
@@ -29,6 +42,7 @@ export enum RelationshipType {
   MultiNetworkPolicyToNAD = 'multi-network-policy-to-nad',
   PodToNAD = 'pod-to-nad',
   RouteToService = 'route-to-service',
+  Scope = 'scope',
   UDNToNAD = 'udn-to-nad',
   UDNToPod = 'udn-to-pod',
   UDNToVM = 'udn-to-vm',
@@ -95,5 +109,7 @@ export enum TopologyLayoutType {
 }
 
 export const DEFAULT_TOPOLOGY_LAYOUT = TopologyLayoutType.Dagre;
+
+export const DEFAULT_TOPOLOGY_GROUP = TopologyGroupType.none;
 
 export const TOPOLOGY_LAYOUT_PARAM = 'layout';

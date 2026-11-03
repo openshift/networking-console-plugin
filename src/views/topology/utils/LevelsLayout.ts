@@ -26,8 +26,8 @@ export class LevelsLayout extends BaseLayout implements Layout {
     const groupDimensions = Object.keys(groups || {}).map((key) =>
       this.positionGroupNodes(groups[key], 0, 0),
     );
-    const maxGroupWidth = Math.max(...groupDimensions.map((dim) => dim.width));
-    const maxGroupHeight = Math.max(...groupDimensions.map((dim) => dim.height));
+    const maxGroupWidth = Math.max(0, ...groupDimensions.map((dim) => dim.width));
+    const maxGroupHeight = Math.max(0, ...groupDimensions.map((dim) => dim.height));
     return { maxGroupHeight, maxGroupWidth };
   }
 
@@ -49,11 +49,11 @@ export class LevelsLayout extends BaseLayout implements Layout {
     let padX = 0;
     let padY = 0;
 
-    (groupNodes || []).forEach((node) => {
-      if (padX < node.width) {
+    (groupNodes || []).filter(Boolean).forEach((node) => {
+      if (typeof node.width === 'number' && padX < node.width) {
         padX = node.width;
       }
-      if (padY < node.height) {
+      if (typeof node.height === 'number' && padY < node.height) {
         padY = node.height;
       }
     });
@@ -93,7 +93,7 @@ export class LevelsLayout extends BaseLayout implements Layout {
     let maxX = x;
     let maxY = y;
 
-    (sortedNodes || []).forEach((node) => {
+    (sortedNodes || []).filter(Boolean).forEach((node) => {
       if (node?.element?.getData()?.level !== currentLevel) {
         // Move to the next level when the level changes
         currentLevel = node?.element?.getData()?.level;
