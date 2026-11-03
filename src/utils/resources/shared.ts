@@ -68,11 +68,11 @@ export const getCreationTimestamp = <A extends K8sResourceCommon = K8sResourceCo
  * @returns { [key: string]: string } - annotations
  */
 export const getAnnotations = <A extends K8sResourceCommon = K8sResourceCommon>(
-  resource: A,
+  resource?: A,
   defaultValue?: {
     [key: string]: string;
   },
-): { [key: string]: string } => resource?.metadata?.annotations || defaultValue;
+): { [key: string]: string } | undefined => resource?.metadata?.annotations || defaultValue;
 
 /**
  * Get labels
