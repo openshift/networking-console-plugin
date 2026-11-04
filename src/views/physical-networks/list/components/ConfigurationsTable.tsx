@@ -6,8 +6,8 @@ import type { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/es
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { NO_DATA_DASH } from '@utils/utils/constants';
 
-import EnactmentStateIcon from '../details/EnactmentStateIcon';
-import { ConfigurationDetails } from '../utils/types';
+import EnactmentStateIcon from '../../components/EnactmentStateIcon';
+import { ConfigurationDetails } from '../../utils/types';
 
 type ConfigurationsTableProps = {
   nncpDetails: ConfigurationDetails[];

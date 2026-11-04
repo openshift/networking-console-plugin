@@ -5,13 +5,9 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 
 import { ConfigurationDetails } from '../utils/types';
 
-import DetailsTab from './DetailsTab';
-import EnactmentStateTab from './EnactmentStateTab';
-
-enum ConfigurationDrawerTabKey {
-  Details = 'Details',
-  EnactmentState = 'EnactmentState',
-}
+import DetailsTab from './components/DetailsTab';
+import EnactmentStateTab from './components/EnactmentStateTab';
+import { ConfigurationDrawerTabKey } from './utils/constants';
 
 type ConfigurationDrawerProps = {
   isOpen: boolean;

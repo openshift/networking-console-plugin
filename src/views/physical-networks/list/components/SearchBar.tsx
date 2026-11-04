@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import { SearchInput, ToggleGroup, ToggleGroupItem } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
-import { NetworksSearchType } from '../utils/constants';
+import { NetworksSearchType } from '../../utils/constants';
 
 type SearchBarProps = {
   onSearchInputChange: (value: string) => void;

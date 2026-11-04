@@ -38,15 +38,12 @@ export const getSourceState = <T>(result: {
   }
 
   const errorCode = getErrorCode(result.loadError);
-  if (errorCode === 401 || errorCode === 403) {
+  if (errorCode === 401 || errorCode === 403)
     return { ...empty, availability: SourceAvailability.Forbidden };
-  }
-  if (errorCode === 404 || isMissingModelError(result.loadError)) {
-    return empty;
-  }
-  if (result.loadError) {
-    return { ...empty, availability: SourceAvailability.Error };
-  }
+
+  if (errorCode === 404 || isMissingModelError(result.loadError)) return empty;
+
+  if (result.loadError) return { ...empty, availability: SourceAvailability.Error };
 
   if (result.data == null) {
     return empty;

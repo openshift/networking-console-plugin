@@ -1,8 +1,11 @@
 import React, { FC } from 'react';
 
-import { RedExclamationCircleIcon } from '@openshift-console/dynamic-plugin-sdk';
+import {
+  GreenCheckCircleIcon,
+  RedExclamationCircleIcon,
+} from '@openshift-console/dynamic-plugin-sdk';
 import { Icon } from '@patternfly/react-core';
-import { CheckIcon, CloseIcon, HourglassHalfIcon, InProgressIcon } from '@patternfly/react-icons';
+import { CloseIcon, HourglassHalfIcon, InProgressIcon } from '@patternfly/react-icons';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 import { EnactmentState } from '../utils/types';
@@ -13,11 +16,7 @@ const ICONS_BY_STATE = {
       <CloseIcon />
     </Icon>
   ),
-  [EnactmentState.Available]: (
-    <Icon status="success">
-      <CheckIcon />
-    </Icon>
-  ),
+  [EnactmentState.Available]: <GreenCheckCircleIcon />,
   [EnactmentState.Failing]: <RedExclamationCircleIcon />,
   [EnactmentState.Pending]: <HourglassHalfIcon />,
   [EnactmentState.Progressing]: <InProgressIcon />,

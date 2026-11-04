@@ -64,6 +64,8 @@ export type LocalnetNAD = {
   vlan: string;
 };
 
+export type ConsumersSelection = { nad: LocalnetNAD; networkName: string };
+
 export type PhysicalNetworkConsumer = {
   groupVersionKind: K8sGroupVersionKind;
   kind: 'Pod' | 'VirtualMachine';

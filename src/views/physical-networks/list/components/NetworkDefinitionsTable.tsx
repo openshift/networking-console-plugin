@@ -9,7 +9,7 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 import { getResourceURL } from '@utils/resources/shared';
 import { NO_DATA_DASH } from '@utils/utils/constants';
 
-import { ConsumersAvailability, LocalnetNAD, PhysicalNetworkConsumer } from '../utils/types';
+import { ConsumersAvailability, LocalnetNAD, PhysicalNetworkConsumer } from '../../utils/types';
 
 type NetworkDefinitionsTableProps = {
   consumersAvailability: ConsumersAvailability;

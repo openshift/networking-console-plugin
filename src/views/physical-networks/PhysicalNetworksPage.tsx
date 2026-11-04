@@ -14,13 +14,11 @@ import PhysicalNetworksPageHeader from './components/PhysicalNetworksPageHeader'
 import SourceStateAlerts from './components/SourceStateAlerts';
 import ConfigurationDrawer from './details/ConfigurationDrawer';
 import usePhysicalNetworks from './hooks/usePhysicalNetworks';
-import ConsumersModal from './list/ConsumersModal';
-import PhysicalNetworksTable from './list/PhysicalNetworksTable';
-import ScopeSelect from './list/ScopeSelect';
+import ConsumersModal from './list/components/ConsumersModal';
+import ScopeSelect from './list/components/ScopeSelect';
+import PhysicalNetworksList from './list/PhysicalNetworksList';
 import { isNMStateSimulatedAbsent } from './utils/simulation';
-import { ConfigurationDetails, LocalnetNAD, SourceAvailability } from './utils/types';
-
-type ConsumersSelection = { nad: LocalnetNAD; networkName: string };
+import { ConfigurationDetails, ConsumersSelection, SourceAvailability } from './utils/types';
 
 const PhysicalNetworksPage: FC = () => {
   const { t } = useNetworkingTranslation();
@@ -101,7 +99,7 @@ const PhysicalNetworksPage: FC = () => {
         />
       )}
       {!isLoading && networks.length > 0 && (
-        <PhysicalNetworksTable
+        <PhysicalNetworksList
           actionsEnabled={actionsEnabled}
           consumersAvailability={consumersAvailability}
           networks={networks}

@@ -12,7 +12,7 @@ import { NodeNetworkConfigurationPolicyModel } from '@utils/models';
 import { getResourceURL } from '@utils/resources/shared';
 import { NO_DATA_DASH } from '@utils/utils/constants';
 
-import { ConfigurationDetails } from '../utils/types';
+import { ConfigurationDetails } from '../../utils/types';
 
 type DetailsTabProps = {
   nmstateFrontendAvailable: boolean;
