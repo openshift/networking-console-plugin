@@ -6,7 +6,7 @@ import { Modal, ModalBody, ModalHeader, SearchInput } from '@patternfly/react-co
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { NO_DATA_DASH } from '@utils/utils/constants';
 
-import { ConsumersAvailability, LocalnetNAD, PhysicalNetworkConsumer } from '../utils/types';
+import { ConsumersAvailability, LocalnetNAD, PhysicalNetworkConsumer } from '../../utils/types';
 
 import './consumers-modal.scss';
 

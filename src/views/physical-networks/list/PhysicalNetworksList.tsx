@@ -6,9 +6,6 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 import usePagination from '@utils/hooks/usePagination/usePagination';
 import { paginationDefaultValues } from '@utils/hooks/usePagination/utils/constants';
 
-import usePhysicalNetworkColumns, {
-  PhysicalNetworkColumnIDs,
-} from '../hooks/usePhysicalNetworkColumns';
 import { NetworksSearchType } from '../utils/constants';
 import {
   ConfigurationDetails,
@@ -18,13 +15,16 @@ import {
   PhysicalNetworksSources,
 } from '../utils/types';
 
-import PhysicalNetworkRow from './PhysicalNetworkRow';
-import SearchBar from './SearchBar';
-import { filterPhysicalNetworks } from './utils';
+import PhysicalNetworkRow from './components/PhysicalNetworkRow';
+import SearchBar from './components/SearchBar';
+import usePhysicalNetworkColumns, {
+  PhysicalNetworkColumnIDs,
+} from './hooks/usePhysicalNetworkColumns';
+import { filterPhysicalNetworks } from './utils/utils';
 
-import './physical-networks-table.scss';
+import './components/physical-networks-table.scss';
 
-type PhysicalNetworksTableProps = {
+type PhysicalNetworksListProps = {
   actionsEnabled: { configure: boolean; createVMNetwork: boolean };
   consumersAvailability: ConsumersAvailability;
   networks: PhysicalNetwork[];
@@ -33,7 +33,7 @@ type PhysicalNetworksTableProps = {
   sources: PhysicalNetworksSources;
 };
 
-const PhysicalNetworksTable: FC<PhysicalNetworksTableProps> = ({
+const PhysicalNetworksList: FC<PhysicalNetworksListProps> = ({
   actionsEnabled,
   consumersAvailability,
   networks,
@@ -148,4 +148,4 @@ const PhysicalNetworksTable: FC<PhysicalNetworksTableProps> = ({
   );
 };
 
-export default PhysicalNetworksTable;
+export default PhysicalNetworksList;

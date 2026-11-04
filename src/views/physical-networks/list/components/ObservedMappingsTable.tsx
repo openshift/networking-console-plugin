@@ -9,7 +9,7 @@ import { NodeModel, NodeModelGroupVersionKind } from '@utils/models';
 import { getResourceURL } from '@utils/resources/shared';
 import { NO_DATA_DASH } from '@utils/utils/constants';
 
-import { ObservedMapping } from '../utils/types';
+import { ObservedMapping } from '../../utils/types';
 
 type ObservedMappingsTableProps = {
   observedMappings: ObservedMapping[];

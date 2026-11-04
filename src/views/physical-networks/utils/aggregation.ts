@@ -57,7 +57,7 @@ const allLabelsMatchSelector = (
   return Object.entries(selector).every(([key, value]) => labels[key] === value);
 };
 
-const filterNodes = (
+const filterNodesBySelector = (
   nodes: IoK8sApiCoreV1Node[],
   selector: Record<string, string>,
 ): IoK8sApiCoreV1Node[] =>
@@ -120,7 +120,7 @@ const getConfigurationDetails = (
   nodeToEnactmentStateMap: NodeToEnactmentStateMap,
   t: TFunction,
 ): ConfigurationDetails => {
-  const nncpNodes = filterNodes(nodes, nncp?.spec?.nodeSelector);
+  const nncpNodes = filterNodesBySelector(nodes, nncp?.spec?.nodeSelector);
   const selectedEnactmentStates = getSelectedEnactmentStates(nodeToEnactmentStateMap, nncpNodes);
 
   return {

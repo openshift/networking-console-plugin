@@ -27,7 +27,6 @@ enum UplinkConnection {
 }
 
 /* Policy selectors */
-
 const getPolicyInterfaces = (
   policy: V1NodeNetworkConfigurationPolicy,
 ): NodeNetworkConfigurationInterface[] => policy?.spec?.desiredState?.interfaces || [];
@@ -150,7 +149,6 @@ export const getUplinkDisplayText = (
 };
 
 /* Enactment selectors */
-
 export const getEnactmentStateNNCP = (
   enactment: V1beta1NodeNetworkConfigurationEnactment,
 ): string => enactment?.metadata?.labels?.[ENACTMENT_LABEL_POLICY];
@@ -163,7 +161,6 @@ export const getEnactmentStatus = (enactment: V1beta1NodeNetworkConfigurationEna
   enactment?.status?.conditions?.find((condition) => condition.status === 'True')?.type;
 
 /* Observed bridge mappings */
-
 export const getObservedBridgeMappings = (
   nodeNetworkStates: NodeNetworkStateWithBridgeMappings[],
 ): ObservedBridgeMapping[] => {

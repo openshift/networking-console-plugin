@@ -3,22 +3,12 @@ import React, { FC, useMemo, useState } from 'react';
 import { SearchInput } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
-import { ENACTMENT_STATES } from '../utils/constants';
-import { ConfigurationDetails, EnactmentState, NodeEnactmentStateDetails } from '../utils/types';
+import { ENACTMENT_STATES } from '../../utils/constants';
+import { ConfigurationDetails, EnactmentState } from '../../utils/types';
+import { filterEnactmentStateDetails } from '../utils/utils';
 
 import EnactmentStateFilter from './EnactmentStateFilter';
 import EnactmentStateTable from './EnactmentStateTable';
-
-const filterEnactmentStateDetails = (
-  details: NodeEnactmentStateDetails[],
-  searchInput: string,
-  states: EnactmentState[],
-): NodeEnactmentStateDetails[] =>
-  details.filter(
-    ({ node, status }) =>
-      (node?.metadata?.name?.includes(searchInput) ?? false) &&
-      states.includes(EnactmentState[status as keyof typeof EnactmentState]),
-  );
 
 type EnactmentStateTabProps = {
   selectedConfiguration: ConfigurationDetails;

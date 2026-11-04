@@ -9,10 +9,9 @@ import {
 } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
-import { ENACTMENT_STATES } from '../utils/constants';
-import { EnactmentState } from '../utils/types';
-
-import EnactmentStateIcon from './EnactmentStateIcon';
+import EnactmentStateIcon from '../../components/EnactmentStateIcon';
+import { ENACTMENT_STATES } from '../../utils/constants';
+import { EnactmentState } from '../../utils/types';
 
 import './enactment-state-filter.scss';
 

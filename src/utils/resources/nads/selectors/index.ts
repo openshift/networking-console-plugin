@@ -3,6 +3,7 @@ import { V1VirtualMachine } from '@kubevirt-ui-ext/kubevirt-api/kubevirt';
 import { getAnnotations, getNamespace } from '@utils/resources/shared';
 import { getNetworks } from '@utils/resources/vm/selectors';
 
+import { POD_NETWORKS_ANNOTATION_KEY } from '../constants';
 import { NetworkAttachmentDefinitionConfig, NetworkAttachmentDefinitionKind } from '../types';
 
 export const getConfigAsJSON = (
@@ -28,8 +29,6 @@ export const getType = (config: NetworkAttachmentDefinitionConfig): string => {
 
   return null;
 };
-
-const POD_NETWORKS_ANNOTATION_KEY = 'k8s.v1.cni.cncf.io/networks';
 
 type MultusNetworkReference = { name?: string; namespace?: string };
 

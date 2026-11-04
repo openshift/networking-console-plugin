@@ -10,19 +10,19 @@ import {
   NODE_NETWORK_CONFIGURATION_WIZARD_PATH,
   PHYSICAL_NETWORK_NAME_PARAM_KEY,
   VM_NETWORK_NEW_PATH,
-} from '../utils/constants';
+} from '../../utils/constants';
 import {
   ConfigurationDetails,
   ConsumersAvailability,
   LocalnetNAD,
   PhysicalNetwork,
   PhysicalNetworksSources,
-} from '../utils/types';
+} from '../../utils/types';
+import { getSourceBackedValue } from '../utils/utils';
 
 import ConfigurationsTable from './ConfigurationsTable';
 import NetworkDefinitionsTable from './NetworkDefinitionsTable';
 import ObservedMappingsTable from './ObservedMappingsTable';
-import { getSourceBackedValue } from './utils';
 
 type PhysicalNetworkRowProps = {
   actionsEnabled: { configure: boolean; createVMNetwork: boolean };

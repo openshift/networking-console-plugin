@@ -1,9 +1,10 @@
 import { TFunction } from 'i18next';
 
+import { getName } from '@utils/resources/shared';
 import { NO_DATA_DASH } from '@utils/utils/constants';
 
-import { NetworksSearchType } from '../utils/constants';
-import { PhysicalNetwork, SourceAvailability } from '../utils/types';
+import { NetworksSearchType } from '../../utils/constants';
+import { PhysicalNetwork, SourceAvailability } from '../../utils/types';
 
 const matchesSearchInput = (value: string, searchInput: string): boolean =>
   value?.includes(searchInput) ?? false;
@@ -21,9 +22,7 @@ export const filterPhysicalNetworks = (
     case NetworksSearchType.Nodes:
       return networks.filter(
         (network) =>
-          network.selectedNodes.some((node) =>
-            matchesSearchInput(node?.metadata?.name, searchInput),
-          ) ||
+          network.selectedNodes.some((node) => matchesSearchInput(getName(node), searchInput)) ||
           network.observedMappings.some(({ nodeName }) =>
             matchesSearchInput(nodeName, searchInput),
           ),

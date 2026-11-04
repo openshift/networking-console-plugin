@@ -6,12 +6,11 @@ import { DataViewTable } from '@patternfly/react-data-view';
 import type { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { NodeModel, NodeModelGroupVersionKind } from '@utils/models';
-import { getResourceURL } from '@utils/resources/shared';
+import { getName, getResourceURL } from '@utils/resources/shared';
 import { NO_DATA_DASH } from '@utils/utils/constants';
 
-import { NodeEnactmentStateDetails } from '../utils/types';
-
-import EnactmentStateIcon from './EnactmentStateIcon';
+import EnactmentStateIcon from '../../components/EnactmentStateIcon';
+import { NodeEnactmentStateDetails } from '../../utils/types';
 
 type EnactmentStateTableProps = {
   nodeEnactmentStateDetails: NodeEnactmentStateDetails[];
@@ -34,9 +33,7 @@ const EnactmentStateTable: FC<EnactmentStateTableProps> = ({ nodeEnactmentStateD
       cell: node ? (
         <>
           <ResourceIcon groupVersionKind={NodeModelGroupVersionKind} />
-          <Link to={getResourceURL({ model: NodeModel, resource: node })}>
-            {node?.metadata?.name}
-          </Link>
+          <Link to={getResourceURL({ model: NodeModel, resource: node })}>{getName(node)}</Link>
         </>
       ) : (
         NO_DATA_DASH

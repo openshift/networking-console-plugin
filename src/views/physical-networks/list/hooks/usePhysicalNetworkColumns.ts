@@ -7,7 +7,7 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 import { PaginationState } from '@utils/hooks/usePagination/utils/types';
 import { columnSorting } from '@utils/utils/sorting';
 
-import { PhysicalNetwork } from '../utils/types';
+import { PhysicalNetwork } from '../../utils/types';
 
 export enum PhysicalNetworkColumnIDs {
   Actions = 'actions',
