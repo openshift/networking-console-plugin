@@ -27,7 +27,13 @@ export const dismissGuidedTourIfPresent = (): void => {
 export const serviceNameField = () => byOuiaOr('service-name', '#service-name');
 export const serviceNamespaceField = () => byOuiaOr('service-namespace', '#service-namespace');
 export const serviceTypeToggle = () => byOuiaOr('service-type', '#toggle-service-type');
-export const servicePortsField = () => byOuiaOr('service-ports', '#service-ports');
+export const servicePortNameFields = () => cy.get('[id^="service-ports-"][id$="-name"]');
+export const servicePortNameField = (index = 0) => cy.get(`#service-ports-${index}-name`);
+export const servicePortField = (index = 0) => cy.get(`#service-ports-${index}-port`);
+export const serviceTargetPortField = (index = 0) => cy.get(`#service-ports-${index}-target-port`);
+export const servicePortRemoveButton = (index = 0) =>
+  cy.get(`button[aria-label="Remove port"]`).eq(index);
+export const addServicePortButton = () => cy.contains('button', 'Add port');
 export const serviceExternalNameField = () =>
   byOuiaOr('service-external-name', '#service-external-name');
 export const saveChangesButton = () => byOuiaOr('save-changes', '#save-changes');
@@ -101,12 +107,47 @@ export const fillSelector = (key: string, value: string, index = 0): void => {
     });
 };
 
-export const fillPorts = (portsText: string): void => {
-  servicePortsField().then(($el) => {
-    setNativeInputValue($el[0] as HTMLTextAreaElement, portsText);
-  });
-  servicePortsField().should('have.value', portsText);
+type ServicePortInput = {
+  name?: string;
+  port: string;
+  targetPort: string;
 };
+
+const resizePortRows = (count: number): Cypress.Chainable =>
+  servicePortNameFields().then(($fields) => {
+    if ($fields.length === count) {
+      return;
+    }
+
+    if ($fields.length < count) {
+      return addServicePortButton()
+        .click()
+        .then(() => resizePortRows(count));
+    }
+
+    return servicePortRemoveButton($fields.length - 1)
+      .click()
+      .then(() => resizePortRows(count));
+  });
+
+const fillPort = ({ name = '', port, targetPort }: ServicePortInput, index: number) =>
+  servicePortNameField(index)
+    .then(($el) => {
+      setNativeInputValue($el[0] as HTMLInputElement, name);
+    })
+    .then(() =>
+      servicePortField(index).then(($el) => {
+        setNativeInputValue($el[0] as HTMLInputElement, port);
+      }),
+    )
+    .then(() =>
+      serviceTargetPortField(index).then(($el) => {
+        setNativeInputValue($el[0] as HTMLInputElement, targetPort);
+      }),
+    );
+
+export const fillPorts = (ports: ServicePortInput[]): Cypress.Chainable =>
+  resizePortRows(ports.length).then(() => cy.wrap(ports).each(fillPort));
 
 export const submitServiceForm = (): void => {
   saveChangesButton().should('not.be.disabled').click();
