@@ -95,6 +95,7 @@
   "Backend health": "Estado del backend",
   "BFD detects failures quickly; BGP keepalive uses standard BGP timers.": "BFD detecta los errores rápidamente; el keepalive de BGP usa temporizadores BGP estándar.",
   "BGP": "BGP",
+  "BGP Cloud Connector": "BGP Cloud Connector",
   "BGP keepalive": "Keepalive de BGP",
   "BGP routing is not ready": "El enrutamiento BGP no está listo",
   "BGPCloudConfiguration": "BGPCloudConfiguration",

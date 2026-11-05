@@ -90,6 +90,7 @@
   "Backend health": "バックエンドの健全性",
   "BFD detects failures quickly; BGP keepalive uses standard BGP timers.": "BFD は障害をすばやく検出し、BGP keepalive は標準の BGP タイマーを使用します。",
   "BGP": "BGP",
+  "BGP Cloud Connector": "BGP Cloud Connector",
   "BGP keepalive": "BGP keepalive",
   "BGP routing is not ready": "BGP ルーティングの準備ができていません",
   "BGPCloudConfiguration": "BGPCloudConfiguration",
