@@ -387,7 +387,7 @@
   "Namespaces": "Namespace",
   "Namespaces can be created before or after this network. Add the selector labels above to include them.": "Namespaces can be created before or after this network. Add the selector labels above to include them.",
   "Namespaces having all the supplied key/value pairs as labels will be selected.": "指定されたすべてのキーと値のペアをラベルとして持つ namespace が選択されます。",
-  "Namespaces must have all of the labels shown above to join this network.": "Namespaces must have all of the labels shown above to join this network.",
+  "Namespaces must satisfy all selector requirements, including labels that must be absent and alternative values.": "Namespaces must satisfy all selector requirements, including labels that must be absent and alternative values.",
   "Naming information": "命名情報",
   "NCC hub name": "NCC ハブ名",
   "NCC spoke prefix": "NCC スポークプレフィックス",

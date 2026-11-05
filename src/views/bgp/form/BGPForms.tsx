@@ -44,6 +44,7 @@ type FieldProps<T extends FieldValues> = {
   help?: string;
   id: Path<T>;
   label: string;
+  disabled?: boolean;
   placeholder?: string;
   register: UseFormRegister<T>;
   required?: boolean;
@@ -54,13 +55,19 @@ const Field = <T extends FieldValues>({
   help,
   id,
   label,
+  disabled,
   placeholder,
   register,
   required,
   validate,
 }: FieldProps<T>) => (
   <FormGroup fieldId={id} isRequired={required} label={label}>
-    <TextInput id={id} placeholder={placeholder} {...register(id, { required, validate })} />
+    <TextInput
+      id={id}
+      isDisabled={disabled}
+      placeholder={placeholder}
+      {...register(id, { required, validate })}
+    />
     <FormGroupHelperText>{error || help}</FormGroupHelperText>
   </FormGroup>
 );
@@ -479,6 +486,7 @@ export const BGPRoutingForm: FC<BGPFormProps<BGPRouting>> = ({ formData, onChang
     <PageSection>
       <Form onSubmit={handleSubmit(submit)}>
         <Field
+          disabled={Boolean(originalResource.metadata?.resourceVersion)}
           id="name"
           label={t('Resource name')}
           placeholder="prod-routing"

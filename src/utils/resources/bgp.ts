@@ -99,7 +99,10 @@ const isValidIPv6 = (address: string) => {
   if (normalized.includes(':::')) return false;
   const doubleColonCount = (normalized.match(/::/g) || []).length;
   if (doubleColonCount > 1) return false;
-  if (doubleColonCount === 0 && (normalized.startsWith(':') || normalized.endsWith(':')))
+  if (
+    (normalized.startsWith(':') && !normalized.startsWith('::')) ||
+    (normalized.endsWith(':') && !normalized.endsWith('::'))
+  )
     return false;
   const groups = normalized.split(':');
   if (groups.some((group) => group.length > 4)) return false;

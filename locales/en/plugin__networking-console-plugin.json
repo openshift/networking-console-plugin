@@ -389,7 +389,7 @@
   "Namespaces": "Namespaces",
   "Namespaces can be created before or after this network. Add the selector labels above to include them.": "Namespaces can be created before or after this network. Add the selector labels above to include them.",
   "Namespaces having all the supplied key/value pairs as labels will be selected.": "Namespaces having all the supplied key/value pairs as labels will be selected.",
-  "Namespaces must have all of the labels shown above to join this network.": "Namespaces must have all of the labels shown above to join this network.",
+  "Namespaces must satisfy all selector requirements, including labels that must be absent and alternative values.": "Namespaces must satisfy all selector requirements, including labels that must be absent and alternative values.",
   "Naming information": "Naming information",
   "NCC hub name": "NCC hub name",
   "NCC spoke prefix": "NCC spoke prefix",

@@ -394,7 +394,7 @@
   "Namespaces": "Espaces de noms",
   "Namespaces can be created before or after this network. Add the selector labels above to include them.": "Namespaces can be created before or after this network. Add the selector labels above to include them.",
   "Namespaces having all the supplied key/value pairs as labels will be selected.": "Les espaces de noms dont toutes les paires clé/valeur sont fournies comme étiquettes seront sélectionnés.",
-  "Namespaces must have all of the labels shown above to join this network.": "Namespaces must have all of the labels shown above to join this network.",
+  "Namespaces must satisfy all selector requirements, including labels that must be absent and alternative values.": "Namespaces must satisfy all selector requirements, including labels that must be absent and alternative values.",
   "Naming information": "Informations sur l’attribution de nom",
   "NCC hub name": "Nom du hub NCC",
   "NCC spoke prefix": "Préfixe du spoke NCC",

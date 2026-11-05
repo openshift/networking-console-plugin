@@ -82,7 +82,7 @@ const CUDNNamespaceMembership: FC<CUDNNamespaceMembershipProps> = ({ cudn }) => 
   const canFilterNamespaceList = matchLabels.length > 0 && !selector.matchExpressions?.length;
   const namespaceListLink = canFilterNamespaceList
     ? `${resourceListPathFromModel(NamespaceModel)}?labels=${encodeURIComponent(
-        matchLabels.map(([key, value]) => (value ? `${key}=${value}` : key)).join(','),
+        matchLabels.map(([key, value]) => `${key}=${value}`).join(','),
       )}`
     : undefined;
   const matchingNamespaces = getCUDNProjects(cudn, (namespaces || []) as K8sResourceCommon[]);
@@ -178,7 +178,9 @@ const CUDNNamespaceMembership: FC<CUDNNamespaceMembershipProps> = ({ cudn }) => 
         )}
         <p className="pf-v6-u-mb-0 pf-v6-u-mt-sm">
           {selectorEntries.length
-            ? t('Namespaces must have all of the labels shown above to join this network.')
+            ? t(
+                'Namespaces must satisfy all selector requirements, including labels that must be absent and alternative values.',
+              )
             : t('This network has no namespace selector and can include all namespaces.')}
         </p>
       </Alert>
@@ -210,14 +212,14 @@ const CUDNNamespaceMembership: FC<CUDNNamespaceMembershipProps> = ({ cudn }) => 
         <GridItem md={3}>
           <DL className="co-m-pane__details">
             <DetailsItem label={t('Matching')} obj={cudn}>
-              {namespacesLoaded ? matchingNamespaces.length : t('Loading')}
+              <span>{namespacesLoaded ? matchingNamespaces.length : t('Loading')}</span>
             </DetailsItem>
           </DL>
         </GridItem>
         <GridItem md={3}>
           <DL className="co-m-pane__details">
             <DetailsItem label={t('Pods')} obj={cudn}>
-              {podCount}
+              <span>{podCount}</span>
             </DetailsItem>
           </DL>
         </GridItem>
@@ -231,7 +233,9 @@ const CUDNNamespaceMembership: FC<CUDNNamespaceMembershipProps> = ({ cudn }) => 
           variant={AlertVariant.info}
         >
           {selectorEntries.length
-            ? t('Namespaces must have all of the labels shown above to join this network.')
+            ? t(
+                'Namespaces must satisfy all selector requirements, including labels that must be absent and alternative values.',
+              )
             : t('This network has no namespace selector and can include all namespaces.')}
         </Alert>
       )}
