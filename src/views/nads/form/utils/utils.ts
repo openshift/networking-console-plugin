@@ -39,6 +39,7 @@ const buildConfig = (
       bridge: networkTypeData?.bridge,
       ipam,
       macspoofchk: networkTypeData?.macspoofchk,
+      portIsolation: networkTypeData?.portIsolation,
       preserveDefaultVlan: false,
       vlan: parseInt(networkTypeData?.vlanTagNum, 10) || undefined,
     },
@@ -103,6 +104,7 @@ export const fromNADObjToFormData = (
     [NetworkTypeKeys.cnvBridgeNetworkType]: {
       bridge: configParsed?.bridge || null,
       macspoofchk: configParsed?.macspoofchk,
+      portIsolation: configParsed?.portIsolation,
       vlanTagNum: configParsed?.vlan?.toString() || '',
     },
     [NetworkTypeKeys.ovnKubernetesNetworkType]: {

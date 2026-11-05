@@ -39,6 +39,19 @@ const BridgeParameters: FC = () => {
           />
         )}
       />
+      <Controller
+        control={control}
+        defaultValue={false as never}
+        name={`${NetworkTypeKeys.cnvBridgeNetworkType}.portIsolation`}
+        render={({ field: { onChange, value } }) => (
+          <Checkbox
+            id={`${NetworkTypeKeys.cnvBridgeNetworkType}.portIsolation`}
+            isChecked={value}
+            label={t('Port isolation')}
+            onChange={onChange}
+          />
+        )}
+      />
     </>
   );
 };

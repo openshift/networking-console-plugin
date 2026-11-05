@@ -450,6 +450,7 @@
   "Policy name": "Policy name",
   "Policy type": "Policy type",
   "Port": "Port",
+  "Port isolation": "Port isolation",
   "Port is required": "Port is required",
   "Port must be between 1 and 65535": "Port must be between 1 and 65535",
   "Port names must be unique": "Port names must be unique",
