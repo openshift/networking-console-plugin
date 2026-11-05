@@ -28,10 +28,10 @@ let readiness: NMStateReadiness = 'unreadable';
 
 describe('OCPNETUI-205: Physical networks page', () => {
   before(() => {
-    // Authenticate even when this spec runs on its own rather than through all.cy.ts.
-    cy.login();
-    // Sets the csrf-token cookie the write helpers send; the page watch needs no extra auth.
-    cy.request('/');
+    // // Authenticate even when this spec runs on its own rather than through all.cy.ts.
+    // cy.login();
+    // // Sets the csrf-token cookie the write helpers send; the page watch needs no extra auth.
+    // cy.request('/');
     if (NMSTATE_SIMULATED_ABSENT) {
       // The simulation flips what the page sees, so the real probe would contradict it; keep one
       // source of truth for which describes may run.

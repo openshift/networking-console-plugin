@@ -23,7 +23,12 @@ jobs:
       BRIDGE_E2E_BROWSER_NAME: electron
       HIDE_XHR: 'true'
       TEST_NS: cy-test-ns
+      NAD_NS: nad-test-ns
       UDN_NS: udn-test-ns
+      EMPTY_NS: empty-test-ns
+      CUDN_NS: cudn-test-ns
+      TOPO_NS: topo-test-ns
+      LOCALNET_NS: localnet-test-ns
 
     steps:
       - name: Check CONSOLE_URL secret

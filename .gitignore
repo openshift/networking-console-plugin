@@ -10,3 +10,8 @@ ui-tests-cy/gui-test-screenshots/
 ui-tests-cy/ci-hot-cluster-e2e/
 .env
 ui-tests-cy/ci-hot-cluster-e2e/
+HANDOFF.md
+
+# Python bytecode from the skill MCP servers
+__pycache__/
+*.pyc

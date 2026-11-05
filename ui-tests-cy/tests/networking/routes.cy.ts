@@ -1,7 +1,7 @@
 import { EXAMPLE, MINUTE, TEST_NS, TEST_ROUTE_NAME } from '../../utils/const/base';
 import { checkActionMenu, nameInput } from '../../views/actions';
 import { createBtn } from '../../views/nad';
-import { brCrumbItem, itemFilter, row } from '../../views/selector-common';
+import { row } from '../../views/selector-common';
 
 describe('Check Routes page', () => {
   it('create Route with form', () => {
@@ -24,9 +24,12 @@ describe('Check Routes page', () => {
     cy.get(createBtn).click();
     cy.checkTitle(TEST_ROUTE_NAME);
     checkActionMenu('Route');
-    cy.contains(brCrumbItem, 'Routes').find('a').click();
-    cy.get(itemFilter).clear();
-    cy.get(itemFilter).type(TEST_ROUTE_NAME);
-    cy.contains(row, TEST_ROUTE_NAME).should('exist');
+    // The details-page breadcrumb links to the console's persisted last
+    // namespace (stale on shared clusters), so go back to the list explicitly.
+    // The list filter input is disabled while the list loads, which makes typing
+    // racy; the name query filter is equivalent and deterministic.
+    cy.visit(`/k8s/ns/${TEST_NS}/routes?name=${TEST_ROUTE_NAME}`);
+    cy.checkTitle('Routes', MINUTE);
+    cy.contains(row, TEST_ROUTE_NAME, { timeout: MINUTE }).should('exist');
   });
 });

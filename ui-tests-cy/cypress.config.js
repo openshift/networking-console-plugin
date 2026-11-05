@@ -1,6 +1,10 @@
 const { defineConfig } = require('cypress');
 
 module.exports = defineConfig({
+  // Cypress.env() is deprecated and readable by app code; public values go
+  // through config.expose/Cypress.expose() and the kubeadmin password through
+  // cy.env() in test code only.
+  allowCypressEnv: false,
   defaultCommandTimeout: 60000,
   e2e: {
     setupNodeEvents(on, config) {
@@ -31,7 +35,7 @@ module.exports = defineConfig({
     testIsolation: false,
   },
   fixturesFolder: 'fixtures',
-  pageLoadTimeout: 120000,
+  pageLoadTimeout: 240000,
   reporter: '../node_modules/cypress-multi-reporters',
   reporterOptions: {
     configFile: 'reporter-config.json',

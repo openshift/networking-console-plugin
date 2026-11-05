@@ -1,73 +1,8 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: ocpnetui-31-empty
----
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: default-deny-ingress
-  namespace: ocpnetui-31-empty
-spec:
-  podSelector: {}
-  policyTypes:
-    - Ingress
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: ocpnetui-31-nads
----
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: default-deny-ingress
-  namespace: ocpnetui-31-nads
-spec:
-  podSelector: {}
-  policyTypes:
-    - Ingress
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: ocpnetui-31-udn
-  labels:
-    k8s.ovn.org/primary-user-defined-network: ''
----
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: default-deny-ingress
-  namespace: ocpnetui-31-udn
-spec:
-  podSelector: {}
-  policyTypes:
-    - Ingress
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: ocpnetui-31-cudn
-  labels:
-    ocpnetui-31/cudn: member
-    k8s.ovn.org/primary-user-defined-network: ''
----
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: default-deny-ingress
-  namespace: ocpnetui-31-cudn
-spec:
-  podSelector: {}
-  policyTypes:
-    - Ingress
----
 apiVersion: k8s.cni.cncf.io/v1
 kind: NetworkAttachmentDefinition
 metadata:
   name: nad-cnv-bridge
-  namespace: ocpnetui-31-nads
+  namespace: ${NAD_NS}
   annotations:
     k8s.v1.cni.cncf.io/resourceName: bridge.network.kubevirt.io/br0
 spec:
@@ -85,7 +20,7 @@ apiVersion: k8s.cni.cncf.io/v1
 kind: NetworkAttachmentDefinition
 metadata:
   name: nad-ovn
-  namespace: ocpnetui-31-nads
+  namespace: ${NAD_NS}
 spec:
   config: |
     {
@@ -93,7 +28,7 @@ spec:
       "name": "nad-ovn",
       "type": "ovn-k8s-cni-overlay",
       "topology": "layer2",
-      "netAttachDefName": "ocpnetui-31-nads/nad-ovn",
+      "netAttachDefName": "${NAD_NS}/nad-ovn",
       "subnets": "10.220.0.0/24"
     }
 ---
@@ -101,7 +36,7 @@ apiVersion: k8s.cni.cncf.io/v1
 kind: NetworkAttachmentDefinition
 metadata:
   name: nad-sriov
-  namespace: ocpnetui-31-nads
+  namespace: ${NAD_NS}
   annotations:
     k8s.v1.cni.cncf.io/resourceName: openshift.io/sriov_net
 spec:
@@ -118,7 +53,7 @@ apiVersion: k8s.ovn.org/v1
 kind: UserDefinedNetwork
 metadata:
   name: udn-with-nad
-  namespace: ocpnetui-31-udn
+  namespace: ${UDN_NS}
 spec:
   topology: Layer2
   layer2:
@@ -133,7 +68,7 @@ metadata:
 spec:
   namespaceSelector:
     matchLabels:
-      ocpnetui-31/cudn: member
+      e2e.networking-console-plugin/cudn-31: member
   network:
     topology: Layer2
     layer2:
