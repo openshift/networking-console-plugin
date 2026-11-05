@@ -40,9 +40,6 @@ const Row: FC<RowProps<BGPRouting>> = ({ activeColumnIDs, obj }) => {
       <TableData activeColumnIDs={activeColumnIDs} id="subnets">
         {obj.spec?.network?.subnets?.join(', ')}
       </TableData>
-      <TableData activeColumnIDs={activeColumnIDs} id="namespaces">
-        {obj.status?.namespaces?.length || 0}
-      </TableData>
       <TableData activeColumnIDs={activeColumnIDs} id="phase">
         <BGPStatus condition={available} phase={obj.status?.phase} />
       </TableData>
@@ -78,7 +75,6 @@ const BGPRoutingList: FC = () => {
       { id: 'name', title: t('Name') },
       { id: 'network', title: t('Network') },
       { id: 'subnets', title: t('Advertised subnets') },
-      { id: 'namespaces', title: t('Selected namespaces') },
       { id: 'phase', title: t('Phase') },
       { id: 'availability', title: t('Availability') },
       { id: 'reason', title: t('Reason') },

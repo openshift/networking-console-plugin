@@ -1,5 +1,6 @@
 import { checkErrors } from '../support';
 import { MINUTE } from '../support/commands';
+import { expectYamlToContain, switchToFormView, switchToYamlView } from '../support/service-form';
 
 const CLOUD_CREATE_URL =
   '/k8s/cluster/networking.openshift.io~v1beta1~BGPCloudConfiguration/~new/form';
@@ -41,6 +42,13 @@ describe('BGP forms', () => {
     cy.get('#enableNestedVirtualization').should('not.exist');
 
     cy.get('#platform').click();
+    cy.contains('[role="menuitem"]', 'Azure').click();
+    cy.get('#azureSubscriptionID').should('be.visible');
+    cy.get('#azureResourceGroup').should('be.visible');
+    cy.get('#azureRouteServerName').should('be.visible');
+    cy.get('#awsRegion').should('not.exist');
+
+    cy.get('#platform').click();
     cy.contains('[role="menuitem"]', 'GCP').click();
     cy.get('#gcpProject').should('be.visible');
     cy.get('#gcpRegion').should('be.visible');
@@ -61,13 +69,84 @@ describe('BGP forms', () => {
     cy.get('#ebgpMultiHop').should('have.attr', 'type', 'checkbox');
   });
 
+  it('allows selector labels with an empty value', () => {
+    cy.visit(CLOUD_CREATE_URL);
+    selectFormEditor();
+
+    cy.get('#localASN').type('64512');
+    cy.get('#platform').click();
+    cy.contains('[role="menuitem"]', 'Manual').click();
+    cy.get('#peerSelectorKey').type('k8s.ovn.org/primary-user-defined-network');
+    cy.get('#peerSelectorValue').should('have.value', '');
+    cy.get('#neighborAddress').type('192.0.2.1');
+    cy.get('#remoteASN').type('64513');
+    cy.get('#routerSelectorKey').type('node-role.kubernetes.io/bgp');
+    cy.get('#routerSelectorValue').should('have.value', '');
+
+    cy.get('button[type="submit"]').should('not.be.disabled');
+  });
+
   it('supports switching between the guided form and YAML editor', () => {
     cy.visit(CLOUD_CREATE_URL);
     selectFormEditor();
-    cy.get('#yaml').check({ force: true });
-    cy.get('.monaco-editor', { timeout: MINUTE }).should('be.visible');
-    cy.get('#form').check({ force: true });
-    cy.get('#localASN').should('be.visible');
+    cy.get('#localASN').type('64512');
+    cy.get('#platform').click();
+    cy.contains('[role="menuitem"]', 'Manual').click();
+    cy.get('#peerSelectorKey').type('node-role.kubernetes.io/bgp');
+    cy.get('#neighborAddress').type('192.0.2.1');
+    cy.get('#remoteASN').type('64513');
+    cy.get('#routerSelectorKey').type('node-role.kubernetes.io/worker');
+
+    switchToYamlView();
+    expectYamlToContain(
+      'kind: BGPCloudConfiguration',
+      'platform: Manual',
+      'localASN: 64512',
+      'address: 192.0.2.1',
+    );
+    switchToFormView();
+    cy.get('#localASN').should('have.value', '64512');
+    cy.get('#platform').should('contain', 'Manual');
+    cy.get('#neighborAddress').should('have.value', '192.0.2.1');
+  });
+
+  it('supports switching between the BGPRouting form and YAML editor', () => {
+    cy.visit(ROUTING_CREATE_URL);
+    selectFormEditor();
+    cy.get('#name').type('e2e-routing');
+    cy.get('#network').type('e2e-network');
+    cy.get('#subnet1').type('10.20.0.0/16');
+    cy.get('#subnet2').type('2001:db8:20::/64');
+
+    switchToYamlView();
+    expectYamlToContain(
+      'kind: BGPRouting',
+      'name: e2e-routing',
+      'name: e2e-network',
+      '10.20.0.0/16',
+      '2001:db8:20::/64',
+    );
+    switchToFormView();
+    cy.get('#name').should('have.value', 'e2e-routing');
+    cy.get('#network').should('have.value', 'e2e-network');
+    cy.get('#subnet1').should('have.value', '10.20.0.0/16');
+    cy.get('#subnet2').should('have.value', '2001:db8:20::/64');
+  });
+
+  it('shows the routing tab disabled until a cloud configuration exists', () => {
+    cy.visit('/k8s/cluster/networking.openshift.io~v1beta1~BGPCloudConfiguration');
+    cy.contains('h1', 'BGP', { timeout: MINUTE }).should('be.visible');
+    cy.get('[role="tab"]', { timeout: MINUTE })
+      .contains('BGPRouting')
+      .should(($tab) => {
+        const configurationExists =
+          $tab.closest('body').find('a[href*="BGPCloudConfiguration/"]').length > 0;
+        if (configurationExists) {
+          expect($tab).not.to.have.attr('aria-disabled', 'true');
+        } else {
+          expect($tab).to.have.attr('aria-disabled', 'true');
+        }
+      });
   });
 
   it('validates BGPRouting CIDRs and refreshes namespace guidance', () => {
@@ -78,7 +157,7 @@ describe('BGP forms', () => {
     cy.get('#name').should('have.attr', 'type', 'text');
     cy.get('#network').type('prod');
     cy.contains('code', 'cluster-udn=prod').should('be.visible');
-    cy.get('#subnet1').type('not-a-cidr');
+    cy.get('#subnet1').type('abc.def/24');
     cy.contains('Enter a valid IPv4 or IPv6 CIDR.').should('be.visible');
     cy.get('button[type="submit"]').should('be.disabled');
 

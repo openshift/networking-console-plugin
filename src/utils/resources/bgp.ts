@@ -47,7 +47,6 @@ export type BGPRouting = {
   spec: { network: { name: string; subnets: string[] } };
   status?: {
     conditions?: BGPCondition[];
-    namespaces?: string[];
     observedGeneration?: number;
     phase?: string;
   };
