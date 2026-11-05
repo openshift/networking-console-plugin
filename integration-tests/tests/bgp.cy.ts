@@ -1,6 +1,6 @@
 import { checkErrors } from '../support';
 import { MINUTE } from '../support/commands';
-import { expectYamlToContain, switchToFormView, switchToYamlView } from '../support/service-form';
+import { expectYamlToContain, switchToYamlView } from '../support/service-form';
 
 const CLOUD_CREATE_URL =
   '/k8s/cluster/networking.openshift.io~v1beta1~BGPCloudConfiguration/~new/form';
@@ -8,6 +8,11 @@ const ROUTING_CREATE_URL = '/k8s/cluster/networking.openshift.io~v1beta1~BGPRout
 
 const selectFormEditor = () => {
   cy.get('#form', { timeout: MINUTE }).check({ force: true });
+};
+
+const switchBGPFormView = (fieldId: string) => {
+  cy.contains('label', 'Form view').click();
+  cy.get(`#${fieldId}`, { timeout: MINUTE }).should('be.visible');
 };
 
 describe('BGP forms', () => {
@@ -104,7 +109,7 @@ describe('BGP forms', () => {
       'localASN: 64512',
       'address: 192.0.2.1',
     );
-    switchToFormView();
+    switchBGPFormView('localASN');
     cy.get('#localASN').should('have.value', '64512');
     cy.get('#platform').should('contain', 'Manual');
     cy.get('#neighborAddress').should('have.value', '192.0.2.1');
@@ -126,7 +131,7 @@ describe('BGP forms', () => {
       '10.20.0.0/16',
       '2001:db8:20::/64',
     );
-    switchToFormView();
+    switchBGPFormView('name');
     cy.get('#name').should('have.value', 'e2e-routing');
     cy.get('#network').should('have.value', 'e2e-network');
     cy.get('#subnet1').should('have.value', '10.20.0.0/16');
@@ -136,15 +141,15 @@ describe('BGP forms', () => {
   it('shows the routing tab disabled until a cloud configuration exists', () => {
     cy.visit('/k8s/cluster/networking.openshift.io~v1beta1~BGPCloudConfiguration');
     cy.contains('h1', 'BGP', { timeout: MINUTE }).should('be.visible');
-    cy.get('[role="tab"]', { timeout: MINUTE })
+    cy.get('button[role="tab"]', { timeout: MINUTE })
       .contains('BGPRouting')
       .should(($tab) => {
         const configurationExists =
           $tab.closest('body').find('a[href*="BGPCloudConfiguration/"]').length > 0;
         if (configurationExists) {
-          expect($tab).not.to.have.attr('aria-disabled', 'true');
+          expect($tab).not.to.be.disabled;
         } else {
-          expect($tab).to.have.attr('aria-disabled', 'true');
+          expect($tab).to.be.disabled;
         }
       });
   });
@@ -154,7 +159,7 @@ describe('BGP forms', () => {
     cy.contains('h1', 'Create BGPRouting', { timeout: MINUTE }).should('be.visible');
     selectFormEditor();
 
-    cy.get('#name').should('have.attr', 'type', 'text');
+    cy.get('#name').should('have.attr', 'type', 'text').type('e2e-routing-validation');
     cy.get('#network').type('prod');
     cy.contains('code', 'cluster-udn=prod').should('be.visible');
     cy.get('#subnet1').type('abc.def/24');
