@@ -30,6 +30,7 @@ export type NetworkAttachmentDefinitionConfig = {
   netAttachDefName?: string;
   physicalNetworkName?: string;
   plugins?: NetworkAttachmentDefinitionPlugin[];
+  portIsolation?: boolean;
   preserveDefaultVlan?: boolean;
   role?: string;
   subnets?: string;

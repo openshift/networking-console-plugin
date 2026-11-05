@@ -449,6 +449,7 @@
   "Policy type": "정책 유형",
   "Port": "포트",
   "Port is required": "포트가 필요합니다.",
+  "Port isolation": "Port isolation",
   "Port must be between 1 and 65535": "포트는 1에서 65535 사이의 값이어야합니다.",
   "Port names must be unique": "포트 이름은 고유해야 합니다.",
   "Port names must be valid DNS labels": "포트 이름은 유효한 DNS 레이블이어야 합니다.",

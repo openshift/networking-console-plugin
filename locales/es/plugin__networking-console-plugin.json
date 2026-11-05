@@ -456,6 +456,7 @@
   "Policy type": "Tipo de póliza",
   "Port": "Puerto",
   "Port is required": "Se requiere un puerto",
+  "Port isolation": "Port isolation",
   "Port must be between 1 and 65535": "El puerto debe estar entre 1 y 65535",
   "Port names must be unique": "Los nombres de los puertos deben ser únicos",
   "Port names must be valid DNS labels": "Los nombres de los puertos deben ser etiquetas DNS válidas",
