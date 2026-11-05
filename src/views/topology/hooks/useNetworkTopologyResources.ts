@@ -9,6 +9,12 @@ import {
 import { IoK8sApiCoreV1Pod } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import { V1VirtualMachine } from '@kubevirt-ui-ext/kubevirt-api/kubevirt';
 import {
+  V1beta1NodeNetworkConfigurationEnactment,
+  V1beta1NodeNetworkConfigurationPolicy,
+  V1beta1NodeNetworkState,
+  V1NodeNetworkConfigurationPolicy,
+} from '@kubevirt-ui-ext/kubevirt-api/nmstate';
+import {
   K8sResourceCommon,
   useActiveNamespace,
   useK8sWatchResources,
@@ -18,6 +24,9 @@ import useProjects from '@utils/hooks/useProjects/useProjects';
 import {
   ClusterUserDefinedNetworkModelGroupVersionKind,
   IngressModel,
+  NodeNetworkConfigurationEnactmentModelGroupVersionKind,
+  NodeNetworkConfigurationPolicyModelGroupVersionKind,
+  NodeNetworkStateModelGroupVersionKind,
   UserDefinedNetworkModelGroupVersionKind,
 } from '@utils/models';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
@@ -31,6 +40,9 @@ import {
 export type NetworkTopologyResources = {
   clusterUserDefinedNetworks: ClusterUserDefinedNetworkKind[];
   networkAttachmentDefinitions: NetworkAttachmentDefinitionKind[];
+  nodeNetworkConfigurationEnactments: V1beta1NodeNetworkConfigurationEnactment[];
+  nodeNetworkConfigurationPolicies: V1NodeNetworkConfigurationPolicy[];
+  nodeNetworkStates: V1beta1NodeNetworkState[];
   pods: IoK8sApiCoreV1Pod[];
   projects: K8sResourceCommon[];
   userDefinedNetworks: UserDefinedNetworkKind[];
@@ -67,6 +79,22 @@ const useNetworkTopologyResources = (): UseNetworkTopologyResourcesResult => {
       groupVersionKind: modelToGroupVersionKind(NetworkAttachmentDefinitionModel),
       isList: true,
       ...namespaceProperties,
+    },
+    nodeNetworkConfigurationEnactments: {
+      groupVersionKind: NodeNetworkConfigurationEnactmentModelGroupVersionKind,
+      isList: true,
+      namespaced: false,
+    },
+    nodeNetworkConfigurationPolicies: {
+      groupVersionKind: NodeNetworkConfigurationPolicyModelGroupVersionKind,
+      isList: true,
+      namespaced: false,
+      optional: true,
+    },
+    nodeNetworkStates: {
+      groupVersionKind: NodeNetworkStateModelGroupVersionKind,
+      isList: true,
+      namespaced: false,
     },
     pods: {
       groupVersionKind: modelToGroupVersionKind(PodModel),
@@ -106,6 +134,11 @@ const useNetworkTopologyResources = (): UseNetworkTopologyResourcesResult => {
       .data as ClusterUserDefinedNetworkKind[],
     networkAttachmentDefinitions: watchedResources.networkAttachmentDefinitions
       .data as NetworkAttachmentDefinitionKind[],
+    nodeNetworkConfigurationEnactments: watchedResources.nodeNetworkConfigurationEnactments
+      .data as V1beta1NodeNetworkConfigurationEnactment[],
+    nodeNetworkConfigurationPolicies: watchedResources.nodeNetworkConfigurationPolicies
+      .data as V1beta1NodeNetworkConfigurationPolicy[],
+    nodeNetworkStates: watchedResources.nodeNetworkStates.data as V1beta1NodeNetworkState[],
     pods: filteredPods,
     projects: projects || [],
     userDefinedNetworks: watchedResources.userDefinedNetworks.data as UserDefinedNetworkKind[],

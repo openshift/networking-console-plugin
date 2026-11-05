@@ -24,7 +24,7 @@ import {
   NodeNetworkStateModelGroupVersionKind,
 } from '@utils/models';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
-import { NodeNetworkStateWithBridgeMappings } from '@utils/resources/nmstate/types';
+import { NodeNetworkStateWithBridgeMappings } from '@utils/resources/nmstate/NodeNetworkStates/types';
 
 import { isNMStateSimulatedAbsent } from '../utils/simulation';
 import { getSourceState } from '../utils/sourceStates';

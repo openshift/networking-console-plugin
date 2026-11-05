@@ -2,8 +2,8 @@ import { useMemo } from 'react';
 
 import { useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { NodeNetworkStateModelGroupVersionKind } from '@utils/models';
-import { getObservedBridgeMappings } from '@utils/resources/nmstate/selectors';
-import { NodeNetworkStateWithBridgeMappings } from '@utils/resources/nmstate/types';
+import { getObservedBridgeMappings } from '@utils/resources/nmstate/NodeNetworkConfigurationPolicies/selectors';
+import { NodeNetworkStateWithBridgeMappings } from '@utils/resources/nmstate/NodeNetworkStates/types';
 
 const useOVNBridgeMappings = (): string[] => {
   const [nodeNetworkStates, loaded, loadError] = useK8sWatchResource<

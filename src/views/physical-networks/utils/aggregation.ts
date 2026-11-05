@@ -24,8 +24,8 @@ import {
   getObservedBridgeMappings,
   getPolicyLocalnetNames,
   getUplinkDisplayText,
-} from '@utils/resources/nmstate/selectors';
-import type { NodeNetworkStateWithBridgeMappings } from '@utils/resources/nmstate/types';
+} from '@utils/resources/nmstate/NodeNetworkConfigurationPolicies/selectors';
+import { NodeNetworkStateWithBridgeMappings } from '@utils/resources/nmstate/NodeNetworkStates/types';
 import { isVirtLauncherPod } from '@utils/resources/pods/selectors';
 import {
   getAnnotations,

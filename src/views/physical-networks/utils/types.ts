@@ -9,7 +9,7 @@ import {
 } from '@kubevirt-ui-ext/kubevirt-api/nmstate';
 import type { K8sGroupVersionKind } from '@openshift-console/dynamic-plugin-sdk';
 import type { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
-import type { NodeNetworkStateWithBridgeMappings } from '@utils/resources/nmstate/types';
+import { NodeNetworkStateWithBridgeMappings } from '@utils/resources/nmstate/NodeNetworkStates/types';
 
 export enum SourceAvailability {
   Absent = 'absent',

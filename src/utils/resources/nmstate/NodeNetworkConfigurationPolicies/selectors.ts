@@ -8,6 +8,7 @@ import {
   V1beta1NodeNetworkConfigurationEnactment,
   V1NodeNetworkConfigurationPolicy,
 } from '@kubevirt-ui-ext/kubevirt-api/nmstate';
+import { NodeNetworkStateWithBridgeMappings } from '@utils/resources/nmstate/NodeNetworkStates/types';
 import { NO_DATA_DASH } from '@utils/utils/constants';
 
 import {
@@ -18,7 +19,7 @@ import {
   LINK_AGGREGATION,
   OVN_BRIDGE_MAPPINGS,
 } from './constants';
-import { NodeNetworkStateWithBridgeMappings, ObservedBridgeMapping } from './types';
+import { ObservedBridgeMapping } from './types';
 
 enum UplinkConnection {
   BondingInterface = 'bonding_interface',

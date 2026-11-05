@@ -1,9 +1,21 @@
 import { IoK8sApiCoreV1Pod } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import { V1VirtualMachine } from '@kubevirt-ui-ext/kubevirt-api/kubevirt';
+import {
+  V1beta1NodeNetworkConfigurationEnactment,
+  V1beta1NodeNetworkState,
+} from '@kubevirt-ui-ext/kubevirt-api/nmstate';
 import { K8sResourceCommon } from '@openshift-console/dynamic-plugin-sdk';
 import { EdgeModel, NodeModel } from '@patternfly/react-topology';
 import { getPodNADReferences, getVMNADReferences } from '@utils/resources/nads/selectors';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
+import {
+  getCorrelatedEnactment,
+  getNNCEConfiguredInterfaces,
+} from '@utils/resources/nmstate/NodeNetworkConfigurationEnactments/selectors';
+import {
+  getNNSInterfaces,
+  getVisibleInterfaces,
+} from '@utils/resources/nmstate/NodeNetworkStates/selectors';
 import { getName, getNamespace } from '@utils/resources/shared';
 import { CLUSTER_UDN_NAD_NAME_PREFIX } from '@utils/resources/udns/constants';
 import { getCUDNNamespaceNames } from '@utils/resources/udns/helper';
@@ -15,6 +27,11 @@ import {
   createNode,
   findExistingEdge,
 } from '@views/topology/utils/dataTransformation/dataTransformation';
+import {
+  createInterfaceEdges,
+  createInterfaceNodes,
+  createNodeGroup,
+} from '@views/topology/utils/dataTransformation/nmstateResourceUtils';
 import { podUsesUDN } from '@views/topology/utils/filteringUtils';
 
 export const getResourceID = (resource: K8sResourceCommon): string => {
@@ -215,5 +232,66 @@ export const addClusterUserDefinedNetworkNodesAndEdges = (
           }
         }
       }
+    });
+  });
+
+export const addNodeGroupsAndEdges = (
+  nodeNetworkStates: V1beta1NodeNetworkState[],
+  enactments: V1beta1NodeNetworkConfigurationEnactment[],
+  nodes: NodeModel[],
+  edges: EdgeModel[],
+  nodeMap: Map<string, NodeModel>,
+  nads: NetworkAttachmentDefinitionKind[],
+) =>
+  nodeNetworkStates?.forEach((nodeState: V1beta1NodeNetworkState) => {
+    const nnsName = getName(nodeState);
+    const allInterfaces = getNNSInterfaces(nodeState);
+    const visibleInterfaces = getVisibleInterfaces(allInterfaces);
+
+    // Find correlated enactment for policy-derived styling
+    const enactment = getCorrelatedEnactment(enactments, nnsName);
+    const nnceConfiguredInterfaces = getNNCEConfiguredInterfaces(enactment, nodeState);
+
+    // Create interface child nodes
+    const childNodes = createInterfaceNodes(nnsName, visibleInterfaces, nnceConfiguredInterfaces);
+
+    // Create interface-to-interface edges (bridge/bond/vlan)
+    const interfaceEdges = createInterfaceEdges(childNodes);
+
+    // Create group node container
+    const groupNode = createNodeGroup(
+      nnsName,
+      childNodes.map((child) => child.id),
+      true,
+    );
+
+    // Add group and child nodes to collections
+    nodes.push(groupNode, ...childNodes);
+    edges.push(...interfaceEdges);
+
+    // Add nodes to map for edge creation
+    childNodes.forEach((node) => {
+      nodeMap.set(node.id, node);
+    });
+
+    // Create interface-to-NAD edges
+    childNodes.forEach((interfaceNode) => {
+      const interfaceName = interfaceNode.label;
+
+      nads?.forEach((nad) => {
+        const nadName = getName(nad);
+        const nadID = getResourceID(nad);
+
+        // Simple name matching - can be enhanced with bridge mapping logic
+        if (interfaceName === nadName) {
+          const nadNode = nodeMap.get(nadID);
+          if (nadNode && interfaceNode.id !== nadID) {
+            const existingEdge = findExistingEdge(edges, interfaceNode.id, nadID);
+            if (!existingEdge) {
+              edges.push(createEdge(interfaceNode.id, nadID, RelationshipType.NodeInterfaceToNAD));
+            }
+          }
+        }
+      });
     });
   });
