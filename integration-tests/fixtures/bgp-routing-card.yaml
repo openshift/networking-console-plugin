@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: e2e-bgp-card-ns
+  labels:
+    e2e.bgp-card/member: 'true'
+---
+apiVersion: k8s.ovn.org/v1
+kind: ClusterUserDefinedNetwork
+metadata:
+  name: e2e-bgp-card-cudn
+spec:
+  namespaceSelector:
+    matchLabels:
+      e2e.bgp-card/member: 'true'
+  network:
+    topology: Layer2
+    layer2:
+      role: Secondary
+      subnets:
+        - 10.253.0.0/24
+---
+apiVersion: networking.openshift.io/v1beta1
+kind: BGPRouting
+metadata:
+  name: e2e-bgp-card-routing
+spec:
+  network:
+    name: e2e-bgp-card-cudn
+    subnets:
+      - 10.253.0.0/24

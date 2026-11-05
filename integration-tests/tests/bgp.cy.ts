@@ -5,6 +5,8 @@ import { expectYamlToContain, switchToYamlView } from '../support/service-form';
 const CLOUD_CREATE_URL =
   '/k8s/cluster/networking.openshift.io~v1beta1~BGPCloudConfiguration/~new/form';
 const ROUTING_CREATE_URL = '/k8s/cluster/networking.openshift.io~v1beta1~BGPRouting/~new/form';
+const BGP_CARD_CUDN_URL = '/k8s/cluster/k8s.ovn.org~v1~ClusterUserDefinedNetwork/e2e-bgp-card-cudn';
+const BGP_CARD_FIXTURE = 'fixtures/bgp-routing-card.yaml';
 
 const selectFormEditor = () => {
   cy.get('#form', { timeout: MINUTE }).check({ force: true });
@@ -18,6 +20,7 @@ const switchBGPFormView = (fieldId: string) => {
 describe('BGP forms', () => {
   before(() => {
     cy.login();
+    cy.applyFixtureFile(BGP_CARD_FIXTURE);
   });
 
   afterEach(() => {
@@ -25,6 +28,12 @@ describe('BGP forms', () => {
   });
 
   after(() => {
+    cy.exec(
+      'oc delete bgprouting e2e-bgp-card-routing --ignore-not-found && ' +
+        'oc delete clusteruserdefinednetwork e2e-bgp-card-cudn --ignore-not-found && ' +
+        'oc delete namespace e2e-bgp-card-ns --ignore-not-found --wait=false',
+      { failOnNonZeroExit: false, timeout: MINUTE },
+    );
     cy.logout();
   });
 
@@ -190,5 +199,17 @@ describe('BGP forms', () => {
           cy.get('[data-test-id="item-filter"]').should('be.visible');
         } else cy.contains('No BGPRouting found').should('be.visible');
       });
+  });
+
+  it('shows related BGPRouting details on the CUDN page', () => {
+    cy.visit(BGP_CARD_CUDN_URL);
+    cy.contains('h1', 'e2e-bgp-card-cudn', { timeout: MINUTE }).should('be.visible');
+    cy.contains('h2', 'BGP routings', { timeout: MINUTE }).scrollIntoView();
+    cy.contains('h2', 'BGP routings', { timeout: MINUTE }).should('be.visible');
+    cy.contains('a', 'e2e-bgp-card-routing').should('be.visible');
+    cy.contains('Network').should('be.visible');
+    cy.contains('e2e-bgp-card-cudn').should('be.visible');
+    cy.contains('Phase').should('be.visible');
+    cy.contains('Availability').should('be.visible');
   });
 });
