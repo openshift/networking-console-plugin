@@ -1,6 +1,7 @@
 .git
 node_modules
 dist
+coverage
 .git
 .idea
 .vscode
