@@ -21,6 +21,7 @@ import {
   PageSection,
 } from '@patternfly/react-core';
 import { PencilAltIcon } from '@patternfly/react-icons';
+import DescriptionDetails from '@utils/components/DescriptionDetails/DescriptionDetails';
 import { DetailsItem } from '@utils/components/DetailsItem/DetailsItem';
 import { LabelList } from '@utils/components/DetailsItem/LabelList';
 import DetailsSectionTitle from '@utils/components/DetailsSectionTitle/DetailsSectionTitle';
@@ -30,7 +31,6 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
 import { getAnnotations, getLabels, getName, getNamespace, getUID } from '@utils/resources/shared';
 
-import NADDescriptionDetails from './NADDescriptionDetails';
 import NADTypeDetails from './NADTypeDetails';
 
 type NADDetailsProps = {
@@ -116,7 +116,7 @@ const NADDetails: FC<NADDetailsProps> = ({ obj: nad }) => {
               )}
             </DetailsItem>
             <DetailsItem label={t('Description')} obj={nad} path="metadata.annotations.description">
-              <NADDescriptionDetails nad={nad} />
+              <DescriptionDetails obj={nad} />
             </DetailsItem>
             <DetailsItem label={t('Created at')} obj={nad} path="metadata.creationTimestamp">
               <Timestamp timestamp={nad.metadata?.creationTimestamp} />

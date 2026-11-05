@@ -5,6 +5,7 @@ import { Divider, Stack, StackItem } from '@patternfly/react-core';
 import {
   GRAPH_LAYOUT_END_EVENT,
   Model,
+  SelectionEventListener,
   TopologyView,
   Visualization,
   VisualizationProvider,
@@ -12,6 +13,7 @@ import {
 } from '@patternfly/react-topology';
 import { isEmpty } from '@utils/utils';
 import ControlBar from '@views/topology/components/TopologyControlBar';
+import TopologyDrawer from '@views/topology/components/TopologyDrawer/TopologyDrawer';
 import TopologyTableView from '@views/topology/components/TopologyTableView/TopologyTableView';
 import TopologyToolbar from '@views/topology/components/TopologyToolbar';
 import { useTopologyContext } from '@views/topology/context/TopologyContext';
@@ -40,7 +42,7 @@ const Topology: FC = () => {
   const [displayMode, setDisplayMode] = useState<TopologyDisplayMode>(TopologyDisplayMode.graph);
   const [displayOptions, setDisplayOptions] =
     useState<DisplayOptionsState>(DEFAULT_DISPLAY_OPTIONS);
-  const { resources } = useTopologyContext();
+  const { onSelectNode, resources } = useTopologyContext();
   const { advancedFilters, filterMatchType, layout, resourceTypes, searchQuery, setLayout } =
     useTopologyFilters();
   const laidOutModelRef = useRef<Model | undefined>(undefined);
@@ -51,6 +53,25 @@ const Topology: FC = () => {
   const topologyModel = useMemo(
     () => (!resources || isEmpty(resources) ? {} : generateDataModel(resources)),
     [resources],
+  );
+
+  const handleSelection: SelectionEventListener = useCallback(
+    (selectedIds: string[]) => {
+      if (!controller) return;
+
+      if (selectedIds.length === 0) {
+        onSelectNode(null);
+        return;
+      }
+
+      const selectedId = selectedIds[0];
+      const node = controller.getNodeById(selectedId);
+
+      if (node && node.getType() === 'node') {
+        onSelectNode(node);
+      }
+    },
+    [controller, onSelectNode],
   );
 
   useEffect(() => {
@@ -134,6 +155,16 @@ const Topology: FC = () => {
     });
   }, [controller, displayOptions.compactView, displayOptions.showLabels]);
 
+  useEffect(() => {
+    if (!controller) return;
+
+    controller.addEventListener<SelectionEventListener>('selection', handleSelection);
+
+    return () => {
+      controller.removeEventListener('selection', handleSelection);
+    };
+  }, [controller, handleSelection]);
+
   // Re-run fit after mount to ensure correct scale when container size stabilizes (e.g. navigation from create flow)
   useEffect(() => {
     if (!controller) return;
@@ -174,12 +205,14 @@ const Topology: FC = () => {
           <TopologyTableView />
         ) : (
           <VisualizationProvider controller={controller}>
-            <TopologyView
-              className={classNames({ 'networking-topology--filter-active': isSearchActive })}
-              controlBar={<ControlBar controller={controller} />}
-            >
-              <VisualizationSurface />
-            </TopologyView>
+            <TopologyDrawer>
+              <TopologyView
+                className={classNames({ 'networking-topology--filter-active': isSearchActive })}
+                controlBar={<ControlBar controller={controller} />}
+              >
+                <VisualizationSurface />
+              </TopologyView>
+            </TopologyDrawer>
           </VisualizationProvider>
         )}
       </StackItem>
