@@ -13,14 +13,20 @@ import { getName, getNamespace, resourcePathFromModel } from '@utils/resources/s
 
 import useIsCreationForm from './hooks/useIsCreationForm';
 import { NAME_FIELD_ID, NAMESPACE_FIELD_ID } from './utils/constants';
-import { buildServiceSubmitPayload, portsToText, textToPorts } from './utils/utils';
+import type { ServicePortFormData } from './utils/types';
+import {
+  buildServiceSubmitPayload,
+  formDataToServicePorts,
+  servicePortsToFormData,
+} from './utils/utils';
 import {
   getServiceFormFieldErrors,
   validateExternalName,
-  validatePortsText,
   validateSelectorPairs,
+  validateServicePorts,
 } from './utils/validationUtils';
 import ServiceFormActions from './ServiceFormActions';
+import ServicePortsField from './ServicePortsField';
 import ServiceTypeFields from './ServiceTypeFields';
 import ServiceTypeSelect from './ServiceTypeSelect';
 
@@ -35,7 +41,7 @@ const ServiceForm: FC<ServiceFormProps> = ({ formData, onChange: onFormChange })
   const [apiError, setError] = useState<Error>(null);
   const isCreationForm = useIsCreationForm();
 
-  const [portsText, setPortsText] = useState(() => portsToText(formData.spec?.ports));
+  const [ports, setPorts] = useState(() => servicePortsToFormData(formData.spec?.ports));
   const [portsError, setPortsError] = useState<string>();
   const [labelPairs, setLabelPairs] = useState(() => recordToLabelPairs(formData.spec?.selector));
   const [selectorError, setSelectorError] = useState<string>();
@@ -79,18 +85,19 @@ const ServiceForm: FC<ServiceFormProps> = ({ formData, onChange: onFormChange })
     setSelectorError(error);
   };
 
-  const onPortsChange = (text: string) => {
-    setPortsText(text);
-    const { errorMessage, isValid } = validatePortsText(t, text);
+  const onPortsChange = (nextPorts: ServicePortFormData[]) => {
+    setPorts(nextPorts);
+    const { errorMessage, isValid } = validateServicePorts(t, nextPorts, serviceType);
     setPortsError(isValid ? undefined : errorMessage);
-    if (isValid) {
-      setValue('spec.ports', textToPorts(text), { shouldDirty: true, shouldValidate: true });
-    }
+    setValue('spec.ports', formDataToServicePorts(nextPorts), {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
   };
 
   const onSubmit = (data: IoK8sApiCoreV1Service) => {
     const { portsError: nextPortsError, selectorError: nextSelectorError } =
-      getServiceFormFieldErrors(t, labelPairs, portsText, data.spec?.type);
+      getServiceFormFieldErrors(t, labelPairs, ports, data.spec?.type);
 
     setPortsError(nextPortsError);
     setSelectorError(nextSelectorError);
@@ -99,7 +106,7 @@ const ServiceForm: FC<ServiceFormProps> = ({ formData, onChange: onFormChange })
       return;
     }
 
-    const payload = buildServiceSubmitPayload(data, portsText);
+    const payload = buildServiceSubmitPayload(data);
 
     const k8sPromise = isCreationForm
       ? k8sCreate({ data: payload, model: ServiceModel })
@@ -166,11 +173,17 @@ const ServiceForm: FC<ServiceFormProps> = ({ formData, onChange: onFormChange })
             labelPairs={labelPairs}
             namespace={namespace}
             onLabelPairsChange={onLabelPairsChange}
-            onPortsChange={onPortsChange}
-            portsError={portsError}
-            portsText={portsText}
             selectorError={selectorError}
           />
+
+          {!isExternalName && (
+            <ServicePortsField
+              error={portsError}
+              onChange={onPortsChange}
+              ports={ports}
+              serviceType={serviceType}
+            />
+          )}
 
           <ServiceFormActions
             apiError={apiError}

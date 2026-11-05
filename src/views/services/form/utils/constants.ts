@@ -1,4 +1,5 @@
 export const SERVICE_TYPES = ['ClusterIP', 'NodePort', 'LoadBalancer', 'ExternalName'] as const;
+export const SERVICE_PORT_PROTOCOLS = ['TCP', 'UDP', 'SCTP'] as const;
 
 export type ServiceType = (typeof SERVICE_TYPES)[number];
 
