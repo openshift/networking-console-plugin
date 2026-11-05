@@ -387,7 +387,7 @@
   "Namespaces": "네임스페이스",
   "Namespaces can be created before or after this network. Add the selector labels above to include them.": "Namespaces can be created before or after this network. Add the selector labels above to include them.",
   "Namespaces having all the supplied key/value pairs as labels will be selected.": "레이블로 제공된 모든 키/값 쌍이 있는 네임스페이스가 선택됩니다.",
-  "Namespaces must have all of the labels shown above to join this network.": "Namespaces must have all of the labels shown above to join this network.",
+  "Namespaces must satisfy all selector requirements, including labels that must be absent and alternative values.": "Namespaces must satisfy all selector requirements, including labels that must be absent and alternative values.",
   "Naming information": "이름 지정 정보",
   "NCC hub name": "NCC 허브 이름",
   "NCC spoke prefix": "NCC 스포크 접두사",

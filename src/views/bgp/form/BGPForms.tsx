@@ -47,6 +47,7 @@ type FieldProps<T extends FieldValues> = {
   help?: string;
   id: Path<T>;
   label: string;
+  disabled?: boolean;
   placeholder?: string;
   register: UseFormRegister<T>;
   required?: boolean;
@@ -58,6 +59,7 @@ const Field = <T extends FieldValues>({
   help,
   id,
   label,
+  disabled,
   placeholder,
   register,
   required,
