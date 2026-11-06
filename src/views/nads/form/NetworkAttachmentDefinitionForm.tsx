@@ -96,10 +96,10 @@ const NetworkAttachmentDefinitionForm: FC<NetworkAttachmentDefinitionFormProps> 
                 />
               }
             >
-              <TextInput {...register('name', { required: true })} />
+              <TextInput id="name" {...register('name', { required: true })} />
             </FormGroup>
             <FormGroup fieldId="description" label={t('Description')}>
-              <TextInput {...register('description')} />
+              <TextInput id="description" {...register('description')} />
             </FormGroup>
             <NetworkAttachmentDefinitionTypeSelect />
             <NetworkTypeParameters />
