@@ -16,6 +16,7 @@ export default tseslint.config(
       // .gitignore:
       '**/node_modules/',
       '**/dist/',
+      '**/coverage/',
       'integration-tests/videos',
       'integration-tests/screenshots',
       '**/.DS_Store',
