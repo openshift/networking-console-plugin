@@ -669,6 +669,10 @@ export const Timestamp = ({ timestamp }: { timestamp?: string }) => (
 /* The little resource-kind glyph shown next to links. */
 export const ResourceIcon = () => null;
 
+/* Titles the browser tab in the console. The harness has no tab to title, and
+ * components render it next to their content, so it renders nothing. */
+export const DocumentTitle = () => null;
+
 /* Status icons the SDK re-exports. PatternFly 6 dropped the coloured variants,
  * so the neutral icons stand in; components only render them inside an Icon. */
 export const GreenCheckCircleIcon = CheckCircleIcon;
