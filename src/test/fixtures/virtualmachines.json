@@ -1,0 +1,289 @@
+{
+  "apiVersion": "kubevirt.io/v1",
+  "items": [
+    {
+      "apiVersion": "kubevirt.io/v1",
+      "kind": "VirtualMachine",
+      "metadata": {
+        "annotations": {
+          "kubemacpool.io/transaction-timestamp": "2026-11-06T14:22:56.783992365Z",
+          "kubevirt.io/latest-observed-api-version": "v1",
+          "kubevirt.io/storage-observed-api-version": "v1"
+        },
+        "finalizers": ["kubevirt.io/virtualMachineControllerFinalize"],
+        "name": "vm-detached",
+        "namespace": "cy-test-ns"
+      },
+      "spec": {
+        "running": false,
+        "template": {
+          "metadata": {
+            "annotations": {
+              "kubevirt.io/pci-topology-version": "v3"
+            },
+            "labels": {
+              "kubevirt.io/domain": "vm-detached"
+            }
+          },
+          "spec": {
+            "architecture": "amd64",
+            "domain": {
+              "devices": {},
+              "firmware": {
+                "serial": "124ca116-2f98-44cd-ab5d-152eca8aec52",
+                "uuid": "36e0dc8d-524f-448b-b527-71218ae16f82"
+              },
+              "machine": {
+                "type": "pc-q35-rhel9.8.0"
+              },
+              "resources": {
+                "requests": {
+                  "memory": "64Mi"
+                }
+              }
+            }
+          }
+        }
+      },
+      "status": {
+        "conditions": [
+          {
+            "lastProbeTime": "2026-11-06T14:22:56Z",
+            "lastTransitionTime": "2026-11-06T14:22:56Z",
+            "message": "VMI does not exist",
+            "reason": "VMINotExists",
+            "status": "False",
+            "type": "Ready"
+          }
+        ],
+        "printableStatus": "Stopped"
+      }
+    },
+    {
+      "apiVersion": "kubevirt.io/v1",
+      "kind": "VirtualMachine",
+      "metadata": {
+        "annotations": {
+          "kubemacpool.io/transaction-timestamp": "2026-11-06T14:22:56.565514219Z",
+          "kubevirt.io/latest-observed-api-version": "v1",
+          "kubevirt.io/storage-observed-api-version": "v1"
+        },
+        "finalizers": ["kubevirt.io/virtualMachineControllerFinalize"],
+        "name": "vm-other",
+        "namespace": "cy-test-ns"
+      },
+      "spec": {
+        "running": false,
+        "template": {
+          "metadata": {
+            "annotations": {
+              "kubevirt.io/pci-topology-version": "v3"
+            },
+            "labels": {
+              "kubevirt.io/domain": "vm-other"
+            }
+          },
+          "spec": {
+            "architecture": "amd64",
+            "domain": {
+              "devices": {
+                "interfaces": [
+                  {
+                    "bridge": {},
+                    "macAddress": "02:00:00:00:00:01",
+                    "name": "nad-net"
+                  }
+                ]
+              },
+              "firmware": {
+                "serial": "0b548742-064a-4f3a-9871-ff6addf4b7af",
+                "uuid": "b356b326-62c4-40e3-94bf-fc43fe65111b"
+              },
+              "machine": {
+                "type": "pc-q35-rhel9.8.0"
+              },
+              "resources": {
+                "requests": {
+                  "memory": "64Mi"
+                }
+              }
+            },
+            "networks": [
+              {
+                "multus": {
+                  "networkName": "other-nad"
+                },
+                "name": "nad-net"
+              }
+            ]
+          }
+        }
+      },
+      "status": {
+        "conditions": [
+          {
+            "lastProbeTime": "2026-11-06T14:22:56Z",
+            "lastTransitionTime": "2026-11-06T14:22:56Z",
+            "message": "VMI does not exist",
+            "reason": "VMINotExists",
+            "status": "False",
+            "type": "Ready"
+          }
+        ],
+        "printableStatus": "Stopped"
+      }
+    },
+    {
+      "apiVersion": "kubevirt.io/v1",
+      "kind": "VirtualMachine",
+      "metadata": {
+        "annotations": {
+          "kubemacpool.io/transaction-timestamp": "2026-11-06T14:22:56.194585541Z",
+          "kubevirt.io/latest-observed-api-version": "v1",
+          "kubevirt.io/storage-observed-api-version": "v1"
+        },
+        "finalizers": ["kubevirt.io/virtualMachineControllerFinalize"],
+        "name": "vm-plain",
+        "namespace": "cy-test-ns"
+      },
+      "spec": {
+        "running": false,
+        "template": {
+          "metadata": {
+            "annotations": {
+              "kubevirt.io/pci-topology-version": "v3"
+            },
+            "labels": {
+              "kubevirt.io/domain": "vm-plain"
+            }
+          },
+          "spec": {
+            "architecture": "amd64",
+            "domain": {
+              "devices": {
+                "interfaces": [
+                  {
+                    "bridge": {},
+                    "macAddress": "02:00:00:00:00:01",
+                    "name": "nad-net"
+                  }
+                ]
+              },
+              "firmware": {
+                "serial": "261bd4ca-e78a-46ef-9976-38e8fd66421b",
+                "uuid": "3a40bcd5-7c3f-4df9-8939-dce3fccd02cf"
+              },
+              "machine": {
+                "type": "pc-q35-rhel9.8.0"
+              },
+              "resources": {
+                "requests": {
+                  "memory": "64Mi"
+                }
+              }
+            },
+            "networks": [
+              {
+                "multus": {
+                  "networkName": "udn-layer2"
+                },
+                "name": "nad-net"
+              }
+            ]
+          }
+        }
+      },
+      "status": {
+        "conditions": [
+          {
+            "lastProbeTime": "2026-11-06T14:22:56Z",
+            "lastTransitionTime": "2026-11-06T14:22:56Z",
+            "message": "VMI does not exist",
+            "reason": "VMINotExists",
+            "status": "False",
+            "type": "Ready"
+          }
+        ],
+        "printableStatus": "Stopped"
+      }
+    },
+    {
+      "apiVersion": "kubevirt.io/v1",
+      "kind": "VirtualMachine",
+      "metadata": {
+        "annotations": {
+          "kubemacpool.io/transaction-timestamp": "2026-11-06T14:22:56.379597811Z",
+          "kubevirt.io/latest-observed-api-version": "v1",
+          "kubevirt.io/storage-observed-api-version": "v1"
+        },
+        "finalizers": ["kubevirt.io/virtualMachineControllerFinalize"],
+        "name": "vm-qualified",
+        "namespace": "cy-test-ns"
+      },
+      "spec": {
+        "running": false,
+        "template": {
+          "metadata": {
+            "annotations": {
+              "kubevirt.io/pci-topology-version": "v3"
+            },
+            "labels": {
+              "kubevirt.io/domain": "vm-qualified"
+            }
+          },
+          "spec": {
+            "architecture": "amd64",
+            "domain": {
+              "devices": {
+                "interfaces": [
+                  {
+                    "bridge": {},
+                    "macAddress": "02:00:00:00:00:01",
+                    "name": "nad-net"
+                  }
+                ]
+              },
+              "firmware": {
+                "serial": "a345b84b-1537-406f-850d-5483998991a1",
+                "uuid": "a39de86c-5bd2-4493-8bc5-40b62d83c0df"
+              },
+              "machine": {
+                "type": "pc-q35-rhel9.8.0"
+              },
+              "resources": {
+                "requests": {
+                  "memory": "64Mi"
+                }
+              }
+            },
+            "networks": [
+              {
+                "multus": {
+                  "networkName": "cy-test-ns/udn-layer2"
+                },
+                "name": "nad-net"
+              }
+            ]
+          }
+        }
+      },
+      "status": {
+        "conditions": [
+          {
+            "lastProbeTime": "2026-11-06T14:22:56Z",
+            "lastTransitionTime": "2026-11-06T14:22:56Z",
+            "message": "VMI does not exist",
+            "reason": "VMINotExists",
+            "status": "False",
+            "type": "Ready"
+          }
+        ],
+        "printableStatus": "Stopped"
+      }
+    }
+  ],
+  "kind": "VirtualMachineList",
+  "metadata": {
+    "continue": ""
+  }
+}
