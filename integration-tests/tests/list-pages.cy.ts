@@ -34,9 +34,34 @@ const LIST_PAGES = [
   },
 ];
 
+const BGP_LIST_PAGES = [
+  {
+    h1: 'BGP',
+    name: 'BGPCloudConfigurations',
+    url: '/k8s/cluster/networking.openshift.io~v1beta1~BGPCloudConfiguration',
+  },
+  {
+    h1: 'BGP',
+    name: 'BGPRoutings',
+    url: '/k8s/cluster/networking.openshift.io~v1beta1~BGPRouting',
+  },
+];
+
 describe('List page smoke tests', { testIsolation: false }, () => {
   before(() => {
     cy.login();
+  });
+
+  let bgpEnabled = false;
+  before(() => {
+    cy.exec(
+      'oc get crd bgpcloudconfigurations.networking.openshift.io bgproutings.networking.openshift.io --ignore-not-found -o name',
+      { failOnNonZeroExit: false },
+    ).then(({ stdout }) => {
+      bgpEnabled =
+        stdout.includes('bgpcloudconfigurations.networking.openshift.io') &&
+        stdout.includes('bgproutings.networking.openshift.io');
+    });
   });
 
   afterEach(() => {
@@ -49,6 +74,15 @@ describe('List page smoke tests', { testIsolation: false }, () => {
 
   LIST_PAGES.forEach(({ h1, name, url }) => {
     it(`loads the ${name} list page`, () => {
+      cy.visit(url);
+      cy.dismissWelcomeTourIfPresent();
+      cy.contains('h1', h1, { timeout: MINUTE }).should('be.visible');
+    });
+  });
+
+  BGP_LIST_PAGES.forEach(({ h1, name, url }) => {
+    it(`loads the ${name} list page when BGP is available`, function () {
+      if (!bgpEnabled) this.skip();
       cy.visit(url);
       cy.dismissWelcomeTourIfPresent();
       cy.contains('h1', h1, { timeout: MINUTE }).should('be.visible');

@@ -6,13 +6,18 @@ import FormGroupHelperText from '@utils/components/FormGroupHelperText/FormGroup
 import { MatchExpressions } from '@utils/components/MatchExpression/MatchExpression';
 import MatchLabels from '@utils/components/MatchLabels/MatchLabels';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import useProjects from '@utils/hooks/useProjects/useProjects';
+import UDNNamespaceSelectorPreview from '@views/udns/components/UDNNamespaceSelectorPreview';
 
 import { UserDefinedNetworkFormInput } from '../utils/types';
 
 const ClusterUserDefinedNetworkNamespaceSelector: FC = () => {
   const { t } = useNetworkingTranslation();
-  const { control } = useFormContext<UserDefinedNetworkFormInput>();
+  const { control, watch } = useFormContext<UserDefinedNetworkFormInput>();
+  const [namespaces, loaded] = useProjects();
   const namespaceSelectorTitle = t('Namespace Selector');
+  const matchLabels = watch('namespaceSelector.matchLabels');
+  const matchExpressions = watch('namespaceSelector.matchExpressions');
 
   return (
     <FormSection title={namespaceSelectorTitle} titleElement="h2">
@@ -59,6 +64,12 @@ const ClusterUserDefinedNetworkNamespaceSelector: FC = () => {
             </FormGroupHelperText>
           </FormGroup>
         )}
+      />
+      <UDNNamespaceSelectorPreview
+        loaded={loaded}
+        matchExpressions={matchExpressions}
+        matchLabels={matchLabels}
+        namespaces={namespaces}
       />
     </FormSection>
   );
