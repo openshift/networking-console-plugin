@@ -1,5 +1,6 @@
 import { TFunction } from 'i18next';
 
+import { describe, expect, it } from '@jest/globals';
 import { NMStateInterface } from '@views/topology/types';
 
 import {
