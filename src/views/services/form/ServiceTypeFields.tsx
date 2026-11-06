@@ -50,7 +50,6 @@ const ServiceTypeFields: FC<ServiceTypeFieldsProps> = ({
           aria-label={t('Ports')}
           id={PORTS_FIELD_ID}
           onChange={(_event, text) => onPortsChange(text)}
-          ouiaId={PORTS_FIELD_ID}
           resizeOrientation="vertical"
           rows={3}
           validated={portsError ? ValidatedOptions.error : ValidatedOptions.default}

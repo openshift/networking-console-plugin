@@ -8,7 +8,6 @@ import {
 import { V1VirtualMachine } from '@kubevirt-ui-ext/kubevirt-api/kubevirt';
 import { ResourceLink } from '@openshift-console/dynamic-plugin-sdk';
 import { Bullseye, EmptyState, Label, Spinner } from '@patternfly/react-core';
-import { DataViewTh } from '@patternfly/react-data-view';
 import { SearchIcon } from '@patternfly/react-icons';
 import { Tbody, Td, Th, Thead, Tr } from '@patternfly/react-table';
 import { getName, getNamespace } from '@utils/resources/shared';
@@ -72,38 +71,13 @@ const useAddUDNVMModalTable = ({
     [direction, onSort, sortBy],
   );
 
+  /* DataViewTableHead wraps each column in a DataViewTh, so a column is the
+   * content plus the Th props, never a DataViewTh element. */
   const columns = useMemo(
     () => [
-      {
-        cell: (
-          <DataViewTh
-            content={t('Name')}
-            thProps={{
-              sort: getSortParams(0),
-            }}
-          />
-        ),
-      },
-      {
-        cell: (
-          <DataViewTh
-            content={t('Namespace')}
-            thProps={{
-              sort: getSortParams(1),
-            }}
-          />
-        ),
-      },
-      {
-        cell: (
-          <DataViewTh
-            content={t('Status')}
-            thProps={{
-              sort: getSortParams(2),
-            }}
-          />
-        ),
-      },
+      { cell: t('Name'), props: { sort: getSortParams(0) } },
+      { cell: t('Namespace'), props: { sort: getSortParams(1) } },
+      { cell: t('Status'), props: { sort: getSortParams(2) } },
     ],
     [getSortParams, t],
   );
@@ -171,7 +145,9 @@ const useAddUDNVMModalTable = ({
               }}
             />
             {columns.map((column, index) => (
-              <React.Fragment key={index}>{column.cell}</React.Fragment>
+              <Th key={index} {...column.props}>
+                {column.cell}
+              </Th>
             ))}
           </Tr>
         </Thead>

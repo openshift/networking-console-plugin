@@ -17,6 +17,7 @@ const BridgeParameters: FC = () => {
     <>
       <FormGroup isRequired label={t('Bridge name')}>
         <TextInput
+          aria-label={t('Bridge name')}
           {...register(`${NetworkTypeKeys.cnvBridgeNetworkType}.bridge`, { required: true })}
         />
       </FormGroup>
@@ -24,7 +25,10 @@ const BridgeParameters: FC = () => {
         label={t('VLAN tag number')}
         labelHelp={<PopoverHelpIcon bodyContent={t('Example: 100')} />}
       >
-        <TextInput {...register(`${NetworkTypeKeys.cnvBridgeNetworkType}.vlanTagNum`)} />
+        <TextInput
+          aria-label={t('VLAN tag number')}
+          {...register(`${NetworkTypeKeys.cnvBridgeNetworkType}.vlanTagNum`)}
+        />
       </FormGroup>
       <Controller
         control={control}

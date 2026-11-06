@@ -41,6 +41,7 @@ const Layer3Parameters: FC = () => {
         }
       >
         <TextInput
+          aria-label={t('MTU')}
           type="number"
           {...register(`${TopologyKeys.Layer3}.mtu`, { max: MAX_MTU, min: 0, required: false })}
         />

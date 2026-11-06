@@ -69,17 +69,17 @@ const UDNSubnets: FC<UDNSubnetsProps> = ({
     if (withHostSubnet) {
       const l3Subnet = subnet as UserDefinedNetworkLayer3Subnet;
       return (
-        <Grid hasGutter md={6}>
+        <Grid hasGutter key={idx} md={6}>
           <FormGroup isRequired label={t('CIDR')}>
             <TextInput
-              key={idx}
+              aria-label={t('CIDR')}
               onChange={(event, value) => updateSubnet(event, idx, { ...l3Subnet, cidr: value })}
               value={l3Subnet.cidr}
             />
           </FormGroup>
           <FormGroup label={t('HostSubnet')}>
             <TextInput
-              key={idx}
+              aria-label={t('HostSubnet')}
               onChange={(event, value) =>
                 updateSubnet(event, idx, {
                   ...l3Subnet,
@@ -94,9 +94,9 @@ const UDNSubnets: FC<UDNSubnetsProps> = ({
       );
     } else {
       return (
-        <FormGroup isRequired label={t('CIDR')}>
+        <FormGroup isRequired key={idx} label={t('CIDR')}>
           <TextInput
-            key={idx}
+            aria-label={t('CIDR')}
             onChange={(event, value) => updateSubnet(event, idx, value)}
             value={subnet as string}
           />
