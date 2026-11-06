@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { modelToGroupVersionKind, ServiceModel } from '@kubevirt-ui-ext/kubevirt-api/console';
 import type { IoK8sApiCoreV1Service } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
-import { useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
+import { Selector, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { useEndpointHealth } from '@utils/hooks/useEndpointHealth';
 import { getName, getNamespace } from '@utils/resources/shared';
 import { ServiceWithHealth } from '@utils/types';
@@ -21,11 +21,15 @@ export type UseServiceListViewDataResult = {
  *   -> EndpointSlice (label: kubernetes.io/service-name)
  *   -> endpoints[].conditions.ready -> aggregate ready/total
  */
-export const useServiceListViewData = (namespace: string): UseServiceListViewDataResult => {
+export const useServiceListViewData = (
+  namespace: string,
+  selector?: Selector,
+): UseServiceListViewDataResult => {
   const [services, servicesLoaded, servicesError] = useK8sWatchResource<IoK8sApiCoreV1Service[]>({
     groupVersionKind: modelToGroupVersionKind(ServiceModel),
     isList: true,
     namespace,
+    selector,
   });
 
   const { healthMap } = useEndpointHealth(namespace);
