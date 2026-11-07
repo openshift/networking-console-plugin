@@ -1,0 +1,238 @@
+{
+  "kind": "PodList",
+  "apiVersion": "v1",
+  "metadata": {},
+  "items": [
+    {
+      "metadata": {
+        "labels": {
+          "app": "other",
+          "topology.kubernetes.io/zone": "nova"
+        },
+        "name": "other-1",
+        "namespace": "cy-test-ns"
+      },
+      "spec": {
+        "containers": [
+          {
+            "image": "registry.k8s.io/pause:3.9",
+            "name": "other"
+          }
+        ],
+        "nodeName": "node-1"
+      },
+      "status": {
+        "conditions": [
+          {
+            "type": "PodReadyToStartContainers",
+            "observedGeneration": 1,
+            "status": "True",
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-11-06T14:22:52Z"
+          },
+          {
+            "type": "Initialized",
+            "observedGeneration": 1,
+            "status": "True",
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-11-06T14:22:51Z"
+          },
+          {
+            "type": "Ready",
+            "observedGeneration": 1,
+            "status": "True",
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-11-06T14:22:52Z"
+          },
+          {
+            "type": "ContainersReady",
+            "observedGeneration": 1,
+            "status": "True",
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-11-06T14:22:52Z"
+          },
+          {
+            "type": "PodScheduled",
+            "observedGeneration": 1,
+            "status": "True",
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-11-06T14:22:51Z"
+          }
+        ],
+        "containerStatuses": [
+          {
+            "name": "other",
+            "ready": true,
+            "restartCount": 0,
+            "state": {
+              "running": {
+                "startedAt": "2026-11-06T14:22:52Z"
+              }
+            }
+          }
+        ],
+        "initContainerStatuses": [],
+        "phase": "Running",
+        "podIP": "192.0.2.10"
+      }
+    },
+    {
+      "metadata": {
+        "labels": {
+          "app": "web",
+          "topology.kubernetes.io/zone": "nova"
+        },
+        "name": "web-1",
+        "namespace": "cy-test-ns"
+      },
+      "spec": {
+        "containers": [
+          {
+            "image": "registry.k8s.io/pause:3.9",
+            "name": "web",
+            "ports": [
+              {
+                "containerPort": 8080,
+                "protocol": "TCP"
+              }
+            ]
+          }
+        ],
+        "nodeName": "node-1"
+      },
+      "status": {
+        "conditions": [
+          {
+            "type": "PodReadyToStartContainers",
+            "observedGeneration": 1,
+            "status": "True",
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-11-06T14:22:51Z"
+          },
+          {
+            "type": "Initialized",
+            "observedGeneration": 1,
+            "status": "True",
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-11-06T14:22:51Z"
+          },
+          {
+            "type": "Ready",
+            "observedGeneration": 1,
+            "status": "True",
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-11-06T14:22:51Z"
+          },
+          {
+            "type": "ContainersReady",
+            "observedGeneration": 1,
+            "status": "True",
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-11-06T14:22:51Z"
+          },
+          {
+            "type": "PodScheduled",
+            "observedGeneration": 1,
+            "status": "True",
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-11-06T14:22:51Z"
+          }
+        ],
+        "containerStatuses": [
+          {
+            "name": "web",
+            "ready": true,
+            "restartCount": 0,
+            "state": {
+              "running": {
+                "startedAt": "2026-11-06T14:22:51Z"
+              }
+            }
+          }
+        ],
+        "initContainerStatuses": [],
+        "phase": "Running",
+        "podIP": "192.0.2.10"
+      }
+    },
+    {
+      "metadata": {
+        "labels": {
+          "app": "web",
+          "topology.kubernetes.io/zone": "nova"
+        },
+        "name": "web-2",
+        "namespace": "cy-test-ns"
+      },
+      "spec": {
+        "containers": [
+          {
+            "image": "registry.k8s.io/pause:3.9",
+            "name": "web",
+            "ports": [
+              {
+                "containerPort": 8080,
+                "protocol": "TCP"
+              }
+            ]
+          }
+        ],
+        "nodeName": "node-2"
+      },
+      "status": {
+        "conditions": [
+          {
+            "type": "PodReadyToStartContainers",
+            "observedGeneration": 1,
+            "status": "True",
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-11-06T14:22:52Z"
+          },
+          {
+            "type": "Initialized",
+            "observedGeneration": 1,
+            "status": "True",
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-11-06T14:22:51Z"
+          },
+          {
+            "type": "Ready",
+            "observedGeneration": 1,
+            "status": "True",
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-11-06T14:22:52Z"
+          },
+          {
+            "type": "ContainersReady",
+            "observedGeneration": 1,
+            "status": "True",
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-11-06T14:22:52Z"
+          },
+          {
+            "type": "PodScheduled",
+            "observedGeneration": 1,
+            "status": "True",
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-11-06T14:22:51Z"
+          }
+        ],
+        "containerStatuses": [
+          {
+            "name": "web",
+            "ready": true,
+            "restartCount": 0,
+            "state": {
+              "running": {
+                "startedAt": "2026-11-06T14:22:52Z"
+              }
+            }
+          }
+        ],
+        "initContainerStatuses": [],
+        "phase": "Running",
+        "podIP": "192.0.2.10"
+      }
+    }
+  ]
+}

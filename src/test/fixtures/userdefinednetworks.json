@@ -1,0 +1,79 @@
+{
+  "apiVersion": "k8s.ovn.org/v1",
+  "items": [
+    {
+      "apiVersion": "k8s.ovn.org/v1",
+      "kind": "UserDefinedNetwork",
+      "metadata": {
+        "annotations": {},
+        "finalizers": ["k8s.ovn.org/user-defined-network-protection"],
+        "name": "udn-layer2",
+        "namespace": "cy-test-ns"
+      },
+      "spec": {
+        "layer2": {
+          "role": "Secondary",
+          "subnets": ["192.0.2.10/24"]
+        },
+        "topology": "Layer2"
+      },
+      "status": {
+        "conditions": [
+          {
+            "lastTransitionTime": "2026-11-06T14:22:52Z",
+            "message": "NetworkAttachmentDefinition has been created",
+            "reason": "NetworkAttachmentDefinitionCreated",
+            "status": "True",
+            "type": "NetworkCreated"
+          },
+          {
+            "lastTransitionTime": "2026-11-06T14:22:52Z",
+            "message": "Network allocation succeeded for all synced nodes.",
+            "reason": "NetworkAllocationSucceeded",
+            "status": "True",
+            "type": "NetworkAllocationSucceeded"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "k8s.ovn.org/v1",
+      "kind": "UserDefinedNetwork",
+      "metadata": {
+        "annotations": {},
+        "finalizers": ["k8s.ovn.org/user-defined-network-protection"],
+        "name": "udn-layer3",
+        "namespace": "cy-test-ns"
+      },
+      "spec": {
+        "layer2": {
+          "role": "Secondary",
+          "subnets": ["192.0.2.10/24"]
+        },
+        "topology": "Layer2"
+      },
+      "status": {
+        "conditions": [
+          {
+            "lastTransitionTime": "2026-11-06T14:22:52Z",
+            "message": "NetworkAttachmentDefinition has been created",
+            "reason": "NetworkAttachmentDefinitionCreated",
+            "status": "True",
+            "type": "NetworkCreated"
+          },
+          {
+            "lastTransitionTime": "2026-11-06T14:22:52Z",
+            "message": "Network allocation succeeded for all synced nodes.",
+            "reason": "NetworkAllocationSucceeded",
+            "status": "True",
+            "type": "NetworkAllocationSucceeded"
+          }
+        ]
+      }
+    }
+  ],
+  "kind": "UserDefinedNetworkList",
+  "metadata": {
+    "continue": ""
+  }
+}

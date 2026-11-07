@@ -4,7 +4,7 @@ import {
   IoK8sApiNetworkingV1Ingress,
   IoK8sApiNetworkingV1NetworkPolicy,
   IoK8sApiNetworkingV1NetworkPolicyIngressRule,
-} from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+} from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import { Model, NodeModel } from '@patternfly/react-topology';
 import { RouteKind } from '@utils/types';
 import {
