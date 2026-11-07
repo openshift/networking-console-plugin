@@ -1,6 +1,7 @@
 # .gitignore:
 node_modules/
 dist/
+coverage/
 integration-tests/videos
 integration-tests/screenshots
 integration-tests/.DS_Store

@@ -9,8 +9,7 @@ import { V1VirtualMachine } from '@kubevirt-ui-ext/kubevirt-api/kubevirt';
 import { ResourceLink, Timestamp } from '@openshift-console/dynamic-plugin-sdk';
 import { ColumnManagementModalColumn } from '@patternfly/react-component-groups';
 import { Bullseye, EmptyState, Label, Spinner } from '@patternfly/react-core';
-import { DataViewTh } from '@patternfly/react-data-view';
-import { Tbody, Td, Tr } from '@patternfly/react-table';
+import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
 import { getName, getNamespace } from '@utils/resources/shared';
 import {
   getVMConditionsSummary,
@@ -109,24 +108,19 @@ const getVMStatusLabelColor = (status: string) => {
   return 'orange';
 };
 
+/* DataViewTableHead wraps every column in a DataViewTh itself, so returning a
+ * DataViewTh element here nests a <th> inside a <th>. Hand it the content and
+ * the Th props instead. */
 const buildColumnHeader = (
   column: ColumnManagementModalColumn,
   getSortParams: (columnKey: string) => SortParams | undefined,
-) => {
+): { cell: ReactNode; props?: ThProps } => {
   const sortParams = getSortParams(column.key);
 
-  if (!sortParams) {
-    return <DataViewTh content={column.title} />;
-  }
-
-  return (
-    <DataViewTh
-      content={column.title}
-      thProps={{
-        sort: sortParams,
-      }}
-    />
-  );
+  return {
+    cell: column.title,
+    props: sortParams ? { sort: sortParams } : undefined,
+  };
 };
 
 const buildColumnCell = (
@@ -240,11 +234,9 @@ export const useVMNetworkDataViewContent = ({
 
   const columns = useMemo(
     () => [
-      ...visibleColumns.map((column) => ({
-        cell: buildColumnHeader(column, getSortParams),
-      })),
+      ...visibleColumns.map((column) => buildColumnHeader(column, getSortParams)),
       {
-        cell: <DataViewTh content={t('Actions')} />,
+        cell: t('Actions'),
       },
     ],
     [getSortParams, t, visibleColumns],

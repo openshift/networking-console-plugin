@@ -10,7 +10,8 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { IngressModel } from '@utils/models';
-import { asAccessReview, getResourceURL } from '@utils/resources/shared';
+import { asAccessReview, resourcePathFromModel } from '@utils/resources/shared';
+import { getValidNamespace } from '@utils/utils';
 
 type UseIngressActions = (ingress: IoK8sApiNetworkingV1Ingress) => [actions: Action[]];
 
@@ -39,7 +40,13 @@ const useIngressActions: UseIngressActions = (ingress) => {
       accessReview: asAccessReview(IngressModel, ingress, 'update'),
       cta: () =>
         navigate(
-          getResourceURL({ activeNamespace, model: IngressModel, path: 'yaml', resource: ingress }),
+          // Use the canonical group~version~kind path: the console does not
+          // resolve the short "ingresses" plural, so Edit Ingress would 404.
+          `${resourcePathFromModel(
+            IngressModel,
+            ingress?.metadata?.name,
+            ingress?.metadata?.namespace || getValidNamespace(activeNamespace),
+          )}/yaml`,
         ),
       id: 'edit-ingress',
       label: t('Edit Ingress'),

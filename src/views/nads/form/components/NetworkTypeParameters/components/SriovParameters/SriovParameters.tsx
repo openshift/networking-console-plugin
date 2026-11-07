@@ -87,7 +87,10 @@ const SriovParameters: FC = () => {
         label={t('VLAN tag number')}
         labelHelp={<PopoverHelpIcon bodyContent={t('Example: 100')} />}
       >
-        <TextInput {...register(`${NetworkTypeKeys.sriovNetworkType}.vlanTagNum`)} />
+        <TextInput
+          aria-label={t('VLAN tag number')}
+          {...register(`${NetworkTypeKeys.sriovNetworkType}.vlanTagNum`)}
+        />
       </FormGroup>
     </>
   );

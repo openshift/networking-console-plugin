@@ -18,7 +18,7 @@ import { DOC_URL_NETWORK_INGRESS } from '@utils/constants/documentation';
 import { SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML } from '@utils/constants/ui';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { IngressModel } from '@utils/models';
-import { getResourceURL } from '@utils/resources/shared';
+import { resourcePathFromModel } from '@utils/resources/shared';
 import { getValidNamespace } from '@utils/utils';
 import useIngressColumns from '@views/ingresses/list/hooks/useIngressColumns';
 
@@ -34,11 +34,13 @@ const IngressesList: FC<IngressesListProps> = ({ namespace }) => {
   const navigate = useNavigate();
   const validNamespace = getValidNamespace(namespace || activeNamespace);
 
-  const ingressURL = getResourceURL({
-    activeNamespace: validNamespace,
-    model: IngressModel,
-    path: SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML,
-  });
+  // The console only resolves the canonical group~version~kind path; the short
+  // "ingresses" plural 404s (see ui-tests-cy/PLAN.md).
+  const ingressURL = `${resourcePathFromModel(
+    IngressModel,
+    null,
+    validNamespace,
+  )}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML}`;
 
   const [ingress, loaded, loadError] = useK8sWatchResource<IoK8sApiNetworkingV1Ingress[]>({
     groupVersionKind: modelToGroupVersionKind(IngressModel),
