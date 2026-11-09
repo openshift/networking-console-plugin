@@ -7,6 +7,7 @@ import {
   ListPageCreateButton,
   ListPageFilter,
   ListPageHeader,
+  Selector,
   useActiveNamespace,
   useListPageFilter,
   VirtualizedTable,
@@ -25,15 +26,16 @@ import { ServiceWithHealth, useServiceListViewData } from './hooks/useServiceLis
 type ServiceListProps = {
   kind: string;
   namespace: string;
+  selector?: Selector;
 };
 
-const ServiceList: FC<ServiceListProps> = ({ namespace }) => {
+const ServiceList: FC<ServiceListProps> = ({ namespace, selector }) => {
   const { t } = useNetworkingTranslation();
   const navigate = useNavigate();
   const [activeNamespace] = useActiveNamespace();
   const validNamespace = getValidNamespace(namespace || activeNamespace);
 
-  const { data: services, error: loadError, loaded } = useServiceListViewData(namespace);
+  const { data: services, error: loadError, loaded } = useServiceListViewData(namespace, selector);
 
   const [data, filteredData, onFilterChange] = useListPageFilter(services);
   const columns = useServiceColumn();
