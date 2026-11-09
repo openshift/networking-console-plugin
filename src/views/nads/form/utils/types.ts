@@ -32,6 +32,7 @@ export type NetworkAttachmentDefinitionFormInput = {
   [NetworkTypeKeys.cnvBridgeNetworkType]?: {
     bridge: string;
     macspoofchk?: boolean;
+    portIsolation?: boolean;
     vlanTagNum?: string;
   };
   [NetworkTypeKeys.ovnKubernetesNetworkType]?: {

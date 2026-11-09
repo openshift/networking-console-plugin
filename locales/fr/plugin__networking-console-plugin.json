@@ -456,6 +456,7 @@
   "Policy type": "Type de stratégie",
   "Port": "Port",
   "Port is required": "Le port est requis",
+  "Port isolation": "Port isolation",
   "Port must be between 1 and 65535": "Le port doit être compris entre 1 et 65535.",
   "Port names must be unique": "Les noms de ports doivent être uniques",
   "Port names must be valid DNS labels": "Les noms de port doivent être des étiquettes DNS valides.",

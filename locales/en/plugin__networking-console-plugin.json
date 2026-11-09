@@ -451,6 +451,7 @@
   "Policy type": "Policy type",
   "Port": "Port",
   "Port is required": "Port is required",
+  "Port isolation": "Port isolation",
   "Port must be between 1 and 65535": "Port must be between 1 and 65535",
   "Port names must be unique": "Port names must be unique",
   "Port names must be valid DNS labels": "Port names must be valid DNS labels",

@@ -449,6 +449,7 @@
   "Policy type": "策略类型",
   "Port": "端口",
   "Port is required": "端口是必需的",
+  "Port isolation": "Port isolation",
   "Port must be between 1 and 65535": "端口必须在 1 到 65535 之间",
   "Port names must be unique": "端口名称必须是唯一的",
   "Port names must be valid DNS labels": "端口名称必须是有效的 DNS 标签",

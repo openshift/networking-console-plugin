@@ -449,6 +449,7 @@
   "Policy type": "ポリシータイプ",
   "Port": "ポート",
   "Port is required": "ポートは必須です",
+  "Port isolation": "Port isolation",
   "Port must be between 1 and 65535": "ポートは 1 から 65535 である必要があります",
   "Port names must be unique": "ポート名は一意である必要があります",
   "Port names must be valid DNS labels": "ポート名は有効な DNS ラベルである必要があります",
