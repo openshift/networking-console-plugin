@@ -12,6 +12,9 @@ const config: Config.InitialOptions = {
   preset: 'ts-jest',
   testEnvironment: 'jest-environment-jsdom',
   testMatch: ['<rootDir>/src/**/*.{test,spec}.{ts,tsx}'],
+  // Integration tests need the SDK shim and MSW; they run under
+  // jest.integration.config.ts via `npm run test:integration`.
+  testPathIgnorePatterns: ['/node_modules/', '\\.integration\\.test\\.'],
   transform: {
     '^.+\\.[t|j]sx?$': [
       'ts-jest',

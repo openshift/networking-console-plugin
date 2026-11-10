@@ -1,0 +1,8 @@
+{
+  "apiVersion": "k8s.cni.cncf.io/v1beta1",
+  "items": [],
+  "kind": "MultiNetworkPolicyList",
+  "metadata": {
+    "continue": ""
+  }
+}
