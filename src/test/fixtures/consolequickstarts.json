@@ -1,0 +1,372 @@
+{
+  "apiVersion": "console.openshift.io/v1",
+  "items": [
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "add-healthchecks"
+      },
+      "spec": {
+        "description": "You just created a sample application. Now, let’s add health checks to it.",
+        "displayName": "Add health checks to your sample application"
+      }
+    },
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "creating-virtual-machine"
+      },
+      "spec": {
+        "description": "Quick create a virtual machine from a template that already has a boot source.",
+        "displayName": "Create a virtual machine from a template"
+      }
+    },
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "creating-virtual-machine-from-volume"
+      },
+      "spec": {
+        "description": "Quick create a virtual machine from a volume with InstanceType.",
+        "displayName": "Create a virtual machine from a volume"
+      }
+    },
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "enable-developer-perspective"
+      },
+      "spec": {
+        "description": "Learn how to enable and disable the Developer perspective.",
+        "displayName": "Enable the Developer Perspective"
+      }
+    },
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "explore-pipelines"
+      },
+      "spec": {
+        "description": "Install the Red Hat OpenShift Pipelines to build Pipelines using Tekton.",
+        "displayName": "Install the Red Hat OpenShift Pipelines"
+      }
+    },
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "getting-started-odf"
+      },
+      "spec": {
+        "description": "Learn how to create persistent files, object storage and connect it with your applications using OpenShift Data Foundation (ODF).",
+        "displayName": "Getting started with OpenShift Data Foundation"
+      }
+    },
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "host-inventory"
+      },
+      "spec": {
+        "description": "Configure your host inventory and create a cluster.",
+        "displayName": "Get started with on-premise host inventory"
+      }
+    },
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "install-cert-manager"
+      },
+      "spec": {
+        "description": "Install the cert-manager Operator for Red Hat OpenShift to manage TLS certificates from an external PKI.",
+        "displayName": "Install the cert-manager Operator for Red Hat OpenShift"
+      }
+    },
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "install-cryostat"
+      },
+      "spec": {
+        "description": "Install the Red Hat build of Cryostat to profile and monitor your Java applications deployed on OpenShift.",
+        "displayName": "Get started with the Red Hat build of Cryostat"
+      }
+    },
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "install-external-secrets-operator"
+      },
+      "spec": {
+        "description": "Install the External Secrets Operator for Red Hat OpenShift to synchronize secrets from external secret management systems into OpenShift.",
+        "displayName": "Install the External Secrets Operator for Red Hat OpenShift"
+      }
+    },
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "install-helmchartrepo-ns"
+      },
+      "spec": {
+        "description": "Enable additional Helm Charts by adding a namespace scoped Helm Chart Repository to your project.",
+        "displayName": "Add Helm Chart Repositories to extend the Developer Catalog for your project"
+      }
+    },
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "install-multicluster-engine"
+      },
+      "spec": {
+        "description": "Take the first step in the multicluster journey with multicluster engine.",
+        "displayName": "Get started with multicluster engine"
+      }
+    },
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "install-secrets-store-csi"
+      },
+      "spec": {
+        "description": "Install the Secrets Store CSI Driver Operator to mount secrets from external stores as volumes in your pods.",
+        "displayName": "Install the Secrets Store CSI Driver Operator"
+      }
+    },
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "install-serverless"
+      },
+      "spec": {
+        "description": "Install the OpenShift Serverless Operator to deploy stateless, event-trigger-based applications.",
+        "displayName": "Install the OpenShift Serverless Operator"
+      }
+    },
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "jboss-eap7-with-helm"
+      },
+      "spec": {
+        "description": "Deploy a JBoss EAP 7 application using a Helm Chart.",
+        "displayName": "Get started with JBoss EAP 7 using a Helm Chart"
+      }
+    },
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "jboss-eap81-with-helm"
+      },
+      "spec": {
+        "description": "Deploy a JBoss EAP 8.1 application using a Helm Chart.",
+        "displayName": "Get started with JBoss EAP 8.1 using a Helm Chart"
+      }
+    },
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "manage-helm-repos"
+      },
+      "spec": {
+        "description": "Manage available content in the Helm Chart Catalog by adding a Helm Chart Repository.",
+        "displayName": "Manage available content in the Helm Chart Catalog"
+      }
+    },
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "monitor-sampleapp"
+      },
+      "spec": {
+        "description": "Now that you’ve created a sample application and added health checks, let’s monitor your application.",
+        "displayName": "Monitor your sample application"
+      }
+    },
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "netobserv"
+      },
+      "spec": {
+        "description": "Install Network Observability Operator and deploy a FlowCollector to monitor your network.",
+        "displayName": "Observe the cluster network traffic"
+      }
+    },
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "node-with-s2i"
+      },
+      "spec": {
+        "description": "Import a Node Application from git, build, and deploy it onto OpenShift.",
+        "displayName": "Get started with Node"
+      }
+    },
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "odf-configuration"
+      },
+      "spec": {
+        "description": "Learn how to configure OpenShift Data Foundation (ODF) to meet your deployment needs.",
+        "displayName": "Configure and manage OpenShift Data Foundation"
+      }
+    },
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "odf-install-tour"
+      },
+      "spec": {
+        "description": "Install the OpenShift Data Foundation (ODF) operator and create a storage system.",
+        "displayName": "Install OpenShift Data Foundation"
+      }
+    },
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "quarkus-with-helm"
+      },
+      "spec": {
+        "description": "Deploy a Quarkus application using a Helm Chart.",
+        "displayName": "Get started with Quarkus using a Helm Chart"
+      }
+    },
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "quarkus-with-s2i"
+      },
+      "spec": {
+        "description": "Import a Quarkus Application from git, build, and deploy it onto OpenShift.",
+        "displayName": "Get started with Quarkus using s2i"
+      }
+    },
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "rhdh-installation-via-helm"
+      },
+      "spec": {
+        "description": "Install RHDH, an enterprise-grade, open developer platform for building developer portals, built on Backstage.",
+        "displayName": "Install Red Hat Developer Hub (RHDH) using Helm Chart"
+      }
+    },
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "rhdh-installation-via-operator"
+      },
+      "spec": {
+        "description": "Install RHDH, an enterprise-grade, open developer platform for building developer portals, built on Backstage.",
+        "displayName": "Install Red Hat Developer Hub (RHDH) using the Operator"
+      }
+    },
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "sample-application"
+      },
+      "spec": {
+        "description": "Is this the first time you’ve used OpenShift? Let's start with a simple sample app to learn the basics.",
+        "displayName": "Get started with a sample application"
+      }
+    },
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "spring-with-s2i"
+      },
+      "spec": {
+        "description": "Import a Spring Application from git, build, and deploy it onto OpenShift.",
+        "displayName": "Get started with Spring"
+      }
+    },
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "trusted-artifact-signer-getting-started"
+      },
+      "spec": {
+        "description": "Install TAS, configure signing, and validate signatures and attestations. TAS verifies artifact integrity and provenance with Sigstore/cosign and policy checks.",
+        "displayName": "Get started with Trusted Artifact Signer"
+      }
+    },
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "trusted-profile-analyzer-getting-started"
+      },
+      "spec": {
+        "description": "Install TPA, ingest a sample SBOM, and explore component risks and CVEs. TPA correlates components to vulnerabilities to surface risk earlier.",
+        "displayName": "Get started with Trusted Profile Analyzer"
+      }
+    },
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "upload-boot-source"
+      },
+      "spec": {
+        "description": "Upload a boot source to create a virtual machine from a template that does not have a boot source.",
+        "displayName": "Upload a boot source"
+      }
+    },
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "user-impersonation"
+      },
+      "spec": {
+        "description": "Impersonate a user and perform any action as if you are that user.",
+        "displayName": "Impersonating the system:admin user"
+      }
+    },
+    {
+      "apiVersion": "console.openshift.io/v1",
+      "kind": "ConsoleQuickStart",
+      "metadata": {
+        "name": "windows-bootsource-pipeline"
+      },
+      "spec": {
+        "description": "To be able to create Windows virtual machines from a template, you must first create a Windows boot source by running Windows EFI Installer pipeline.",
+        "displayName": "Creating a Windows boot source to use with OpenShift Pipelines"
+      }
+    }
+  ],
+  "kind": "ConsoleQuickStartList",
+  "metadata": {
+    "continue": ""
+  }
+}

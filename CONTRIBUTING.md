@@ -87,12 +87,18 @@ PR.
 
 - **Lint**: `npm run lint` (ESLint + Prettier)
 - **i18n check**: `npm run i18n` then verify `git status --short locales` shows no changes
+- **Unit tests**: `npm test` (or `npm run test:coverage` for a coverage report)
+- **Integration tests**: `npm run test:integration` renders real components against the recorded cluster
+  payloads in `src/test/fixtures`, with the console SDK replaced by a fetch-based shim and MSW serving the
+  responses, so it needs no cluster
 - **Cypress E2E**: `npm run test-cypress-headless` (requires a running OpenShift cluster)
 
 E2E specs live in `integration-tests`. Tests run against http://localhost:9000 by default (override with
 `BRIDGE_BASE_ADDRESS`).
 
-CI runs `test-frontend.sh` (i18n validation) and `test-prow-e2e.sh` (Cypress against a live cluster) on every PR.
+CI runs the `Test` workflow (`npm run lint`, `test-frontend.sh`, `npm run test:coverage`,
+`npm run test:integration` and `npm run build`) and the `E2E Tests` workflow on every PR; Prow additionally
+runs `test-prow-e2e.sh` (Cypress against a live cluster).
 
 ## Commit Conventions
 
