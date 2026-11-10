@@ -19,7 +19,11 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 import useProjectsWithPrimaryUserDefinedLabel from '@utils/hooks/useProjectsWithPrimaryUserDefinedLabel';
 import { ClusterUserDefinedNetworkModel, UserDefinedNetworkModel } from '@utils/models';
 import { getName, getNamespace, resourcePathFromModel } from '@utils/resources/shared';
-import { UserDefinedNetworkRole } from '@utils/resources/udns/types';
+import {
+  IPAM_MODE_DISABLED,
+  MACSecurityMode,
+  UserDefinedNetworkRole,
+} from '@utils/resources/udns/types';
 import {
   CUDN_CREATION_FAILED,
   CUDN_CREATION_STARTED,
@@ -68,7 +72,7 @@ const UserDefinedNetworkCreateModal: FC<UserDefinedNetworkCreateModalProps> = ({
   });
 
   const {
-    formState: { isSubmitting },
+    formState: { isSubmitting, isValid },
     handleSubmit,
     setValue,
     watch,
@@ -117,19 +121,49 @@ const UserDefinedNetworkCreateModal: FC<UserDefinedNetworkCreateModalProps> = ({
     try {
       const model = isClusterUDN ? ClusterUserDefinedNetworkModel : UserDefinedNetworkModel;
 
+      // Deep clone and set ipam.mode based on MAC Security mode
+      const udnToSubmit = JSON.parse(JSON.stringify(udn)) as UDNForm;
+      const layer2 = isClusterUDN ? udnToSubmit.spec?.network?.layer2 : udnToSubmit.spec?.layer2;
+
+      if (layer2 && isSecondary) {
+        // Ensure macSecurity object exists and has a mode
+        if (!layer2.macSecurity) layer2.macSecurity = { mode: MACSecurityMode.Enabled };
+        else if (!layer2.macSecurity.mode) layer2.macSecurity.mode = MACSecurityMode.Enabled;
+
+        const macSecurityMode = layer2.macSecurity.mode;
+
+        // Ensure ipam object exists
+        if (!layer2.ipam) layer2.ipam = {};
+
+        // Set ipam.mode based on MAC Security mode
+        if (macSecurityMode === MACSecurityMode.Disabled) {
+          layer2.ipam.mode = IPAM_MODE_DISABLED;
+          delete layer2.ipam.lifecycle; // incompatible when ipam is disabled
+
+          // Remove subnets field if empty or contains only empty strings
+          // (API requires at least 1 item if present)
+          if (
+            !layer2.subnets ||
+            layer2.subnets.length === 0 ||
+            layer2.subnets.every((s) => !s || !s.trim())
+          )
+            delete layer2.subnets;
+        } else {
+          // When MAC Security is Enabled or not set, remove ipam.mode (default behavior)
+          delete layer2.ipam.mode;
+        }
+      }
+
       const createdResource = await k8sCreate({
-        data: udn,
+        data: udnToSubmit,
         model,
       });
 
-      if (isClusterUDN) {
-        logCUDNCreated(createdResource);
-      } else {
-        logUDNCreated(createdResource);
-      }
+      if (isClusterUDN) logCUDNCreated(createdResource);
+      else logUDNCreated(createdResource);
 
       closeModal();
-      navigate(resourcePathFromModel(model, getName(udn), getNamespace(udn)));
+      navigate(resourcePathFromModel(model, getName(udnToSubmit), getNamespace(udnToSubmit)));
     } catch (apiError) {
       const failEvent = isClusterUDN ? CUDN_CREATION_FAILED : UDN_CREATION_FAILED;
       logCreationFailed(failEvent, apiError);
@@ -168,6 +202,7 @@ const UserDefinedNetworkCreateModal: FC<UserDefinedNetworkCreateModalProps> = ({
           form="create-udn-form"
           isDisabled={
             isSubmitting ||
+            !isValid ||
             !isUDNValid(udn) ||
             (requiresPrimaryProject && (!loadedPrimaryUDN || showFailedToRetrieveProjectsError))
           }
