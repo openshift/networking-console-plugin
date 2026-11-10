@@ -1,0 +1,88 @@
+{
+  "apiVersion": "operator.openshift.io/v1",
+  "kind": "Network",
+  "metadata": {
+    "name": "cluster"
+  },
+  "spec": {
+    "clusterNetwork": [
+      {
+        "cidr": "192.0.2.10/14",
+        "hostPrefix": 23
+      }
+    ],
+    "defaultNetwork": {
+      "ovnKubernetesConfig": {
+        "egressIPConfig": {},
+        "gatewayConfig": {
+          "ipv4": {},
+          "ipv6": {},
+          "routingViaHost": false
+        },
+        "genevePort": 6081,
+        "ipsecConfig": {
+          "mode": "Disabled"
+        },
+        "mtu": 7850,
+        "policyAuditConfig": {
+          "destination": "null",
+          "maxFileSize": 50,
+          "maxLogFiles": 5,
+          "rateLimit": 20,
+          "syslogFacility": "local0"
+        }
+      },
+      "type": "OVNKubernetes"
+    },
+    "deployKubeProxy": false,
+    "disableMultiNetwork": false,
+    "disableNetworkDiagnostics": false,
+    "logLevel": "Normal",
+    "managementState": "Managed",
+    "observedConfig": null,
+    "operatorLogLevel": "Normal",
+    "serviceNetwork": ["192.0.2.10/16"],
+    "unsupportedConfigOverrides": null,
+    "useMultiNetworkPolicy": true
+  },
+  "status": {
+    "conditions": [
+      {
+        "lastTransitionTime": "2026-11-01T08:18:36Z",
+        "message": "",
+        "reason": "",
+        "status": "False",
+        "type": "Degraded"
+      },
+      {
+        "lastTransitionTime": "2026-11-01T08:17:54Z",
+        "message": "",
+        "reason": "",
+        "status": "True",
+        "type": "Upgradeable"
+      },
+      {
+        "lastTransitionTime": "2026-11-01T08:17:54Z",
+        "message": "",
+        "reason": "",
+        "status": "False",
+        "type": "ManagementStateDegraded"
+      },
+      {
+        "lastTransitionTime": "2026-11-01T10:13:24Z",
+        "message": "",
+        "reason": "",
+        "status": "False",
+        "type": "Progressing"
+      },
+      {
+        "lastTransitionTime": "2026-11-01T08:18:06Z",
+        "message": "",
+        "reason": "",
+        "status": "True",
+        "type": "Available"
+      }
+    ],
+    "version": "5.0.0"
+  }
+}

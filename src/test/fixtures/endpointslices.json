@@ -1,0 +1,228 @@
+{
+  "kind": "EndpointSliceList",
+  "apiVersion": "discovery.k8s.io/v1",
+  "metadata": {},
+  "items": [
+    {
+      "metadata": {
+        "name": "cluster-ip-485px",
+        "generateName": "cluster-ip-",
+        "namespace": "cy-test-ns",
+        "labels": {
+          "endpointslice.kubernetes.io/managed-by": "endpointslice-controller.k8s.io",
+          "kubernetes.io/service-name": "cluster-ip"
+        },
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-11-06T14:22:54Z"
+        }
+      },
+      "addressType": "IPv4",
+      "endpoints": null,
+      "ports": null
+    },
+    {
+      "metadata": {
+        "name": "degraded-1",
+        "namespace": "cy-test-ns",
+        "labels": {
+          "kubernetes.io/service-name": "degraded"
+        },
+        "annotations": {}
+      },
+      "addressType": "IPv4",
+      "endpoints": [
+        {
+          "addresses": ["192.0.2.10"],
+          "conditions": {
+            "ready": true
+          }
+        },
+        {
+          "addresses": ["192.0.2.10"],
+          "conditions": {
+            "ready": false
+          }
+        }
+      ],
+      "ports": [
+        {
+          "name": "http",
+          "protocol": "TCP",
+          "port": 80
+        }
+      ]
+    },
+    {
+      "metadata": {
+        "name": "down-1",
+        "namespace": "cy-test-ns",
+        "labels": {
+          "kubernetes.io/service-name": "down"
+        },
+        "annotations": {}
+      },
+      "addressType": "IPv4",
+      "endpoints": [
+        {
+          "addresses": ["192.0.2.10"],
+          "conditions": {
+            "ready": false
+          }
+        },
+        {
+          "addresses": ["192.0.2.10"],
+          "conditions": {
+            "ready": false
+          }
+        }
+      ],
+      "ports": [
+        {
+          "name": "http",
+          "protocol": "TCP",
+          "port": 80
+        }
+      ]
+    },
+    {
+      "metadata": {
+        "name": "headless-b4pq8",
+        "generateName": "headless-",
+        "namespace": "cy-test-ns",
+        "labels": {
+          "endpointslice.kubernetes.io/managed-by": "endpointslice-controller.k8s.io",
+          "kubernetes.io/service-name": "headless",
+          "service.kubernetes.io/headless": ""
+        },
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-11-06T14:22:54Z"
+        }
+      },
+      "addressType": "IPv4",
+      "endpoints": null,
+      "ports": null
+    },
+    {
+      "metadata": {
+        "name": "healthy-1",
+        "namespace": "cy-test-ns",
+        "labels": {
+          "kubernetes.io/service-name": "healthy"
+        },
+        "annotations": {}
+      },
+      "addressType": "IPv4",
+      "endpoints": [
+        {
+          "addresses": ["192.0.2.10"],
+          "conditions": {
+            "ready": true
+          }
+        },
+        {
+          "addresses": ["192.0.2.10"],
+          "conditions": {
+            "ready": true
+          }
+        }
+      ],
+      "ports": [
+        {
+          "name": "http",
+          "protocol": "TCP",
+          "port": 80
+        }
+      ]
+    },
+    {
+      "metadata": {
+        "name": "load-balancer-krstl",
+        "generateName": "load-balancer-",
+        "namespace": "cy-test-ns",
+        "labels": {
+          "endpointslice.kubernetes.io/managed-by": "endpointslice-controller.k8s.io",
+          "kubernetes.io/service-name": "load-balancer"
+        },
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-11-06T14:22:54Z"
+        }
+      },
+      "addressType": "IPv4",
+      "endpoints": null,
+      "ports": null
+    },
+    {
+      "metadata": {
+        "name": "node-port-v82th",
+        "generateName": "node-port-",
+        "namespace": "cy-test-ns",
+        "labels": {
+          "endpointslice.kubernetes.io/managed-by": "endpointslice-controller.k8s.io",
+          "kubernetes.io/service-name": "node-port"
+        },
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-11-06T14:22:54Z"
+        }
+      },
+      "addressType": "IPv4",
+      "endpoints": null,
+      "ports": null
+    },
+    {
+      "metadata": {
+        "name": "web-wdvkz",
+        "generateName": "web-",
+        "namespace": "cy-test-ns",
+        "labels": {
+          "endpointslice.kubernetes.io/managed-by": "endpointslice-controller.k8s.io",
+          "kubernetes.io/service-name": "web"
+        },
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-11-06T14:22:52Z"
+        }
+      },
+      "addressType": "IPv4",
+      "endpoints": [
+        {
+          "addresses": ["192.0.2.10"],
+          "conditions": {
+            "ready": true,
+            "serving": true,
+            "terminating": false
+          },
+          "targetRef": {
+            "kind": "Pod",
+            "namespace": "cy-test-ns",
+            "name": "web-1",
+            "uid": "3a7b684e-691a-4387-aba7-038a2459ab20"
+          },
+          "nodeName": "node-1",
+          "zone": "nova"
+        },
+        {
+          "addresses": ["192.0.2.10"],
+          "conditions": {
+            "ready": true,
+            "serving": true,
+            "terminating": false
+          },
+          "targetRef": {
+            "kind": "Pod",
+            "namespace": "cy-test-ns",
+            "name": "web-2",
+            "uid": "94d6f76d-9aaa-4bdb-9214-eb830803995a"
+          },
+          "nodeName": "node-2",
+          "zone": "nova"
+        }
+      ],
+      "ports": [
+        {
+          "name": "http",
+          "protocol": "TCP",
+          "port": 8080
+        }
+      ]
+    }
+  ]
+}

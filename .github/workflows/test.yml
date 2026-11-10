@@ -45,5 +45,15 @@ jobs:
       - name: Test
         run: npm run test:coverage
 
+      # Fails the build if the fixture sanitizer stops refusing identity-bearing
+      # payloads or starts redacting whole recordings into empty ones.
+      - name: Test (sanitizer)
+        run: npm run test:sanitizer
+
+      # Renders real components against recorded cluster payloads, so it needs no
+      # cluster; the ESM flags msw 3 requires are set by the npm script.
+      - name: Test (integration)
+        run: npm run test:integration
+
       - name: Build
         run: npm run build
