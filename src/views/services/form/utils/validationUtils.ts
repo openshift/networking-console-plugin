@@ -2,8 +2,9 @@ import { TFunction } from 'i18next';
 
 import { isTagValid } from '@utils/components/PodSelectorModal/selectorUtils';
 
-import type { ServiceFormFieldErrors, ValidationResult } from './types';
-import { isValidDNSLabel, isValidExternalNameHostname, parsePortText } from './utils';
+import { SERVICE_PORT_PROTOCOLS } from './constants';
+import type { ServiceFormFieldErrors, ServicePortFormData, ValidationResult } from './types';
+import { isNodePortServiceType, isValidDNSLabel, isValidExternalNameHostname } from './utils';
 
 const validResult = (): ValidationResult => ({ errorMessage: '', isValid: true });
 
@@ -12,7 +13,7 @@ const invalidResult = (errorMessage: string): ValidationResult => ({
   isValid: false,
 });
 
-const SERVICE_PROTOCOLS = new Set(['SCTP', 'TCP', 'UDP']);
+const serviceProtocols = new Set(SERVICE_PORT_PROTOCOLS);
 
 export const validatePort = (t: TFunction, value: unknown): ValidationResult => {
   if (value === '' || value === null || value === undefined) {
@@ -69,51 +70,42 @@ export const validateSelectorPairs = (t: TFunction, pairs: string[][]): Validati
   return validResult();
 };
 
-export const validatePortsText = (t: TFunction, text: string): ValidationResult => {
-  const lines = text
-    .split('\n')
-    .map((line) => line.trim())
-    .filter(Boolean);
+export const validateServicePorts = (
+  t: TFunction,
+  ports: ServicePortFormData[],
+  serviceType?: string,
+): ValidationResult => {
+  if (!ports.length) return invalidResult(t('At least one port is required'));
 
-  if (!lines.length) {
-    return invalidResult(t('At least one port is required'));
-  }
+  const names = new Set<string>();
+  for (const servicePort of ports) {
+    const portResult = validatePort(t, servicePort.port);
+    if (!portResult.isValid) return portResult;
 
-  const seenNames = new Set<string>();
-
-  for (const line of lines) {
-    const parsed = parsePortText(line);
-
-    if (!parsed) {
-      return invalidResult(t('Ports must use the format [name:]port:targetPort/PROTOCOL'));
-    }
-
-    if (parsed.name) {
-      if (!isValidDNSLabel(parsed.name)) {
-        return invalidResult(t('Port names must be valid DNS labels'));
-      }
-      if (seenNames.has(parsed.name)) {
-        return invalidResult(t('Port names must be unique'));
-      }
-      seenNames.add(parsed.name);
-    }
-
-    const portResult = validatePort(t, Number(parsed.port));
-    if (!portResult.isValid) {
-      return portResult;
-    }
-
-    if (/^\d+$/.test(parsed.targetPort)) {
-      const targetResult = validatePort(t, Number(parsed.targetPort));
-      if (!targetResult.isValid) {
-        return targetResult;
-      }
-    } else if (!isValidDNSLabel(parsed.targetPort)) {
+    if (!servicePort.targetPort.trim()) return invalidResult(t('Target port is required'));
+    if (/^\d+$/.test(servicePort.targetPort)) {
+      const targetPortResult = validatePort(t, servicePort.targetPort);
+      if (!targetPortResult.isValid) return targetPortResult;
+    } else if (!isValidDNSLabel(servicePort.targetPort)) {
       return invalidResult(t('Target port names must be valid DNS labels'));
     }
 
-    if (!SERVICE_PROTOCOLS.has(parsed.protocol)) {
+    if (!serviceProtocols.has(servicePort.protocol as (typeof SERVICE_PORT_PROTOCOLS)[number])) {
       return invalidResult(t('Protocol must be TCP, UDP, or SCTP'));
+    }
+
+    const name = servicePort.name.trim();
+    if (ports.length > 1 && !name) return invalidResult(t('Port name required for multiple ports'));
+
+    if (name) {
+      if (!isValidDNSLabel(name)) return invalidResult(t('Port names must be valid DNS labels'));
+      if (names.has(name)) return invalidResult(t('Port names must be unique'));
+      names.add(name);
+    }
+
+    if (isNodePortServiceType(serviceType) && servicePort.nodePort) {
+      const nodePortResult = validatePort(t, servicePort.nodePort);
+      if (!nodePortResult.isValid) return nodePortResult;
     }
   }
 
@@ -134,11 +126,11 @@ export const validateExternalName = (t: TFunction, value?: string): ValidationRe
   return validResult();
 };
 
-/** Validates selector pairs and ports text fields used by ClusterIP/NodePort/LoadBalancer. */
+/** Validates selector pairs and ports used by ClusterIP/NodePort/LoadBalancer. */
 export const getServiceFormFieldErrors = (
   t: TFunction,
   selectorPairs: string[][],
-  portsText: string,
+  ports: ServicePortFormData[],
   serviceType?: string,
 ): ServiceFormFieldErrors => {
   if (serviceType === 'ExternalName') {
@@ -146,7 +138,7 @@ export const getServiceFormFieldErrors = (
   }
 
   const selectorValidation = validateSelectorPairs(t, selectorPairs);
-  const portsValidation = validatePortsText(t, portsText);
+  const portsValidation = validateServicePorts(t, ports, serviceType);
 
   return {
     portsError: portsValidation.isValid ? undefined : portsValidation.errorMessage,

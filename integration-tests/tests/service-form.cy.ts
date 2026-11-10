@@ -17,7 +17,8 @@ import {
   serviceExternalNameField,
   serviceNameField,
   serviceNamespaceField,
-  servicePortsField,
+  servicePortField,
+  servicePortNameFields,
   serviceTypeToggle,
   setYamlEditorValue,
   submitServiceForm,
@@ -63,7 +64,7 @@ describe('Service creation and editing form', { testIsolation: false }, () => {
     serviceNamespaceField().should('have.value', SERVICE_FORM_NS);
     serviceTypeToggle().should('contain', 'ClusterIP');
     fillSelector('app', 'e2e-clusterip');
-    fillPorts('http:80:8080/TCP');
+    fillPorts([{ name: 'http', port: '80', targetPort: '8080' }]);
     submitServiceForm();
 
     cy.contains('h1', name, { timeout: 60000 }).should('be.visible');
@@ -76,12 +77,12 @@ describe('Service creation and editing form', { testIsolation: false }, () => {
 
     selectServiceType('NodePort');
     selectorKeyField().should('be.visible');
-    servicePortsField().should('be.visible');
+    servicePortField().should('be.visible');
     serviceExternalNameField().should('not.exist');
 
     fillServiceName(name);
     fillSelector('app', 'e2e-nodeport');
-    fillPorts('http:80:8080/TCP');
+    fillPorts([{ name: 'http', port: '80', targetPort: '8080' }]);
     submitServiceForm();
 
     cy.contains('h1', name, { timeout: 60000 }).should('be.visible');
@@ -95,12 +96,12 @@ describe('Service creation and editing form', { testIsolation: false }, () => {
 
     selectServiceType('LoadBalancer');
     selectorKeyField().should('be.visible');
-    servicePortsField().should('be.visible');
+    servicePortField().should('be.visible');
     serviceExternalNameField().should('not.exist');
 
     fillServiceName(name);
     fillSelector('app', 'e2e-lb');
-    fillPorts('http:80:8080/TCP');
+    fillPorts([{ name: 'http', port: '80', targetPort: '8080' }]);
     submitServiceForm();
 
     cy.contains('h1', name, { timeout: 60000 }).should('be.visible');
@@ -114,7 +115,7 @@ describe('Service creation and editing form', { testIsolation: false }, () => {
     selectServiceType('ExternalName');
     serviceExternalNameField().should('be.visible');
     selectorKeyField().should('not.exist');
-    servicePortsField().should('not.exist');
+    servicePortField().should('not.exist');
     saveChangesButton().should('be.disabled');
 
     fillServiceName(name);
@@ -130,12 +131,15 @@ describe('Service creation and editing form', { testIsolation: false }, () => {
     fillServiceName('e2e-ports');
     fillSelector('app', 'e2e-ports');
 
-    fillPorts('http:80:8080/TCP\nmetrics:9090:9090/TCP');
-    servicePortsField().should('have.value', 'http:80:8080/TCP\nmetrics:9090:9090/TCP');
+    fillPorts([
+      { name: 'http', port: '80', targetPort: '8080' },
+      { name: 'metrics', port: '9090', targetPort: '9090' },
+    ]);
+    servicePortNameFields().should('have.length', 2);
     saveChangesButton().should('not.be.disabled');
 
-    fillPorts('http:80:8080/TCP');
-    servicePortsField().should('have.value', 'http:80:8080/TCP');
+    fillPorts([{ name: 'http', port: '80', targetPort: '8080' }]);
+    servicePortNameFields().should('have.length', 1);
   });
 
   it('adds selector pairs and previews matching pods', () => {
@@ -160,7 +164,7 @@ describe('Service creation and editing form', { testIsolation: false }, () => {
 
     fillServiceName(name);
     fillSelector('app', 'synced');
-    fillPorts('http:80:8080/TCP');
+    fillPorts([{ name: 'http', port: '80', targetPort: '8080' }]);
     selectServiceType('NodePort');
 
     switchToYamlView();
@@ -189,11 +193,11 @@ describe('Service creation and editing form', { testIsolation: false }, () => {
     cy.contains('Selector is required').should('be.visible');
 
     fillSelector('app', 'valid');
-    fillPorts('not-a-port');
-    cy.contains('Ports must use the format [name:]port:targetPort/PROTOCOL').should('be.visible');
+    fillPorts([{ name: 'http', port: 'not-a-port', targetPort: '80' }]);
+    cy.contains('Port must be between 1 and 65535').should('be.visible');
     saveChangesButton().should('be.disabled');
 
-    fillPorts('http:99999:80/TCP');
+    fillPorts([{ name: 'http', port: '99999', targetPort: '80' }]);
     cy.contains('Port must be between 1 and 65535').should('be.visible');
 
     selectServiceType('ExternalName');
@@ -209,7 +213,7 @@ describe('Service creation and editing form', { testIsolation: false }, () => {
     visitServiceCreateForm();
     fillServiceName(name);
     fillSelector('app', 'before-edit');
-    fillPorts('http:80:8080/TCP');
+    fillPorts([{ name: 'http', port: '80', targetPort: '8080' }]);
     submitServiceForm();
     cy.contains('h1', name, { timeout: 60000 }).should('be.visible');
 
@@ -219,10 +223,10 @@ describe('Service creation and editing form', { testIsolation: false }, () => {
     serviceTypeToggle().should('contain', 'ClusterIP');
     selectorKeyField().should('have.value', 'app');
     selectorValueField().should('have.value', 'before-edit');
-    servicePortsField().should('contain.value', '80:8080/TCP');
+    servicePortField().should('have.value', '80');
 
     fillSelector('app', 'after-edit');
-    fillPorts('http:8080:9090/TCP');
+    fillPorts([{ name: 'http', port: '8080', targetPort: '9090' }]);
     submitServiceForm();
 
     cy.contains('h1', name, { timeout: 60000 }).should('be.visible');
@@ -235,7 +239,7 @@ describe('Service creation and editing form', { testIsolation: false }, () => {
     visitServiceCreateForm();
     fillServiceName(name);
     fillSelector('app', 'e2e-delete');
-    fillPorts('80:8080/TCP');
+    fillPorts([{ port: '80', targetPort: '8080' }]);
     submitServiceForm();
     cy.contains('h1', name, { timeout: 60000 }).should('be.visible');
 

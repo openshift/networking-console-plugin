@@ -1,21 +1,31 @@
-import React, { FC } from 'react';
+import React, { FC, ReactNode, useId } from 'react';
 
 import { Button, ButtonVariant, Grid, GridItem, TextInput, Tooltip } from '@patternfly/react-core';
 import { MinusCircleIcon, PlusCircleIcon } from '@patternfly/react-icons';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 type LabelSelectorEditorProps = {
+  helperText?: ReactNode;
   labelSelectorPairs: string[][];
+  labelSuggestions?: string[];
   onLastItemRemoved: () => void;
   updateParentData: (newLabelSelectorPairs: string[][]) => void;
+  valueSuggestions?: Record<string, string[]>;
 };
 
 const LabelSelectorEditor: FC<LabelSelectorEditorProps> = ({
+  helperText,
   labelSelectorPairs,
+  labelSuggestions = [],
   onLastItemRemoved,
   updateParentData,
+  valueSuggestions = [],
 }) => {
   const { t } = useNetworkingTranslation();
+  const idPrefix = useId();
+  const keyHeaderId = `${idPrefix}-key-header`;
+  const keysListId = `${idPrefix}-keys`;
+  const valueHeaderId = `${idPrefix}-value-header`;
 
   const onChange = (label: string, selector: string, index: number) => {
     const newPairs = [...labelSelectorPairs];
@@ -37,10 +47,10 @@ const LabelSelectorEditor: FC<LabelSelectorEditorProps> = ({
   return (
     <>
       <Grid hasGutter>
-        <GridItem id="editor-label-header" sm={5}>
+        <GridItem id={keyHeaderId} sm={5}>
           {t('Key')}
         </GridItem>
-        <GridItem id="editor-selector-header" sm={5}>
+        <GridItem id={valueHeaderId} sm={5}>
           {t('Value')}
         </GridItem>
         {labelSelectorPairs.map((labelSelectorPair, index) => {
@@ -49,8 +59,9 @@ const LabelSelectorEditor: FC<LabelSelectorEditorProps> = ({
               <Grid hasGutter>
                 <GridItem sm={5}>
                   <TextInput
-                    aria-labelledby="editor-label-header"
-                    id={`${index}-serial`}
+                    aria-labelledby={keyHeaderId}
+                    id={`${idPrefix}-${index}-key`}
+                    list={keysListId}
                     onChange={(_, value) => onChange(value, labelSelectorPair[1], index)}
                     ouiaId="pairs-list-name"
                     type="text"
@@ -59,8 +70,9 @@ const LabelSelectorEditor: FC<LabelSelectorEditorProps> = ({
                 </GridItem>
                 <GridItem sm={5}>
                   <TextInput
-                    aria-labelledby="editor-selector-header"
-                    id={`${index}-serial`}
+                    aria-labelledby={valueHeaderId}
+                    id={`${idPrefix}-${index}-value`}
+                    list={`${idPrefix}-values-${index}`}
                     onChange={(_, value) => onChange(labelSelectorPair[0], value, index)}
                     ouiaId="pairs-list-value"
                     type="text"
@@ -87,6 +99,7 @@ const LabelSelectorEditor: FC<LabelSelectorEditorProps> = ({
             </GridItem>
           );
         })}
+        {helperText && <GridItem span={12}>{helperText}</GridItem>}
         <GridItem>
           <Button
             icon={<PlusCircleIcon />}
@@ -98,6 +111,18 @@ const LabelSelectorEditor: FC<LabelSelectorEditorProps> = ({
           </Button>
         </GridItem>
       </Grid>
+      <datalist id={keysListId}>
+        {labelSuggestions.map((suggestion) => (
+          <option key={suggestion} value={suggestion} />
+        ))}
+      </datalist>
+      {labelSelectorPairs.map((labelSelectorPair, index) => (
+        <datalist id={`${idPrefix}-values-${index}`} key={index}>
+          {(valueSuggestions[labelSelectorPair[0]] || []).map((suggestion) => (
+            <option key={suggestion} value={suggestion} />
+          ))}
+        </datalist>
+      ))}
     </>
   );
 };

@@ -1,9 +1,18 @@
-import React, { FC, useRef } from 'react';
+import React, { FC, useMemo, useRef } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Trans } from 'react-i18next';
 
-import { PodModel } from '@kubevirt-ui-ext/kubevirt-api/console';
-import type { IoK8sApiCoreV1Service } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
+import {
+  DeploymentModel,
+  modelToGroupVersionKind,
+  PodModel,
+} from '@kubevirt-ui-ext/kubevirt-api/console';
+import type {
+  IoK8sApiAppsV1Deployment,
+  IoK8sApiCoreV1Pod,
+  IoK8sApiCoreV1Service,
+} from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
+import { useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import {
   Button,
   ButtonVariant,
@@ -37,6 +46,48 @@ const ServiceSelectorField: FC<ServiceSelectorFieldProps> = ({
   const { t } = useNetworkingTranslation();
   const { setValue } = useFormContext<IoK8sApiCoreV1Service>();
   const podsPreviewPopoverRef = useRef<HTMLElement>();
+  const [pods] = useK8sWatchResource<IoK8sApiCoreV1Pod[]>({
+    groupVersionKind: modelToGroupVersionKind(PodModel),
+    isList: true,
+    namespace,
+    optional: true,
+  });
+
+  const [deployments] = useK8sWatchResource<IoK8sApiAppsV1Deployment[]>({
+    groupVersionKind: modelToGroupVersionKind(DeploymentModel),
+    isList: true,
+    namespace,
+    optional: true,
+  });
+
+  const { keys: labelKeys, values: labelValues } = useMemo(() => {
+    const labels = [
+      ...(pods || []).map((pod) => pod.metadata?.labels),
+      ...(deployments || []).flatMap((deployment) => [
+        deployment.metadata?.labels,
+        deployment.spec?.template?.metadata?.labels,
+      ]),
+    ];
+    const keys = new Set<string>();
+    const values: Record<string, Set<string>> = {};
+
+    labels.forEach((labelSet) => {
+      Object.entries(labelSet || {}).forEach(([key, value]) => {
+        keys.add(key);
+        if (value) {
+          values[key] ??= new Set<string>();
+          values[key].add(value);
+        }
+      });
+    });
+
+    return {
+      keys: [...keys].sort(),
+      values: Object.fromEntries(
+        Object.entries(values).map(([key, value]) => [key, [...value].sort()]),
+      ),
+    };
+  }, [deployments, pods]);
 
   const onPairsChange = (pairs: string[][]) => {
     const nextPairs = isEmpty(pairs) ? [['', '']] : pairs;
@@ -58,15 +109,19 @@ const ServiceSelectorField: FC<ServiceSelectorFieldProps> = ({
         {t('Pods having all the supplied key/value pairs as labels will be selected.')}
       </Content>
       <LabelSelectorEditor
+        helperText={
+          selectorError && (
+            <FormGroupHelperText validated={ValidatedOptions.error}>
+              {selectorError}
+            </FormGroupHelperText>
+          )
+        }
         labelSelectorPairs={labelPairs}
+        labelSuggestions={labelKeys}
         onLastItemRemoved={() => onPairsChange([['', '']])}
         updateParentData={onPairsChange}
+        valueSuggestions={labelValues}
       />
-      <FormGroupHelperText
-        validated={selectorError ? ValidatedOptions.error : ValidatedOptions.default}
-      >
-        {selectorError}
-      </FormGroupHelperText>
       <Content component="p">
         <Trans t={t}>
           Show a preview of the{' '}
