@@ -10,3 +10,8 @@ export const CLUSTER_UDN_NAD_NAME_PREFIX = 'cluster.udn.';
 
 export const NETWORK_CREATED = 'NetworkCreated';
 export const NETWORK_ALLOCATION_SUCCEEDED = 'NetworkAllocationSucceeded';
+
+export const MAC_SECURITY_MODE_ENABLED = 'Enabled';
+
+export const IPAM_MODE_DISABLED = 'Disabled';
+export const VLAN_MODE_ACCESS = 'Access';
