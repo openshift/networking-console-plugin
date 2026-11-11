@@ -1,7 +1,9 @@
 import { ClusterUserDefinedNetworkModel, UserDefinedNetworkModel } from '@utils/models';
+import { LAYER3_TOPOLOGY } from '@utils/resources/udns/constants';
 
 import {
   ClusterUserDefinedNetworkKind,
+  MACSecurityMode,
   UDNCondition,
   UserDefinedNetworkKind,
   UserDefinedNetworkLayer3Subnet,
@@ -78,3 +80,16 @@ export const getVLANID = (cudn: ClusterUserDefinedNetworkKind): number =>
 export const getUDNConditions = (
   obj: ClusterUserDefinedNetworkKind | UserDefinedNetworkKind,
 ): UDNCondition[] => obj?.status?.conditions ?? [];
+
+export const getMACSecurityMode = (
+  obj: ClusterUserDefinedNetworkKind | UserDefinedNetworkKind,
+): string | undefined => {
+  const topology = getTopology(obj);
+  if (topology === LAYER3_TOPOLOGY) return undefined;
+
+  const network = getNetwork(obj);
+  const macSecurityMode = network?.layer2?.macSecurity?.mode;
+  return macSecurityMode === MACSecurityMode.Disabled
+    ? MACSecurityMode.Disabled
+    : MACSecurityMode.Enabled;
+};

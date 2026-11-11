@@ -95,9 +95,7 @@ const UserDefinedNetworkCreateForm: FC<UserDefinedNetworkCreateFormProps> = ({
   }, [macSecurityMode, isSecondary, subnetField, trigger]);
 
   const onRoleSelect = (event: FormEvent<HTMLInputElement>, checked: boolean) => {
-    if (!checked) {
-      return;
-    }
+    if (!checked) return;
 
     const newRole = event.currentTarget.value as UserDefinedNetworkRole;
     setValue(roleField, newRole);
@@ -107,9 +105,9 @@ const UserDefinedNetworkCreateForm: FC<UserDefinedNetworkCreateFormProps> = ({
     const currentName = watch('metadata.name');
 
     if (newRole === UserDefinedNetworkRole.Primary) {
-      if (currentName && currentName !== FIXED_PRIMARY_UDN_NAME) {
+      if (currentName && currentName !== FIXED_PRIMARY_UDN_NAME)
         lastSecondaryName.current = currentName;
-      }
+
       setValue('metadata.name', FIXED_PRIMARY_UDN_NAME);
       setValue(PROJECT_NAME, '');
       return;
