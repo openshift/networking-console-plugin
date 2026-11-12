@@ -35,13 +35,20 @@ const NADListEmpty: FC<NADListEmptyProps> = ({ canCreateNAD = true, namespace })
     groupVersionKind: modelToGroupVersionKind(QuickStartModel),
     isList: true,
   });
-  const hasQuickStarts =
+  // A watch that ends loaded-with-error leaves `quickStarts` undefined (403 for a
+  // user without consolequickstarts access), and a QuickStart may omit its spec
+  // fields, so both are guarded.
+  const hasQuickStarts = Boolean(
     quickStartsLoaded &&
-    quickStarts.find(
-      ({ spec: { description, displayName } }) =>
+    (quickStarts ?? []).find((quickStart) => {
+      const { description = '', displayName = '' } = quickStart?.spec ?? {};
+
+      return (
         displayName.toLowerCase().includes(searchText) ||
-        description.toLowerCase().includes(searchText),
-    );
+        description.toLowerCase().includes(searchText)
+      );
+    }),
+  );
 
   return (
     <EmptyState headingLevel="h4" titleText={t('No NetworkAttachmentDefinition found')}>
