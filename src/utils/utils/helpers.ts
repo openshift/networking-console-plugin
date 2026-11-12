@@ -13,8 +13,14 @@ import { SYSTEM_NAMESPACES, SYSTEM_NAMESPACES_PREFIX } from './constants';
 
 export const networkConsole = console;
 
-export const isEmpty = (obj) =>
-  [Array, Object].includes((obj || {}).constructor) && !Object.entries(obj || {}).length;
+export const isEmpty = (obj) => {
+  if (obj === null || obj === undefined) return true;
+  // `Array.isArray` is realm-safe; comparing the constructor is not. Arrays
+  // created in another realm (jsdom tests, iframes) otherwise read as non-empty.
+  if (Array.isArray(obj)) return obj.length === 0;
+  if (typeof obj !== 'object') return !obj;
+  return obj.constructor === Object && !Object.entries(obj).length;
+};
 
 export const generateName = (prefix: string): string => {
   return `${prefix}-${uniqueNamesGenerator({

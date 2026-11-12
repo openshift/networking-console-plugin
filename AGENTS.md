@@ -32,6 +32,7 @@ src/
     types.ts              # Shared TypeScript types
   templates/              # YAML templates for resource creation (Ingress, NAD, Route, Service, UDN)
   styles/                 # Global SCSS
+  test/                   # Jest integration harness: SDK shim, MSW server, fixtures
 integration-tests/        # Cypress E2E tests
   tests/                  # Test specs (.cy.ts files)
   fixtures/               # Test data
