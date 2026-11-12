@@ -464,13 +464,7 @@ export const applyHideWorkloads = (model: Model, hide: boolean): Model => {
     (node) => !WORKLOAD_RESOURCE_TYPES.has(node.data?.resourceType),
   );
 
-  const keptIds = new Set(nodes.map((node) => node.id));
-  const edges = (model.edges ?? []).filter(
-    (edge) =>
-      !!edge.source && !!edge.target && keptIds.has(edge.source) && keptIds.has(edge.target),
-  );
-
-  return { ...model, edges, nodes };
+  return modelWithNodes(model, nodes);
 };
 
 export const resourceTypeLabel = (t: TFunction, type: ResourceType): string => {
