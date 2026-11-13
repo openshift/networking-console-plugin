@@ -27,7 +27,8 @@ import DetailsSectionTitle from '@utils/components/DetailsSectionTitle/DetailsSe
 import Loading from '@utils/components/Loading/Loading';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { BGPRoutingModel, BGPRoutingModelGroupVersionKind } from '@utils/models';
-import { BGPRouting, condition } from '@utils/resources/bgp';
+import { BGPRouting } from '@utils/resources/bgp/types';
+import { condition } from '@utils/resources/bgp/utils';
 import { getName, resourceListPathFromModel } from '@utils/resources/shared';
 import { getCUDNProjects, udnIsReady } from '@utils/resources/udns/helper';
 import { getUDNConditions } from '@utils/resources/udns/selectors';
