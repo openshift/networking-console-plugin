@@ -27,9 +27,16 @@ adminOnlyDescribe('Test UDN', () => {
     cy.byTestID('input-udn-subnet').type(SUBNET);
     cy.byTestID('tags-input').clear();
     cy.byTestID('tags-input').type(`kubernetes.io/metadata.name=${UDN_NS}`);
+    cy.contains('Review selected Namespace(s)').click();
+    cy.get('a').contains(UDN_NS).should('be.visible');
     cy.byButtonText('Review selected').click();
     cy.byTestID('create-udn-submit').click();
     cy.checkTitle(UDN_CLST);
+    cy.contains('Namespace membership').should('be.visible');
+    cy.contains(`kubernetes.io/metadata.name=${UDN_NS}`).should('be.visible');
+    cy.contains('Matching').should('be.visible');
+    cy.get('a').contains(UDN_NS).should('be.visible');
+    cy.get('a[href*="core~v1~Namespace"][href*="labels="]').should('be.visible');
     checkActionMenu('ClusterUserDefinedNetwork');
     cy.contains(brCrumbItem, 'ClusterUserDefinedNetworks').find('a').eq(0).click();
   });

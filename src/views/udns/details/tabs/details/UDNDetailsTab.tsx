@@ -25,10 +25,12 @@ import Loading from '@utils/components/Loading/Loading';
 import { OwnerReferences } from '@utils/components/OwnerReference/owner-references';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { getAnnotations, getLabels, getName, getNamespace, getUID } from '@utils/resources/shared';
+import { isClusterUDN } from '@utils/resources/udns/helper';
 import { getModel, getUDNConditions } from '@utils/resources/udns/selectors';
 import { ClusterUserDefinedNetworkKind, UserDefinedNetworkKind } from '@utils/resources/udns/types';
 import UDNConditions from '@views/udns/list/components/UDNConditions';
 
+import CUDNNamespaceMembership from './CUDNNamespaceMembership';
 import UDNLayerDetails from './UDNLayerDetails';
 import UDNTopologyDetails from './UDNTopologyDetails';
 
@@ -126,13 +128,14 @@ const UDNDetailsTab: FC<UDNDetailsTabProps> = ({ obj: udn }) => {
             <DetailsItem label={t('Topology')} obj={udn}>
               <UDNTopologyDetails obj={udn} />
             </DetailsItem>
+            <UDNLayerDetails obj={udn} />
             <DetailsItem label={t('Conditions')} obj={udn}>
               <UDNConditions conditions={getUDNConditions(udn)} />
             </DetailsItem>
-            <UDNLayerDetails obj={udn} />
           </DL>
         </GridItem>
       </Grid>
+      {isClusterUDN(udn) && <CUDNNamespaceMembership cudn={udn} />}
     </PageSection>
   );
 };

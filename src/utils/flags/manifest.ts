@@ -27,6 +27,12 @@ export const FlagsExtensions: EncodedExtension[] = [
     },
     type: 'console.flag/model',
   },
+  {
+    properties: {
+      handler: { $codeRef: 'networkingFlags.useBGPEnabledFlag' },
+    },
+    type: 'console.flag/hookProvider',
+  } as EncodedExtension<FeatureFlagHookProvider>,
 ];
 
 export const FlagsExposedModules = {
