@@ -10,7 +10,7 @@ import { SyncedEditor } from '@utils/components/SyncedEditor/SyncedEditor';
 import { safeYAMLToJS } from '@utils/components/SyncedEditor/yaml';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { BGPCloudConfigurationModel } from '@utils/models';
-import { BGPCloudConfiguration } from '@utils/resources/bgp';
+import { BGPCloudConfiguration } from '@utils/resources/bgp/types';
 
 import { BGPCloudConfigurationForm } from './BGPForms';
 
@@ -49,6 +49,7 @@ const BGPCloudConfigurationFormPage: FC = () => {
     ),
     [isExisting],
   );
+
   return (
     <StatusBox error={error} loaded={loaded}>
       <PageSection>

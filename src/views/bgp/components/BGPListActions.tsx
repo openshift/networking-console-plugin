@@ -5,8 +5,8 @@ import type { K8sModel } from '@openshift-console/dynamic-plugin-sdk';
 import { useDeleteModal } from '@openshift-console/dynamic-plugin-sdk';
 import ActionsDropdown from '@utils/components/ActionsDropdown/ActionsDropdown';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { BGPCloudConfiguration, BGPRouting } from '@utils/resources/bgp';
-import { asAccessReview, resourcePathFromModel } from '@utils/resources/shared';
+import { BGPCloudConfiguration, BGPRouting } from '@utils/resources/bgp/types';
+import { asAccessReview, getName, resourcePathFromModel } from '@utils/resources/shared';
 
 type BGPListActionsProps = {
   model: K8sModel;
@@ -17,7 +17,7 @@ const BGPListActions: FC<BGPListActionsProps> = ({ model, obj }) => {
   const { t } = useNetworkingTranslation();
   const navigate = useNavigate();
   const launchDeleteModal = useDeleteModal(obj);
-  const resourcePath = resourcePathFromModel(model, obj.metadata?.name);
+  const resourcePath = resourcePathFromModel(model, getName(obj));
   const actions = [
     {
       accessReview: asAccessReview(model, obj, 'update'),

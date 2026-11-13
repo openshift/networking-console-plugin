@@ -5,63 +5,18 @@ import { modelToGroupVersionKind } from '@kubevirt-ui-ext/kubevirt-api/console';
 import {
   ListPageBody,
   ListPageFilter,
-  ResourceLink,
-  RowProps,
   TableColumn,
-  TableData,
   useK8sWatchResource,
   useListPageFilter,
   VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { Label } from '@patternfly/react-core';
 import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { BGPRoutingModel } from '@utils/models';
-import { BGPRouting, condition } from '@utils/resources/bgp';
+import { BGPRouting } from '@utils/resources/bgp/types';
 import { resourcePathFromModel } from '@utils/resources/shared';
 
-import BGPListActions from '../components/BGPListActions';
-import { BGPStatus } from '../components/BGPStatus';
-
-const Row: FC<RowProps<BGPRouting>> = ({ activeColumnIDs, obj }) => {
-  const { t } = useNetworkingTranslation();
-  const available = condition(obj.status?.conditions);
-  return (
-    <>
-      <TableData activeColumnIDs={activeColumnIDs} id="name">
-        <ResourceLink
-          groupVersionKind={modelToGroupVersionKind(BGPRoutingModel)}
-          name={obj.metadata?.name}
-        />
-      </TableData>
-      <TableData activeColumnIDs={activeColumnIDs} id="network">
-        {obj.spec?.network?.name}
-      </TableData>
-      <TableData activeColumnIDs={activeColumnIDs} id="subnets">
-        {obj.spec?.network?.subnets?.join(', ')}
-      </TableData>
-      <TableData activeColumnIDs={activeColumnIDs} id="phase">
-        <BGPStatus condition={available} phase={obj.status?.phase} />
-      </TableData>
-      <TableData activeColumnIDs={activeColumnIDs} id="availability">
-        <Label color={available?.status === 'True' ? 'green' : 'red'}>
-          {available?.status || t('Unknown')}
-        </Label>
-      </TableData>
-      <TableData activeColumnIDs={activeColumnIDs} id="reason">
-        {available?.reason || t('Not available')}
-      </TableData>
-      <TableData activeColumnIDs={activeColumnIDs} id="created">
-        {obj.metadata?.creationTimestamp
-          ? new Date(obj.metadata.creationTimestamp).toLocaleString()
-          : '-'}
-      </TableData>
-      <TableData activeColumnIDs={activeColumnIDs} id="actions">
-        <BGPListActions model={BGPRoutingModel} obj={obj} />
-      </TableData>
-    </>
-  );
-};
+import BGPRoutingRow from './components/BGPRoutingRow';
 const BGPRoutingList: FC = () => {
   const { t } = useNetworkingTranslation();
   const navigate = useNavigate();
@@ -101,7 +56,7 @@ const BGPRoutingList: FC = () => {
             data={filteredData}
             loaded={loaded}
             loadError={error}
-            Row={Row}
+            Row={BGPRoutingRow}
             unfilteredData={data}
           />
         </ListPageBody>

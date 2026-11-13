@@ -10,7 +10,7 @@ import { SyncedEditor } from '@utils/components/SyncedEditor/SyncedEditor';
 import { safeYAMLToJS } from '@utils/components/SyncedEditor/yaml';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { BGPRoutingModel } from '@utils/models';
-import { BGPRouting } from '@utils/resources/bgp';
+import { BGPRouting } from '@utils/resources/bgp/types';
 
 import { BGPRoutingForm } from './BGPForms';
 
@@ -49,6 +49,7 @@ const BGPRoutingFormPage: FC = () => {
     ),
     [isExisting],
   );
+
   return (
     <StatusBox error={error} loaded={loaded}>
       <PageSection>

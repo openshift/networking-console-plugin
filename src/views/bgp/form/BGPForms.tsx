@@ -33,13 +33,16 @@ import {
 import FormGroupHelperText from '@utils/components/FormGroupHelperText/FormGroupHelperText';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { BGPCloudConfigurationModel, BGPRoutingModel } from '@utils/models';
-import { BGPCloudConfiguration, BGPRouting, isCIDR } from '@utils/resources/bgp';
+import { BGPCloudConfiguration, BGPRouting } from '@utils/resources/bgp/types';
+import { isCIDR } from '@utils/resources/bgp/utils';
 import { getName, resourcePathFromModel } from '@utils/resources/shared';
 
-import { cloudPayload, CloudValues, routingPayload, RoutingValues } from './BGPFormUtils';
+import { cloudPayload, routingPayload } from './utils/BGPFormUtils';
+import { CloudValues, RoutingValues } from './utils/types';
 
 export type BGPFormProps<T extends K8sResourceKind> = { formData: T; onChange: (data: T) => void };
 type FieldProps<T extends FieldValues> = {
+  disabled?: boolean;
   error?: string;
   help?: string;
   id: Path<T>;
@@ -50,6 +53,7 @@ type FieldProps<T extends FieldValues> = {
   validate?: (value: number | string) => boolean | string;
 };
 const Field = <T extends FieldValues>({
+  disabled,
   error,
   help,
   id,
@@ -60,7 +64,12 @@ const Field = <T extends FieldValues>({
   validate,
 }: FieldProps<T>) => (
   <FormGroup fieldId={id} isRequired={required} label={label}>
-    <TextInput id={id} placeholder={placeholder} {...register(id, { required, validate })} />
+    <TextInput
+      id={id}
+      isDisabled={disabled}
+      placeholder={placeholder}
+      {...register(id, { required, validate })}
+    />
     <FormGroupHelperText>{error || help}</FormGroupHelperText>
   </FormGroup>
 );
@@ -479,6 +488,7 @@ export const BGPRoutingForm: FC<BGPFormProps<BGPRouting>> = ({ formData, onChang
     <PageSection>
       <Form onSubmit={handleSubmit(submit)}>
         <Field
+          disabled={Boolean(originalResource.metadata?.resourceVersion)}
           id="name"
           label={t('Resource name')}
           placeholder="prod-routing"

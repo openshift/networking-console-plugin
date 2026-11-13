@@ -10,10 +10,10 @@ import {
 import { Tab, Tabs, TabTitleText } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { BGPCloudConfigurationModel, BGPRoutingModel } from '@utils/models';
-import { BGPCloudConfiguration } from '@utils/resources/bgp';
+import { BGPCloudConfiguration } from '@utils/resources/bgp/types';
 import { resourcePathFromModel } from '@utils/resources/shared';
 
-import { isBGPNetworkingListPage } from '../olm';
+import { isBGPNetworkingListPage } from '../utils/olm';
 
 import BGPCloudConfigurationList from './BGPCloudConfigurationList';
 import BGPRoutingList from './BGPRoutingList';

@@ -4,16 +4,22 @@ import { CamelCaseWrap, Timestamp } from '@openshift-console/dynamic-plugin-sdk'
 import { Label } from '@patternfly/react-core';
 import { Table, Tbody, Td, Th, Thead, Tr } from '@patternfly/react-table';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { BGPCondition } from '@utils/resources/bgp';
+import { BGPCondition } from '@utils/resources/bgp/types';
+
+type BGPStatusColor = 'green' | 'orange' | 'red';
+
+const AVAILABLE_COLOR: BGPStatusColor = 'green';
+const DEGRADED_COLOR: BGPStatusColor = 'red';
+const UNKNOWN_COLOR: BGPStatusColor = 'orange';
 
 export const BGPStatus: FC<{ condition?: BGPCondition; phase?: string }> = ({
   condition,
   phase,
 }) => {
   const { t } = useNetworkingTranslation();
-  let color: 'green' | 'orange' | 'red' = 'orange';
-  if (phase === 'Ready' && condition?.status === 'True') color = 'green';
-  if (phase === 'Degraded' || condition?.status === 'False') color = 'red';
+  let color: BGPStatusColor = UNKNOWN_COLOR;
+  if (phase === 'Ready' && condition?.status === 'True') color = AVAILABLE_COLOR;
+  if (phase === 'Degraded' || condition?.status === 'False') color = DEGRADED_COLOR;
   return <Label color={color}>{phase || t('Unknown')}</Label>;
 };
 
