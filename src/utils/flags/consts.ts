@@ -3,3 +3,4 @@ export const FLAG_KUBEVIRT = 'KUBEVIRT_DYNAMIC';
 export const FLAG_NMSTATE = 'NMSTATE_DYNAMIC'; // set by nmstate-console-plugin when its frontend is loaded
 export const FLAG_NMSTATE_CRDS = 'NMSTATE_PLUGIN_ENABLED'; // NNS model discovery, registered in flags/manifest.ts
 export const FLAG_UDN_ENABLED = 'FLAG_UDN_ENABLED';
+export const FLAG_BGP_ENABLED = 'FLAG_BGP_ENABLED';
