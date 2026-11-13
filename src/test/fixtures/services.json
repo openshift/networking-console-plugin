@@ -1,0 +1,259 @@
+{
+  "kind": "ServiceList",
+  "apiVersion": "v1",
+  "metadata": {},
+  "items": [
+    {
+      "metadata": {
+        "name": "cluster-ip",
+        "namespace": "cy-test-ns",
+        "annotations": {}
+      },
+      "spec": {
+        "ports": [
+          {
+            "protocol": "TCP",
+            "port": 80,
+            "targetPort": 8080
+          }
+        ],
+        "selector": {
+          "app": "cluster-ip"
+        },
+        "clusterIP": "192.0.2.10",
+        "clusterIPs": ["192.0.2.10"],
+        "type": "ClusterIP",
+        "sessionAffinity": "None",
+        "ipFamilies": ["IPv4"],
+        "ipFamilyPolicy": "SingleStack",
+        "internalTrafficPolicy": "Cluster"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    },
+    {
+      "metadata": {
+        "name": "degraded",
+        "namespace": "cy-test-ns",
+        "annotations": {}
+      },
+      "spec": {
+        "ports": [
+          {
+            "protocol": "TCP",
+            "port": 80,
+            "targetPort": 80
+          }
+        ],
+        "clusterIP": "192.0.2.10",
+        "clusterIPs": ["192.0.2.10"],
+        "type": "ClusterIP",
+        "sessionAffinity": "None",
+        "ipFamilies": ["IPv4"],
+        "ipFamilyPolicy": "SingleStack",
+        "internalTrafficPolicy": "Cluster"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    },
+    {
+      "metadata": {
+        "name": "down",
+        "namespace": "cy-test-ns",
+        "annotations": {}
+      },
+      "spec": {
+        "ports": [
+          {
+            "protocol": "TCP",
+            "port": 80,
+            "targetPort": 80
+          }
+        ],
+        "clusterIP": "192.0.2.10",
+        "clusterIPs": ["192.0.2.10"],
+        "type": "ClusterIP",
+        "sessionAffinity": "None",
+        "ipFamilies": ["IPv4"],
+        "ipFamilyPolicy": "SingleStack",
+        "internalTrafficPolicy": "Cluster"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    },
+    {
+      "metadata": {
+        "name": "external-name",
+        "namespace": "cy-test-ns",
+        "annotations": {}
+      },
+      "spec": {
+        "ports": [
+          {
+            "protocol": "TCP",
+            "port": 80,
+            "targetPort": 80
+          }
+        ],
+        "type": "ExternalName",
+        "sessionAffinity": "None",
+        "externalName": "example.com"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    },
+    {
+      "metadata": {
+        "name": "headless",
+        "namespace": "cy-test-ns",
+        "annotations": {}
+      },
+      "spec": {
+        "ports": [
+          {
+            "protocol": "TCP",
+            "port": 80,
+            "targetPort": 8080
+          }
+        ],
+        "selector": {
+          "app": "headless"
+        },
+        "clusterIP": "None",
+        "clusterIPs": ["None"],
+        "type": "ClusterIP",
+        "sessionAffinity": "None",
+        "ipFamilies": ["IPv4"],
+        "ipFamilyPolicy": "SingleStack",
+        "internalTrafficPolicy": "Cluster"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    },
+    {
+      "metadata": {
+        "name": "healthy",
+        "namespace": "cy-test-ns",
+        "annotations": {}
+      },
+      "spec": {
+        "ports": [
+          {
+            "protocol": "TCP",
+            "port": 80,
+            "targetPort": 80
+          }
+        ],
+        "clusterIP": "192.0.2.10",
+        "clusterIPs": ["192.0.2.10"],
+        "type": "ClusterIP",
+        "sessionAffinity": "None",
+        "ipFamilies": ["IPv4"],
+        "ipFamilyPolicy": "SingleStack",
+        "internalTrafficPolicy": "Cluster"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    },
+    {
+      "metadata": {
+        "name": "load-balancer",
+        "namespace": "cy-test-ns",
+        "annotations": {},
+        "finalizers": ["service.kubernetes.io/load-balancer-cleanup"]
+      },
+      "spec": {
+        "ports": [
+          {
+            "protocol": "TCP",
+            "port": 80,
+            "targetPort": 8080,
+            "nodePort": 32397
+          }
+        ],
+        "selector": {
+          "app": "load-balancer"
+        },
+        "clusterIP": "192.0.2.10",
+        "clusterIPs": ["192.0.2.10"],
+        "type": "LoadBalancer",
+        "sessionAffinity": "None",
+        "externalTrafficPolicy": "Cluster",
+        "ipFamilies": ["IPv4"],
+        "ipFamilyPolicy": "SingleStack",
+        "allocateLoadBalancerNodePorts": true,
+        "internalTrafficPolicy": "Cluster"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    },
+    {
+      "metadata": {
+        "name": "node-port",
+        "namespace": "cy-test-ns",
+        "annotations": {}
+      },
+      "spec": {
+        "ports": [
+          {
+            "protocol": "TCP",
+            "port": 80,
+            "targetPort": 8080,
+            "nodePort": 30080
+          }
+        ],
+        "selector": {
+          "app": "node-port"
+        },
+        "clusterIP": "192.0.2.10",
+        "clusterIPs": ["192.0.2.10"],
+        "type": "NodePort",
+        "sessionAffinity": "None",
+        "externalTrafficPolicy": "Cluster",
+        "ipFamilies": ["IPv4"],
+        "ipFamilyPolicy": "SingleStack",
+        "internalTrafficPolicy": "Cluster"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    },
+    {
+      "metadata": {
+        "name": "web",
+        "namespace": "cy-test-ns",
+        "annotations": {}
+      },
+      "spec": {
+        "ports": [
+          {
+            "name": "http",
+            "protocol": "TCP",
+            "port": 80,
+            "targetPort": 8080
+          }
+        ],
+        "selector": {
+          "app": "web"
+        },
+        "clusterIP": "192.0.2.10",
+        "clusterIPs": ["192.0.2.10"],
+        "type": "ClusterIP",
+        "sessionAffinity": "None",
+        "ipFamilies": ["IPv4"],
+        "ipFamilyPolicy": "SingleStack",
+        "internalTrafficPolicy": "Cluster"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    }
+  ]
+}

@@ -1,6 +1,9 @@
 import { defaults, isPlainObject } from 'lodash';
 
-import { VALUE_WITH_OPTIONAL_UNIT } from './constants';
+/* Kept in this module rather than constants: it is the only consumer, and this
+ * file is loaded as CommonJS by the integration Jest project, where importing an
+ * ES module from it is a require(esm) cycle that Node 24 rejects. */
+const VALUE_WITH_OPTIONAL_UNIT = /^([-+]?[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?)\s*([a-zA-Z%]*)$/;
 
 export const units = {};
 export const validate = {};
