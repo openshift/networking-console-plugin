@@ -92,9 +92,7 @@ const CUDNNamespaceMembership: FC<CUDNNamespaceMembershipProps> = ({ cudn }) => 
     ? (pods || []).filter((pod) => matchingNamespaceSet.has(pod.metadata?.namespace)).length
     : undefined;
   const relatedRoutings = (routings || []).filter(
-    (routing) =>
-      routing.spec?.network?.name === cudn.metadata?.name ||
-      `cluster-udn-${routing.spec?.network?.name}` === cudn.metadata?.name,
+    (routing) => `cluster-udn-${routing.spec?.network?.name}` === cudn.metadata?.name,
   );
   const conditions = getUDNConditions(cudn);
   const noMatchingNamespaces =
@@ -104,9 +102,9 @@ const CUDNNamespaceMembership: FC<CUDNNamespaceMembershipProps> = ({ cudn }) => 
       udnCondition.type === 'NetworkCreated' || udnCondition.type === 'NetworkAllocationSucceeded',
   );
   let podCount: ReactNode = t('Loading');
-  if (podsError) {
+  if (namespacesError || podsError) {
     podCount = t('Unavailable');
-  } else if (podsLoaded) {
+  } else if (namespacesLoaded && podsLoaded) {
     podCount = matchingPodCount;
   }
 

@@ -8,7 +8,7 @@ metadata:
 apiVersion: k8s.ovn.org/v1
 kind: ClusterUserDefinedNetwork
 metadata:
-  name: e2e-bgp-card-cudn
+  name: cluster-udn-e2e-bgp-card-cudn
 spec:
   namespaceSelector:
     matchLabels:
