@@ -27,6 +27,8 @@ import {
   TopologyViewTypes,
 } from '@views/topology/utils/constants';
 
+import { getDisplayOptionLabel, LayoutOption } from './utils';
+
 import './DisplayOptionsDropdown.scss';
 
 type DisplayOptionsDropdownProps = {
@@ -39,12 +41,6 @@ type DisplayOptionsDropdownProps = {
   onScopeChange: (scope: TopologyViewTypes) => void;
   scope: TopologyViewTypes;
 };
-
-interface LayoutOption {
-  description: string;
-  label: string;
-  type: TopologyLayoutType;
-}
 
 const DisplayOptionsDropdown: FC<DisplayOptionsDropdownProps> = ({
   displayOptions,
@@ -103,34 +99,16 @@ const DisplayOptionsDropdown: FC<DisplayOptionsDropdownProps> = ({
   };
 
   const onToggle = () => setIsOpen((prev) => !prev);
-  const scopeLabel = (value: TopologyGroupType | TopologyViewTypes) => {
-    switch (value) {
-      case TopologyViewTypes.network:
-        return t('Network');
-      case TopologyViewTypes.owner:
-        return t('Owner');
-      case TopologyViewTypes.namespace:
-        return t('Namespace');
-      case TopologyViewTypes.resource:
-        return t('Resource');
-      case TopologyGroupType.namespaceOwner:
-        return t('Namespace + Owner');
-      case TopologyGroupType.none:
-        return t('None');
-    }
-  };
 
   const groupOptions = TOPOLOGY_GROUP_ORDER.filter((value) => {
     if (value === TopologyGroupType.none) return true;
     if (
       (scope === TopologyViewTypes.namespace || scope === TopologyViewTypes.network) &&
       value === TopologyGroupType.owner
-    ) {
+    )
       return false;
-    }
-    if (scope !== TopologyViewTypes.resource && value === TopologyGroupType.namespaceOwner) {
+    if (scope !== TopologyViewTypes.resource && value === TopologyGroupType.namespaceOwner)
       return false;
-    }
     return String(value) !== String(scope);
   });
 
@@ -181,7 +159,7 @@ const DisplayOptionsDropdown: FC<DisplayOptionsDropdownProps> = ({
                       }
                       ref={toggleRef}
                     >
-                      {t(scopeLabel(scope))}
+                      {getDisplayOptionLabel(t, scope)}
                     </MenuToggle>
                   )}
                 >
@@ -196,7 +174,7 @@ const DisplayOptionsDropdown: FC<DisplayOptionsDropdownProps> = ({
                         setIsOpen(true);
                       }}
                     >
-                      {t(scopeLabel(value))}
+                      {getDisplayOptionLabel(t, value)}
                     </DropdownItem>
                   ))}
                 </Dropdown>
@@ -219,7 +197,7 @@ const DisplayOptionsDropdown: FC<DisplayOptionsDropdownProps> = ({
                       }
                       ref={toggleRef}
                     >
-                      {t(scopeLabel(group))}
+                      {getDisplayOptionLabel(t, group)}
                     </MenuToggle>
                   )}
                 >
@@ -234,7 +212,7 @@ const DisplayOptionsDropdown: FC<DisplayOptionsDropdownProps> = ({
                         setIsOpen(true);
                       }}
                     >
-                      {t(scopeLabel(value))}
+                      {getDisplayOptionLabel(t, value)}
                     </DropdownItem>
                   ))}
                 </Dropdown>

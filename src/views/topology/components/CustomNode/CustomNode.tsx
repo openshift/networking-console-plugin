@@ -38,9 +38,7 @@ const CustomNode: FC<CustomNodeProps> = ({ element, ...rest }) => {
   const data = element.getData() ?? {};
   const Icon = data.icon ?? NetworkIcon;
   const bounds = element.getBounds();
-  if (!bounds || typeof bounds.width !== 'number' || typeof bounds.height !== 'number') {
-    return null;
-  }
+  if (!bounds || typeof bounds.width !== 'number' || typeof bounds.height !== 'number') return null;
   const { height, width } = bounds;
 
   const xCenter = (width - ICON_SIZE) / 2;

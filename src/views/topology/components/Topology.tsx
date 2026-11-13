@@ -57,13 +57,10 @@ const Topology: FC = () => {
   const prevScopeRef = useRef(scope);
 
   const layoutGraph = useCallback((visualization: Visualization): boolean => {
-    if (visualization.getGraph().getNodes().length === 0) {
-      return false;
-    }
+    if (visualization.getGraph().getNodes().length === 0) return false;
     const bounds = visualization.getGraph().getBounds();
-    if (!bounds || typeof bounds.width !== 'number' || typeof bounds.height !== 'number') {
+    if (!bounds || typeof bounds.width !== 'number' || typeof bounds.height !== 'number')
       return false;
-    }
     visualization.getGraph().layout();
     return true;
   }, []);
@@ -83,6 +80,7 @@ const Topology: FC = () => {
           ),
     [k8sModels, resources],
   );
+
   const filteredTopologyModel = useMemo(
     () =>
       !resources || isEmpty(resources)

@@ -1,44 +1,8 @@
-import React, { ComponentType, FC } from 'react';
-import { IconType } from 'react-icons';
+import React, { FC } from 'react';
 import { GrMultiple } from 'react-icons/gr';
-import { LuGroup } from 'react-icons/lu';
-import { PiNetwork } from 'react-icons/pi';
 
 // Kubernetes SVG icon paths and mappings adapted from:
 // https://github.com/netobserv/netobserv-web-console/blob/main/web/src/components/icons/kubernetes-icons.tsx
-
-type TopologyPodIconProps = {
-  height?: number;
-  width?: number;
-};
-
-export const TopologyPodIcon: FC<TopologyPodIconProps> = ({ height = 30, width = 30 }) => {
-  const size = Math.min(height, width);
-  const scale = (size / 18.035334) * 2;
-
-  return (
-    <g
-      transform={`translate(${size / 2 - 9.017667 * scale}, ${
-        size / 2 - 8.750189 * scale
-      }) scale(${scale})`}
-    >
-      <g transform="translate(-0.86495977,-0.82270299)">
-        <path
-          d="M 6.2617914,7.036086 9.8826317,5.986087 13.503462,7.036086 9.8826317,8.086087 Z"
-          fill="currentColor"
-        />
-        <path
-          d="m 6.2617914,7.43817 0,3.852778 3.3736103,1.868749 0.0167,-4.713193 z"
-          fill="currentColor"
-        />
-        <path
-          d="m 13.503462,7.43817 0,3.852778 -3.37361,1.868749 -0.0167,-4.713193 z"
-          fill="currentColor"
-        />
-      </g>
-    </g>
-  );
-};
 
 type TopologyOwnerIconProps = {
   height?: number;
@@ -144,39 +108,4 @@ export const TopologyOwnerIcon: FC<TopologyOwnerIconProps> = ({
   );
 };
 
-type TopologyScopeIconProps = {
-  height?: number;
-  kind?: string;
-  scope: string;
-  width?: number;
-};
-
-const ICONS: Record<string, IconType> = {
-  namespace: LuGroup,
-  network: PiNetwork,
-  owner: GrMultiple,
-  resource: GrMultiple,
-};
-
-export const TopologyScopeIcon: FC<TopologyScopeIconProps> = ({ height, kind, scope, width }) => {
-  const normalizedKind = kind?.toLowerCase();
-  if (
-    scope === 'owner' &&
-    (normalizedKind === 'userdefinednetwork' || normalizedKind === 'clusteruserdefinednetwork')
-  ) {
-    const NetworkIcon = ICONS.network;
-    const size = Math.min(height ?? 30, width ?? 30);
-    return <NetworkIcon aria-hidden size={size} />;
-  }
-  if (scope === 'owner') {
-    return <TopologyOwnerIcon height={height} kind={kind} width={width} />;
-  }
-  const Icon = ICONS[scope] ?? GrMultiple;
-  const size = Math.min(height ?? 30, width ?? 30);
-
-  return <Icon aria-hidden size={size} />;
-};
-
-export const createScopeIcon =
-  (scope: string, kind?: string): ComponentType =>
-  () => <TopologyScopeIcon height={30} kind={kind} scope={scope} width={30} />;
+export default TopologyOwnerIcon;
