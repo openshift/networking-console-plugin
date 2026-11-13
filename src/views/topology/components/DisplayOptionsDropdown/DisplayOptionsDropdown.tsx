@@ -4,6 +4,8 @@ import {
   Content,
   ContentVariants,
   Divider,
+  Dropdown,
+  DropdownItem,
   Flex,
   FlexItem,
   MenuToggle,
@@ -17,30 +19,42 @@ import {
 } from '@patternfly/react-core';
 import { SlidersHIcon } from '@patternfly/react-icons';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { DisplayOptionsState } from '@views/topology/types';
-import { TopologyLayoutType } from '@views/topology/utils/constants';
+import { DisplayOptionsState, TopologyGroupType } from '@views/topology/types';
+import {
+  TOPOLOGY_GROUP_ORDER,
+  TOPOLOGY_SCOPE_ORDER,
+  TopologyLayoutType,
+  TopologyViewTypes,
+} from '@views/topology/utils/constants';
+
+import { getDisplayOptionLabel, LayoutOption } from './utils';
+
+import './DisplayOptionsDropdown.scss';
 
 type DisplayOptionsDropdownProps = {
   displayOptions: DisplayOptionsState;
+  group: TopologyGroupType;
   layout: TopologyLayoutType;
   onDisplayOptionsChange: (options: DisplayOptionsState) => void;
+  onGroupChange: (group: TopologyGroupType) => void;
   onLayoutChange: (layout: TopologyLayoutType) => void;
+  onScopeChange: (scope: TopologyViewTypes) => void;
+  scope: TopologyViewTypes;
 };
-
-interface LayoutOption {
-  description: string;
-  label: string;
-  type: TopologyLayoutType;
-}
 
 const DisplayOptionsDropdown: FC<DisplayOptionsDropdownProps> = ({
   displayOptions,
+  group,
   layout,
   onDisplayOptionsChange,
+  onGroupChange,
   onLayoutChange,
+  onScopeChange,
+  scope,
 }) => {
   const { t } = useNetworkingTranslation();
   const [isOpen, setIsOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<'group' | 'scope' | undefined>();
 
   const layoutOptions: LayoutOption[] = [
     {
@@ -86,16 +100,31 @@ const DisplayOptionsDropdown: FC<DisplayOptionsDropdownProps> = ({
 
   const onToggle = () => setIsOpen((prev) => !prev);
 
+  const groupOptions = TOPOLOGY_GROUP_ORDER.filter((value) => {
+    if (value === TopologyGroupType.none) return true;
+    if (
+      (scope === TopologyViewTypes.namespace || scope === TopologyViewTypes.network) &&
+      value === TopologyGroupType.owner
+    )
+      return false;
+    if (scope !== TopologyViewTypes.resource && value === TopologyGroupType.namespaceOwner)
+      return false;
+    return String(value) !== String(scope);
+  });
+
   return (
     <Select
       isOpen={isOpen}
-      onOpenChange={setIsOpen}
+      onOpenChange={(open) => {
+        setIsOpen(open);
+      }}
       onSelect={(_event, value) => {
         if (
           typeof value === 'string' &&
           Object.values(TopologyLayoutType).includes(value as TopologyLayoutType)
         ) {
           onLayoutChange(value as TopologyLayoutType);
+          setIsOpen(true);
         }
       }}
       popperProps={{ appendTo: () => document.body, position: 'end' }}
@@ -114,37 +143,119 @@ const DisplayOptionsDropdown: FC<DisplayOptionsDropdownProps> = ({
       )}
     >
       <SelectList>
+        <div className="networking-topology__scope-group-row">
+          <div className="networking-topology__scope-group-item">
+            <SelectGroup label={t('Scope')}>
+              <div className="networking-topology__display-option-dropdown">
+                <Dropdown
+                  isOpen={openDropdown === 'scope'}
+                  onOpenChange={(open) => setOpenDropdown(open ? 'scope' : undefined)}
+                  toggle={(toggleRef) => (
+                    <MenuToggle
+                      className="networking-topology__scope-group-toggle"
+                      isExpanded={openDropdown === 'scope'}
+                      onClick={() =>
+                        setOpenDropdown(openDropdown === 'scope' ? undefined : 'scope')
+                      }
+                      ref={toggleRef}
+                    >
+                      {getDisplayOptionLabel(t, scope)}
+                    </MenuToggle>
+                  )}
+                >
+                  {TOPOLOGY_SCOPE_ORDER.map((value) => (
+                    <DropdownItem
+                      isSelected={scope === value}
+                      key={value}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        onScopeChange(value);
+                        setOpenDropdown(undefined);
+                        setIsOpen(true);
+                      }}
+                    >
+                      {getDisplayOptionLabel(t, value)}
+                    </DropdownItem>
+                  ))}
+                </Dropdown>
+              </div>
+            </SelectGroup>
+          </div>
+          <div className="networking-topology__scope-group-item">
+            <SelectGroup label={t('Groups')}>
+              <div className="networking-topology__display-option-dropdown">
+                <Dropdown
+                  isOpen={openDropdown === 'group'}
+                  onOpenChange={(open) => setOpenDropdown(open ? 'group' : undefined)}
+                  toggle={(toggleRef) => (
+                    <MenuToggle
+                      className="networking-topology__scope-group-toggle"
+                      isDisabled={groupOptions.length === 1}
+                      isExpanded={openDropdown === 'group'}
+                      onClick={() =>
+                        setOpenDropdown(openDropdown === 'group' ? undefined : 'group')
+                      }
+                      ref={toggleRef}
+                    >
+                      {getDisplayOptionLabel(t, group)}
+                    </MenuToggle>
+                  )}
+                >
+                  {groupOptions.map((value) => (
+                    <DropdownItem
+                      isSelected={group === value}
+                      key={value}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        onGroupChange(value);
+                        setOpenDropdown(undefined);
+                        setIsOpen(true);
+                      }}
+                    >
+                      {getDisplayOptionLabel(t, value)}
+                    </DropdownItem>
+                  ))}
+                </Dropdown>
+              </div>
+            </SelectGroup>
+          </div>
+        </div>
+        <Divider />
         <SelectGroup label={t('Visibility')}>
-          <SelectOption isDisabled key="show-labels" value="show-labels">
+          <SelectOption key="show-labels" value="show-labels">
             <Switch
               id="display-opt-show-labels"
               isChecked={displayOptions.showLabels}
               label={t('Show labels')}
               onChange={(_event, checked) => updateOption('showLabels', checked)}
+              onClick={(event) => event.stopPropagation()}
             />
           </SelectOption>
-          <SelectOption isDisabled key="hide-management-ports" value="hide-management-ports">
+          <SelectOption key="hide-management-ports" value="hide-management-ports">
             <Switch
               id="display-opt-hide-management-ports"
               isChecked={displayOptions.hideManagementPorts}
               label={t('Hide management ports')}
               onChange={(_event, checked) => updateOption('hideManagementPorts', checked)}
+              onClick={(event) => event.stopPropagation()}
             />
           </SelectOption>
-          <SelectOption isDisabled key="hide-workloads" value="hide-workloads">
+          <SelectOption key="hide-workloads" value="hide-workloads">
             <Switch
               id="display-opt-hide-workloads"
               isChecked={displayOptions.hideWorkloads}
               label={t('Hide workloads')}
               onChange={(_event, checked) => updateOption('hideWorkloads', checked)}
+              onClick={(event) => event.stopPropagation()}
             />
           </SelectOption>
-          <SelectOption isDisabled key="compact-view" value="compact-view">
+          <SelectOption key="compact-view" value="compact-view">
             <Switch
               id="display-opt-compact-view"
               isChecked={displayOptions.compactView}
               label={t('Compact view')}
               onChange={(_event, checked) => updateOption('compactView', checked)}
+              onClick={(event) => event.stopPropagation()}
             />
           </SelectOption>
         </SelectGroup>
