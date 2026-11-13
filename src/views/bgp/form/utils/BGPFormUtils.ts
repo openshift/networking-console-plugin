@@ -19,12 +19,21 @@ export const cloudPayload = (
   data: CloudValues,
   original?: BGPCloudConfiguration,
 ): BGPCloudConfiguration => {
+  const {
+    aws: _aws,
+    azure: _azure,
+    bgp: originalBGP,
+    gcp: _gcp,
+    ...otherSpec
+  } = original?.spec || {};
+  const { peerGroups: originalPeerGroups, ...otherBGP } = originalBGP || {};
   const spec: BGPCloudConfiguration['spec'] = {
-    ...original?.spec,
+    ...otherSpec,
     bgp: {
-      ...original?.spec?.bgp,
+      ...otherBGP,
       livenessDetection: data.livenessDetection,
       localASN: Number(data.localASN),
+      ...(data.platform === 'Manual' && { peerGroups: originalPeerGroups }),
     },
     platform: data.platform,
     routerNodeSelector: replaceFirstSelector(
@@ -54,7 +63,11 @@ export const cloudPayload = (
       ...original?.spec?.gcp,
       cloudRouterName: data.cloudRouterName,
       enableNestedVirtualization: data.enableNestedVirtualization,
-      ncc: { hubName: data.gcpNCCHubName, spokePrefix: data.gcpNCCSpokePrefix },
+      ncc: {
+        ...original?.spec?.gcp?.ncc,
+        hubName: data.gcpNCCHubName,
+        spokePrefix: data.gcpNCCSpokePrefix,
+      },
       project: data.gcpProject,
       region: data.gcpRegion,
     };
