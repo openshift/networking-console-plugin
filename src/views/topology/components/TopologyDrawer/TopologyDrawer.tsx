@@ -1,7 +1,7 @@
 import React, { FC, ReactNode } from 'react';
 
 import { Drawer, DrawerContent, DrawerContentBody } from '@patternfly/react-core';
-import TopologyDrawerContent from '@views/topology/components/TopologyDrawer/components/TopologyDrawerContent/TopologyDrawerContent';
+import TopologyDrawerContent from '@views/topology/components/TopologyDrawer/components/TopologyDrawerContent';
 import { useTopologyContext } from '@views/topology/context/TopologyContext';
 
 type TopologyDrawerProps = { children: ReactNode };
@@ -11,7 +11,7 @@ const TopologyDrawer: FC<TopologyDrawerProps> = ({ children }) => {
 
   return (
     <Drawer isExpanded={!!selectedNode} isInline position="right">
-      <DrawerContent panelContent={<TopologyDrawerContent />}>
+      <DrawerContent panelContent={selectedNode ? <TopologyDrawerContent /> : null}>
         <DrawerContentBody>{children}</DrawerContentBody>
       </DrawerContent>
     </Drawer>
