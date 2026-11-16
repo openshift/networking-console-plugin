@@ -1,0 +1,16 @@
+.networking-topology__scope-slider {
+  align-items: center;
+  background-color: var(--pf-v6-global--BackgroundColor--100);
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+  min-height: 0;
+  margin-left: var(--pf-v6-global--spacer--md);
+  padding: var(--pf-v6-global--spacer--md) var(--pf-v6-global--spacer--lg);
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 128px;
+  z-index: 1;
+}

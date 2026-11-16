@@ -1,0 +1,46 @@
+.networking-topology__legend {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pf-t--global--spacer--sm);
+  min-width: 12rem;
+}
+
+.networking-topology__legend-entry {
+  align-items: center;
+  display: flex;
+  gap: var(--pf-t--global--spacer--sm);
+}
+
+.networking-topology__legend-section-title {
+  font-weight: var(--pf-t--global--font--weight--body--bold);
+  margin-top: var(--pf-t--global--spacer--sm);
+}
+
+.networking-topology__legend-badge {
+  align-items: center;
+  border-radius: 999px;
+  color: white;
+  display: inline-flex;
+  font-size: var(--pf-t--global--font--size--xs);
+  font-weight: var(--pf-t--global--font--weight--body--bold);
+  justify-content: center;
+  min-width: 2rem;
+  padding: var(--pf-t--global--spacer--xs);
+}
+
+.networking-topology__legend-edge {
+  background-color: var(--pf-t--global--text--color--regular);
+  height: 2px;
+  position: relative;
+  width: 2rem;
+}
+
+.networking-topology__legend-edge::after {
+  border-bottom: 4px solid transparent;
+  border-left: 6px solid var(--pf-t--global--text--color--regular);
+  border-top: 4px solid transparent;
+  content: '';
+  position: absolute;
+  right: -1px;
+  top: -3px;
+}

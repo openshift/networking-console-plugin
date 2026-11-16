@@ -1,0 +1,19 @@
+.networking-topology__scope-group-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--pf-t--global--spacer--xs);
+  margin-inline: var(--pf-t--global--spacer--sm);
+}
+
+.networking-topology__scope-group-item {
+  flex: 1 1 9rem;
+  min-width: 0;
+}
+
+.networking-topology__display-option-dropdown {
+  min-width: 0;
+}
+
+.networking-topology__scope-group-toggle {
+  width: 100%;
+}
