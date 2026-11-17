@@ -1,0 +1,7 @@
+.networking-topology__filter-list {
+  padding-block: var(--pf-t--global--spacer--xs);
+}
+
+.networking-topology__filter-list > :first-child {
+  margin-block-start: var(--pf-t--global--spacer--sm);
+}

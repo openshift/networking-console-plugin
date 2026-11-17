@@ -31,9 +31,7 @@ export const addNetworkAttachmentDefinitionNodes = (
 ) =>
   nads?.forEach((nad: NetworkAttachmentDefinitionKind) => {
     const id = getResourceID(nad);
-    const node = createNode(nad, ResourceType.NetworkAttachmentDefinition, 2, {
-      badge: 'NAD',
-    });
+    const node = createNode(nad, ResourceType.NetworkAttachmentDefinition, 2);
     nodes.push(node);
     nodeMap.set(id, node);
   });
@@ -46,7 +44,7 @@ export const addPodNodesAndEdges = (
 ) =>
   pods?.forEach((pod: IoK8sApiCoreV1Pod) => {
     const id = getResourceID(pod);
-    const node = createNode(pod, ResourceType.Pod, 5, { badge: 'POD' });
+    const node = createNode(pod, ResourceType.Pod, 5);
     nodes.push(node);
     nodeMap.set(id, node);
 
@@ -73,7 +71,7 @@ export const addVirtualMachineNodesAndEdges = (
 ) =>
   vms?.forEach((vm: V1VirtualMachine) => {
     const id = getResourceID(vm);
-    const node = createNode(vm, ResourceType.VirtualMachine, 5, { badge: 'VM' });
+    const node = createNode(vm, ResourceType.VirtualMachine, 5);
     nodes.push(node);
     nodeMap.set(id, node);
 
@@ -103,7 +101,7 @@ export const addUserDefinedNetworkNodesAndEdges = (
 ) =>
   udns?.forEach((udn: UserDefinedNetworkKind) => {
     const id = getResourceID(udn);
-    const node = createNode(udn, ResourceType.UserDefinedNetwork, 3, { badge: 'UDN' });
+    const node = createNode(udn, ResourceType.UserDefinedNetwork, 3);
     nodes.push(node);
     nodeMap.set(id, node);
 
@@ -165,9 +163,7 @@ export const addClusterUserDefinedNetworkNodesAndEdges = (
 ) =>
   clusterUDNs?.forEach((cudn: ClusterUserDefinedNetworkKind) => {
     const id = getResourceID(cudn);
-    const node = createNode(cudn, ResourceType.ClusterUserDefinedNetwork, 3, {
-      badge: 'CUDN',
-    });
+    const node = createNode(cudn, ResourceType.ClusterUserDefinedNetwork, 3);
     nodes.push(node);
     nodeMap.set(id, node);
 

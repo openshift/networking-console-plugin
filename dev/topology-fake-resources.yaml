@@ -1,0 +1,488 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: topology-fake-owner
+  labels:
+    topology-fake-cudn: member
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: topology-fake-namespace
+  labels:
+    topology-fake-cudn: member
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: topology-fake-network
+  labels:
+    topology-fake-cudn: member
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: topology-fake-resource
+  labels:
+    topology-fake-cudn: member
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: owner-network
+  namespace: topology-fake-owner
+spec:
+  config: '{"cniVersion":"0.3.1","name":"owner-network","type":"bridge","bridge":"br-owner","ipam":{}}'
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: namespace-network
+  namespace: topology-fake-namespace
+spec:
+  config: '{"cniVersion":"0.3.1","name":"namespace-network","type":"bridge","bridge":"br-namespace","ipam":{}}'
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: network-a
+  namespace: topology-fake-network
+spec:
+  config: '{"cniVersion":"0.3.1","name":"network-a","type":"bridge","bridge":"br-a","ipam":{}}'
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: network-b
+  namespace: topology-fake-network
+spec:
+  config: '{"cniVersion":"0.3.1","name":"network-b","type":"bridge","bridge":"br-b","ipam":{}}'
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: resource-network
+  namespace: topology-fake-resource
+spec:
+  config: '{"cniVersion":"0.3.1","name":"resource-network","type":"bridge","bridge":"br-resource","ipam":{}}'
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: shared-network
+  namespace: topology-fake-network
+spec:
+  config: '{"cniVersion":"0.3.1","name":"shared-network","type":"bridge","bridge":"br-shared-network","ipam":{}}'
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: shared-network
+  namespace: topology-fake-resource
+spec:
+  config: '{"cniVersion":"0.3.1","name":"shared-network","type":"bridge","bridge":"br-shared-resource","ipam":{}}'
+---
+apiVersion: k8s.ovn.org/v1
+kind: UserDefinedNetwork
+metadata:
+  name: owner-udn
+  namespace: topology-fake-owner
+spec:
+  topology: Layer2
+  layer2:
+    role: Secondary
+    subnets:
+      - 10.241.0.0/24
+---
+apiVersion: k8s.ovn.org/v1
+kind: UserDefinedNetwork
+metadata:
+  name: namespace-udn
+  namespace: topology-fake-namespace
+spec:
+  topology: Layer2
+  layer2:
+    role: Secondary
+    subnets:
+      - 10.242.0.0/24
+---
+apiVersion: k8s.ovn.org/v1
+kind: UserDefinedNetwork
+metadata:
+  name: resource-udn
+  namespace: topology-fake-resource
+spec:
+  topology: Layer2
+  layer2:
+    role: Secondary
+    subnets:
+      - 10.244.0.0/24
+---
+apiVersion: k8s.ovn.org/v1
+kind: ClusterUserDefinedNetwork
+metadata:
+  name: fake-cluster-network
+spec:
+  namespaceSelector:
+    matchLabels:
+      topology-fake-cudn: member
+  network:
+    topology: Layer2
+    layer2:
+      role: Secondary
+      subnets:
+        - 10.243.0.0/24
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fake-owner-deployment
+  namespace: topology-fake-owner
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: fake-owner-deployment
+  template:
+    metadata:
+      labels:
+        app: fake-owner-deployment
+      annotations:
+        k8s.v1.cni.cncf.io/networks: topology-fake-owner/owner-network
+    spec:
+      containers:
+        - name: pause
+          image: registry.k8s.io/pause:3.9
+          resources:
+            limits:
+              cpu: 10m
+              memory: 16Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fake-owner-second
+  namespace: topology-fake-owner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fake-owner-second
+  template:
+    metadata:
+      labels:
+        app: fake-owner-second
+      annotations:
+        k8s.v1.cni.cncf.io/networks: topology-fake-owner/owner-network
+    spec:
+      containers:
+        - name: pause
+          image: registry.k8s.io/pause:3.9
+          resources:
+            limits:
+              cpu: 10m
+              memory: 16Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fake-multi-network
+  namespace: topology-fake-network
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fake-multi-network
+  template:
+    metadata:
+      labels:
+        app: fake-multi-network
+      annotations:
+        # The first entry is used for Network grouping; both entries create edges.
+        k8s.v1.cni.cncf.io/networks: network-a, topology-fake-resource/resource-network
+    spec:
+      containers:
+        - name: pause
+          image: registry.k8s.io/pause:3.9
+          resources:
+            limits:
+              cpu: 10m
+              memory: 16Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: fake-owner-statefulset
+  namespace: topology-fake-owner
+spec:
+  serviceName: fake-owner-statefulset
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fake-owner-statefulset
+  template:
+    metadata:
+      labels:
+        app: fake-owner-statefulset
+      annotations:
+        k8s.v1.cni.cncf.io/networks: topology-fake-owner/owner-network
+    spec:
+      containers:
+        - name: pause
+          image: registry.k8s.io/pause:3.9
+          resources:
+            limits:
+              cpu: 10m
+              memory: 16Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: fake-owner-daemonset
+  namespace: topology-fake-owner
+spec:
+  selector:
+    matchLabels:
+      app: fake-owner-daemonset
+  template:
+    metadata:
+      labels:
+        app: fake-owner-daemonset
+      annotations:
+        k8s.v1.cni.cncf.io/networks: topology-fake-owner/owner-network
+    spec:
+      containers:
+        - name: pause
+          image: registry.k8s.io/pause:3.9
+          resources:
+            limits:
+              cpu: 10m
+              memory: 16Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: fake-owner-job
+  namespace: topology-fake-owner
+spec:
+  completions: 1
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        app: fake-owner-job
+      annotations:
+        k8s.v1.cni.cncf.io/networks: topology-fake-owner/owner-network
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: pause
+          image: registry.k8s.io/pause:3.9
+          resources:
+            limits:
+              cpu: 10m
+              memory: 16Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: namespace-pod
+  namespace: topology-fake-namespace
+  annotations:
+    k8s.v1.cni.cncf.io/networks: topology-fake-namespace/namespace-network
+spec:
+  containers:
+    - name: pause
+      image: registry.k8s.io/pause:3.9
+      resources:
+        limits:
+          cpu: 10m
+          memory: 16Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: multi-network-pod
+  namespace: topology-fake-resource
+  annotations:
+    # The Pod belongs to resource-network for grouping but is connected to three NADs.
+    k8s.v1.cni.cncf.io/networks: resource-network, topology-fake-network/network-a, topology-fake-network/shared-network
+spec:
+  containers:
+    - name: pause
+      image: registry.k8s.io/pause:3.9
+      resources:
+        limits:
+          cpu: 10m
+          memory: 16Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: same-name-network-pod
+  namespace: topology-fake-resource
+  annotations:
+    # The unqualified reference resolves locally; the qualified reference crosses namespaces.
+    k8s.v1.cni.cncf.io/networks: shared-network, topology-fake-network/shared-network
+spec:
+  containers:
+    - name: pause
+      image: registry.k8s.io/pause:3.9
+      resources:
+        limits:
+          cpu: 10m
+          memory: 16Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: network-pod-a
+  namespace: topology-fake-network
+  annotations:
+    k8s.v1.cni.cncf.io/networks: topology-fake-network/network-a
+spec:
+  containers:
+    - name: pause
+      image: registry.k8s.io/pause:3.9
+      resources:
+        limits:
+          cpu: 10m
+          memory: 16Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: network-pod-b
+  namespace: topology-fake-network
+  annotations:
+    k8s.v1.cni.cncf.io/networks: topology-fake-network/network-b
+spec:
+  containers:
+    - name: pause
+      image: registry.k8s.io/pause:3.9
+      resources:
+        limits:
+          cpu: 10m
+          memory: 16Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+---
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: resource-vm
+  namespace: topology-fake-resource
+spec:
+  runStrategy: Halted
+  template:
+    spec:
+      domain:
+        devices:
+          interfaces:
+            - name: default
+              bridge: {}
+            - name: resource-network
+              bridge: {}
+      networks:
+        - name: default
+          pod: {}
+        - name: resource-network
+          multus:
+            networkName: topology-fake-resource/resource-network
