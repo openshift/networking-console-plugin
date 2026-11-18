@@ -4,6 +4,11 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk-webpack';
 
 import { FlagsExposedModules, FlagsExtensions } from './src/utils/flags/manifest';
+import {
+  BGPCloudConfigurationExtensions,
+  BGPExposedModules,
+  BGPRoutingExtensions,
+} from './src/views/bgp/manifest';
 import { IngressesExposedModules, IngressesExtensions } from './src/views/ingresses/manifest';
 import { NADsExposedModules, NADsExtensions } from './src/views/nads/manifest';
 import {
@@ -38,6 +43,7 @@ export const pluginMetadata: ConsolePluginBuildMetadata = {
     ...UserDefinedNetworksExposedModules,
     ...TopologyExposedModules,
     ...PhysicalNetworksExposedModules,
+    ...BGPExposedModules,
     yamlTemplates: './templates/index.ts',
   },
   name: 'networking-console-plugin',
@@ -54,4 +60,6 @@ export const extensions: EncodedExtension[] = [
   ...UserDefinedNetworksExtensions,
   ...TopologyExtensions,
   ...PhysicalNetworksExtensions,
+  ...BGPCloudConfigurationExtensions,
+  ...BGPRoutingExtensions,
 ];
