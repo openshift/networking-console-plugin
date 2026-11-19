@@ -1,8 +1,8 @@
 # Networking Console Plugin
 
 An OpenShift Console dynamic plugin that provides the Networking section UI for the OpenShift web console. It manages
-views for Services, Routes, Ingresses, NetworkPolicies, NetworkAttachmentDefinitions (NADs), and UserDefinedNetworks (
-UDNs).
+views for Services, Routes, Ingresses, NetworkPolicies, NetworkAttachmentDefinitions (NADs), UserDefinedNetworks (
+UDNs), `BGPCloudConfiguration`, and `BGPRouting`.
 
 The plugin integrates with the [OpenShift Console](https://github.com/openshift/console)
 via [webpack module federation](https://webpack.js.org/concepts/module-federation/) and
