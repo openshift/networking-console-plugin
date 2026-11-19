@@ -19,11 +19,8 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 import useProjectsWithPrimaryUserDefinedLabel from '@utils/hooks/useProjectsWithPrimaryUserDefinedLabel';
 import { ClusterUserDefinedNetworkModel, UserDefinedNetworkModel } from '@utils/models';
 import { getName, getNamespace, resourcePathFromModel } from '@utils/resources/shared';
-import {
-  IPAM_MODE_DISABLED,
-  MACSecurityMode,
-  UserDefinedNetworkRole,
-} from '@utils/resources/udns/types';
+import { IPAM_MODE_DISABLED } from '@utils/resources/udns/constants';
+import { MACSecurityMode, UserDefinedNetworkRole } from '@utils/resources/udns/types';
 import {
   CUDN_CREATION_FAILED,
   CUDN_CREATION_STARTED,
