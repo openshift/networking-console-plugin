@@ -17,11 +17,12 @@ import { isUserDefinedNetworkNAD } from '@utils/resources/nads/helpers';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
 import { asAccessReview, getName, getNamespace } from '@utils/resources/shared';
 
-type NADsActionsProps = (
+type UseNADsActions = (
   obj: NetworkAttachmentDefinitionKind,
+  includeOpenDetails?: boolean,
 ) => [actions: Action[], inFlight: boolean, error: any];
 
-const useNADsActions: NADsActionsProps = (obj) => {
+const useNADsActions: UseNADsActions = (obj, includeOpenDetails = false) => {
   const { t } = useNetworkingTranslation();
   const [, inFlight] = useK8sModel(NetworkAttachmentDefinitionModelRef);
 
@@ -36,6 +37,19 @@ const useNADsActions: NADsActionsProps = (obj) => {
 
   return useMemo(() => {
     const actions = [
+      ...(includeOpenDetails
+        ? [
+            {
+              accessReview: asAccessReview(NetworkAttachmentDefinitionModel, obj, 'get'),
+              cta: () =>
+                navigate(
+                  `/k8s/ns/${objNamespace}/${NetworkAttachmentDefinitionModelRef}/${objName}`,
+                ),
+              id: 'open-details-nad',
+              label: t('Open details'),
+            },
+          ]
+        : []),
       {
         accessReview: asAccessReview(NetworkAttachmentDefinitionModel, obj, 'update'),
         cta: launchLabelsModal,
@@ -84,6 +98,7 @@ const useNADsActions: NADsActionsProps = (obj) => {
     objNamespace,
     objName,
     isUDNManaged,
+    includeOpenDetails,
     t,
   ]);
 };

@@ -49,6 +49,12 @@ export type NetworkAttachmentDefinitionKind = {
   spec?: NetworkAttachmentDefinitionSpec;
 } & K8sResourceKind;
 
+export type MultusNetworkReference = {
+  interface?: string;
+  name?: string;
+  namespace?: string;
+};
+
 export type NADNetworkPair = {
   iface: V1Interface;
   ifaceIndex: number;

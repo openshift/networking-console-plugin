@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import TopologyDrawerContentPanel from '@views/topology/components/TopologyDrawer/components/TopologyDrawerContentPanel';
+import TopologyDrawerContentPanel from '@views/topology/components/TopologyDrawer/components/TopologyDrawerContent/components/TopologyDrawerContentPanel';
 import { useTopologyContext } from '@views/topology/context/TopologyContext';
 
 const TopologyDrawerContent: FC = () => {

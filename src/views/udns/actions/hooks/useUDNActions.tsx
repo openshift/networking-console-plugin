@@ -12,11 +12,12 @@ import { asAccessReview, getResourceURL } from '@utils/resources/shared';
 import { getModel } from '@utils/resources/udns/selectors';
 import { ClusterUserDefinedNetworkKind, UserDefinedNetworkKind } from '@utils/resources/udns/types';
 
-type UDNActionsProps = (
+type UseUDNActions = (
   obj: ClusterUserDefinedNetworkKind | UserDefinedNetworkKind,
+  includeOpenDetails?: boolean,
 ) => [actions: Action[]];
 
-const useUDNActions: UDNActionsProps = (obj) => {
+const useUDNActions: UseUDNActions = (obj, includeOpenDetails = false) => {
   const { t } = useNetworkingTranslation();
   const model = getModel(obj);
   const [activeNamespace] = useActiveNamespace();
@@ -26,6 +27,19 @@ const useUDNActions: UDNActionsProps = (obj) => {
   const launchAnnotationsModal = useAnnotationsModal(obj);
 
   const actions = [
+    ...(includeOpenDetails
+      ? [
+          {
+            accessReview: asAccessReview(model, obj, 'get'),
+            cta: () =>
+              navigate(getResourceURL({ activeNamespace, model, resource: obj }), {
+                state: { fromTopology: true },
+              }),
+            id: 'open-details-udn',
+            label: t('Open details'),
+          },
+        ]
+      : []),
     {
       accessReview: asAccessReview(model, obj, 'update'),
       cta: launchLabelsModal,

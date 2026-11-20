@@ -1,0 +1,12 @@
+.topology-drawer__panel {
+  overflow: hidden;
+}
+
+.topology-drawer__content {
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.topology-drawer__alerts {
+  padding: var(--pf-t--global--spacer--md) var(--pf-t--global--spacer--md) 0;
+}
