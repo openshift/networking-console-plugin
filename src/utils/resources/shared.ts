@@ -7,7 +7,7 @@ import {
   K8sVerb,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { ALL_NAMESPACES, CLUSTER, CORE, DEFAULT_NAMESPACE } from '@utils/constants';
-import { getValidNamespace } from '@utils/utils';
+import { getValidNamespace } from '@utils/utils/helpers';
 
 /**
  *

@@ -66,6 +66,9 @@ systemctl reboot
 | `npm run lint`                  | Run ESLint on `src/` and `integration-tests/`                     |
 | `npm run lint-fix`              | Auto-fix lint issues                                              |
 | `npm run i18n`                  | Extract and update translation strings in `locales/`              |
+| `npm test`                      | Jest unit + integration projects, plus sanitizer tests            |
+| `npm run test:unit`             | Jest unit project only                                            |
+| `npm run test:integration`      | Jest MSW integration project only                                 |
 | `npm run test-cypress`          | Open Cypress test runner (interactive)                            |
 | `npm run test-cypress-headless` | Run Cypress tests headless                                        |
 
@@ -134,6 +137,9 @@ docker push quay.io/my-repository/networking-console-plugin:latest
 On Apple silicon, add `--platform=linux/amd64`.
 
 ## Testing
+
+See [docs/testing.md](docs/testing.md) for the unit / MSW integration / Cypress layers, and for re-recording
+integration fixtures with `scripts/record-integration-fixtures.mjs`.
 
 ### Frontend Validation
 

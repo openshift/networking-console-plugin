@@ -14,11 +14,10 @@ import {
   useK8sWatchResource,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { ImpersonateKind } from '@openshift-console/dynamic-plugin-sdk/lib/app/redux-types';
-import { UserDefinedNetworkRole } from '@utils/resources/udns/types';
 
 import { getLabels } from '../shared';
 
-import { MULTUS_DAEMON_CONFIG_NAME, OPENSHIFT_MULTUS_NS, UDN_LABEL } from './constants';
+import { MULTUS_DAEMON_CONFIG_NAME, NADRole, OPENSHIFT_MULTUS_NS, UDN_LABEL } from './constants';
 import { getNADRole } from './selectors';
 import { NetworkAttachmentDefinitionKind } from './types';
 
@@ -34,9 +33,10 @@ export const filterUDNNads = (nads: NetworkAttachmentDefinitionKind[]): FilterUD
   const [regular, primary] = partition(
     nads,
     (nad) =>
-      getNADRole(nad) !== UserDefinedNetworkRole.Primary &&
+      getNADRole(nad) !== NADRole.Primary &&
       (getLabels(nad)?.[UDN_LABEL] === undefined ||
-        getNADRole(nad) === UserDefinedNetworkRole.Secondary),
+        getNADRole(nad) === NADRole.Secondary ||
+        !getNADRole(nad)),
   ) as [NetworkAttachmentDefinitionKind[], NetworkAttachmentDefinitionKind[]];
   return { primary, regular };
 };
@@ -82,7 +82,8 @@ export const useGlobalNamespaces = (impersonate?: ImpersonateKind): [string[], b
   return [allowedNamespaces, isLoadingMultusDaemonConfig || !loaded || isLoadingAllowedNamespaces];
 };
 
-const parseGlobalNamespaces = (daemonConfig: string): string[] => {
+/** Parses Multus `daemon-config.json` `globalNamespaces` into a trimmed namespace list. */
+export const parseGlobalNamespaces = (daemonConfig: string): string[] => {
   if (!daemonConfig) return EMPTY_ARRAY;
   try {
     const value = (JSON.parse(daemonConfig) as { globalNamespaces?: unknown }).globalNamespaces;

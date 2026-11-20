@@ -11,7 +11,7 @@ import { getAnnotations } from '@utils/resources/shared';
 // JSON Patch paths use '/' as a segment separator (RFC 6902). Annotation keys often
 // contain '/', so escape '~' → '~0' and '/' → '~1' (e.g. kubevirt.io/allow-pod-network
 // → /metadata/annotations/kubevirt.io~1allow-pod-network).
-const patchSafeKey = (key: string): string => key.replace(/~/g, '~0').replace(/\//g, '~1');
+export const patchSafeKey = (key: string): string => key.replace(/~/g, '~0').replace(/\//g, '~1');
 
 const annotationPath = (key: string): string => `/metadata/annotations/${patchSafeKey(key)}`;
 

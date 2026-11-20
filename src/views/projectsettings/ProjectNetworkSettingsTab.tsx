@@ -23,7 +23,6 @@ import {
   Flex,
   Form,
   FormGroup,
-  Label,
   PageSection,
   Spinner,
   Switch,
@@ -242,9 +241,27 @@ const ProjectNetworkSettingsTab: FC<ProjectNetworkSettingsTabProps> = ({ imperso
                   {selectedLabel}
                   {isLoadingNads && <Spinner size="sm" />}
                   {!isLoadingNads && !allowPodNetwork && preSelectedNetwork && (
-                    <Label isCompact onClick={() => onSelectNetwork(undefined)}>
-                      <TimesIcon aria-label={t('Clear')} />
-                    </Label>
+                    // Span (not a button): MenuToggle already renders a <button>, so a nested
+                    // interactive Label/button triggers validateDOMNesting warnings.
+                    <span
+                      aria-label={t('Clear')}
+                      onClick={(event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        onSelectNetwork(undefined);
+                      }}
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter' || event.key === ' ') {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          onSelectNetwork(undefined);
+                        }
+                      }}
+                      role="button"
+                      tabIndex={0}
+                    >
+                      <TimesIcon />
+                    </span>
                   )}
                 </Flex>
               }

@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "allowJs": true,
+    "baseUrl": ".",
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "jsx": "react",
@@ -9,8 +10,10 @@
     "moduleResolution": "bundler",
     "noUnusedLocals": true,
     "outDir": "dist",
+    "resolveJsonModule": true,
     "rootDir": "src",
     "paths": {
+      "src/*": ["./src/*"],
       "@utils/*": ["./src/utils/*"],
       "@views/*": ["./src/views/*"],
       "@styles/*": ["./src/styles/*"]
