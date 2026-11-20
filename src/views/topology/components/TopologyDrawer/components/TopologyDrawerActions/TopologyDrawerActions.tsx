@@ -18,6 +18,7 @@ const TopologyDrawerActions: FC = () => {
     case ResourceType.NetworkAttachmentDefinition:
       return (
         <NADsActions
+          includeOpenDetails
           isKebabToggle={false}
           obj={selectedNode.resource as NetworkAttachmentDefinitionKind}
         />
@@ -26,12 +27,18 @@ const TopologyDrawerActions: FC = () => {
     case ResourceType.ClusterUserDefinedNetwork:
       return (
         <UDNActions
+          includeOpenDetails
           isKebabToggle={false}
           obj={selectedNode.resource as ClusterUserDefinedNetworkKind | UserDefinedNetworkKind}
         />
       );
     default:
-      return <DefaultTopologyDrawerActions resource={selectedNode.resource} />;
+      return (
+        <DefaultTopologyDrawerActions
+          resource={selectedNode.resource}
+          resourceType={selectedNode.resourceType}
+        />
+      );
   }
 };
 

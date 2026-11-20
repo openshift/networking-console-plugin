@@ -9,6 +9,7 @@ import DetailsPageTitle from '@utils/components/DetailsPageTitle/DetailsPageTitl
 import { useLastNamespacePath } from '@utils/hooks/useLastNamespacePath';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
+import { getNamespace } from '@utils/resources/shared';
 import NADActions from '@views/nads/actions/NADActions';
 
 type NADDetailsPageTitleProps = {
@@ -18,10 +19,15 @@ type NADDetailsPageTitleProps = {
 const NADDetailsPageTitle: FC<NADDetailsPageTitleProps> = ({ nad }) => {
   const { t } = useNetworkingTranslation();
   const namespacePath = useLastNamespacePath();
+  const namespace = getNamespace(nad);
 
   return (
     <DetailsPageTitle
       breadcrumbs={[
+        {
+          name: t('Topology'),
+          to: `/k8s/ns/${namespace}/networking-topology`,
+        },
         {
           name: t('NetworkAttachmentDefinitions'),
           to: `/k8s/${namespacePath}/${modelToRef(NetworkAttachmentDefinitionModel)}`,

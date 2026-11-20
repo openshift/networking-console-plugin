@@ -55,7 +55,10 @@ const CustomNode: FC<CustomNodeProps> = ({ element, ...rest }) => {
       badgeTextColor={data?.badgeTextColor}
       className={classNames('custom-node', { 'is-filtered': isFiltered })}
       element={element}
-      onStatusDecoratorClick={(event) => event.stopPropagation()}
+      onStatusDecoratorClick={(event) => {
+        event.stopPropagation();
+        rest.onSelect?.(event);
+      }}
       showLabel={showLabels}
       showStatusDecorator
       truncateLength={24}

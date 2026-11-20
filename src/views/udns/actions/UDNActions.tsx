@@ -6,12 +6,13 @@ import { ClusterUserDefinedNetworkKind, UserDefinedNetworkKind } from '@utils/re
 import useUDNActions from './hooks/useUDNActions';
 
 type UDNActionsProps = {
+  includeOpenDetails?: boolean;
   isKebabToggle?: boolean;
   obj: ClusterUserDefinedNetworkKind | UserDefinedNetworkKind;
 };
 
-const UDNActions: FC<UDNActionsProps> = ({ isKebabToggle = true, obj }) => {
-  const [actions] = useUDNActions(obj);
+const UDNActions: FC<UDNActionsProps> = ({ includeOpenDetails, isKebabToggle = true, obj }) => {
+  const [actions] = useUDNActions(obj, includeOpenDetails);
 
   return (
     <ActionsDropdown

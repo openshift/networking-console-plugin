@@ -1,5 +1,6 @@
 import React, { createContext, FC, PropsWithChildren, useContext, useMemo, useState } from 'react';
 
+import { V1NodeNetworkConfigurationPolicy } from '@kubevirt-ui-ext/kubevirt-api/nmstate';
 import { K8sResourceCommon } from '@openshift-console/dynamic-plugin-sdk';
 import { Node } from '@patternfly/react-topology';
 import { ALL_NAMESPACES_KEY } from '@utils/constants';
@@ -14,6 +15,8 @@ export type SelectedNodeData = {
 
 type TopologyContextType = {
   activeNamespace: string;
+  nmstateAvailable: boolean;
+  nodeNetworkPolicies: V1NodeNetworkConfigurationPolicy[];
   nodeNetworkStates: NodeNetworkStateKind[];
   nodeNetworkStatesLoaded: boolean;
   onSelectNode: (node: Node | null) => void;
@@ -24,6 +27,8 @@ type TopologyContextType = {
 
 const TopologyContext = createContext<TopologyContextType>({
   activeNamespace: ALL_NAMESPACES_KEY,
+  nmstateAvailable: false,
+  nodeNetworkPolicies: [],
   nodeNetworkStates: [],
   nodeNetworkStatesLoaded: false,
   onSelectNode: () => {},
@@ -34,6 +39,8 @@ const TopologyContext = createContext<TopologyContextType>({
 
 type TopologyContextProviderProps = {
   activeNamespace: string;
+  nmstateAvailable: boolean;
+  nodeNetworkPolicies: V1NodeNetworkConfigurationPolicy[];
   nodeNetworkStates: NodeNetworkStateKind[];
   nodeNetworkStatesLoaded: boolean;
   resources: NetworkTopologyResources | undefined;
@@ -43,6 +50,8 @@ type TopologyContextProviderProps = {
 export const TopologyContextProvider: FC<PropsWithChildren<TopologyContextProviderProps>> = ({
   activeNamespace,
   children,
+  nmstateAvailable,
+  nodeNetworkPolicies,
   nodeNetworkStates,
   nodeNetworkStatesLoaded,
   resources,
@@ -68,6 +77,8 @@ export const TopologyContextProvider: FC<PropsWithChildren<TopologyContextProvid
   const value = useMemo(
     () => ({
       activeNamespace,
+      nmstateAvailable,
+      nodeNetworkPolicies,
       nodeNetworkStates,
       nodeNetworkStatesLoaded,
       onSelectNode,
@@ -77,6 +88,8 @@ export const TopologyContextProvider: FC<PropsWithChildren<TopologyContextProvid
     }),
     [
       activeNamespace,
+      nmstateAvailable,
+      nodeNetworkPolicies,
       resources,
       resourcesLoaded,
       selectedNode,
