@@ -4,11 +4,12 @@ import { Dropdown, DropdownList, MenuToggle, MenuToggleElement } from '@patternf
 
 type SelectProps = PropsWithChildren<{
   id?: string;
+  isDisabled?: boolean;
   selected: any;
   toggleContent: Element | JSX.Element | string;
 }>;
 
-const Select: FC<SelectProps> = ({ children, id, selected, toggleContent }) => {
+const Select: FC<SelectProps> = ({ children, id, isDisabled, selected, toggleContent }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   return (
@@ -21,6 +22,7 @@ const Select: FC<SelectProps> = ({ children, id, selected, toggleContent }) => {
       toggle={(toggleRef: Ref<MenuToggleElement>) => (
         <MenuToggle
           id={`toggle-${id}`}
+          isDisabled={isDisabled}
           isExpanded={isDropdownOpen}
           isFullWidth
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}

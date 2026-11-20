@@ -8,9 +8,10 @@ import { NetworkAttachmentDefinitionConfig, NetworkAttachmentDefinitionKind } fr
 
 export const getConfigAsJSON = (
   obj: NetworkAttachmentDefinitionKind,
-): NetworkAttachmentDefinitionConfig => {
+): NetworkAttachmentDefinitionConfig | null => {
+  if (!obj?.spec?.config) return null;
   try {
-    return JSON.parse(obj?.spec?.config);
+    return JSON.parse(obj.spec.config) as NetworkAttachmentDefinitionConfig;
   } catch {
     // eslint-disable-next-line no-console
     console.error('Unable to parse NetworkAttachmentDefinition configuration');
@@ -18,7 +19,7 @@ export const getConfigAsJSON = (
   }
 };
 
-export const getType = (config: NetworkAttachmentDefinitionConfig): string => {
+export const getType = (config: NetworkAttachmentDefinitionConfig): null | string => {
   if (config?.type) {
     return config.type;
   }
@@ -30,6 +31,10 @@ export const getType = (config: NetworkAttachmentDefinitionConfig): string => {
   return null;
 };
 
+export const getNADRole = (nad: NetworkAttachmentDefinitionKind): string | undefined => {
+  const config = getConfigAsJSON(nad);
+  return config?.role;
+};
 type MultusNetworkReference = { name?: string; namespace?: string };
 
 /**
