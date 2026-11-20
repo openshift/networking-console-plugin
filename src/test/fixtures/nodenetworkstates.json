@@ -1,0 +1,127 @@
+{
+  "apiVersion": "nmstate.io/v1beta1",
+  "items": [
+    {
+      "apiVersion": "nmstate.io/v1beta1",
+      "kind": "NodeNetworkState",
+      "metadata": {
+        "name": "node-1"
+      },
+      "status": {
+        "currentState": {
+          "ovn": {
+            "bridge-mappings": [
+              {
+                "bridge": "br-ex",
+                "localnet": "physnet"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "nmstate.io/v1beta1",
+      "kind": "NodeNetworkState",
+      "metadata": {
+        "name": "node-2"
+      },
+      "status": {
+        "currentState": {
+          "ovn": {
+            "bridge-mappings": [
+              {
+                "bridge": "br-ex",
+                "localnet": "physnet"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "nmstate.io/v1beta1",
+      "kind": "NodeNetworkState",
+      "metadata": {
+        "name": "node-3"
+      },
+      "status": {
+        "currentState": {
+          "ovn": {
+            "bridge-mappings": [
+              {
+                "bridge": "br-ex",
+                "localnet": "physnet"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "nmstate.io/v1beta1",
+      "kind": "NodeNetworkState",
+      "metadata": {
+        "name": "node-4"
+      },
+      "status": {
+        "currentState": {
+          "ovn": {
+            "bridge-mappings": [
+              {
+                "bridge": "br-ex",
+                "localnet": "net134137"
+              },
+              {
+                "bridge": "br-ex",
+                "localnet": "physnet"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "nmstate.io/v1beta1",
+      "kind": "NodeNetworkState",
+      "metadata": {
+        "name": "node-5"
+      },
+      "status": {
+        "currentState": {
+          "ovn": {
+            "bridge-mappings": [
+              {
+                "bridge": "br-ex",
+                "localnet": "physnet"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "nmstate.io/v1beta1",
+      "kind": "NodeNetworkState",
+      "metadata": {
+        "name": "node-6"
+      },
+      "status": {
+        "currentState": {
+          "ovn": {
+            "bridge-mappings": [
+              {
+                "bridge": "br-ex",
+                "localnet": "physnet"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "kind": "NodeNetworkStateList",
+  "metadata": {
+    "continue": ""
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "kind": "NodeList",
+  "apiVersion": "v1",
+  "metadata": {},
+  "items": [
+    {
+      "metadata": {
+        "name": "node-1"
+      }
+    },
+    {
+      "metadata": {
+        "name": "node-2"
+      }
+    },
+    {
+      "metadata": {
+        "name": "node-3"
+      }
+    },
+    {
+      "metadata": {
+        "name": "node-4"
+      }
+    },
+    {
+      "metadata": {
+        "name": "node-5"
+      }
+    },
+    {
+      "metadata": {
+        "name": "node-6"
+      }
+    }
+  ]
+}

@@ -1,0 +1,152 @@
+{
+  "kind": "RouteList",
+  "apiVersion": "route.openshift.io/v1",
+  "metadata": {},
+  "items": [
+    {
+      "metadata": {
+        "name": "draft",
+        "namespace": "cy-test-ns",
+        "annotations": {
+          "openshift.io/host.generated": "true"
+        }
+      },
+      "spec": {
+        "host": "example.com",
+        "to": {
+          "kind": "Service",
+          "name": "missing",
+          "weight": 100
+        },
+        "wildcardPolicy": "None"
+      },
+      "status": {
+        "ingress": [
+          {
+            "host": "example.com",
+            "routerName": "default",
+            "conditions": [
+              {
+                "type": "Admitted",
+                "status": "True",
+                "lastTransitionTime": "2026-11-06T14:22:53Z"
+              }
+            ],
+            "wildcardPolicy": "None",
+            "routerCanonicalHostname": "example.com"
+          }
+        ]
+      }
+    },
+    {
+      "metadata": {
+        "name": "shop",
+        "namespace": "cy-test-ns",
+        "annotations": {}
+      },
+      "spec": {
+        "host": "shop.example.com",
+        "to": {
+          "kind": "Service",
+          "name": "web",
+          "weight": 100
+        },
+        "port": {
+          "targetPort": "http"
+        },
+        "wildcardPolicy": "None"
+      },
+      "status": {
+        "ingress": [
+          {
+            "host": "shop.example.com",
+            "routerName": "default",
+            "conditions": [
+              {
+                "type": "Admitted",
+                "status": "True",
+                "lastTransitionTime": "2026-11-06T14:22:53Z"
+              }
+            ],
+            "wildcardPolicy": "None",
+            "routerCanonicalHostname": "example.com"
+          }
+        ]
+      }
+    },
+    {
+      "metadata": {
+        "name": "shop-lxzzt",
+        "namespace": "cy-test-ns",
+        "annotations": {}
+      },
+      "spec": {
+        "host": "shop.example.com",
+        "path": "/",
+        "to": {
+          "kind": "Service",
+          "name": "web",
+          "weight": 100
+        },
+        "port": {
+          "targetPort": "http"
+        },
+        "wildcardPolicy": "None"
+      },
+      "status": {
+        "ingress": [
+          {
+            "host": "shop.example.com",
+            "routerName": "default",
+            "conditions": [
+              {
+                "type": "Admitted",
+                "status": "True",
+                "lastTransitionTime": "2026-11-06T14:22:52Z"
+              }
+            ],
+            "wildcardPolicy": "None",
+            "routerCanonicalHostname": "example.com"
+          }
+        ]
+      }
+    },
+    {
+      "metadata": {
+        "name": "shop-trgkc",
+        "namespace": "cy-test-ns",
+        "annotations": {}
+      },
+      "spec": {
+        "host": "www.example.com",
+        "path": "/",
+        "to": {
+          "kind": "Service",
+          "name": "web",
+          "weight": 100
+        },
+        "port": {
+          "targetPort": "http"
+        },
+        "wildcardPolicy": "None"
+      },
+      "status": {
+        "ingress": [
+          {
+            "host": "www.example.com",
+            "routerName": "default",
+            "conditions": [
+              {
+                "type": "Admitted",
+                "status": "True",
+                "lastTransitionTime": "2026-11-06T14:22:52Z"
+              }
+            ],
+            "wildcardPolicy": "None",
+            "routerCanonicalHostname": "example.com"
+          }
+        ]
+      }
+    }
+  ]
+}

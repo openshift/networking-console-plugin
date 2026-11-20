@@ -1,0 +1,8 @@
+{
+  "apiVersion": "kubevirt.io/v1",
+  "items": [],
+  "kind": "VirtualMachineInstanceList",
+  "metadata": {
+    "continue": ""
+  }
+}
