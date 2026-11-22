@@ -27,6 +27,13 @@ export interface NodeNetworkStateKind extends K8sResourceCommon {
   status?: {
     currentState?: {
       interfaces?: NMStateInterface[];
+      ovn?: {
+        'bridge-mappings'?: {
+          bridge?: string;
+          localnet?: string;
+          state?: string;
+        }[];
+      };
     };
   };
 }

@@ -1,7 +1,7 @@
 import React, { FC, ReactNode } from 'react';
 
 import { Drawer, DrawerContent, DrawerContentBody } from '@patternfly/react-core';
-import TopologyDrawerContent from '@views/topology/components/TopologyDrawer/components/TopologyDrawerContent';
+import TopologyDrawerContent from '@views/topology/components/TopologyDrawer/components/TopologyDrawerContent/TopologyDrawerContent';
 import { useTopologyContext } from '@views/topology/context/TopologyContext';
 
 type TopologyDrawerProps = { children: ReactNode };

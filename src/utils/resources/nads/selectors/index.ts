@@ -4,7 +4,11 @@ import { getAnnotations, getNamespace } from '@utils/resources/shared';
 import { getNetworks } from '@utils/resources/vm/selectors';
 
 import { POD_NETWORKS_ANNOTATION_KEY } from '../constants';
-import { NetworkAttachmentDefinitionConfig, NetworkAttachmentDefinitionKind } from '../types';
+import {
+  MultusNetworkReference,
+  NetworkAttachmentDefinitionConfig,
+  NetworkAttachmentDefinitionKind,
+} from '../types';
 
 export const getConfigAsJSON = (
   obj: NetworkAttachmentDefinitionKind,
@@ -12,8 +16,6 @@ export const getConfigAsJSON = (
   try {
     return JSON.parse(obj?.spec?.config);
   } catch {
-    // eslint-disable-next-line no-console
-    console.error('Unable to parse NetworkAttachmentDefinition configuration');
     return null;
   }
 };
@@ -30,33 +32,38 @@ export const getType = (config: NetworkAttachmentDefinitionConfig): string => {
   return null;
 };
 
-type MultusNetworkReference = { name?: string; namespace?: string };
+export type PodNetworkAttachment = {
+  interfaceName?: string;
+  name: string;
+  namespace?: string;
+};
 
-/**
- * Extract NAD names from a Pod's network annotation.
- * Multus accepts a comma-separated list, entries carrying an `@interface` suffix,
- * and a JSON list of `{ name, namespace }` objects; all become `name` or `namespace/name`.
- */
-export const getPodNetworkAttachments = (pod: IoK8sApiCoreV1Pod): string[] => {
+/** Parses a Pod's Multus annotation into network name, optional namespace, and interface name. */
+export const getPodNetworkAttachmentDetails = (pod: IoK8sApiCoreV1Pod): PodNetworkAttachment[] => {
   const annotation = getAnnotations(pod)?.[POD_NETWORKS_ANNOTATION_KEY]?.trim();
   if (!annotation) return [];
 
   if (annotation.startsWith('[')) {
     try {
       const references = JSON.parse(annotation) as MultusNetworkReference[];
-      return references.flatMap(({ name, namespace }) =>
-        name ? [namespace ? `${namespace}/${name}` : name] : [],
+      return references.flatMap(({ interface: interfaceName, name, namespace }) =>
+        name ? [{ interfaceName, name, namespace }] : [],
       );
     } catch {
       return [];
     }
   }
 
-  return annotation
-    .split(',')
-    .map((reference) => reference.trim().split('@')[0].trim())
-    .filter(Boolean);
+  return annotation.split(',').flatMap((reference) => {
+    const [name, interfaceName] = reference.trim().split('@');
+    return name ? [{ interfaceName, name }] : [];
+  });
 };
+
+export const getPodNetworkAttachments = (pod: IoK8sApiCoreV1Pod): string[] =>
+  getPodNetworkAttachmentDetails(pod).map(({ name, namespace }) =>
+    namespace ? `${namespace}/${name}` : name,
+  );
 
 /**
  * Get all NAD names that a Pod connects to (normalized to namespace/name format)
