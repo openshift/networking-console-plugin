@@ -8,7 +8,14 @@ const { compilerOptions } = tsconfig;
 
 const config: Config.InitialOptions = {
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/' }),
+  moduleNameMapper: {
+    '@console/*': '<rootDir>/src/test/dummy.ts',
+    '@openshift-console/*': '<rootDir>/src/test/dummy.ts',
+    '\\.(css|less|scss|svg)$': '<rootDir>/src/test/dummy.ts',
+    ...pathsToModuleNameMapper(compilerOptions.paths, {
+      prefix: '<rootDir>/',
+    }),
+  },
   preset: 'ts-jest',
   testEnvironment: 'jest-environment-jsdom',
   testMatch: ['<rootDir>/src/**/*.{test,spec}.{ts,tsx}'],

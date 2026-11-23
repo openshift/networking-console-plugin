@@ -6,7 +6,8 @@ import {
   useRef,
   useState,
 } from 'react';
-import { useNetworkingTranslation } from 'src/utils/hooks/useNetworkingTranslation';
+
+import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 import { getEnterKeySelection } from '../utils/keyboard';
 import { buildSelectOptions } from '../utils/options';

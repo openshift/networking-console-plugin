@@ -1,0 +1,51 @@
+{
+  "kind": "ConfigMap",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "multus-daemon-config",
+    "namespace": "openshift-multus",
+    "uid": "3c3dc067-b91c-4568-9383-a0e582e3dfc5",
+    "resourceVersion": "3666",
+    "creationTimestamp": "2026-10-06T12:03:45Z",
+    "labels": {
+      "app": "multus",
+      "tier": "node"
+    },
+    "ownerReferences": [
+      {
+        "apiVersion": "operator.openshift.io/v1",
+        "kind": "Network",
+        "name": "cluster",
+        "uid": "ca3985c4-0116-4acf-a3c9-ef5af2d4590b",
+        "controller": true,
+        "blockOwnerDeletion": true
+      }
+    ],
+    "managedFields": [
+      {
+        "manager": "cluster-network-operator/operconfig",
+        "operation": "Apply",
+        "apiVersion": "v1",
+        "time": "2026-10-06T12:03:45Z",
+        "fieldsType": "FieldsV1",
+        "fieldsV1": {
+          "f:data": {
+            "f:daemon-config.json": {}
+          },
+          "f:metadata": {
+            "f:labels": {
+              "f:app": {},
+              "f:tier": {}
+            },
+            "f:ownerReferences": {
+              "k:{\"uid\":\"ca3985c4-0116-4acf-a3c9-ef5af2d4590b\"}": {}
+            }
+          }
+        }
+      }
+    ]
+  },
+  "data": {
+    "daemon-config.json": "{\n    \"cniVersion\": \"1.1.0\",\n    \"chrootDir\": \"/hostroot\",\n    \"logToStderr\": true,\n    \"logLevel\": \"verbose\",\n    \"binDir\": \"/var/lib/cni/bin\",\n\n    \"perNodeCertificate\": {\n      \"enabled\": true,\n      \"bootstrapKubeconfig\": \"/var/lib/kubelet/kubeconfig\",\n      \"certDir\": \"/etc/cni/multus/certs\",\n      \"certDuration\": \"24h\"\n    },\n\n    \"cniConfigDir\": \"/host/etc/cni/net.d\",\n    \"multusConfigFile\": \"auto\",\n    \"multusAutoconfigDir\": \"/host/run/multus/cni/net.d\",\n    \"namespaceIsolation\": true,\n    \"globalNamespaces\": \"default,openshift-multus,openshift-sriov-network-operator,openshift-cnv,custom-namespace\",\n    \"readinessindicatorfile\": \"/host/run/multus/cni/net.d/10-ovn-kubernetes.conf\",\n    \"daemonSocketDir\": \"/run/multus/socket\",\n    \"socketDir\": \"/host/run/multus/socket\",\n    \"auxiliaryCNIChainName\": \"vendor-cni-chain\"\n}\n"
+  }
+}

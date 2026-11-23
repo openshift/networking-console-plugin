@@ -1,7 +1,6 @@
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { connect } from 'react-redux';
 import { uniq } from 'lodash';
-import SelectTypeahead from 'src/utils/components/SelectTypeahead/SelectTypeahead';
 
 import {
   NamespaceModel,
@@ -27,6 +26,7 @@ import {
   Title,
 } from '@patternfly/react-core';
 import FormGroupHelperText from '@utils/components/FormGroupHelperText/FormGroupHelperText';
+import SelectTypeahead from '@utils/components/SelectTypeahead/SelectTypeahead';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { PROJECT_POD_NETWORK_VALUE } from '@utils/resources/nads/constants';
 import { filterUDNNads, useGlobalNamespaces } from '@utils/resources/nads/helpers';
@@ -329,5 +329,7 @@ const ProjectNetworkSettingsTab: FC<ProjectNetworkSettingsTabProps> = ({ imperso
     </>
   );
 };
+
+export const TestComponent = ProjectNetworkSettingsTab;
 
 export default connect(impersonateStateToProps)(ProjectNetworkSettingsTab);

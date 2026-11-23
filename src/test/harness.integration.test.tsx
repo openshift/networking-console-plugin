@@ -1,13 +1,12 @@
 import * as React from 'react';
-import { http, HttpResponse } from 'msw';
 
 import { expect, it } from '@jest/globals';
 import { type K8sResourceCommon, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { render, screen } from '@testing-library/react';
 
-import { Operator, resourcePath } from './console-sdk-shim';
+import { apiPath, Operator, resourcePath } from './console-sdk-shim';
 import { loadListFixture } from './fixtures';
-import { server } from './msw';
+import { mockList } from './msw';
 
 const PodList = () => {
   const [pods, loaded] = useK8sWatchResource<K8sResourceCommon[]>({
@@ -24,11 +23,7 @@ const PodList = () => {
 it('serves a recorded list through the SDK shim and MSW', async () => {
   const pods = loadListFixture<K8sResourceCommon>('pods');
 
-  server.use(
-    http.get('*/api/v1/namespaces/cy-test-ns/pods', () =>
-      HttpResponse.json({ apiVersion: 'v1', items: pods, kind: 'PodList' }),
-    ),
-  );
+  mockList(apiPath('', 'v1', 'pods', 'cy-test-ns'), pods);
 
   render(<PodList />);
 
