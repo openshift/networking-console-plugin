@@ -1,123 +1,133 @@
-import React, { FC, ReactNode, Ref, useRef, useState } from 'react';
+import React, { type FC, type ReactNode, type Ref } from 'react';
 
 import {
-  MenuToggleElement,
+  Button,
+  ButtonVariant,
+  MenuToggle,
+  type MenuToggleElement,
   Select,
   SelectList,
   SelectOption,
-  SelectOptionProps,
+  TextInputGroup,
+  TextInputGroupMain,
+  TextInputGroupUtilities,
 } from '@patternfly/react-core';
-import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { isEmpty } from '@utils/utils';
+import { SearchIcon, TimesIcon } from '@patternfly/react-icons';
 
-import Toggle from './Toggle';
-import { filterOptions } from './utils';
-
-type SelectTypeaheadProps = {
-  canCreate?: boolean;
-  id: string;
-  newOptionComponent?: (inputValue: string) => ReactNode;
-  options: SelectOptionProps[];
-  placeholder?: string;
-  selected: string;
-  setSelected: (newSelection: null | string) => void;
-};
+import { useSelectTypeahead } from './hooks/useSelectTypeahead';
+import { type SelectTypeaheadProps } from './utils/types';
+import { createItemId } from './utils/utils';
 
 const SelectTypeahead: FC<SelectTypeaheadProps> = ({
+  addOption,
   canCreate = false,
-  id,
-  newOptionComponent,
+  dataTestId,
+  getCreateAction,
+  getToggleStatus,
+  isDisabled,
+  isFullWidth = false,
   options,
   placeholder,
-  selected,
-  setSelected,
+  selectedValue,
+  setSelectedValue,
 }) => {
-  const { t } = useNetworkingTranslation();
-  const [isOpen, setIsOpen] = useState(false);
-  const [inputValue, setInputValue] = useState<string>(selected || '');
-  const [filterValue, setFilterValue] = useState<string>('');
-  const [focusedItemIndex, setFocusedItemIndex] = useState<null | number>(null);
-  const textInputRef = useRef<HTMLInputElement>();
+  const {
+    activeItemId,
+    focusedItemIndex,
+    inputValue,
+    isOpen,
+    listboxId,
+    onClearButtonClick,
+    onInputKeyDown,
+    onOpenChange,
+    onSelect,
+    onTextInputChange,
+    onToggleClick,
+    openMenu,
+    selectOptions,
+    textInputRef,
+  } = useSelectTypeahead({
+    addOption,
+    canCreate,
+    getCreateAction,
+    options,
+    selectedValue,
+    setSelectedValue,
+  });
 
-  const selectOptions = filterValue ? filterOptions(options, filterValue) : options;
-
-  const onSelect = (value: string) => {
-    if (value) {
-      setSelected(value);
-
-      setInputValue(value);
-      if (selected === value) {
-        setFilterValue('');
-      }
-
-      setIsOpen(false);
-    }
-
-    textInputRef.current?.focus();
-  };
-
-  const resetInputToSelectedOption = () => {
-    if (inputValue && inputValue !== selected) {
-      setInputValue(selected ?? '');
-      setFilterValue('');
-    }
-  };
+  const toggle = (toggleRef: Ref<MenuToggleElement>): ReactNode => (
+    <MenuToggle
+      aria-label="Typeahead menu toggle"
+      data-test={dataTestId}
+      isDisabled={isDisabled}
+      isExpanded={isOpen}
+      isFullWidth={isFullWidth}
+      onClick={onToggleClick}
+      ref={toggleRef}
+      status={getToggleStatus?.(inputValue)}
+      variant="typeahead"
+    >
+      <TextInputGroup isPlain>
+        <TextInputGroupMain
+          autoComplete="off"
+          data-test={dataTestId ? `${dataTestId}-input` : undefined}
+          icon={<SearchIcon />}
+          innerRef={textInputRef}
+          onChange={onTextInputChange}
+          onClick={openMenu}
+          onKeyDown={onInputKeyDown}
+          placeholder={placeholder}
+          value={inputValue}
+          {...(activeItemId && { 'aria-activedescendant': activeItemId })}
+          aria-controls={listboxId}
+          isExpanded={isOpen}
+          role="combobox"
+        />
+        {!!inputValue && (
+          <TextInputGroupUtilities>
+            <Button
+              aria-label="Clear input value"
+              icon={<TimesIcon />}
+              onClick={onClearButtonClick}
+              variant={ButtonVariant.plain}
+            />
+          </TextInputGroupUtilities>
+        )}
+      </TextInputGroup>
+    </MenuToggle>
+  );
 
   return (
     <Select
-      id={id}
+      data-test={dataTestId}
+      id={dataTestId}
       isOpen={isOpen}
       isScrollable
-      onOpenChange={() => {
-        setIsOpen(false);
-        resetInputToSelectedOption();
-      }}
-      onSelect={(ev, selection) => onSelect(selection as string)}
-      selected={selected}
-      toggle={(toggleRef: Ref<MenuToggleElement>) => (
-        <Toggle
-          focusedItemIndex={focusedItemIndex}
-          inputValue={inputValue}
-          isOpen={isOpen}
-          onSelect={onSelect}
-          placeholder={placeholder}
-          selected={selected}
-          selectOptions={selectOptions}
-          setFocusedItemIndex={setFocusedItemIndex}
-          setInputValue={(newInput) => {
-            setInputValue(newInput);
-            setFilterValue(newInput);
-            if (!newInput) setSelected(null);
-          }}
-          setIsOpen={setIsOpen}
-          setSelected={setSelected}
-          textInputRef={textInputRef}
-          toggleRef={toggleRef}
-        />
-      )}
+      onOpenChange={onOpenChange}
+      onSelect={onSelect}
+      selected={selectedValue}
+      toggle={toggle}
+      variant="typeahead"
     >
-      <SelectList id="select-typeahead-listbox">
-        {selectOptions.map((option, index) => (
-          <SelectOption
-            className={option.className}
-            id={`select-typeahead-${option.value.replace(' ', '-')}`}
-            isFocused={focusedItemIndex === index}
-            key={option.value || option.children}
-            {...option}
-          >
-            {option.children || option.value}
-          </SelectOption>
-        ))}
+      <SelectList id={listboxId}>
+        {selectOptions?.map(({ label, optionProps, value }, index) => {
+          const { children, key: _key, ...otherOptionProps } = optionProps ?? {};
+          return (
+            <SelectOption
+              key={value}
+              {...otherOptionProps}
+              id={createItemId(value)}
+              isFocused={focusedItemIndex === index}
+              value={value}
+            >
+              {children ?? label ?? value}
+            </SelectOption>
+          );
+        })}
       </SelectList>
-      {!isEmpty(inputValue) && canCreate && (
-        <SelectOption selected={inputValue === selected} value={inputValue}>
-          {newOptionComponent
-            ? newOptionComponent(inputValue)
-            : t(`Use "{{inputValue}}"`, { inputValue })}
-        </SelectOption>
-      )}
     </Select>
   );
 };
 
+export type { SelectTypeaheadOptionProps, SelectTypeaheadProps } from './utils/types';
 export default SelectTypeahead;
