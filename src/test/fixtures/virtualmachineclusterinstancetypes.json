@@ -1,0 +1,1345 @@
+{
+  "apiVersion": "instancetype.kubevirt.io/v1beta1",
+  "items": [
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "cx1.2xlarge"
+      },
+      "spec": {
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 8,
+          "isolateEmulatorThread": true,
+          "maxSockets": 8,
+          "numa": {
+            "guestMappingPassthrough": {}
+          }
+        },
+        "ioThreadsPolicy": "auto",
+        "memory": {
+          "guest": "16Gi",
+          "hugepages": {
+            "pageSize": "2Mi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "cx1.2xlarge1gi"
+      },
+      "spec": {
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 8,
+          "isolateEmulatorThread": true,
+          "maxSockets": 8,
+          "numa": {
+            "guestMappingPassthrough": {}
+          }
+        },
+        "ioThreadsPolicy": "auto",
+        "memory": {
+          "guest": "16Gi",
+          "hugepages": {
+            "pageSize": "1Gi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "cx1.4xlarge"
+      },
+      "spec": {
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 16,
+          "isolateEmulatorThread": true,
+          "maxSockets": 16,
+          "numa": {
+            "guestMappingPassthrough": {}
+          }
+        },
+        "ioThreadsPolicy": "auto",
+        "memory": {
+          "guest": "32Gi",
+          "hugepages": {
+            "pageSize": "2Mi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "cx1.4xlarge1gi"
+      },
+      "spec": {
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 16,
+          "isolateEmulatorThread": true,
+          "maxSockets": 16,
+          "numa": {
+            "guestMappingPassthrough": {}
+          }
+        },
+        "ioThreadsPolicy": "auto",
+        "memory": {
+          "guest": "32Gi",
+          "hugepages": {
+            "pageSize": "1Gi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "cx1.8xlarge"
+      },
+      "spec": {
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 32,
+          "isolateEmulatorThread": true,
+          "maxSockets": 32,
+          "numa": {
+            "guestMappingPassthrough": {}
+          }
+        },
+        "ioThreadsPolicy": "auto",
+        "memory": {
+          "guest": "64Gi",
+          "hugepages": {
+            "pageSize": "2Mi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "cx1.8xlarge1gi"
+      },
+      "spec": {
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 32,
+          "isolateEmulatorThread": true,
+          "maxSockets": 32,
+          "numa": {
+            "guestMappingPassthrough": {}
+          }
+        },
+        "ioThreadsPolicy": "auto",
+        "memory": {
+          "guest": "64Gi",
+          "hugepages": {
+            "pageSize": "1Gi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "cx1.large"
+      },
+      "spec": {
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 2,
+          "isolateEmulatorThread": true,
+          "maxSockets": 2,
+          "numa": {
+            "guestMappingPassthrough": {}
+          }
+        },
+        "ioThreadsPolicy": "auto",
+        "memory": {
+          "guest": "4Gi",
+          "hugepages": {
+            "pageSize": "2Mi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "cx1.large1gi"
+      },
+      "spec": {
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 2,
+          "isolateEmulatorThread": true,
+          "maxSockets": 2,
+          "numa": {
+            "guestMappingPassthrough": {}
+          }
+        },
+        "ioThreadsPolicy": "auto",
+        "memory": {
+          "guest": "4Gi",
+          "hugepages": {
+            "pageSize": "1Gi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "cx1.medium"
+      },
+      "spec": {
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 1,
+          "isolateEmulatorThread": true,
+          "maxSockets": 1,
+          "numa": {
+            "guestMappingPassthrough": {}
+          }
+        },
+        "ioThreadsPolicy": "auto",
+        "memory": {
+          "guest": "2Gi",
+          "hugepages": {
+            "pageSize": "2Mi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "cx1.medium1gi"
+      },
+      "spec": {
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 1,
+          "isolateEmulatorThread": true,
+          "maxSockets": 1,
+          "numa": {
+            "guestMappingPassthrough": {}
+          }
+        },
+        "ioThreadsPolicy": "auto",
+        "memory": {
+          "guest": "2Gi",
+          "hugepages": {
+            "pageSize": "1Gi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "cx1.xlarge"
+      },
+      "spec": {
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 4,
+          "isolateEmulatorThread": true,
+          "maxSockets": 4,
+          "numa": {
+            "guestMappingPassthrough": {}
+          }
+        },
+        "ioThreadsPolicy": "auto",
+        "memory": {
+          "guest": "8Gi",
+          "hugepages": {
+            "pageSize": "2Mi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "cx1.xlarge1gi"
+      },
+      "spec": {
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 4,
+          "isolateEmulatorThread": true,
+          "maxSockets": 4,
+          "numa": {
+            "guestMappingPassthrough": {}
+          }
+        },
+        "ioThreadsPolicy": "auto",
+        "memory": {
+          "guest": "8Gi",
+          "hugepages": {
+            "pageSize": "1Gi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "d1.2xlarge"
+      },
+      "spec": {
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 8,
+          "isolateEmulatorThread": true
+        },
+        "ioThreadsPolicy": "auto",
+        "memory": {
+          "guest": "32Gi"
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "d1.2xmedium"
+      },
+      "spec": {
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 2,
+          "isolateEmulatorThread": true
+        },
+        "ioThreadsPolicy": "auto",
+        "memory": {
+          "guest": "4Gi"
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "d1.4xlarge"
+      },
+      "spec": {
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 16,
+          "isolateEmulatorThread": true
+        },
+        "ioThreadsPolicy": "auto",
+        "memory": {
+          "guest": "64Gi"
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "d1.8xlarge"
+      },
+      "spec": {
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 32,
+          "isolateEmulatorThread": true
+        },
+        "ioThreadsPolicy": "auto",
+        "memory": {
+          "guest": "128Gi"
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "d1.large"
+      },
+      "spec": {
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 2,
+          "isolateEmulatorThread": true
+        },
+        "ioThreadsPolicy": "auto",
+        "memory": {
+          "guest": "8Gi"
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "d1.medium"
+      },
+      "spec": {
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 1,
+          "isolateEmulatorThread": true
+        },
+        "ioThreadsPolicy": "auto",
+        "memory": {
+          "guest": "4Gi"
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "d1.micro"
+      },
+      "spec": {
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 1,
+          "isolateEmulatorThread": true
+        },
+        "ioThreadsPolicy": "auto",
+        "memory": {
+          "guest": "1Gi"
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "d1.nano"
+      },
+      "spec": {
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 1,
+          "isolateEmulatorThread": true
+        },
+        "ioThreadsPolicy": "auto",
+        "memory": {
+          "guest": "512Mi"
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "d1.small"
+      },
+      "spec": {
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 1,
+          "isolateEmulatorThread": true
+        },
+        "ioThreadsPolicy": "auto",
+        "memory": {
+          "guest": "2Gi"
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "d1.xlarge"
+      },
+      "spec": {
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 4,
+          "isolateEmulatorThread": true
+        },
+        "ioThreadsPolicy": "auto",
+        "memory": {
+          "guest": "16Gi"
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "m1.2xlarge"
+      },
+      "spec": {
+        "cpu": {
+          "guest": 8
+        },
+        "memory": {
+          "guest": "64Gi",
+          "hugepages": {
+            "pageSize": "2Mi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "m1.2xlarge1gi"
+      },
+      "spec": {
+        "cpu": {
+          "guest": 8
+        },
+        "memory": {
+          "guest": "64Gi",
+          "hugepages": {
+            "pageSize": "1Gi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "m1.4xlarge"
+      },
+      "spec": {
+        "cpu": {
+          "guest": 16
+        },
+        "memory": {
+          "guest": "128Gi",
+          "hugepages": {
+            "pageSize": "2Mi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "m1.4xlarge1gi"
+      },
+      "spec": {
+        "cpu": {
+          "guest": 16
+        },
+        "memory": {
+          "guest": "128Gi",
+          "hugepages": {
+            "pageSize": "1Gi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "m1.8xlarge"
+      },
+      "spec": {
+        "cpu": {
+          "guest": 32
+        },
+        "memory": {
+          "guest": "256Gi",
+          "hugepages": {
+            "pageSize": "2Mi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "m1.8xlarge1gi"
+      },
+      "spec": {
+        "cpu": {
+          "guest": 32
+        },
+        "memory": {
+          "guest": "256Gi",
+          "hugepages": {
+            "pageSize": "1Gi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "m1.large"
+      },
+      "spec": {
+        "cpu": {
+          "guest": 2
+        },
+        "memory": {
+          "guest": "16Gi",
+          "hugepages": {
+            "pageSize": "2Mi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "m1.large1gi"
+      },
+      "spec": {
+        "cpu": {
+          "guest": 2
+        },
+        "memory": {
+          "guest": "16Gi",
+          "hugepages": {
+            "pageSize": "1Gi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "m1.xlarge"
+      },
+      "spec": {
+        "cpu": {
+          "guest": 4
+        },
+        "memory": {
+          "guest": "32Gi",
+          "hugepages": {
+            "pageSize": "2Mi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "m1.xlarge1gi"
+      },
+      "spec": {
+        "cpu": {
+          "guest": 4
+        },
+        "memory": {
+          "guest": "32Gi",
+          "hugepages": {
+            "pageSize": "1Gi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "n1.2xlarge"
+      },
+      "spec": {
+        "annotations": {
+          "cpu-load-balancing.crio.io": "disable",
+          "cpu-quota.crio.io": "disable",
+          "irq-load-balancing.crio.io": "disable"
+        },
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 16,
+          "isolateEmulatorThread": true
+        },
+        "memory": {
+          "guest": "32Gi",
+          "hugepages": {
+            "pageSize": "1Gi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "n1.4xlarge"
+      },
+      "spec": {
+        "annotations": {
+          "cpu-load-balancing.crio.io": "disable",
+          "cpu-quota.crio.io": "disable",
+          "irq-load-balancing.crio.io": "disable"
+        },
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 32,
+          "isolateEmulatorThread": true
+        },
+        "memory": {
+          "guest": "64Gi",
+          "hugepages": {
+            "pageSize": "1Gi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "n1.8xlarge"
+      },
+      "spec": {
+        "annotations": {
+          "cpu-load-balancing.crio.io": "disable",
+          "cpu-quota.crio.io": "disable",
+          "irq-load-balancing.crio.io": "disable"
+        },
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 64,
+          "isolateEmulatorThread": true
+        },
+        "memory": {
+          "guest": "128Gi",
+          "hugepages": {
+            "pageSize": "1Gi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "n1.large"
+      },
+      "spec": {
+        "annotations": {
+          "cpu-load-balancing.crio.io": "disable",
+          "cpu-quota.crio.io": "disable",
+          "irq-load-balancing.crio.io": "disable"
+        },
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 4,
+          "isolateEmulatorThread": true
+        },
+        "memory": {
+          "guest": "8Gi",
+          "hugepages": {
+            "pageSize": "1Gi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "n1.medium"
+      },
+      "spec": {
+        "annotations": {
+          "cpu-load-balancing.crio.io": "disable",
+          "cpu-quota.crio.io": "disable",
+          "irq-load-balancing.crio.io": "disable"
+        },
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 4,
+          "isolateEmulatorThread": true
+        },
+        "memory": {
+          "guest": "4Gi",
+          "hugepages": {
+            "pageSize": "1Gi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "n1.xlarge"
+      },
+      "spec": {
+        "annotations": {
+          "cpu-load-balancing.crio.io": "disable",
+          "cpu-quota.crio.io": "disable",
+          "irq-load-balancing.crio.io": "disable"
+        },
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 8,
+          "isolateEmulatorThread": true
+        },
+        "memory": {
+          "guest": "16Gi",
+          "hugepages": {
+            "pageSize": "1Gi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "o1.2xlarge"
+      },
+      "spec": {
+        "cpu": {
+          "guest": 8
+        },
+        "memory": {
+          "guest": "32Gi",
+          "overcommitPercent": 50
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "o1.4xlarge"
+      },
+      "spec": {
+        "cpu": {
+          "guest": 16
+        },
+        "memory": {
+          "guest": "64Gi",
+          "overcommitPercent": 50
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "o1.8xlarge"
+      },
+      "spec": {
+        "cpu": {
+          "guest": 32
+        },
+        "memory": {
+          "guest": "128Gi",
+          "overcommitPercent": 50
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "o1.large"
+      },
+      "spec": {
+        "cpu": {
+          "guest": 2
+        },
+        "memory": {
+          "guest": "8Gi",
+          "overcommitPercent": 50
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "o1.medium"
+      },
+      "spec": {
+        "cpu": {
+          "guest": 1
+        },
+        "memory": {
+          "guest": "4Gi",
+          "overcommitPercent": 50
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "o1.micro"
+      },
+      "spec": {
+        "cpu": {
+          "guest": 1
+        },
+        "memory": {
+          "guest": "1Gi",
+          "overcommitPercent": 50
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "o1.nano"
+      },
+      "spec": {
+        "cpu": {
+          "guest": 1
+        },
+        "memory": {
+          "guest": "512Mi",
+          "overcommitPercent": 50
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "o1.small"
+      },
+      "spec": {
+        "cpu": {
+          "guest": 1
+        },
+        "memory": {
+          "guest": "2Gi",
+          "overcommitPercent": 50
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "o1.xlarge"
+      },
+      "spec": {
+        "cpu": {
+          "guest": 4
+        },
+        "memory": {
+          "guest": "16Gi",
+          "overcommitPercent": 50
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "rt1.2xlarge"
+      },
+      "spec": {
+        "annotations": {
+          "cpu-load-balancing.crio.io": "disable",
+          "cpu-quota.crio.io": "disable",
+          "irq-load-balancing.crio.io": "disable"
+        },
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 8,
+          "isolateEmulatorThread": true,
+          "numa": {
+            "guestMappingPassthrough": {}
+          },
+          "realtime": {}
+        },
+        "memory": {
+          "guest": "32Gi",
+          "hugepages": {
+            "pageSize": "1Gi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "rt1.4xlarge"
+      },
+      "spec": {
+        "annotations": {
+          "cpu-load-balancing.crio.io": "disable",
+          "cpu-quota.crio.io": "disable",
+          "irq-load-balancing.crio.io": "disable"
+        },
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 16,
+          "isolateEmulatorThread": true,
+          "numa": {
+            "guestMappingPassthrough": {}
+          },
+          "realtime": {}
+        },
+        "memory": {
+          "guest": "64Gi",
+          "hugepages": {
+            "pageSize": "1Gi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "rt1.8xlarge"
+      },
+      "spec": {
+        "annotations": {
+          "cpu-load-balancing.crio.io": "disable",
+          "cpu-quota.crio.io": "disable",
+          "irq-load-balancing.crio.io": "disable"
+        },
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 32,
+          "isolateEmulatorThread": true,
+          "numa": {
+            "guestMappingPassthrough": {}
+          },
+          "realtime": {}
+        },
+        "memory": {
+          "guest": "128Gi",
+          "hugepages": {
+            "pageSize": "1Gi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "rt1.large"
+      },
+      "spec": {
+        "annotations": {
+          "cpu-load-balancing.crio.io": "disable",
+          "cpu-quota.crio.io": "disable",
+          "irq-load-balancing.crio.io": "disable"
+        },
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 2,
+          "isolateEmulatorThread": true,
+          "numa": {
+            "guestMappingPassthrough": {}
+          },
+          "realtime": {}
+        },
+        "memory": {
+          "guest": "8Gi",
+          "hugepages": {
+            "pageSize": "1Gi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "rt1.medium"
+      },
+      "spec": {
+        "annotations": {
+          "cpu-load-balancing.crio.io": "disable",
+          "cpu-quota.crio.io": "disable",
+          "irq-load-balancing.crio.io": "disable"
+        },
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 1,
+          "isolateEmulatorThread": true,
+          "numa": {
+            "guestMappingPassthrough": {}
+          },
+          "realtime": {}
+        },
+        "memory": {
+          "guest": "4Gi",
+          "hugepages": {
+            "pageSize": "1Gi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "rt1.micro"
+      },
+      "spec": {
+        "annotations": {
+          "cpu-load-balancing.crio.io": "disable",
+          "cpu-quota.crio.io": "disable",
+          "irq-load-balancing.crio.io": "disable"
+        },
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 1,
+          "isolateEmulatorThread": true,
+          "numa": {
+            "guestMappingPassthrough": {}
+          },
+          "realtime": {}
+        },
+        "memory": {
+          "guest": "1Gi",
+          "hugepages": {
+            "pageSize": "1Gi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "rt1.small"
+      },
+      "spec": {
+        "annotations": {
+          "cpu-load-balancing.crio.io": "disable",
+          "cpu-quota.crio.io": "disable",
+          "irq-load-balancing.crio.io": "disable"
+        },
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 1,
+          "isolateEmulatorThread": true,
+          "numa": {
+            "guestMappingPassthrough": {}
+          },
+          "realtime": {}
+        },
+        "memory": {
+          "guest": "2Gi",
+          "hugepages": {
+            "pageSize": "1Gi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "rt1.xlarge"
+      },
+      "spec": {
+        "annotations": {
+          "cpu-load-balancing.crio.io": "disable",
+          "cpu-quota.crio.io": "disable",
+          "irq-load-balancing.crio.io": "disable"
+        },
+        "cpu": {
+          "dedicatedCPUPlacement": true,
+          "guest": 4,
+          "isolateEmulatorThread": true,
+          "numa": {
+            "guestMappingPassthrough": {}
+          },
+          "realtime": {}
+        },
+        "memory": {
+          "guest": "16Gi",
+          "hugepages": {
+            "pageSize": "1Gi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "u1.2xlarge"
+      },
+      "spec": {
+        "cpu": {
+          "guest": 8
+        },
+        "memory": {
+          "guest": "32Gi"
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "u1.2xmedium"
+      },
+      "spec": {
+        "cpu": {
+          "guest": 2
+        },
+        "memory": {
+          "guest": "4Gi"
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "u1.4xlarge"
+      },
+      "spec": {
+        "cpu": {
+          "guest": 16
+        },
+        "memory": {
+          "guest": "64Gi"
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "u1.8xlarge"
+      },
+      "spec": {
+        "cpu": {
+          "guest": 32
+        },
+        "memory": {
+          "guest": "128Gi"
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "u1.large"
+      },
+      "spec": {
+        "cpu": {
+          "guest": 2
+        },
+        "memory": {
+          "guest": "8Gi"
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "u1.medium"
+      },
+      "spec": {
+        "cpu": {
+          "guest": 1
+        },
+        "memory": {
+          "guest": "4Gi"
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "u1.micro"
+      },
+      "spec": {
+        "cpu": {
+          "guest": 1
+        },
+        "memory": {
+          "guest": "1Gi"
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "u1.nano"
+      },
+      "spec": {
+        "cpu": {
+          "guest": 1
+        },
+        "memory": {
+          "guest": "512Mi"
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "u1.small"
+      },
+      "spec": {
+        "cpu": {
+          "guest": 1
+        },
+        "memory": {
+          "guest": "2Gi"
+        }
+      }
+    },
+    {
+      "apiVersion": "instancetype.kubevirt.io/v1beta1",
+      "kind": "VirtualMachineClusterInstancetype",
+      "metadata": {
+        "name": "u1.xlarge"
+      },
+      "spec": {
+        "cpu": {
+          "guest": 4
+        },
+        "memory": {
+          "guest": "16Gi"
+        }
+      }
+    }
+  ],
+  "kind": "VirtualMachineClusterInstancetypeList",
+  "metadata": {
+    "continue": ""
+  }
+}

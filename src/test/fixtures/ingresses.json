@@ -1,0 +1,85 @@
+{
+  "kind": "IngressList",
+  "apiVersion": "networking.k8s.io/v1",
+  "metadata": {},
+  "items": [
+    {
+      "metadata": {
+        "name": "no-rules",
+        "namespace": "cy-test-ns",
+        "annotations": {}
+      },
+      "spec": {
+        "defaultBackend": {
+          "service": {
+            "name": "web",
+            "port": {
+              "number": 80
+            }
+          }
+        }
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    },
+    {
+      "metadata": {
+        "name": "shop",
+        "namespace": "cy-test-ns",
+        "annotations": {}
+      },
+      "spec": {
+        "rules": [
+          {
+            "host": "shop.example.com",
+            "http": {
+              "paths": [
+                {
+                  "path": "/",
+                  "pathType": "Prefix",
+                  "backend": {
+                    "service": {
+                      "name": "web",
+                      "port": {
+                        "number": 80
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "host": "www.example.com",
+            "http": {
+              "paths": [
+                {
+                  "path": "/",
+                  "pathType": "Prefix",
+                  "backend": {
+                    "service": {
+                      "name": "web",
+                      "port": {
+                        "number": 80
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "status": {
+        "loadBalancer": {
+          "ingress": [
+            {
+              "hostname": "example.com"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

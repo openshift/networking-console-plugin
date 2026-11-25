@@ -1,0 +1,43 @@
+{
+  "apiVersion": "k8s.ovn.org/v1",
+  "items": [
+    {
+      "apiVersion": "k8s.ovn.org/v1",
+      "kind": "ClusterUserDefinedNetwork",
+      "metadata": {
+        "annotations": {},
+        "finalizers": ["k8s.ovn.org/user-defined-network-protection"],
+        "name": "test-cudn-team"
+      },
+      "spec": {
+        "namespaceSelector": {
+          "matchLabels": {
+            "team": "blue"
+          }
+        },
+        "network": {
+          "layer2": {
+            "role": "Secondary",
+            "subnets": ["192.0.2.10/24"]
+          },
+          "topology": "Layer2"
+        }
+      },
+      "status": {
+        "conditions": [
+          {
+            "lastTransitionTime": "2026-11-06T14:22:52Z",
+            "message": "NetworkAttachmentDefinition has been created in following namespaces: []",
+            "reason": "NetworkAttachmentDefinitionCreated",
+            "status": "True",
+            "type": "NetworkCreated"
+          }
+        ]
+      }
+    }
+  ],
+  "kind": "ClusterUserDefinedNetworkList",
+  "metadata": {
+    "continue": ""
+  }
+}
