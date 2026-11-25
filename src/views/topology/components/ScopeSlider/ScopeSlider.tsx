@@ -1,20 +1,26 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 
 import { Popover, ProgressStep, ProgressStepper } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { TopologyViewTypes } from '@views/topology/utils/constants';
 
-import { getScopeDescription, getScopeLabel, SCOPE_DEFINITIONS } from './utils';
+import { getScopeDefinitions, getScopeDescription, getScopeLabel } from './utils';
 
 import './ScopeSlider.scss';
 
 type ScopeSliderProps = {
+  nmstateAvailable: boolean;
   onScopeChange: (scope: TopologyViewTypes) => void;
   scope: TopologyViewTypes;
 };
 
-const ScopeSlider: FC<ScopeSliderProps> = ({ onScopeChange, scope }) => {
+const ScopeSlider: FC<ScopeSliderProps> = ({ nmstateAvailable, onScopeChange, scope }) => {
   const { t } = useNetworkingTranslation();
+
+  const scopeDefinitions = useMemo(
+    () => getScopeDefinitions(nmstateAvailable),
+    [nmstateAvailable],
+  );
 
   return (
     <div
@@ -23,7 +29,7 @@ const ScopeSlider: FC<ScopeSliderProps> = ({ onScopeChange, scope }) => {
       role="group"
     >
       <ProgressStepper isCenterAligned isVertical>
-        {SCOPE_DEFINITIONS.map((definition) => (
+        {scopeDefinitions.map((definition) => (
           <ProgressStep
             id={`topology-scope-${definition.id}`}
             isCurrent={definition.id === scope}

@@ -6,6 +6,13 @@ export const SCOPE_DEFINITIONS: { id: TopologyViewTypes }[] = TOPOLOGY_SCOPE_ORD
   id,
 }));
 
+export const getScopeDefinitions = (nmstateAvailable: boolean): { id: TopologyViewTypes }[] => {
+  const scopes = TOPOLOGY_SCOPE_ORDER.filter(
+    (scope) => scope !== TopologyViewTypes.node || nmstateAvailable,
+  );
+  return scopes.map((id) => ({ id }));
+};
+
 export const getScopeLabel = (t: TFunction, scope: TopologyViewTypes): string => {
   switch (scope) {
     case TopologyViewTypes.network:
@@ -14,6 +21,8 @@ export const getScopeLabel = (t: TFunction, scope: TopologyViewTypes): string =>
       return t('Owner');
     case TopologyViewTypes.namespace:
       return t('Namespace');
+    case TopologyViewTypes.node:
+      return t('Node');
     case TopologyViewTypes.resource:
       return t('Resource');
   }
@@ -32,6 +41,10 @@ export const getScopeDescription = (t: TFunction, scope: TopologyViewTypes): str
     case TopologyViewTypes.namespace:
       return t(
         'Replace namespaced resources with their namespace; cluster-scoped resources remain unchanged.',
+      );
+    case TopologyViewTypes.node:
+      return t(
+        'Show physical nodes as containers grouping their network interfaces and connections.',
       );
     case TopologyViewTypes.resource:
       return t('Show individual resources using their Kubernetes kind and name.');

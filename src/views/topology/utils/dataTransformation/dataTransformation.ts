@@ -260,6 +260,12 @@ const getScopeKey = (node: NodeModel, scope: TopologyViewTypes): string | undefi
       return node.data?.namespace || 'Cluster-scoped';
     case TopologyViewTypes.network:
       return getNetworkGroup(node);
+    case TopologyViewTypes.node:
+      // For interface nodes, the parent is the node name
+      if (node.parent) return node.parent;
+      // For group nodes representing nodes, use the id
+      if (node.group) return node.id;
+      return undefined;
     default:
       return node.id;
   }
@@ -327,6 +333,25 @@ const createScopedModel = (
 ): { edges: EdgeModel[]; nodes: NodeModel[] } => {
   if (scope === TopologyViewTypes.resource) {
     return { edges, nodes };
+  }
+
+  if (scope === TopologyViewTypes.node) {
+    // Filter to only show node interface nodes (have parent property set to NNS name)
+    const nodeInterfaceNodes = nodes.filter((node) => node.parent);
+
+    // Keep the existing node groups (group=true, id is simple NNS name)
+    const nodeGroups = nodes.filter((node) => node.group && !node.id.includes('~'));
+
+    // Filter edges to only those connecting interfaces
+    const nodeInterfaceIds = new Set(nodeInterfaceNodes.map((n) => n.id));
+    const interfaceEdges = edges.filter(
+      (edge) => nodeInterfaceIds.has(edge.source ?? '') && nodeInterfaceIds.has(edge.target ?? ''),
+    );
+
+    return {
+      edges: interfaceEdges,
+      nodes: [...nodeGroups, ...nodeInterfaceNodes],
+    };
   }
 
   const scopedNodes = new Map<string, NodeModel>();

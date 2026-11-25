@@ -13,6 +13,7 @@ export type SelectedNodeData = {
 
 type TopologyContextType = {
   activeNamespace: string;
+  nmstateAvailable: boolean;
   onSelectNode: (node: Node | null) => void;
   resources: NetworkTopologyResources | undefined;
   resourcesLoaded: boolean;
@@ -21,6 +22,7 @@ type TopologyContextType = {
 
 const TopologyContext = createContext<TopologyContextType>({
   activeNamespace: ALL_NAMESPACES_KEY,
+  nmstateAvailable: false,
   onSelectNode: () => {},
   resources: undefined,
   resourcesLoaded: false,
@@ -29,6 +31,7 @@ const TopologyContext = createContext<TopologyContextType>({
 
 type TopologyContextProviderProps = {
   activeNamespace: string;
+  nmstateAvailable: boolean;
   resources: NetworkTopologyResources | undefined;
   resourcesLoaded: boolean;
 };
@@ -36,6 +39,7 @@ type TopologyContextProviderProps = {
 export const TopologyContextProvider: FC<PropsWithChildren<TopologyContextProviderProps>> = ({
   activeNamespace,
   children,
+  nmstateAvailable,
   resources,
   resourcesLoaded,
 }) => {
@@ -59,12 +63,13 @@ export const TopologyContextProvider: FC<PropsWithChildren<TopologyContextProvid
   const value = useMemo(
     () => ({
       activeNamespace,
+      nmstateAvailable,
       onSelectNode,
       resources,
       resourcesLoaded,
       selectedNode,
     }),
-    [activeNamespace, resources, resourcesLoaded, selectedNode],
+    [activeNamespace, nmstateAvailable, resources, resourcesLoaded, selectedNode],
   );
 
   return <TopologyContext.Provider value={value}>{children}</TopologyContext.Provider>;

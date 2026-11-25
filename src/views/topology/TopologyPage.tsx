@@ -26,6 +26,12 @@ const TopologyPage: FC = () => {
 
   return (
     <>
+      <Alert
+        className="pf-v6-u-mt-md"
+        isInline
+        title={t('The configuration topology is a Technical Preview feature')}
+        variant="info"
+      />
       <DocumentTitle>{t('Topology')}</DocumentTitle>
       <div className="networking-topology__layout">
         <div className="networking-topology__sticky-header">
@@ -60,6 +66,7 @@ const TopologyPage: FC = () => {
         >
           <TopologyContextProvider
             activeNamespace={activeNamespace}
+            nmstateAvailable={nmstateAvailable}
             resources={resources}
             resourcesLoaded={loaded}
           >

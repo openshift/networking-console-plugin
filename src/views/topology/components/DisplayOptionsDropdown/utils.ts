@@ -14,6 +14,8 @@ export const getDisplayOptionLabel = (
       return t('Owner');
     case TopologyViewTypes.namespace:
       return t('Namespace');
+    case TopologyViewTypes.node:
+      return t('Node');
     case TopologyViewTypes.resource:
       return t('Resource');
     case TopologyGroupType.namespaceOwner:

@@ -3,6 +3,7 @@ import { DisplayOptionsState, TopologyGroupType } from '@views/topology/types';
 export enum TopologyViewTypes {
   namespace = 'namespace',
   network = 'network',
+  node = 'node',
   owner = 'owner',
   resource = 'resource',
 }
@@ -10,6 +11,7 @@ export enum TopologyViewTypes {
 export const TOPOLOGY_SCOPE_ORDER: TopologyViewTypes[] = [
   TopologyViewTypes.network,
   TopologyViewTypes.namespace,
+  TopologyViewTypes.node,
   TopologyViewTypes.owner,
   TopologyViewTypes.resource,
 ];
