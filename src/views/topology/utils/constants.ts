@@ -3,6 +3,7 @@ import { DisplayOptionsState, TopologyGroupType } from '@views/topology/types';
 export enum TopologyViewTypes {
   namespace = 'namespace',
   network = 'network',
+  node = 'node',
   owner = 'owner',
   resource = 'resource',
 }
@@ -10,6 +11,7 @@ export enum TopologyViewTypes {
 export const TOPOLOGY_SCOPE_ORDER: TopologyViewTypes[] = [
   TopologyViewTypes.network,
   TopologyViewTypes.namespace,
+  TopologyViewTypes.node,
   TopologyViewTypes.owner,
   TopologyViewTypes.resource,
 ];
@@ -27,6 +29,8 @@ export enum ResourceType {
   MultiNetworkPolicy = 'MultiNetworkPolicy',
   NetworkAttachmentDefinition = 'NetworkAttachmentDefinition',
   NetworkPolicy = 'NetworkPolicy',
+  Node = 'Node',
+  NodeInterface = 'NodeInterface',
   Pod = 'Pod',
   Route = 'Route',
   Service = 'Service',
@@ -40,6 +44,8 @@ export enum RelationshipType {
   CUDNToVM = 'cudn-to-vm',
   IngressToService = 'ingress-to-service',
   MultiNetworkPolicyToNAD = 'multi-network-policy-to-nad',
+  NodeInterfaceToInterface = 'node-interface-to-interface',
+  NodeInterfaceToNAD = 'node-interface-to-nad',
   PodToNAD = 'pod-to-nad',
   RouteToService = 'route-to-service',
   Scope = 'scope',

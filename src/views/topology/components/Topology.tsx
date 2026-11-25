@@ -48,7 +48,7 @@ const Topology: FC = () => {
     useState<DisplayOptionsState>(DEFAULT_DISPLAY_OPTIONS);
   const [scope, setScope] = useState<TopologyViewTypes>(TopologyViewTypes.resource);
   const [group, setGroup] = useState<TopologyGroupType>(DEFAULT_TOPOLOGY_GROUP);
-  const { onSelectNode, resources } = useTopologyContext();
+  const { nmstateAvailable, onSelectNode, resources } = useTopologyContext();
   const { advancedFilters, filterMatchType, layout, resourceTypes, searchQuery, setLayout } =
     useTopologyFilters();
   const laidOutModelRef = useRef<Model | undefined>(undefined);
@@ -233,7 +233,9 @@ const Topology: FC = () => {
     setGroup((currentGroup) => {
       if (
         String(currentGroup) === String(nextScope) ||
-        ([TopologyViewTypes.namespace, TopologyViewTypes.network].includes(nextScope) &&
+        ([TopologyViewTypes.namespace, TopologyViewTypes.network, TopologyViewTypes.node].includes(
+          nextScope,
+        ) &&
           currentGroup === TopologyGroupType.owner) ||
         (nextScope !== TopologyViewTypes.resource &&
           currentGroup === TopologyGroupType.namespaceOwner)
@@ -273,7 +275,11 @@ const Topology: FC = () => {
           <TopologyTableView />
         ) : (
           <div className="networking-topology__visualization">
-            <ScopeSlider onScopeChange={handleScopeChange} scope={scope} />
+            <ScopeSlider
+              nmstateAvailable={nmstateAvailable}
+              onScopeChange={handleScopeChange}
+              scope={scope}
+            />
             <div className="networking-topology__canvas">
               <VisualizationProvider controller={controller}>
                 <TopologyDrawer>

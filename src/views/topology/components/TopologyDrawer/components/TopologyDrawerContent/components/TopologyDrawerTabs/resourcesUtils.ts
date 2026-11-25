@@ -1,6 +1,9 @@
 import { IoK8sApiCoreV1Pod } from '@kubevirt-ui-ext/kubevirt-api/kubernetes';
 import { V1VirtualMachine } from '@kubevirt-ui-ext/kubevirt-api/kubevirt';
-import { V1NodeNetworkConfigurationPolicy } from '@kubevirt-ui-ext/kubevirt-api/nmstate';
+import {
+  V1beta1NodeNetworkState,
+  V1NodeNetworkConfigurationPolicy,
+} from '@kubevirt-ui-ext/kubevirt-api/nmstate';
 import { K8sResourceCommon } from '@openshift-console/dynamic-plugin-sdk';
 import {
   getConfigAsJSON,
@@ -8,14 +11,13 @@ import {
   getVMNADReferences,
 } from '@utils/resources/nads/selectors';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
-import { getPolicyLocalnetNames } from '@utils/resources/nmstate/selectors';
+import { getPolicyLocalnetNames } from '@utils/resources/nmstate/NodeNetworkConfigurationPolicies/selectors';
 import { getName, getNamespace } from '@utils/resources/shared';
 import { getCUDNNamespaceNames, isPrimaryUDN } from '@utils/resources/udns/helper';
 import { getNetwork } from '@utils/resources/udns/selectors';
 import { ClusterUserDefinedNetworkKind, UserDefinedNetworkKind } from '@utils/resources/udns/types';
 import { getInterfaces, getNetworks } from '@utils/resources/vm/selectors';
 import { NetworkTopologyResources } from '@views/topology/hooks/useNetworkTopologyResources';
-import { NodeNetworkStateKind } from '@views/topology/types';
 import { ResourceType } from '@views/topology/utils/constants';
 import { generateDataModel } from '@views/topology/utils/dataTransformation/dataTransformation';
 import { getResourceID } from '@views/topology/utils/dataTransformation/resourceUtils';
@@ -68,7 +70,7 @@ export const isHostManagedNetwork = (
 
 export const getWorkerBridgeAttachments = (
   physicalNetworkName: string | undefined,
-  nodeNetworkStates: NodeNetworkStateKind[],
+  nodeNetworkStates: V1beta1NodeNetworkState[],
 ): WorkerBridgeAttachment[] => {
   if (!physicalNetworkName) return [];
 

@@ -18,6 +18,7 @@ import { getName, getNamespace } from '@utils/resources/shared';
 import { udnIsReady } from '@utils/resources/udns/helper';
 import { PrintableVMErrorStatus, PrintableVMStatus } from '@utils/resources/vm/constants';
 import { getVMStatus } from '@utils/resources/vm/selectors';
+import { isEmpty } from '@utils/utils';
 import { PodPhase } from '@views/services/details/tabs/pods/constants';
 import { getPodPhase } from '@views/services/details/tabs/pods/utils';
 import { createScopeIcon, TopologyPodIcon } from '@views/topology/components/TopologyIcons';
@@ -26,6 +27,7 @@ import { TopologyGroupType } from '@views/topology/types';
 import {
   addClusterUserDefinedNetworkNodesAndEdges,
   addNetworkAttachmentDefinitionNodes,
+  addNodeGroupsAndEdges,
   addPodNodesAndEdges,
   addUserDefinedNetworkNodesAndEdges,
   addVirtualMachineNodesAndEdges,
@@ -44,6 +46,10 @@ const getIconForResourceType = (resourceType: ResourceType): ComponentType => {
       return TopologyPodIcon;
     case ResourceType.VirtualMachine:
       return ServerIcon;
+    case ResourceType.NodeInterface:
+      // Icon will be set per-node in data.icon based on interface type
+      // This is just a fallback
+      return NetworkIcon;
     default:
       return NetworkIcon;
   }
@@ -59,6 +65,9 @@ const getShapeForResourceType = (resourceType: ResourceType): NodeShape => {
     case ResourceType.Pod:
     case ResourceType.VirtualMachine:
       return NodeShape.ellipse;
+    case ResourceType.NodeInterface:
+      // Shape determined per-node: circle for policy-derived, rectangle for standard
+      return NodeShape.rect; // default fallback
     default:
       return NodeShape.ellipse;
   }
@@ -188,7 +197,9 @@ export const findExistingEdge = (
   sourceId: string,
   targetId: string,
 ): EdgeModel | undefined => {
-  return edges.find(
+  console.log('**** edges: ', edges);
+
+  return edges?.find(
     (e) =>
       (e.data.sourceId === sourceId && e.data.targetId === targetId) ||
       (e.data.sourceId === targetId && e.data.targetId === sourceId),
@@ -249,6 +260,12 @@ const getScopeKey = (node: NodeModel, scope: TopologyViewTypes): string | undefi
       return node.data?.namespace || 'Cluster-scoped';
     case TopologyViewTypes.network:
       return getNetworkGroup(node);
+    case TopologyViewTypes.node:
+      // For interface nodes, the parent is the node name
+      if (node.parent) return node.parent;
+      // For group nodes representing nodes, use the id
+      if (node.group) return node.id;
+      return undefined;
     default:
       return node.id;
   }
@@ -316,6 +333,25 @@ const createScopedModel = (
 ): { edges: EdgeModel[]; nodes: NodeModel[] } => {
   if (scope === TopologyViewTypes.resource) {
     return { edges, nodes };
+  }
+
+  if (scope === TopologyViewTypes.node) {
+    // Filter to only show node interface nodes (have parent property set to NNS name)
+    const nodeInterfaceNodes = nodes.filter((node) => node.parent);
+
+    // Keep the existing node groups (group=true, id is simple NNS name)
+    const nodeGroups = nodes.filter((node) => node.group && !node.id.includes('~'));
+
+    // Filter edges to only those connecting interfaces
+    const nodeInterfaceIds = new Set(nodeInterfaceNodes.map((n) => n.id));
+    const interfaceEdges = edges.filter(
+      (edge) => nodeInterfaceIds.has(edge.source ?? '') && nodeInterfaceIds.has(edge.target ?? ''),
+    );
+
+    return {
+      edges: interfaceEdges,
+      nodes: [...nodeGroups, ...nodeInterfaceNodes],
+    };
   }
 
   const scopedNodes = new Map<string, NodeModel>();
@@ -528,28 +564,52 @@ export const generateDataModel = (
   const edges: EdgeModel[] = [];
   const nodeMap = new Map<string, NodeModel>();
 
-  addNetworkAttachmentDefinitionNodes(resources.networkAttachmentDefinitions, nodes, nodeMap);
-  addPodNodesAndEdges(resources.pods, nodes, edges, nodeMap);
-  addVirtualMachineNodesAndEdges(resources.virtualMachines, nodes, edges, nodeMap);
+  const {
+    clusterUserDefinedNetworks,
+    networkAttachmentDefinitions,
+    nodeNetworkConfigurationEnactments,
+    nodeNetworkStates,
+    pods,
+    projects,
+    userDefinedNetworks,
+    virtualMachines,
+  } = resources;
+
+  // Add nodes FIRST (level 1)
+  if (!isEmpty(nodeNetworkStates)) {
+    addNodeGroupsAndEdges(
+      nodeNetworkStates,
+      nodeNetworkConfigurationEnactments,
+      nodes,
+      edges,
+      nodeMap,
+      networkAttachmentDefinitions,
+    );
+  }
+
+  // Then existing resources in level order
+  addNetworkAttachmentDefinitionNodes(networkAttachmentDefinitions, nodes, nodeMap);
   addUserDefinedNetworkNodesAndEdges(
-    resources.userDefinedNetworks,
+    userDefinedNetworks,
     nodes,
     edges,
     nodeMap,
-    resources.pods,
-    resources.virtualMachines,
-    resources.networkAttachmentDefinitions,
+    pods,
+    virtualMachines,
+    networkAttachmentDefinitions,
   );
   addClusterUserDefinedNetworkNodesAndEdges(
-    resources.clusterUserDefinedNetworks,
+    clusterUserDefinedNetworks,
     nodes,
     edges,
     nodeMap,
-    resources.pods,
-    resources.virtualMachines,
-    resources.networkAttachmentDefinitions,
-    resources.projects,
+    pods,
+    virtualMachines,
+    networkAttachmentDefinitions,
+    projects,
   );
+  addPodNodesAndEdges(pods, nodes, edges, nodeMap);
+  addVirtualMachineNodesAndEdges(virtualMachines, nodes, edges, nodeMap);
 
   const selectedTypes = new Set(resourceTypes);
   const filteredNodes =

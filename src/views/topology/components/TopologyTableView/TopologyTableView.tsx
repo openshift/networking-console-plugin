@@ -1,5 +1,6 @@
 import React, { FC, useMemo, useState } from 'react';
 
+import { V1beta1NodeNetworkState } from '@kubevirt-ui-ext/kubevirt-api/nmstate';
 import {
   Bullseye,
   EmptyState,
@@ -16,22 +17,23 @@ import { FilterIcon } from '@patternfly/react-icons';
 import { Table, Tbody, Td, Th, Thead, Tr } from '@patternfly/react-table';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { getName } from '@utils/resources/shared';
+import { isEmpty } from '@utils/utils';
 import { useTopologyContext } from '@views/topology/context/TopologyContext';
-import { NodeNetworkStateKind } from '@views/topology/types';
 
 import NodeInterfacesTable from './NodeInterfacesTable';
 import { DEFAULT_PER_PAGE, paginate } from './utils';
 
 const TopologyTableView: FC = () => {
   const { t } = useNetworkingTranslation();
-  const { nodeNetworkStates, nodeNetworkStatesLoaded } = useTopologyContext();
+  const { resources } = useTopologyContext();
+  const nodeNetworkStates = resources.nodeNetworkStates;
 
   const [nameFilter, setNameFilter] = useState('');
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(DEFAULT_PER_PAGE);
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
 
-  const filteredNodes: NodeNetworkStateKind[] = useMemo(() => {
+  const filteredNodes: V1beta1NodeNetworkState[] = useMemo(() => {
     if (!nameFilter.trim()) return nodeNetworkStates;
     const query = nameFilter.toLowerCase();
     return nodeNetworkStates.filter((nns) => (getName(nns) ?? '').toLowerCase().includes(query));
@@ -54,7 +56,7 @@ const TopologyTableView: FC = () => {
     });
   };
 
-  if (!nodeNetworkStatesLoaded) {
+  if (isEmpty(nodeNetworkStates)) {
     return (
       <Bullseye>
         <Spinner size="xl" />

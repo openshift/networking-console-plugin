@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { DocumentTitle, useActiveNamespace } from '@openshift-console/dynamic-plugin-sdk';
+import { DocumentTitle, useActiveNamespace, useFlag } from '@openshift-console/dynamic-plugin-sdk';
 import {
   Alert,
   Button,
@@ -9,25 +9,29 @@ import {
   PageSection,
   Title,
 } from '@patternfly/react-core';
+import { FLAG_NMSTATE_CRDS } from '@utils/flags/consts';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { SOFTWARE_CATALOG_NMSTATE_PATH } from '@views/physical-networks/utils/constants';
 import Topology from '@views/topology/components/Topology';
 import { TopologyContextProvider } from '@views/topology/context/TopologyContext';
 import useNetworkTopologyResources from '@views/topology/hooks/useNetworkTopologyResources';
-import useNodeNetworkPolicies from '@views/topology/hooks/useNodeNetworkPolicies';
-import useNodeNetworkStates from '@views/topology/hooks/useNodeNetworkStates';
 
 import './TopologyPage.scss';
 
 const TopologyPage: FC = () => {
   const { t } = useNetworkingTranslation();
   const [activeNamespace] = useActiveNamespace();
+  const nmstateAvailable = useFlag(FLAG_NMSTATE_CRDS);
   const { loaded, resources } = useNetworkTopologyResources();
-  const { loaded: nnsLoaded, nmstateAvailable, nodeNetworkStates } = useNodeNetworkStates();
-  const { nodeNetworkPolicies } = useNodeNetworkPolicies();
 
   return (
     <>
+      <Alert
+        className="pf-v6-u-mt-md"
+        isInline
+        title={t('The configuration topology is a Technical Preview feature')}
+        variant="info"
+      />
       <DocumentTitle>{t('Topology')}</DocumentTitle>
       <div className="networking-topology__layout">
         <div className="networking-topology__sticky-header">
@@ -63,9 +67,6 @@ const TopologyPage: FC = () => {
           <TopologyContextProvider
             activeNamespace={activeNamespace}
             nmstateAvailable={nmstateAvailable}
-            nodeNetworkPolicies={nodeNetworkPolicies}
-            nodeNetworkStates={nodeNetworkStates}
-            nodeNetworkStatesLoaded={nnsLoaded}
             resources={resources}
             resourcesLoaded={loaded}
           >
