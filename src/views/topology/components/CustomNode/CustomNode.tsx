@@ -10,6 +10,7 @@ import {
   WithDragNodeProps,
   WithSelectionProps,
 } from '@patternfly/react-topology';
+import { useTopologyDisplayOptions } from '@views/topology/context/TopologyDisplayOptionsContext';
 import { ICON_SIZE, TOPOLOGY_SEARCH_QUERY_PARAM } from '@views/topology/utils/constants';
 import { isSubsequenceMatch } from '@views/topology/utils/filterModel';
 
@@ -24,16 +25,10 @@ type CustomNodeProps = {
 const CustomNode: FC<CustomNodeProps> = ({ element, ...rest }) => {
   const [searchParams] = useSearchParams();
   const searchQuery = (searchParams.get(TOPOLOGY_SEARCH_QUERY_PARAM) ?? '').trim();
+  const { showLabels } = useTopologyDisplayOptions();
 
-  // fromModel unparents a filtered-out node before this observer unmounts.
+  // fromModel unparents a filtered-out node before this component unmounts.
   if (!element.hasParent()) return null;
-
-  const controllerState = element.getController().getState<{
-    viewOptions?: { compactView?: boolean; showLabels?: boolean };
-  }>();
-  const showLabels = controllerState?.viewOptions?.showLabels ?? true;
-  // TODO: Read compactView from controllerState.viewOptions.compactView and adjust NODE_DIAMETER when implemented.
-  // const _compactView = controllerState?.viewOptions?.compactView ?? true;
 
   const data = element.getData() ?? {};
   const Icon = data.icon ?? NetworkIcon;

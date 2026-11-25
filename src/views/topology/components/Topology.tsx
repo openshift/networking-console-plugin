@@ -18,6 +18,7 @@ import TopologyDrawer from '@views/topology/components/TopologyDrawer/TopologyDr
 import TopologyTableView from '@views/topology/components/TopologyTableView/TopologyTableView';
 import TopologyToolbar from '@views/topology/components/TopologyToolbar';
 import { useTopologyContext } from '@views/topology/context/TopologyContext';
+import { TopologyDisplayOptionsProvider } from '@views/topology/context/TopologyDisplayOptionsContext';
 import useTopologyFilters from '@views/topology/hooks/useTopologyFilters';
 import useTopologyK8sModels from '@views/topology/hooks/useTopologyK8sModels';
 import { DisplayOptionsState, TopologyDisplayMode, TopologyGroupType } from '@views/topology/types';
@@ -189,17 +190,6 @@ const Topology: FC = () => {
     scope,
   ]);
 
-  // Sync viewOptions to the controller state so CustomNode can read showLabels/compactView.
-  useEffect(() => {
-    if (!controller) return;
-    controller.setState({
-      viewOptions: {
-        compactView: displayOptions.compactView,
-        showLabels: displayOptions.showLabels,
-      },
-    });
-  }, [controller, displayOptions.compactView, displayOptions.showLabels]);
-
   useEffect(() => {
     if (!controller) return;
 
@@ -275,18 +265,22 @@ const Topology: FC = () => {
           <div className="networking-topology__visualization">
             <ScopeSlider onScopeChange={handleScopeChange} scope={scope} />
             <div className="networking-topology__canvas">
-              <VisualizationProvider controller={controller}>
-                <TopologyDrawer>
-                  <TopologyView
-                    className={classNames({ 'networking-topology--filter-active': isSearchActive })}
-                    controlBar={
-                      <ControlBar controller={controller} model={filteredTopologyModel} />
-                    }
-                  >
-                    <VisualizationSurface />
-                  </TopologyView>
-                </TopologyDrawer>
-              </VisualizationProvider>
+              <TopologyDisplayOptionsProvider value={displayOptions}>
+                <VisualizationProvider controller={controller}>
+                  <TopologyDrawer>
+                    <TopologyView
+                      className={classNames({
+                        'networking-topology--filter-active': isSearchActive,
+                      })}
+                      controlBar={
+                        <ControlBar controller={controller} model={filteredTopologyModel} />
+                      }
+                    >
+                      <VisualizationSurface />
+                    </TopologyView>
+                  </TopologyDrawer>
+                </VisualizationProvider>
+              </TopologyDisplayOptionsProvider>
             </div>
           </div>
         )}
