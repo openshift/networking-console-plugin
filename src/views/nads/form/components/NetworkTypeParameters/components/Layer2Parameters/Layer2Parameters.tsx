@@ -27,6 +27,7 @@ const Layer2Parameters: FC = () => {
   return (
     <FormGroup label={t('Subnet')} labelHelp={<TechPreview />}>
       <TextInput
+        aria-label={t('Subnet')}
         {...register(`${baseId}.subnets`, {
           onBlur: (event) =>
             handleBlur({

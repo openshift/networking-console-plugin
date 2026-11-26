@@ -57,7 +57,7 @@ const CreateProjectModal: FC<{
         await k8sCreate({ data: udn, model: UserDefinedNetworkModel });
 
       if (networkType === NETWORK_TYPE.CLUSTER_UDN) {
-        await patchClusterUDN(clusterUDN, getName(project));
+        await patchClusterUDN(clusterUDN, getName(project), t);
       }
 
       closeModal();
