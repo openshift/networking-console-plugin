@@ -131,6 +131,7 @@
   "Cluster's default network": "Cluster's default network",
   "ClusterUserDefinedNetwork": "ClusterUserDefinedNetwork",
   "ClusterUserDefinedNetwork name": "Nom du réseau défini par l'utilisateur du cluster",
+  "ClusterUserDefinedNetwork selector contains unsupported {{labelType}} key {{offendingKey}}; adding {{project}} would narrow the selector": "ClusterUserDefinedNetwork selector contains unsupported {{labelType}} key {{offendingKey}}; adding {{project}} would narrow the selector",
   "ClusterUserDefinedNetworks": "ClusterUserDefinedNetworks",
   "CNI type": "CNI type",
   "Cola": "Cola",

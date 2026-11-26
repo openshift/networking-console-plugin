@@ -132,6 +132,7 @@ const useWatch = <T,>(resource: null | WatchK8sResource): WatchResult<T> => {
       return;
     }
 
+    setState({ data: undefined, error: undefined, loaded: false });
     let active = true;
 
     fetchJson(path, resource.selector)

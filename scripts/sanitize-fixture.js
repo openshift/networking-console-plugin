@@ -20,6 +20,24 @@ const IDENTITY_FIELDS = [
   'ownerReferences',
 ];
 
+const ANNOTATION_ALLOWLIST = new Set([
+  'cpu-load-balancing.crio.io',
+  'cpu-quota.crio.io',
+  'description',
+  'endpoints.kubernetes.io/last-change-trigger-time',
+  'irq-load-balancing.crio.io',
+  'k8s.ovn.org/network-id',
+  'k8s.ovn.org/network-name',
+  'k8s.ovn.org/tunnel-keys',
+  'k8s.v1.cni.cncf.io/networks',
+  'kubemacpool.io/transaction-timestamp',
+  'kubevirt.io/domain',
+  'kubevirt.io/latest-observed-api-version',
+  'kubevirt.io/pci-topology-version',
+  'kubevirt.io/storage-observed-api-version',
+  'openshift.io/host.generated',
+]);
+
 // Embeds the full object as submitted, including values that never appear in the
 // live spec. Manager and user names come along with it.
 const ANNOTATION_DENYLIST = new Set([
@@ -114,6 +132,8 @@ const placeholderNode = (value) => {
   return nodeNames.get(value);
 };
 
+for (const token of NODE_TOKENS) placeholderNode(token);
+
 const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 /* Match a token only where it stands alone: a node called `net` leaves
@@ -187,13 +207,20 @@ const scrub = (value, parentKey) => {
       fail('payload contains an inline Route TLS private key');
     }
 
+    // Strip identity fields wherever they appear (metadata, targetRef, etc.).
+    for (const field of IDENTITY_FIELDS) {
+      if (field in value) delete value[field];
+    }
+
     const metadata = value.metadata;
     if (metadata && typeof metadata === 'object') {
-      for (const field of IDENTITY_FIELDS) delete metadata[field];
-
       if (metadata.annotations && typeof metadata.annotations === 'object') {
         for (const key of Object.keys(metadata.annotations)) {
-          if (ANNOTATION_DENYLIST.has(key)) delete metadata.annotations[key];
+          if (ANNOTATION_DENYLIST.has(key)) {
+            delete metadata.annotations[key];
+          } else if (!ANNOTATION_ALLOWLIST.has(key)) {
+            fail(`payload contains unreviewed annotation ${JSON.stringify(key)}`);
+          }
         }
       }
 
@@ -273,18 +300,26 @@ const projectNodeList = (list) => ({
 });
 
 /* QuickStarts are large multi-step documents. The NAD empty state only reads
- * the display name and description when it looks for a matching tutorial. */
+ * the display name and description when it looks for a matching tutorial.
+ * Unreviewed quickstarts carry free-form text that could contain contact emails
+ * or internal URLs the address checks do not catch, so only keep the tutorial
+ * the suite asserts on. */
 const projectQuickStartList = (list) => ({
   ...list,
-  items: (list.items ?? []).map((item) => ({
-    apiVersion: item.apiVersion,
-    kind: item.kind,
-    metadata: { name: item.metadata?.name },
-    spec: {
-      description: item.spec?.description,
-      displayName: item.spec?.displayName,
-    },
-  })),
+  items: (list.items ?? [])
+    .filter((item) => {
+      const text = `${item.spec?.displayName ?? ''} ${item.spec?.description ?? ''}`.toLowerCase();
+      return text.includes('network attachment definition');
+    })
+    .map((item) => ({
+      apiVersion: item.apiVersion,
+      kind: item.kind,
+      metadata: { name: item.metadata?.name },
+      spec: {
+        description: item.spec?.description,
+        displayName: item.spec?.displayName,
+      },
+    })),
 });
 
 /* Pods carry runtime container IDs, image IDs, service-account volume suffixes
@@ -432,8 +467,10 @@ const violations = [
   ['IPv6 address', IPV6.test(withoutPlaceholders)],
   ['MAC address', MAC.test(withoutPlaceholders)],
   ['cluster domain', CLUSTER_SUFFIX.test(serialized)],
-  ['authorization header', /authorization\s*:/i.test(serialized)],
+  ['email address', /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/i.test(withoutPlaceholders)],
+  ['authorization header', /"?authorization"?\s*:/i.test(serialized)],
   ['bearer token', /bearer\s+[a-z0-9._-]{10,}/i.test(serialized)],
+  ['basic credential', /basic\s+[A-Za-z0-9+/=]{10,}/i.test(serialized)],
   ['private key', PRIVATE_KEY.test(serialized)],
   ['last-applied annotation', serialized.includes('last-applied-configuration')],
   // The closing quote is part of the match, otherwise "cy-test-ns-other" passes

@@ -264,3 +264,28 @@ test('a node keeps its alias in a payload that omits its peers', () => {
   assert.equal(withPeer.status, 0, withPeer.stderr);
   assert.equal(JSON.parse(withPeer.stdout).metadata.name, 'patch-br-ex_node-1-to-br-int');
 });
+
+test('a quoted Authorization Basic credential is rejected', () => {
+  const result = run({ data: { val: '"Authorization": "Basic dXNlcjpwYXNz"' }, kind: 'ConfigMap' });
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /authorization header|basic credential/i);
+});
+
+test('deep identity fields like targetRef.uid are stripped', () => {
+  const result = run({
+    items: [{ endpoints: [{ targetRef: { kind: 'Pod', name: 'web-1', uid: 'abc-123' } }] }],
+    kind: 'EndpointSliceList',
+  });
+  assert.equal(result.status, 0, result.stderr);
+  const out = JSON.parse(result.stdout);
+  assert.equal(out.items[0].endpoints[0].targetRef.uid, undefined);
+});
+
+test('an unreviewed annotation is rejected', () => {
+  const result = run({
+    kind: 'ConfigMap',
+    metadata: { annotations: { contact: 'alice@corp.example.com' }, name: 'x' },
+  });
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /unreviewed annotation/);
+});

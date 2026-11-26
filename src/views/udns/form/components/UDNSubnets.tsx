@@ -69,17 +69,19 @@ const UDNSubnets: FC<UDNSubnetsProps> = ({
     if (withHostSubnet) {
       const l3Subnet = subnet as UserDefinedNetworkLayer3Subnet;
       return (
-        <Grid hasGutter md={6}>
-          <FormGroup isRequired label={t('CIDR')}>
+        <Grid hasGutter key={idx} md={6}>
+          <FormGroup fieldId={`udn-cidr-${idx}`} isRequired label={t('CIDR')}>
             <TextInput
-              key={idx}
+              aria-label={t('CIDR')}
+              id={`udn-cidr-${idx}`}
               onChange={(event, value) => updateSubnet(event, idx, { ...l3Subnet, cidr: value })}
               value={l3Subnet.cidr}
             />
           </FormGroup>
-          <FormGroup label={t('HostSubnet')}>
+          <FormGroup fieldId={`udn-host-subnet-${idx}`} label={t('HostSubnet')}>
             <TextInput
-              key={idx}
+              aria-label={t('HostSubnet')}
+              id={`udn-host-subnet-${idx}`}
               onChange={(event, value) =>
                 updateSubnet(event, idx, {
                   ...l3Subnet,
@@ -94,9 +96,10 @@ const UDNSubnets: FC<UDNSubnetsProps> = ({
       );
     } else {
       return (
-        <FormGroup isRequired label={t('CIDR')}>
+        <FormGroup fieldId={`udn-cidr-${idx}`} isRequired key={idx} label={t('CIDR')}>
           <TextInput
-            key={idx}
+            aria-label={t('CIDR')}
+            id={`udn-cidr-${idx}`}
             onChange={(event, value) => updateSubnet(event, idx, value)}
             value={subnet as string}
           />

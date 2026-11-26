@@ -77,10 +77,10 @@ const OVNK8sSecondaryLocalnetParameters: FC = () => {
         )}
       </FormGroup>
       <FormGroup label={t('MTU')}>
-        <TextInput {...register(`${baseId}.mtu`)} />
+        <TextInput aria-label={t('MTU')} {...register(`${baseId}.mtu`)} />
       </FormGroup>
       <FormGroup label={t('VLAN')}>
-        <TextInput {...register(`${baseId}.vlanID`)} />
+        <TextInput aria-label={t('VLAN')} {...register(`${baseId}.vlanID`)} />
       </FormGroup>
       {/* <FormGroup label={t('Subnets')} labelIcon={<TechPreview />}>
         <TextInput
@@ -110,7 +110,7 @@ const OVNK8sSecondaryLocalnetParameters: FC = () => {
           </GridItem>
           <GridItem span={10}>
             <TextInput
-              label={t('Exclude')}
+              aria-label={t('Exclude')}
               placeholder={t('Type in excluded subnets (CIDRs or IP addresses)')}
               {...register(`${baseId}.excludeSubnets`, {
                 onBlur: (event) =>
