@@ -29,6 +29,9 @@ export default tseslint.config(
       'cypress/cypress-a11y-report.json',
       // generated
       'package-lock.json',
+      // python venv of the skill MCP servers (vendored JS, not our code)
+      '**/.venv/',
+      '**/__pycache__/',
       'locales/',
       // Helm charts contain Go templates that prettier cannot parse
       'ci-scripts/helm/',

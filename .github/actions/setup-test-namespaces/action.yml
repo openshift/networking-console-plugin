@@ -1,14 +1,29 @@
 name: Set up test namespaces
 description: >
-  Create the Cypress test namespace and the UDN-labeled namespace if they
-  do not already exist.
+  Create shared Cypress namespaces for general tests, NAD/UDN/CUDN topology
+  fixtures, and an empty namespace used by topology empty-state checks.
 
 inputs:
   test-namespace:
     description: Namespace for Cypress test resources
     required: true
+  nad-namespace:
+    description: Namespace for NetworkAttachmentDefinition fixtures
+    required: true
   udn-namespace:
     description: Namespace labeled for primary user-defined network
+    required: true
+  empty-namespace:
+    description: Empty namespace for topology empty-state checks
+    required: true
+  cudn-namespace:
+    description: Primary CUDN member namespace (UDN-labeled)
+    required: true
+  topo-namespace:
+    description: Second CUDN member namespace for multi-member CUDN tests
+    required: true
+  localnet-namespace:
+    description: Namespace for secondary Localnet CUDN membership
     required: true
 
 runs:
@@ -18,18 +33,48 @@ runs:
       shell: bash
       env:
         TEST_NS: ${{ inputs.test-namespace }}
+        NAD_NS: ${{ inputs.nad-namespace }}
         UDN_NS: ${{ inputs.udn-namespace }}
+        EMPTY_NS: ${{ inputs.empty-namespace }}
+        CUDN_NS: ${{ inputs.cudn-namespace }}
+        TOPO_NS: ${{ inputs.topo-namespace }}
+        LOCALNET_NS: ${{ inputs.localnet-namespace }}
         UDN_LABEL: k8s.ovn.org/primary-user-defined-network
+        CUDN_LABEL: e2e.networking-console-plugin/cudn
+        CUDN_31_LABEL: e2e.networking-console-plugin/cudn-31
+        LOCALNET_LABEL: e2e.networking-console-plugin/localnet
       run: |
-        oc get namespace "${TEST_NS}" 2>/dev/null || oc create namespace "${TEST_NS}"
+        ensure_ns() {
+          local name="$1"
+          shift
+          if oc get namespace "${name}" &>/dev/null; then
+            return 0
+          fi
+          if [ "$#" -eq 0 ]; then
+            oc create namespace "${name}"
+            return 0
+          fi
+          {
+            echo "apiVersion: v1"
+            echo "kind: Namespace"
+            echo "metadata:"
+            echo "  name: ${name}"
+            echo "  labels:"
+            for pair in "$@"; do
+              echo "    ${pair}"
+            done
+          } | oc create -f -
+        }
 
-        if ! oc get namespace "${UDN_NS}" 2>/dev/null; then
-          cat <<EOF | oc create -f -
-        apiVersion: v1
-        kind: Namespace
-        metadata:
-          name: ${UDN_NS}
-          labels:
-            ${UDN_LABEL}: ""
-        EOF
-        fi
+        ensure_ns "${TEST_NS}"
+        ensure_ns "${NAD_NS}"
+        ensure_ns "${EMPTY_NS}"
+        ensure_ns "${UDN_NS}" "${UDN_LABEL}: \"\""
+        ensure_ns "${CUDN_NS}" \
+          "${UDN_LABEL}: \"\"" \
+          "${CUDN_LABEL}: member" \
+          "${CUDN_31_LABEL}: member"
+        ensure_ns "${TOPO_NS}" \
+          "${UDN_LABEL}: \"\"" \
+          "${CUDN_LABEL}: member"
+        ensure_ns "${LOCALNET_NS}" "${LOCALNET_LABEL}: member"

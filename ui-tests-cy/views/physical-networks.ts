@@ -1,3 +1,4 @@
+import { getPublicEnv } from '../support/env';
 import { TEST_NS } from '../utils/const/base';
 
 const K8S_API = '/api/kubernetes';
@@ -7,10 +8,10 @@ type SeedResult = 'created' | 'exists' | 'failed';
 
 // Unique per run: concurrent runs against one shared cluster must never adopt or delete each
 // other's objects, and must never collide on a physical network name.
-const RUN_ID = Cypress.env('RUN_ID') || String(Date.now());
+const RUN_ID = getPublicEnv('RUN_ID') || String(Date.now());
 
 // `--env X=true` arrives as a boolean while an OS variable arrives as a string, so compare text.
-const isEnabled = (name: string): boolean => String(Cypress.env(name)) === 'true';
+const isEnabled = (name: string): boolean => String(getPublicEnv(name)) === 'true';
 
 export const LOCALNET_NAD_NAME = `network-localnet-e2e-${RUN_ID}`;
 export const PHYSICAL_NETWORK_NAME = `e2e-phys-${RUN_ID}`;

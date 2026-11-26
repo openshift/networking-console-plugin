@@ -7,7 +7,7 @@ describe('Visit networking pages', () => {
     cy.get('#page-sidebar', { timeout: 3 * MINUTE }).should('be.visible');
   });
 
-  it.skip('visit NetworkAttachmentDefinitions page', () => {
+  it('visit NetworkAttachmentDefinitions page', () => {
     cy.get('#page-sidebar', { timeout: MINUTE })
       .contains('Networking', { timeout: MINUTE })
       .should('be.visible');

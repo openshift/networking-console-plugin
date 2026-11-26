@@ -1,4 +1,14 @@
-import { MINUTE, SECOND } from '../utils/const/base';
+import {
+  CUDN_NS,
+  EMPTY_NS,
+  LOCALNET_NS,
+  MINUTE,
+  NAD_NS,
+  SECOND,
+  TEST_NS,
+  TOPO_NS,
+  UDN_NS,
+} from '../utils/const/base';
 
 declare global {
   namespace Cypress {
@@ -10,13 +20,31 @@ declare global {
   }
 }
 
+const FIXTURE_PLACEHOLDERS: Record<string, string> = {
+  CUDN_NS,
+  EMPTY_NS,
+  LOCALNET_NS,
+  NAD_NS,
+  TEST_NS,
+  TOPO_NS,
+  UDN_NS,
+};
+
 Cypress.Commands.add('applyFixtureFile', (fixturePath: string) => {
   const absolutePath = `${Cypress.config('projectRoot')}/${fixturePath}`;
-  cy.exec(`oc apply -f "${absolutePath}"`, {
-    failOnNonZeroExit: false,
-    timeout: 5 * MINUTE,
-  }).then(({ exitCode, stderr }) => {
-    expect(exitCode, `oc apply failed: ${stderr}`).to.eq(0);
+  cy.readFile(absolutePath, 'utf8').then((contents: string) => {
+    const rendered = Object.entries(FIXTURE_PLACEHOLDERS).reduce(
+      (text, [key, value]) => text.split(`\${${key}}`).join(value),
+      contents,
+    );
+    const tempPath = `/tmp/networking-console-plugin-fixture-${Date.now()}.yaml`;
+    cy.writeFile(tempPath, rendered, 'utf8');
+    cy.exec(`oc apply -f "${tempPath}"`, {
+      failOnNonZeroExit: false,
+      timeout: 5 * MINUTE,
+    }).then(({ exitCode, stderr }) => {
+      expect(exitCode, `oc apply failed: ${stderr}`).to.eq(0);
+    });
   });
 });
 

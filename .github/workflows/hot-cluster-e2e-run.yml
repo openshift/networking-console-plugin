@@ -30,7 +30,12 @@ permissions:
 
 env:
   TEST_NS: networking-ci-test-${{ github.run_id }}
+  NAD_NS: networking-ci-nad-${{ github.run_id }}
   UDN_NS: networking-ci-udn-${{ github.run_id }}
+  EMPTY_NS: networking-ci-empty-${{ github.run_id }}
+  CUDN_NS: networking-ci-cudn-${{ github.run_id }}
+  TOPO_NS: networking-ci-topo-${{ github.run_id }}
+  LOCALNET_NS: networking-ci-localnet-${{ github.run_id }}
 
   # Existing Quay repo + unique tags (per-run repo names need Create Repository).
   PLUGIN_IMAGE: 'quay.io/rhn_support_lkladnit/networking-console-plugin:ci-${{ github.run_id }}-${{ github.run_attempt }}'
@@ -128,7 +133,12 @@ jobs:
         uses: $/.github/actions/setup-test-namespaces
         with:
           test-namespace: ${{ env.TEST_NS }}
+          nad-namespace: ${{ env.NAD_NS }}
           udn-namespace: ${{ env.UDN_NS }}
+          empty-namespace: ${{ env.EMPTY_NS }}
+          cudn-namespace: ${{ env.CUDN_NS }}
+          topo-namespace: ${{ env.TOPO_NS }}
+          localnet-namespace: ${{ env.LOCALNET_NS }}
 
       - name: Install dependencies
         run: |

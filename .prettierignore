@@ -15,6 +15,10 @@ ui-tests-cy/ci-hot-cluster-e2e/
 i18n-scripts/
 #generated
 package-lock.json
+# python venv / bytecode of the skill MCP servers
+.venv/
+__pycache__/
+*.pyc
 locales/
 # Helm charts contain Go templates that prettier cannot parse
 ci-scripts/helm/

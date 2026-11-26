@@ -4,6 +4,8 @@ import './commands';
 import './nav';
 import './console-error-details';
 
+import { getPublicEnvFlag } from './env';
+
 export { checkErrors } from './check-errors';
 
 Cypress.on('uncaught:exception', (err) => {
@@ -11,8 +13,7 @@ Cypress.on('uncaught:exception', (err) => {
     return false;
   }
 });
-
-if (Cypress.env('HIDE_XHR')) {
+if (getPublicEnvFlag('HIDE_XHR')) {
   const origLog = Cypress.log;
   Cypress.log = function (opts, ...other) {
     if (opts.displayName === 'fetch' || opts.displayName === 'xhr') {

@@ -16,7 +16,7 @@ runs:
           echo "| --- | --- |"
           for var in HOME USER RUNNER_NAME RUNNER_OS RUNNER_ARCH \
                      GITHUB_REPOSITORY GITHUB_REF GITHUB_SHA GITHUB_RUN_ID GITHUB_RUN_NUMBER \
-                     TEST_NS UDN_NS PLUGIN_IMAGE; do
+                     TEST_NS NAD_NS UDN_NS EMPTY_NS CUDN_NS TOPO_NS LOCALNET_NS PLUGIN_IMAGE; do
             echo "| \`$var\` | \`${!var:-<unset>}\` |"
           done
           echo "</details>"

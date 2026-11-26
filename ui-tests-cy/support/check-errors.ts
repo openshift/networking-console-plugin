@@ -20,7 +20,11 @@ const IGNORABLE_ERROR_FRAGMENTS = [
  * they are aggregated with an ignorable error.
  */
 const isIgnorableErrorPart = (part: string): boolean => {
-  const missingKey = part.match(/^Missing i18n key "[^"]+" in namespace "([^"]+)"$/);
+  // Real messages read:
+  //   Missing i18n key "X" in namespace "plugin__kubevirt-plugin" and language "en".
+  const missingKey = part.match(
+    /^Missing i18n key "[^"]+" in namespace "([^"]+)"(?: and language "[^"]+")?\.?$/,
+  );
   if (missingKey) {
     return missingKey[1] !== NETWORKING_I18N_NS;
   }

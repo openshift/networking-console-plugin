@@ -17,8 +17,20 @@ adminOnlyDescribe('Test UDN', () => {
     cy.get(
       '[data-test="item-create"] .pf-v6-c-menu-toggle__controls, [data-test="item-create"] [aria-label="Menu toggle"]',
     ).click();
-    cy.contains('ClusterUserDefinedNetwork').click();
-    cy.byTestID('input-name', { timeout: 30000 }).should('be.visible');
+    // Click the dropdown item's own button: its label is a text node that can
+    // be covered by list rows, which makes a plain text click fail actionability.
+    const CUDN_CREATE_ITEM =
+      '[data-test="list-page-create-dropdown-item-ClusterUserDefinedNetwork"]';
+    cy.get('body', { timeout: MINUTE }).should(($body) => {
+      const formOpen = $body.find('[data-testid="input-name"], #input-name').length;
+      expect(formOpen || $body.find(CUDN_CREATE_ITEM).length, 'create form or dropdown').to.be.ok;
+    });
+    cy.get('body').then(($body) => {
+      if ($body.find(CUDN_CREATE_ITEM).length) {
+        cy.get(`${CUDN_CREATE_ITEM} button`).click();
+      }
+    });
+    cy.byTestID('input-name', { timeout: MINUTE }).should('be.visible');
     // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(1000);
     cy.byTestID('input-name').clear();
@@ -31,7 +43,7 @@ adminOnlyDescribe('Test UDN', () => {
     cy.byTestID('create-udn-submit').click();
     cy.checkTitle(UDN_CLST);
     checkActionMenu('ClusterUserDefinedNetwork');
-    cy.contains(brCrumbItem, 'ClusterUserDefinedNetworks').find('a').eq(0).click();
+    cy.contains(brCrumbItem, 'UserDefinedNetworks').find('a').eq(0).click();
   });
 
   it('delete CUDN', () => {
@@ -39,7 +51,7 @@ adminOnlyDescribe('Test UDN', () => {
     cy.checkTitle('UserDefinedNetworks', MINUTE);
     cy.contains('[data-label="name"]', UDN_CLST).find('a').click();
     cy.byButtonText('Actions').click();
-    cy.get('[data-test-action="Delete ClusterUserDefinedNetwork"]').click();
+    cy.contains('button', 'Delete ClusterUserDefinedNetwork').click();
     cy.byTestID('confirm-action').click();
     cy.contains(UDN_CLST).should('not.exist');
   });

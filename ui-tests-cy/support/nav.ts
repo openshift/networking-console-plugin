@@ -1,5 +1,7 @@
 import { MINUTE } from '../utils/const/base';
 
+import { getPublicEnv } from './env';
+
 declare global {
   namespace Cypress {
     interface Chainable {
@@ -12,7 +14,7 @@ declare global {
 }
 
 Cypress.Commands.add('visitNAD', () => {
-  const ns = Cypress.env('TEST_NS') || 'cy-test-ns';
+  const ns = getPublicEnv('TEST_NS') || 'cy-test-ns';
   cy.visit(`/k8s/ns/${ns}/k8s.cni.cncf.io~v1~NetworkAttachmentDefinition`);
   cy.checkTitle('NetworkAttachmentDefinitions', MINUTE);
 });

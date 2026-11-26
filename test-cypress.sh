@@ -27,7 +27,9 @@ if [ -n "${gui-}" ]; then
 else
   node --max-old-space-size=4096 node_modules/.bin/cypress run --project ui-tests-cy --env openshift=true --browser "${BRIDGE_E2E_BROWSER_NAME:=electron}" --spec "$spec" | tee ui-tests-cy/gui-test-screenshots/build.log
   test_exit_code=${PIPESTATUS[0]}
-  npm run cypress-postreport
+  # Always post-report (incl. junit compat copy for CNV Jenkinsfile-v1 ARTIFACTS_DIR)
+  # so Jenkins can publish results even when some specs fail.
+  npm run cypress-postreport || true
 
   if [ ${test_exit_code} -eq 0 ]; then
     cleanup
