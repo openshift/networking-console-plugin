@@ -30,6 +30,8 @@ const config: Config.InitialOptions = {
       '<rootDir>/src/test/console-sdk-internal-shim.tsx',
     '^@openshift-console/dynamic-plugin-sdk/lib/app/components/status/Status$':
       '<rootDir>/src/test/status-shim.tsx',
+    '^@openshift-console/dynamic-plugin-sdk/lib/app/core/reducers/coreSelectors$':
+      '<rootDir>/src/test/coreSelectors.tsx',
     '^@openshift-console/dynamic-plugin-sdk$': '<rootDir>/src/test/console-sdk-shim.tsx',
     // `@patternfly` ships ESM sources under dist/esm in packages that are not
     // `"type": "module"`, so a deep import there is ESM syntax Jest reads as
@@ -45,6 +47,7 @@ const config: Config.InitialOptions = {
     // Every d3 package is ESM-only (`main` is dist/<name>.mjs) but publishes a
     // UMD build under the same name; `exports.umd` selects it.
     '^d3(-[a-z0-9-]+)?$': '<rootDir>/node_modules/d3$1/dist/d3$1.min.js',
+    '^react-redux$': '<rootDir>/src/test/coreSelectors.tsx',
   },
   setupFiles: ['<rootDir>/src/test/nodeGlobals.ts'],
   setupFilesAfterEnv: ['<rootDir>/src/test/setup.ts'],

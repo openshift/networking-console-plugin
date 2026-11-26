@@ -19,6 +19,10 @@ import {
   PhysicalNetworksExposedModules,
   PhysicalNetworksExtensions,
 } from './src/views/physical-networks/manifest';
+import {
+  ProjectSettingsExposedModules,
+  ProjectSettingsExtensions,
+} from './src/views/projectsettings/manifest';
 import { RoutesExposedModules, RoutesExtensions } from './src/views/routes/manifest';
 import { ServicesExposedModules, ServicesExtensions } from './src/views/services/manifest';
 import { TopologyExposedModules, TopologyExtensions } from './src/views/topology/manifest';
@@ -44,6 +48,7 @@ export const pluginMetadata: ConsolePluginBuildMetadata = {
     ...TopologyExposedModules,
     ...PhysicalNetworksExposedModules,
     ...BGPExposedModules,
+    ...ProjectSettingsExposedModules,
     yamlTemplates: './templates/index.ts',
   },
   name: 'networking-console-plugin',
@@ -62,4 +67,5 @@ export const extensions: EncodedExtension[] = [
   ...PhysicalNetworksExtensions,
   ...BGPCloudConfigurationExtensions,
   ...BGPRoutingExtensions,
+  ...ProjectSettingsExtensions,
 ];

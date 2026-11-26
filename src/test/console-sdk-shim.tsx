@@ -85,6 +85,20 @@ export const resourcePath = ({
     : `${prefix}/${plural}/${name}`;
 };
 
+/**
+ * Path pattern for a Kubernetes collection as the SDK shim fetches it
+ * (`/api/...` or `/apis/...`, no console-proxy prefix).
+ */
+export const apiPath = (
+  apiGroup: string,
+  apiVersion: string,
+  plural: string,
+  namespace?: string,
+): string => {
+  const root = `*${apiGroup ? `/apis/${apiGroup}` : '/api'}/${apiVersion}`;
+  return namespace ? `${root}/namespaces/${namespace}/${plural}` : `${root}/${plural}`;
+};
+
 const listItems = <T,>(json: unknown): T[] => {
   if (json && typeof json === 'object' && 'items' in json && Array.isArray(json.items)) {
     return json.items;
@@ -413,7 +427,82 @@ export const useK8sModels = (): [Record<string, unknown>, boolean] => [
   },
   true,
 ];
-export const useAccessReview = (): [boolean, boolean] => [true, true];
+type AccessReviewResourceAttributes = {
+  group?: string;
+  name?: string;
+  namespace?: string;
+  resource?: string;
+  subresource?: string;
+  verb?: string;
+};
+
+type ImpersonateKind = { kind?: string; name?: string; subprotocols?: string[] };
+
+const accessKey = (
+  attrs?: AccessReviewResourceAttributes | null,
+  impersonate?: ImpersonateKind | null,
+): string =>
+  [
+    impersonate?.kind,
+    impersonate?.name,
+    attrs?.group,
+    attrs?.resource,
+    attrs?.verb,
+    attrs?.namespace,
+    attrs?.name,
+  ]
+    .map((part) => part ?? '')
+    .join('|');
+
+/* Default: allowed and finished loading. Scenarios that need RBAC call setAccessReview. */
+let defaultAccess: [boolean, boolean] = [true, false];
+const accessOverrides = new Map<string, [boolean, boolean]>();
+
+const resolveAccess = (
+  attrs?: AccessReviewResourceAttributes | null,
+  impersonate?: ImpersonateKind | null,
+): [boolean, boolean] =>
+  accessOverrides.get(accessKey(attrs, impersonate)) ??
+  (impersonate ? accessOverrides.get(accessKey(attrs)) : undefined) ??
+  defaultAccess;
+
+/** Flip RBAC for a specific access-review request (or the suite default when attrs is omitted). */
+export const setAccessReview = (
+  value: [boolean, boolean],
+  attrs?: AccessReviewResourceAttributes,
+  impersonate?: ImpersonateKind,
+): void => {
+  if (!attrs) {
+    defaultAccess = value;
+    return;
+  }
+  accessOverrides.set(accessKey(attrs, impersonate), value);
+};
+
+export const resetAccessReview = (): void => {
+  defaultAccess = [true, false];
+  accessOverrides.clear();
+};
+
+export const useAccessReview = (
+  attrs?: AccessReviewResourceAttributes | null,
+  impersonate?: ImpersonateKind | null,
+): [boolean, boolean] => resolveAccess(attrs, impersonate);
+
+export const checkAccess = async (
+  attrs: AccessReviewResourceAttributes,
+  impersonate?: ImpersonateKind | null,
+): Promise<{
+  spec: { resourceAttributes: AccessReviewResourceAttributes };
+  status: { allowed: boolean };
+}> => {
+  const [allowed] = resolveAccess(attrs, impersonate);
+  return {
+    spec: { resourceAttributes: attrs },
+    status: { allowed },
+  };
+};
+
 export const useDeleteModal = (): (() => void) => () => undefined;
 export const useLabelsModal = (): (() => void) => () => undefined;
 export const useAnnotationsModal = (): (() => void) => () => undefined;
@@ -642,6 +731,7 @@ export const setTestFlag = (flag: string, value: boolean): void => {
 
 export const resetTestFlags = (): void => {
   Object.keys(TEST_FLAGS).forEach((flag) => delete TEST_FLAGS[flag]);
+  resetAccessReview();
 };
 
 export const useFlag = (flag?: string): boolean => (flag ? Boolean(TEST_FLAGS[flag]) : false);

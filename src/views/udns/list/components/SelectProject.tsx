@@ -2,9 +2,11 @@ import React, { FC, useMemo } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import { ResourceIcon } from '@openshift-console/dynamic-plugin-sdk';
-import { FormGroup, SelectOption } from '@patternfly/react-core';
+import { FormGroup } from '@patternfly/react-core';
 import Loading from '@utils/components/Loading/Loading';
-import SelectTypeahead from '@utils/components/SelectTypeahead/SelectTypeahead';
+import SelectTypeahead, {
+  SelectTypeaheadOptionProps,
+} from '@utils/components/SelectTypeahead/SelectTypeahead';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { ProjectGroupVersionKind } from '@utils/hooks/useProjects/constants';
 import useProjects from '@utils/hooks/useProjects/useProjects';
@@ -33,18 +35,23 @@ const SelectProject: FC<SelectProjectProps> = ({ labeledOnly = true }) => {
     [labeledOnly, projects],
   );
 
-  const projectsOptions = useMemo(
+  const projectsOptions: SelectTypeaheadOptionProps[] = useMemo(
     () =>
-      visibleProjects.map((project) => ({
-        children: (
-          <>
-            {' '}
-            <ResourceIcon groupVersionKind={ProjectGroupVersionKind} /> {getName(project)}{' '}
-          </>
-        ),
-        key: getName(project),
-        value: getName(project),
-      })),
+      visibleProjects
+        .map((project) => getName(project))
+        .filter((projectName): projectName is string => projectName !== undefined)
+        .map((projectName) => ({
+          key: projectName,
+          optionProps: {
+            children: (
+              <>
+                {' '}
+                <ResourceIcon groupVersionKind={ProjectGroupVersionKind} /> {projectName}{' '}
+              </>
+            ),
+          },
+          value: projectName,
+        })),
     [visibleProjects],
   );
 
@@ -57,29 +64,11 @@ const SelectProject: FC<SelectProjectProps> = ({ labeledOnly = true }) => {
         name={PROJECT_NAME}
         render={({ field: { onChange, value: selectedProjectName } }) => (
           <SelectTypeahead
-            id="select-project"
             options={projectsOptions}
             placeholder={t('Select a Project')}
-            selected={selectedProjectName}
-            setSelected={(newSelection) => onChange(newSelection)}
-          >
-            <>
-              {visibleProjects?.map((project) => {
-                const projectName = getName(project);
-                return (
-                  <SelectOption
-                    key={projectName}
-                    onClick={() => onChange(projectName)}
-                    value={projectName}
-                  >
-                    <ResourceIcon groupVersionKind={ProjectGroupVersionKind} />
-
-                    {projectName}
-                  </SelectOption>
-                );
-              })}
-            </>
-          </SelectTypeahead>
+            selectedValue={selectedProjectName}
+            setSelectedValue={(newSelection) => onChange(newSelection)}
+          />
         )}
         rules={{ required: true }}
       />
