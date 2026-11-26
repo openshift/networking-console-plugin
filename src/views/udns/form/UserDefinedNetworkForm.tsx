@@ -124,10 +124,10 @@ const UserDefinedNetworkForm: FC<UserDefinedNetworkFormProps> = ({ formData, onC
                 />
               }
             >
-              <TextInput {...register('name', { required: true })} />
+              <TextInput id="name" {...register('name', { required: true })} />
             </FormGroup>
             <FormGroup fieldId="description" label={t('Description')}>
-              <TextInput {...register('description')} />
+              <TextInput id="description" {...register('description')} />
             </FormGroup>
             {isCluster && <ClusterUserDefinedNetworkNamespaceSelector />}
             <FormSection title={t('Network')} titleElement="h2">

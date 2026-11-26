@@ -126,6 +126,7 @@
   "Cluster's default network": "Cluster's default network",
   "ClusterUserDefinedNetwork": "ClusterUserDefinedNetwork",
   "ClusterUserDefinedNetwork name": "ClusterUserDefinedNetwork 이름",
+  "ClusterUserDefinedNetwork selector contains unsupported {{labelType}} key {{offendingKey}}; adding {{project}} would narrow the selector": "ClusterUserDefinedNetwork selector contains unsupported {{labelType}} key {{offendingKey}}; adding {{project}} would narrow the selector",
   "ClusterUserDefinedNetworks": "ClusterUserDefinedNetworks",
   "CNI type": "CNI type",
   "Cola": "Cola",

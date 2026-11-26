@@ -74,9 +74,9 @@ record multinetworkpolicies \
 record networkattachmentdefinitions \
   "/apis/k8s.cni.cncf.io/v1/namespaces/${NS}/network-attachment-definitions"
 record userdefinednetworks "/apis/k8s.ovn.org/v1/namespaces/${NS}/userdefinednetworks"
-record clusteruserdefinednetworks "/apis/k8s.ovn.org/v1/clusteruserdefinednetworks"
+record clusteruserdefinednetworks "/apis/k8s.ovn.org/v1/clusteruserdefinednetworks?labelSelector=app.kubernetes.io%2Fmanaged-by%3Dnetworking-console-plugin-test"
 record nodenetworkstates "/apis/nmstate.io/v1beta1/nodenetworkstates"
-record nodenetworkconfigurationpolicies "/apis/nmstate.io/v1/nodenetworkconfigurationpolicies"
+record nodenetworkconfigurationpolicies "/apis/nmstate.io/v1/nodenetworkconfigurationpolicies?labelSelector=app.kubernetes.io%2Fmanaged-by%3Dnetworking-console-plugin-test"
 record nodenetworkconfigurationenactments \
   "/apis/nmstate.io/v1beta1/nodenetworkconfigurationenactments"
 record networkconfig "/apis/operator.openshift.io/v1/networks/cluster"
@@ -92,6 +92,5 @@ record virtualmachineinstances \
   "/apis/kubevirt.io/v1/namespaces/${NS}/virtualmachineinstances"
 
 mkdir -p "$OUT"
-cp "$scratch"/*.json "$OUT"/
-npx prettier --write "$OUT"/*.json >/dev/null
+npx prettier --write "$scratch"/*.json >/dev/null && cp "$scratch"/*.json "$OUT"/
 echo "recorded $(ls -1 "$scratch" | wc -l) fixtures into $OUT"

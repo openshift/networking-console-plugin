@@ -193,8 +193,7 @@
           "targetRef": {
             "kind": "Pod",
             "namespace": "cy-test-ns",
-            "name": "web-1",
-            "uid": "3a7b684e-691a-4387-aba7-038a2459ab20"
+            "name": "web-1"
           },
           "nodeName": "node-1",
           "zone": "nova"
@@ -209,8 +208,7 @@
           "targetRef": {
             "kind": "Pod",
             "namespace": "cy-test-ns",
-            "name": "web-2",
-            "uid": "94d6f76d-9aaa-4bdb-9214-eb830803995a"
+            "name": "web-2"
           },
           "nodeName": "node-2",
           "zone": "nova"

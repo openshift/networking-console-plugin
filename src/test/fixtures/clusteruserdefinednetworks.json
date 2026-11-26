@@ -7,12 +7,15 @@
       "metadata": {
         "annotations": {},
         "finalizers": ["k8s.ovn.org/user-defined-network-protection"],
-        "name": "test-cudn-team"
+        "name": "test-cudn-team",
+        "labels": {
+          "app.kubernetes.io/managed-by": "networking-console-plugin-test"
+        }
       },
       "spec": {
         "namespaceSelector": {
           "matchLabels": {
-            "team": "blue"
+            "kubernetes.io/metadata.name": "cy-test-ns"
           }
         },
         "network": {
